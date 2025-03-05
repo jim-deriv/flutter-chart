@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
@@ -13,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../chart/data_visualization/chart_data.dart';
 import '../chart/data_visualization/chart_series/data_series.dart';
 import '../chart/data_visualization/drawing_tools/ray/ray_line_drawing.dart';
+import '../chart/data_visualization/models/animation_info.dart';
 import '../drawing_tool_chart/drawing_tools.dart';
 import 'interactable_drawings/interactable_drawing.dart';
 import 'interactable_drawing_custom_painter.dart';
@@ -294,7 +294,6 @@ class _InteractiveLayerGestureHandlerState
               builder: (_, __) {
                 final double animationValue =
                     _stateChangeCurve.transform(_stateChangeController.value);
-                print('##### $animationValue');
 
                 return Stack(
                   fit: StackFit.expand,
@@ -310,10 +309,10 @@ class _InteractiveLayerGestureHandlerState
                                   epochToX: xAxis.xFromEpoch,
                                   quoteToY: widget.quoteToY,
                                   quoteFromY: widget.quoteFromY,
-                                  getDrawingState:
-                                      _interactiveState.getToolState,
+                                  getDrawingState: _interactiveState.getToolState,
                                   animationInfo: AnimationInfo(
-                                      stateChangePercent: animationValue)
+                                    stateChangePercent: animationValue,
+                                  )
                                   // onDrawingToolClicked: () => _selectedDrawing = e,
                                   ),
                             ))
