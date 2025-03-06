@@ -1,4 +1,5 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_states/Interactive_hover_state.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/state_change_direction.dart';
 import 'package:flutter/gestures.dart';
 
@@ -14,7 +15,8 @@ import 'interactive_state.dart';
 ///
 /// After the drawing is created, the interactive layer transitions back to the
 /// [InteractiveNormalState].
-class InteractiveAddingToolState extends InteractiveState {
+class InteractiveAddingToolState extends InteractiveState
+    with InteractiveHoverState {
   /// Initializes the state with the interactive layer and the [addingTool].
   ///
   /// The [addingTool] parameter specifies the configuration for the type of drawing
@@ -61,13 +63,16 @@ class InteractiveAddingToolState extends InteractiveState {
   void onPanUpdate(DragUpdateDetails details) {}
 
   @override
-  void onHover(PointerHoverEvent event) => _addingDrawing?.onHover(
+  void onHover(PointerHoverEvent event) {
+    print('##### Adding state hover $event');
+    _addingDrawing?.onHover(
         event,
         epochFromX,
         quoteFromY,
         epochToX,
         quoteToY,
       );
+  }
 
   @override
   void onTap(TapUpDetails details) {

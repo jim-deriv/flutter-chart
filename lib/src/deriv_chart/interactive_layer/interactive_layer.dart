@@ -281,7 +281,11 @@ class _InteractiveLayerGestureHandlerState
     final XAxisModel xAxis = context.watch<XAxisModel>();
     return Semantics(
       child: MouseRegion(
-        onHover: (event) => _interactiveState.onHover(event),
+        onHover: (event) {
+          print(
+              'InteractiveLayerOnHover $event ${_interactiveState.runtimeType} ${_interactiveState}');
+          _interactiveState.onHover(event);
+        },
         child: GestureDetector(
           onTapUp: (details) => _interactiveState.onTap(details),
           onPanStart: (details) => _interactiveState.onPanStart(details),
