@@ -178,7 +178,7 @@ class LineInteractableDrawing
           lineStyle,
           canvas,
           startOffset,
-          10 *  animationInfo.stateChangePercent,
+          10 * animationInfo.stateChangePercent,
           3 * animationInfo.stateChangePercent,
           endOffset,
         );
