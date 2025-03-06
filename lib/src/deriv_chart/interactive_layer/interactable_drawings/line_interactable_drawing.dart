@@ -194,13 +194,8 @@ class LineInteractableDrawing
       if (startPoint != null) {
         _drawPoint(
             startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
-        _drawPointAlignmentGuides(
-            canvas,
-            size,
-            Offset(
-              epochToX(startPoint!.epoch),
-              quoteToY(startPoint!.quote)
-            ));
+        _drawPointAlignmentGuides(canvas, size,
+            Offset(epochToX(startPoint!.epoch), quoteToY(startPoint!.quote)));
 
         if (_hoverPosition != null) {
           // endPoint doesn't exist yet and it means we're creating this line.

@@ -41,7 +41,8 @@ class InteractiveNormalState extends InteractiveState
       interactiveLayer: interactiveLayer,
     );
 
-    interactiveLayer.updateStateTo(newState, StateChangeAnimationDirection.forward);
+    interactiveLayer.updateStateTo(
+        newState, StateChangeAnimationDirection.forward);
 
     newState.onPanStart(details);
   }
