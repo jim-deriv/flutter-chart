@@ -81,7 +81,7 @@ class InteractiveSelectedToolState extends InteractiveState
             selected: hitDrawing,
             interactiveLayer: interactiveLayer,
           )..onPanStart(details),
-          StateChangeDirection.forward,
+          StateChangeAnimationDirection.forward,
         );
       }
     }
@@ -115,13 +115,13 @@ class InteractiveSelectedToolState extends InteractiveState
           selected: hitDrawing,
           interactiveLayer: interactiveLayer,
         ),
-        StateChangeDirection.forward,
+        StateChangeAnimationDirection.forward,
       );
     } else {
       // If tap is on empty space, return to normal state.
       interactiveLayer.updateStateTo(
         InteractiveNormalState(interactiveLayer: interactiveLayer),
-        StateChangeDirection.backward,
+        StateChangeAnimationDirection.backward,
         blocking: true,
       );
     }

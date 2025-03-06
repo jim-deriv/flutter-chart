@@ -10,7 +10,7 @@ abstract class InteractiveLayerBase {
   /// Updates the state of the interactive layer to the [state].
   void updateStateTo(
     InteractiveState state,
-    StateChangeDirection direction, {
+    StateChangeAnimationDirection direction, {
     bool blocking = false,
   });
 

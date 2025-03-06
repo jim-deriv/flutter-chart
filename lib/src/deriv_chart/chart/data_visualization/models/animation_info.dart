@@ -1,3 +1,5 @@
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
+
 /// A class that hold animation progress values.
 class AnimationInfo {
   /// Initializes
@@ -13,5 +15,6 @@ class AnimationInfo {
   /// Animation percent of blinking dot in current tick.
   final double blinkingPercent;
 
+  /// Animation percent of [InteractiveLayer] state change.
   final double stateChangePercent;
 }

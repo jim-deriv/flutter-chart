@@ -92,7 +92,7 @@ class InteractiveAddingToolState extends InteractiveState
               selected: drawing,
               interactiveLayer: interactiveLayer,
             ),
-            StateChangeDirection.forward,
+            StateChangeAnimationDirection.forward,
           );
           break;
         }

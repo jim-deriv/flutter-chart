@@ -186,10 +186,7 @@ class HorizontalLineInteractableDrawing
       ..style = PaintingStyle.stroke;
 
     // Create path for horizontal guide
-    final Path horizontalPath = Path();
-
-    // Draw horizontal guide from the point
-    horizontalPath
+    final Path horizontalPath = Path()
       ..moveTo(0, pointOffset.dy)
       ..lineTo(size.width, pointOffset.dy);
 
@@ -225,21 +222,6 @@ class HorizontalLineInteractableDrawing
     return dest;
   }
 
-  void _drawPoint(
-    EdgePoint point,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-    Canvas canvas,
-    DrawingPaintStyle paintStyle,
-    LineStyle lineStyle,
-  ) {
-    canvas.drawCircle(
-      Offset(epochToX(point.epoch), quoteToY(point.quote)),
-      5,
-      paintStyle.glowyCirclePaintStyle(lineStyle.color),
-    );
-  }
-
   void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
     // Create a dashed paint style for the alignment guides
     final Paint guidesPaint = Paint()
@@ -248,10 +230,7 @@ class HorizontalLineInteractableDrawing
       ..style = PaintingStyle.stroke;
 
     // Create path for horizontal guide
-    final Path horizontalPath = Path();
-
-    // Draw horizontal guide from the point
-    horizontalPath
+    final Path horizontalPath = Path()
       ..moveTo(0, pointOffset.dy)
       ..lineTo(size.width, pointOffset.dy);
 

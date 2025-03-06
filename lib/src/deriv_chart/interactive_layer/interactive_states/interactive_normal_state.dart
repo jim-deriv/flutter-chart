@@ -41,7 +41,7 @@ class InteractiveNormalState extends InteractiveState
       interactiveLayer: interactiveLayer,
     );
 
-    interactiveLayer.updateStateTo(newState, StateChangeDirection.forward);
+    interactiveLayer.updateStateTo(newState, StateChangeAnimationDirection.forward);
 
     newState.onPanStart(details);
   }
@@ -64,7 +64,7 @@ class InteractiveNormalState extends InteractiveState
         selected: hitDrawing,
         interactiveLayer: interactiveLayer,
       ),
-      StateChangeDirection.forward,
+      StateChangeAnimationDirection.forward,
     );
   }
 }

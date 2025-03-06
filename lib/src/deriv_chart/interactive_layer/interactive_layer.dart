@@ -251,7 +251,7 @@ class _InteractiveLayerGestureHandlerState
           widget.addingDrawingTool!,
           interactiveLayer: this,
         ),
-        StateChangeDirection.forward,
+        StateChangeAnimationDirection.forward,
       );
     }
   }
@@ -259,11 +259,11 @@ class _InteractiveLayerGestureHandlerState
   @override
   Future<void> updateStateTo(
     InteractiveState state,
-    StateChangeDirection direction, {
+    StateChangeAnimationDirection direction, {
     bool blocking = false,
   }) async {
     if (blocking) {
-      if (direction == StateChangeDirection.forward) {
+      if (direction == StateChangeAnimationDirection.forward) {
         _stateChangeController.reset();
         await _stateChangeController.forward();
       } else {
@@ -271,7 +271,7 @@ class _InteractiveLayerGestureHandlerState
       }
       setState(() => _interactiveState = state);
     } else {
-      if (direction == StateChangeDirection.forward) {
+      if (direction == StateChangeAnimationDirection.forward) {
         _stateChangeController.reset();
         unawaited(_stateChangeController.forward());
       } else {
