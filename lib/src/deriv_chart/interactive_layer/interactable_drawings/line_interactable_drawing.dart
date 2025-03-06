@@ -178,7 +178,7 @@ class LineInteractableDrawing
           lineStyle,
           canvas,
           startOffset,
-          10 * animationInfo.stateChangePercent,
+          10 *  animationInfo.stateChangePercent,
           3 * animationInfo.stateChangePercent,
           endOffset,
         );
@@ -197,12 +197,15 @@ class LineInteractableDrawing
             startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
 
         if (endPoint == null && _hoverPosition != null) {
-          final Offset hoverOffset = Offset(
+          // endPoint doesn't exist yet and it means we're creating this line.
+          // Drawing preview line from startPoint to hoverPosition.
+          final Offset startPosition = Offset(
             epochToX(startPoint!.epoch),
             quoteToY(startPoint!.quote),
           );
-          canvas.drawLine(hoverOffset, _hoverPosition!,
+          canvas.drawLine(startPosition, _hoverPosition!,
               paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
+          _drawPointAlignmentGuides(canvas, size, _hoverPosition!);
         }
       }
 
@@ -250,55 +253,41 @@ class LineInteractableDrawing
   /// Draws alignment guides (horizontal and vertical lines) from the points
   void _drawAlignmentGuides(Canvas canvas, Size size, Offset startOffset,
       Offset endOffset, DrawingPaintStyle paintStyle) {
+    // Draw alignment guides for both start and end points
+    _drawPointAlignmentGuides(canvas, size, startOffset);
+    _drawPointAlignmentGuides(canvas, size, endOffset);
+  }
+
+  /// Draws alignment guides (horizontal and vertical lines) for a single point
+  void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
     // Create a dashed paint style for the alignment guides
     final Paint guidesPaint = Paint()
       ..color = const Color(0x80FFFFFF) // Semi-transparent white
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
 
-    // Create a path for dashed lines
-    final Path horizontalPath1 = Path();
-    final Path verticalPath1 = Path();
-    final Path horizontalPath2 = Path();
-    final Path verticalPath2 = Path();
+    // Create paths for horizontal and vertical guides
+    final Path horizontalPath = Path();
+    final Path verticalPath = Path();
 
-    // Draw horizontal and vertical guides from start point
-    horizontalPath1
-      ..moveTo(0, startOffset.dy)
-      ..lineTo(size.width, startOffset.dy);
+    // Draw horizontal and vertical guides from the point
+    horizontalPath
+      ..moveTo(0, pointOffset.dy)
+      ..lineTo(size.width, pointOffset.dy);
 
-    verticalPath1
-      ..moveTo(startOffset.dx, 0)
-      ..lineTo(startOffset.dx, size.height);
-
-    // Draw horizontal and vertical guides from end point
-    horizontalPath2
-      ..moveTo(0, endOffset.dy)
-      ..lineTo(size.width, endOffset.dy);
-
-    verticalPath2
-      ..moveTo(endOffset.dx, 0)
-      ..lineTo(endOffset.dx, size.height);
+    verticalPath
+      ..moveTo(pointOffset.dx, 0)
+      ..lineTo(pointOffset.dx, size.height);
 
     // Draw the dashed lines
     canvas
       ..drawPath(
-        _dashPath(horizontalPath1,
+        _dashPath(horizontalPath,
             dashArray: _CircularIntervalList<double>(<double>[5, 5])),
         guidesPaint,
       )
       ..drawPath(
-        _dashPath(verticalPath1,
-            dashArray: _CircularIntervalList<double>(<double>[5, 5])),
-        guidesPaint,
-      )
-      ..drawPath(
-        _dashPath(horizontalPath2,
-            dashArray: _CircularIntervalList<double>(<double>[5, 5])),
-        guidesPaint,
-      )
-      ..drawPath(
-        _dashPath(verticalPath2,
+        _dashPath(verticalPath,
             dashArray: _CircularIntervalList<double>(<double>[5, 5])),
         guidesPaint,
       );
