@@ -165,27 +165,26 @@ class LineInteractableDrawing
       final Paint paint = state.contains(DrawingToolState.selected) ||
               state.contains(DrawingToolState.dragging)
           ? paintStyle.linePaintStyle(
-              lineStyle.color, 1 + 3 * animationInfo.stateChangePercent)
+              lineStyle.color, 1 + 1 * animationInfo.stateChangePercent)
           : paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness);
 
       canvas.drawLine(startOffset, endOffset, paint);
 
       // Draw endpoints with glowy effect if selected
       if (state.contains(DrawingToolState.selected) ||
-          state.contains(DrawingToolState.hovered) ||
           state.contains(DrawingToolState.dragging)) {
-        final double markerRadius = 5 * animationInfo.stateChangePercent;
-        canvas
-          ..drawCircle(
-            startOffset,
-            markerRadius,
-            paintStyle.glowyCirclePaintStyle(lineStyle.color),
-          )
-          ..drawCircle(
-            endOffset,
-            markerRadius,
-            paintStyle.glowyCirclePaintStyle(lineStyle.color),
-          );
+        _drawPointsFocusedCircle(
+          paintStyle,
+          lineStyle,
+          canvas,
+          startOffset,
+          10 * animationInfo.stateChangePercent,
+          3 * animationInfo.stateChangePercent,
+          endOffset,
+        );
+      } else if (state.contains(DrawingToolState.hovered)) {
+        _drawPointsFocusedCircle(
+            paintStyle, lineStyle, canvas, startOffset, 10, 3, endOffset);
       }
 
       // Draw alignment guides when dragging
@@ -212,6 +211,40 @@ class LineInteractableDrawing
             endPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
       }
     }
+  }
+
+  void _drawPointsFocusedCircle(
+      DrawingPaintStyle paintStyle,
+      LineStyle lineStyle,
+      ui.Canvas canvas,
+      ui.Offset startOffset,
+      double outerCircleRadius,
+      double innerCircleRadius,
+      ui.Offset endOffset) {
+    final normalPaintStyle = paintStyle.glowyCirclePaintStyle(lineStyle.color);
+    final glowyPaintStyle =
+        paintStyle.glowyCirclePaintStyle(lineStyle.color.withOpacity(0.3));
+    canvas
+      ..drawCircle(
+        startOffset,
+        outerCircleRadius,
+        glowyPaintStyle,
+      )
+      ..drawCircle(
+        startOffset,
+        innerCircleRadius,
+        normalPaintStyle,
+      )
+      ..drawCircle(
+        endOffset,
+        outerCircleRadius,
+        glowyPaintStyle,
+      )
+      ..drawCircle(
+        endOffset,
+        innerCircleRadius,
+        normalPaintStyle,
+      );
   }
 
   /// Draws alignment guides (horizontal and vertical lines) from the points
