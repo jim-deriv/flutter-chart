@@ -34,4 +34,6 @@ abstract class Repository<T> extends ChangeNotifier {
 
   /// Retrieves the hidden status of an indicator or drawing tool.
   bool getHiddenStatus(int index);
+
+  void update() {}
 }

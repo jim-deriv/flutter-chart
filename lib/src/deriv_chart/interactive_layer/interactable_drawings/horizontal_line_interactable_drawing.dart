@@ -125,25 +125,20 @@ class HorizontalLineInteractableDrawing
         _drawAlignmentGuides(canvas, size, startOffset);
       }
     } else {
-      if (startPoint != null) {
-        _drawPoint(
-            startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
-
-        if (startPoint == null && _hoverPosition != null) {
-          // endPoint doesn't exist yet and it means we're creating this line.
-          // Drawing preview horizontal line from startPoint's y-coordinate
-          final Offset startPosition = Offset(
-            0,
-            _hoverPosition!.dy,
-          );
-          final Offset endPosition = Offset(
-            size.width,
-            _hoverPosition!.dy,
-          );
-          canvas.drawLine(startPosition, endPosition,
-              paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
-          _drawPointAlignmentGuides(canvas, size, startPosition);
-        }
+      if (startPoint == null && _hoverPosition != null) {
+        // endPoint doesn't exist yet and it means we're creating this line.
+        // Drawing preview horizontal line from startPoint's y-coordinate
+        final Offset startPosition = Offset(
+          0,
+          _hoverPosition!.dy,
+        );
+        final Offset endPosition = Offset(
+          size.width,
+          _hoverPosition!.dy,
+        );
+        canvas.drawLine(startPosition, endPosition,
+            paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
+        _drawPointAlignmentGuides(canvas, size, startPosition);
       }
     }
   }

@@ -282,8 +282,6 @@ class _InteractiveLayerGestureHandlerState
     return Semantics(
       child: MouseRegion(
         onHover: (event) {
-          print(
-              'InteractiveLayerOnHover $event ${_interactiveState.runtimeType} ${_interactiveState}');
           _interactiveState.onHover(event);
         },
         child: GestureDetector(

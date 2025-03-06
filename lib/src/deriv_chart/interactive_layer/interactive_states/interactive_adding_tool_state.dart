@@ -27,7 +27,9 @@ class InteractiveAddingToolState extends InteractiveState
   InteractiveAddingToolState(
     this.addingTool, {
     required super.interactiveLayer,
-  });
+  }) {
+    _addingDrawing ??= addingTool.getInteractableDrawing();
+  }
 
   /// The tool being added.
   ///
@@ -64,20 +66,17 @@ class InteractiveAddingToolState extends InteractiveState
 
   @override
   void onHover(PointerHoverEvent event) {
-    print('##### Adding state hover $event');
     _addingDrawing?.onHover(
-        event,
-        epochFromX,
-        quoteFromY,
-        epochToX,
-        quoteToY,
-      );
+      event,
+      epochFromX,
+      quoteFromY,
+      epochToX,
+      quoteToY,
+    );
   }
 
   @override
   void onTap(TapUpDetails details) {
-    _addingDrawing ??= addingTool.getInteractableDrawing();
-
     _addingDrawing!
         .onCreateTap(details, epochFromX, quoteFromY, epochToX, quoteToY, () {
       interactiveLayer
