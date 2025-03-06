@@ -151,15 +151,14 @@ class LineInteractableDrawing
   ) {
     final LineStyle lineStyle = config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
+    // Check if this drawing is selected
+    final Set<DrawingToolState> state = getDrawingState(this);
 
     if (startPoint != null && endPoint != null) {
       final Offset startOffset =
           Offset(epochToX(startPoint!.epoch), quoteToY(startPoint!.quote));
       final Offset endOffset =
           Offset(epochToX(endPoint!.epoch), quoteToY(endPoint!.quote));
-
-      // Check if this drawing is selected
-      final Set<DrawingToolState> state = getDrawingState(this);
 
       // Use glowy paint style if selected, otherwise use normal paint style
       final Paint paint = state.contains(DrawingToolState.selected) ||
@@ -191,12 +190,19 @@ class LineInteractableDrawing
       if (state.contains(DrawingToolState.dragging)) {
         _drawAlignmentGuides(canvas, size, startOffset, endOffset, paintStyle);
       }
-    } else {
+    } else if (state.contains(DrawingToolState.adding)) {
       if (startPoint != null) {
         _drawPoint(
             startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
+        _drawPointAlignmentGuides(
+            canvas,
+            size,
+            Offset(
+              epochToX(startPoint!.epoch),
+              quoteToY(startPoint!.quote)
+            ));
 
-        if (endPoint == null && _hoverPosition != null) {
+        if (_hoverPosition != null) {
           // endPoint doesn't exist yet and it means we're creating this line.
           // Drawing preview line from startPoint to hoverPosition.
           final Offset startPosition = Offset(

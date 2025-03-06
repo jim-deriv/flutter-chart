@@ -1,5 +1,6 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_states/Interactive_hover_state.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_states/interactive_selected_tool_state.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/state_change_direction.dart';
 import 'package:flutter/gestures.dart';
 
@@ -79,13 +80,23 @@ class InteractiveAddingToolState extends InteractiveState
   void onTap(TapUpDetails details) {
     _addingDrawing!
         .onCreateTap(details, epochFromX, quoteFromY, epochToX, quoteToY, () {
-      interactiveLayer
-        ..clearAddingDrawing()
-        ..onAddDrawing(_addingDrawing!)
-        ..updateStateTo(
-          InteractiveNormalState(interactiveLayer: interactiveLayer),
-          StateChangeDirection.forward,
-        );
+      interactiveLayer.clearAddingDrawing();
+
+      final DrawingToolConfig addedConfig =
+          interactiveLayer.onAddDrawing(_addingDrawing!);
+
+      for (final drawing in interactiveLayer.drawings) {
+        if (drawing.config.configId == addedConfig.configId) {
+          interactiveLayer.updateStateTo(
+            InteractiveSelectedToolState(
+              selected: drawing,
+              interactiveLayer: interactiveLayer,
+            ),
+            StateChangeDirection.forward,
+          );
+          break;
+        }
+      }
     });
   }
 }

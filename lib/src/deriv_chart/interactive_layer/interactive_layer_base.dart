@@ -33,7 +33,8 @@ abstract class InteractiveLayerBase {
   void clearAddingDrawing();
 
   /// Adds the [drawing] to the interactive layer.
-  void onAddDrawing(InteractableDrawing<DrawingToolConfig> drawing);
+  DrawingToolConfig onAddDrawing(
+      InteractableDrawing<DrawingToolConfig> drawing);
 
   /// Save the drawings with the latest changes (positions or anything) to the
   /// repository.
