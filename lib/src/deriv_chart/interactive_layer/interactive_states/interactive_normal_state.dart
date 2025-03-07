@@ -1,10 +1,10 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/state_change_direction.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
 import '../interactable_drawings/interactable_drawing.dart';
-import 'Interactive_hover_state.dart';
+import '../state_change_direction.dart';
+import 'interactive_hover_state.dart';
 import 'interactive_selected_tool_state.dart';
 import 'interactive_state.dart';
 
