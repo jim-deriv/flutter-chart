@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -42,16 +43,16 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   final ChartConfig chartConfig;
 
   /// Converts x coordinate (in pixels) to epoch timestamp.
-  final int Function(double x) epochFromX;
+  final EpochFromX epochFromX;
 
   /// Converts epoch timestamp to x coordinate (in pixels).
-  final double Function(int x) epochToX;
+  final EpochToX epochToX;
 
   /// Converts y coordinate (in pixels) to quote value.
-  final double Function(double y) quoteToY;
+  final QuoteToY quoteToY;
 
   /// Converts quote value to y coordinate (in pixels).
-  double Function(double) quoteFromY;
+  final QuoteFromY quoteFromY;
 
   /// Showing animations progress.
   final AnimationInfo animationInfo;
@@ -70,7 +71,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
         animationInfo,
         getDrawingState,
       );
-      // TODO(NA): Paint the [drawing]
     });
   }
 
@@ -84,11 +84,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
       false;
 
   @override
-  bool hitTest(Offset position) {
-    if (drawing.hitTest(position, epochToX, quoteToY)) {
-      // onDrawingToolClicked();
-      return true;
-    }
-    return false;
-  }
+  bool hitTest(Offset position) =>
+      drawing.hitTest(position, epochToX, quoteToY);
 }
