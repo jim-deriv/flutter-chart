@@ -365,6 +365,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
                     quoteFromCanvasY: chartQuoteFromCanvasY,
                     epochFromCanvasX: xAxis.epochFromX,
                   ),
+                // TODO(Ramin): move and handle cross-hair inside the InteractiveLayer
                 if (kIsWeb) _buildCrosshairAreaWeb(),
                 if (!kIsWeb && !(widget.drawingTools?.isDrawingMoving ?? false))
                   _buildCrosshairArea(),
