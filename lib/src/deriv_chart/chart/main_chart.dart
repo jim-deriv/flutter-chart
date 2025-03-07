@@ -16,6 +16,7 @@ import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'basic_chart.dart';
+import 'crosshair/crosshair_area.dart';
 import 'multiple_animated_builder.dart';
 import 'data_visualization/annotations/chart_annotation.dart';
 import 'data_visualization/chart_data.dart';
@@ -138,7 +139,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
   late Animation<double> _currentTickBlinkAnimation;
 
   // TODO(Rustem): remove crosshair related state
-  final bool _isCrosshairMode = false;
+  bool _isCrosshairMode = false;
 
   bool get _isScrollToLastTickAvailable =>
       (widget._mainSeries.entries?.isNotEmpty ?? false) &&
@@ -365,8 +366,8 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
                     epochFromCanvasX: xAxis.epochFromX,
                   ),
                 if (kIsWeb) _buildCrosshairAreaWeb(),
-                // if (!kIsWeb && !(widget.drawingTools?.isDrawingMoving ?? false))
-                //   _buildCrosshairArea(),
+                if (!kIsWeb && !(widget.drawingTools?.isDrawingMoving ?? false))
+                  _buildCrosshairArea(),
                 if (widget.showScrollToLastTickButton &&
                     _isScrollToLastTickAvailable)
                   Positioned(
@@ -441,23 +442,23 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
         ]),
       );
 
-  // Widget _buildCrosshairArea() => AnimatedBuilder(
-  //       animation: crosshairZoomOutAnimation,
-  //       builder: (BuildContext context, _) => CrosshairArea(
-  //         mainSeries: widget.mainSeries as DataSeries<Tick>,
-  //         pipSize: widget.pipSize,
-  //         quoteToCanvasY: chartQuoteToCanvasY,
-  //         onCrosshairAppeared: () {
-  //           _isCrosshairMode = true;
-  //           widget.onCrosshairAppeared?.call();
-  //           crosshairZoomOutAnimationController.forward();
-  //         },
-  //         onCrosshairDisappeared: () {
-  //           _isCrosshairMode = false;
-  //           crosshairZoomOutAnimationController.reverse();
-  //         },
-  //       ),
-  //     );
+  Widget _buildCrosshairArea() => AnimatedBuilder(
+        animation: crosshairZoomOutAnimation,
+        builder: (BuildContext context, _) => CrosshairArea(
+          mainSeries: widget.mainSeries as DataSeries<Tick>,
+          pipSize: widget.pipSize,
+          quoteToCanvasY: chartQuoteToCanvasY,
+          onCrosshairAppeared: () {
+            _isCrosshairMode = true;
+            widget.onCrosshairAppeared?.call();
+            crosshairZoomOutAnimationController.forward();
+          },
+          onCrosshairDisappeared: () {
+            _isCrosshairMode = false;
+            crosshairZoomOutAnimationController.reverse();
+          },
+        ),
+      );
 
   Widget _buildCrosshairAreaWeb() => CrosshairAreaWeb(
         mainSeries: widget.mainSeries as DataSeries<Tick>,
