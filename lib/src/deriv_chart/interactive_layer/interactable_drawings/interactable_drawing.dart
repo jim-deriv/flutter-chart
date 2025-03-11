@@ -1,4 +1,5 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
@@ -45,7 +46,8 @@ enum DrawingToolState {
 /// with the tools in the runtime.
 /// During the time that user interacts with a tool. by some debounce mechanism
 /// This class will update the config which is supposed to be saved in the storage.
-abstract class InteractableDrawing<T extends DrawingToolConfig> {
+abstract class InteractableDrawing<T extends DrawingToolConfig>
+    with EquatableMixin {
   /// Initializes [InteractableDrawing].
   InteractableDrawing({required this.config});
 
@@ -129,4 +131,8 @@ abstract class InteractableDrawing<T extends DrawingToolConfig> {
     AnimationInfo animationInfo,
     GetDrawingState getDrawingState,
   );
+
+  /// Returns true if the drawing tool should repaint.
+  bool shouldRepaint(GetDrawingState getState) =>
+      true;
 }

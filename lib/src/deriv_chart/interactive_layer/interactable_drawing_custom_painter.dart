@@ -1,5 +1,6 @@
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
+import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/rendering.dart';
@@ -27,6 +28,8 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     required this.quoteToY,
     required this.quoteFromY,
     required this.getDrawingState,
+    required this.epochRange,
+    required this.quoteRange,
     this.animationInfo = const AnimationInfo(),
   });
 
@@ -57,11 +60,18 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   /// Showing animations progress.
   final AnimationInfo animationInfo;
 
+  /// Current epoch range (x-axis) of the chart;
+  final EpochRange epochRange;
+
+  /// Current quote range (y-axis) of the chart;
+  final QuoteRange quoteRange;
+
   /// Returns `true` if the drawing tool is selected.
   final Set<DrawingToolState> Function(InteractableDrawing) getDrawingState;
 
   @override
   void paint(Canvas canvas, Size size) {
+    // print('####.painting ${DateTime.now()}');
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       drawing.paint(
         canvas,
@@ -75,9 +85,12 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(InteractableDrawingCustomPainter oldDelegate) =>
-      // TODO(NA): Return true/false based on the [drawing] state
-      true;
+  bool shouldRepaint(InteractableDrawingCustomPainter oldDelegate) {
+    return oldDelegate.drawing != drawing ||
+        oldDelegate.epochRange != epochRange ||
+        oldDelegate.quoteRange != quoteRange ||
+        drawing.shouldRepaint(getDrawingState);
+  }
 
   @override
   bool shouldRebuildSemantics(InteractableDrawingCustomPainter oldDelegate) =>

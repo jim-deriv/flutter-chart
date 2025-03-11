@@ -306,6 +306,9 @@ class HorizontalLineInteractableDrawing
   @override
   HorizontalDrawingToolConfig getUpdatedConfig() => config
       .copyWith(edgePoints: <EdgePoint>[if (startPoint != null) startPoint!]);
+
+  @override
+  List<Object?> get props => [startPoint];
 }
 
 /// A circular array for dash patterns

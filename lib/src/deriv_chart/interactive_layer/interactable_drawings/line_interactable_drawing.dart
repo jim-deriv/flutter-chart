@@ -461,6 +461,20 @@ class LineInteractableDrawing
         if (startPoint != null) startPoint!,
         if (endPoint != null) endPoint!
       ]);
+
+  @override
+  List<Object?> get props => [startPoint, endPoint];
+
+  @override
+  bool shouldRepaint(GetDrawingState getState) {
+    if (startPoint == null || endPoint == null) {
+      return false;
+    }
+
+    return getState(this).contains(DrawingToolState.selected) ||
+        getState(this).contains(DrawingToolState.hovered) ||
+        getState(this).contains(DrawingToolState.dragging);
+  }
 }
 
 /// A circular array for dash patterns

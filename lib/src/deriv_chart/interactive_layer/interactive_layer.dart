@@ -4,6 +4,7 @@ import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dar
 import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
+import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ import 'interactive_states/interactive_adding_tool_state.dart';
 import 'interactive_states/interactive_normal_state.dart';
 import 'interactive_states/interactive_state.dart';
 import 'state_change_direction.dart';
-// ignore_for_file: public_member_api_docs
 
 /// Interactive layer of the chart package where elements can be drawn and can
 /// be interacted with.
@@ -36,6 +36,7 @@ class InteractiveLayer extends StatefulWidget {
     required this.epochToCanvasX,
     required this.epochFromCanvasX,
     required this.drawingToolsRepo,
+    required this.quoteRange,
     super.key,
   });
 
@@ -63,21 +64,14 @@ class InteractiveLayer extends StatefulWidget {
   /// Converts epoch to canvas X coordinate.
   final EpochToX epochToCanvasX;
 
+  /// Chart's y-axis range.
+  final QuoteRange quoteRange;
+
   @override
   State<InteractiveLayer> createState() => _InteractiveLayerState();
 }
 
 class _InteractiveLayerState extends State<InteractiveLayer> {
-  /// 1. Keep the state of the selected tool here, the tool that the focus is on
-  /// it right now
-  /// 2. provide callback to outside to let them what is the current selected tool
-  /// 3. This widget will handle adding a tool, can delegate adding to inner components
-  ///    but anyway it will happen here. either directly or indirectly through inner components
-  /// 4. This widget knows the current selected tool, will update its position when its interacted
-  /// 5. the decision to make which tool is selected based on the user click and it's coordinate will happen here
-  /// 6.
-  ///
-
   final List<InteractableDrawing> _interactableDrawings = [];
 
   /// Timer for debouncing repository updates
@@ -157,6 +151,7 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuild InteractiveLayer ${widget.quoteRange} ${DateTime.now()}');
     return _InteractiveLayerGestureHandler(
       drawings: _interactableDrawings,
       epochFromX: widget.epochFromCanvasX,
@@ -166,6 +161,7 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
       series: widget.series,
       chartConfig: widget.chartConfig,
       addingDrawingTool: widget.drawingTools.selectedDrawingTool,
+      quoteRange: widget.quoteRange,
       onClearAddingDrawingTool: widget.drawingTools.clearDrawingToolSelection,
       onSaveDrawingChange: _updateConfigInRepository,
       onAddDrawing: _addDrawingToRepo,
@@ -184,6 +180,7 @@ class _InteractiveLayerGestureHandler extends StatefulWidget {
     required this.chartConfig,
     required this.onClearAddingDrawingTool,
     required this.onAddDrawing,
+    required this.quoteRange,
     this.addingDrawingTool,
     this.onSaveDrawingChange,
   });
@@ -209,6 +206,7 @@ class _InteractiveLayerGestureHandler extends StatefulWidget {
   final QuoteFromY quoteFromY;
   final EpochToX epochToX;
   final QuoteToY quoteToY;
+  final QuoteRange quoteRange;
 
   @override
   State<_InteractiveLayerGestureHandler> createState() =>
@@ -284,69 +282,79 @@ class _InteractiveLayerGestureHandlerState
   @override
   Widget build(BuildContext context) {
     final XAxisModel xAxis = context.watch<XAxisModel>();
-    return Semantics(
-      child: MouseRegion(
-        onHover: (event) {
-          _interactiveState.onHover(event);
-        },
-        child: GestureDetector(
-          onTapUp: (details) => _interactiveState.onTap(details),
-          onPanStart: (details) => _interactiveState.onPanStart(details),
-          onPanUpdate: (details) => _interactiveState.onPanUpdate(details),
-          onPanEnd: (details) => _interactiveState.onPanEnd(details),
-          // TODO(NA): Move this part into separate widget. InteractiveLayer only cares about the interactions and selected tool movement
-          // It can delegate it to an inner component as well. which we can have different interaction behaviours like per platform as well.
-          child: AnimatedBuilder(
-              animation: _stateChangeController,
-              builder: (_, __) {
-                final double animationValue =
-                    _stateChangeCurve.transform(_stateChangeController.value);
+    return MouseRegion(
+      onHover: (event) {
+        _interactiveState.onHover(event);
+      },
+      child: GestureDetector(
+        onTapUp: (details) => _interactiveState.onTap(details),
+        onPanStart: (details) => _interactiveState.onPanStart(details),
+        onPanUpdate: (details) => _interactiveState.onPanUpdate(details),
+        onPanEnd: (details) => _interactiveState.onPanEnd(details),
+        // TODO(NA): Move this part into separate widget. InteractiveLayer only cares about the interactions and selected tool movement
+        // It can delegate it to an inner component as well. which we can have different interaction behaviours like per platform as well.
+        child: AnimatedBuilder(
+            animation: _stateChangeController,
+            builder: (_, __) {
+              final double animationValue =
+                  _stateChangeCurve.transform(_stateChangeController.value);
 
-                return Stack(
+              return RepaintBoundary(
+                child: Stack(
                   fit: StackFit.expand,
                   children: [
                     ...widget.drawings
                         .map((e) => CustomPaint(
-                              foregroundPainter: InteractableDrawingCustomPainter(
-                                  drawing: e,
-                                  series: widget.series,
-                                  theme: context.watch<ChartTheme>(),
-                                  chartConfig: widget.chartConfig,
-                                  epochFromX: xAxis.epochFromX,
-                                  epochToX: xAxis.xFromEpoch,
-                                  quoteToY: widget.quoteToY,
-                                  quoteFromY: widget.quoteFromY,
-                                  getDrawingState: _interactiveState.getToolState,
-                                  animationInfo: AnimationInfo(
-                                    stateChangePercent: animationValue,
-                                  )
-                                  // onDrawingToolClicked: () => _selectedDrawing = e,
-                                  ),
+                              foregroundPainter:
+                                  InteractableDrawingCustomPainter(
+                                drawing: e,
+                                series: widget.series,
+                                theme: context.watch<ChartTheme>(),
+                                chartConfig: widget.chartConfig,
+                                epochFromX: xAxis.epochFromX,
+                                epochToX: xAxis.xFromEpoch,
+                                quoteToY: widget.quoteToY,
+                                quoteFromY: widget.quoteFromY,
+                                getDrawingState: _interactiveState.getToolState,
+                                quoteRange: widget.quoteRange,
+                                epochRange: EpochRange(
+                                  leftEpoch: xAxis.leftBoundEpoch,
+                                  rightEpoch: xAxis.rightBoundEpoch,
+                                ),
+                                animationInfo: AnimationInfo(
+                                  stateChangePercent: animationValue,
+                                ),
+                              ),
                             ))
                         .toList(),
                     ..._interactiveState.previewDrawings
                         .map((e) => CustomPaint(
-                              foregroundPainter: InteractableDrawingCustomPainter(
-                                  drawing: e,
-                                  series: widget.series,
-                                  theme: context.watch<ChartTheme>(),
-                                  chartConfig: widget.chartConfig,
-                                  epochFromX: xAxis.epochFromX,
-                                  epochToX: xAxis.xFromEpoch,
-                                  quoteToY: widget.quoteToY,
-                                  quoteFromY: widget.quoteFromY,
-                                  getDrawingState:
-                                      _interactiveState.getToolState,
-                                  animationInfo: AnimationInfo(
-                                      stateChangePercent: animationValue)
-                                  // onDrawingToolClicked: () => _selectedDrawing = e,
-                                  ),
+                              foregroundPainter:
+                                  InteractableDrawingCustomPainter(
+                                drawing: e,
+                                series: widget.series,
+                                theme: context.watch<ChartTheme>(),
+                                chartConfig: widget.chartConfig,
+                                epochFromX: xAxis.epochFromX,
+                                epochToX: xAxis.xFromEpoch,
+                                quoteToY: widget.quoteToY,
+                                quoteFromY: widget.quoteFromY,
+                                getDrawingState: _interactiveState.getToolState,
+                                quoteRange: widget.quoteRange,
+                                epochRange: EpochRange(
+                                  leftEpoch: xAxis.leftBoundEpoch,
+                                  rightEpoch: xAxis.rightBoundEpoch,
+                                ),
+                                animationInfo: AnimationInfo(
+                                  stateChangePercent: animationValue,
+                                ),
+                              ),
                             ))
                         .toList(),
                   ],
-                );
-              }),
-        ),
+                ),
+              );
+            }),
       ),
     );
   }
