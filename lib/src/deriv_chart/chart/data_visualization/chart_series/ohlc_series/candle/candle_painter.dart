@@ -24,12 +24,17 @@ class CandlePainter extends OhlcPainter {
   ) {
     final CandleStyle style = series.style as CandleStyle? ?? theme.candleStyle;
 
+    // Check if the current candle is bullish or bearish.
+    final bool isBullishCandle = currentPainting.yOpen > currentPainting.yClose;
+
     _linePaint = Paint()
-      ..color = style.neutralColor
+      ..color = isBullishCandle
+          ? style.candleBullishWickColor
+          : style.candleBearishWickColor
       ..strokeWidth = 1.2;
 
-    _positiveCandlePaint = Paint()..color = style.positiveColor;
-    _negativeCandlePaint = Paint()..color = style.negativeColor;
+    _positiveCandlePaint = Paint()..color = style.candleBullishWickColor;
+    _negativeCandlePaint = Paint()..color = style.candleBearishWickColor;
 
     canvas.drawLine(
       Offset(currentPainting.xCenter, currentPainting.yHigh),
@@ -45,7 +50,7 @@ class CandlePainter extends OhlcPainter {
             currentPainting.yOpen),
         _linePaint,
       );
-    } else if (currentPainting.yOpen > currentPainting.yClose) {
+    } else if (isBullishCandle) {
       canvas.drawRect(
         Rect.fromLTRB(
           currentPainting.xCenter - currentPainting.width / 2,
