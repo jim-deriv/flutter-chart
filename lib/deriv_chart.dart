@@ -129,3 +129,7 @@ export 'src/widgets/market_selector/market_selector.dart';
 export 'src/widgets/market_selector/market_selector_button.dart';
 export 'src/widgets/market_selector/models.dart';
 export 'src/widgets/market_selector/symbol_icon.dart';
+export 'src/theme/decorators/chart_theme_decorator.dart';
+export 'src/theme/decorators/champion_theme_decorator.dart';
+export 'src/theme/decorators/deriv_theme_decorator.dart';
+export 'src/theme/decorators/colorblind_theme_decorator.dart';
