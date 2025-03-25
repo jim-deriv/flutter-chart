@@ -13,8 +13,8 @@ class CandlePainter extends OhlcPainter {
   CandlePainter(DataSeries<Candle> series) : super(series);
 
   late Paint _linePaint;
-  late Paint _positiveCandlePaint;
-  late Paint _negativeCandlePaint;
+  late Paint _candleBullishColorPaint;
+  late Paint _candleBearishColorPaint;
 
   @override
   void onPaintCandle(
@@ -33,8 +33,8 @@ class CandlePainter extends OhlcPainter {
           : style.candleBearishWickColor
       ..strokeWidth = 1.2;
 
-    _positiveCandlePaint = Paint()..color = style.candleBullishWickColor;
-    _negativeCandlePaint = Paint()..color = style.candleBearishWickColor;
+    _candleBullishColorPaint = Paint()..color = style.candleBullishWickColor;
+    _candleBearishColorPaint = Paint()..color = style.candleBearishWickColor;
 
     canvas.drawLine(
       Offset(currentPainting.xCenter, currentPainting.yHigh),
@@ -58,7 +58,7 @@ class CandlePainter extends OhlcPainter {
           currentPainting.xCenter + currentPainting.width / 2,
           currentPainting.yOpen,
         ),
-        _positiveCandlePaint,
+        _candleBullishColorPaint,
       );
     } else {
       canvas.drawRect(
@@ -68,7 +68,7 @@ class CandlePainter extends OhlcPainter {
           currentPainting.xCenter + currentPainting.width / 2,
           currentPainting.yClose,
         ),
-        _negativeCandlePaint,
+        _candleBearishColorPaint,
       );
     }
   }
