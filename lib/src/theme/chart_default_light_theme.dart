@@ -74,6 +74,10 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
       );
 
   @override
+  LineStyle get lineStyle =>
+      const LineStyle(color: DefaultLightThemeColors.line);
+
+  @override
   Color get accentRedColor => LightThemeColors.accentRed;
 
   @override
