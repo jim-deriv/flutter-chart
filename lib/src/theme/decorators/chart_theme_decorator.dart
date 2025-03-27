@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 /// A decorator for [ChartTheme] which allows for the decoration of a theme.
 /// This class is useful for adding additional functionality to a theme without
 /// modifying the theme itself.
-class ChartThemeDecorator implements ChartTheme {
+abstract class ChartThemeDecorator implements ChartTheme {
   /// Creates a theme decorator with the specified base theme.
   ///
   /// The [baseTheme] is the theme being decorated.
