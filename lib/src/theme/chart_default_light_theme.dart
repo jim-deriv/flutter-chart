@@ -57,10 +57,10 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
   GridStyle get axisGridStyle => GridStyle(
         gridLineColor: DefaultLightThemeColors.axisGridDefault,
         xLabelStyle: textStyle(
-            textStyle: TextStyles.bodyXsRegular,
+            textStyle: TextStyles.axisLabel,
             color: DefaultLightThemeColors.axisTextDefault),
         yLabelStyle: textStyle(
-            textStyle: TextStyles.bodyXsRegular,
+            textStyle: TextStyles.axisLabel,
             color: DefaultLightThemeColors.axisTextDefault),
       );
 
