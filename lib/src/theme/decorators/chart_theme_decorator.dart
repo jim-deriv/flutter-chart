@@ -621,5 +621,4 @@ class _StyleOverrideThemeDecorator extends ChartThemeDecorator {
 
   @override
   String get themeName => '${super.themeName}_StyleOverride';
-
 }
