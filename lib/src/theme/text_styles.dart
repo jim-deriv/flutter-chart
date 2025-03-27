@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-/// This include all font sizes according to the Deriv theme.
+/// This includes all font sizes according to the Deriv theme.
 class FontSize {
   /// fontSize: 12
   static const double s75 = 12;
