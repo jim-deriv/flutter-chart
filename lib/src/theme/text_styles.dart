@@ -2,12 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-/// This includes all font sizes according to the Deriv theme.
-class FontSize {
-  /// fontSize: 12
-  static const double s75 = 12;
-}
-
 /// This include all text styles according to Deriv theme guideline.
 class TextStyles {
   static const String appFontFamily = 'IBMPlexSans';
@@ -106,19 +100,27 @@ class TextStyles {
     fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
   );
 
-  static const TextStyle bodyXsRegular = TextStyle(
+  static const TextStyle axisLabel = TextStyle(
+    fontFeatures: <FontFeature>[
+      FontFeature.liningFigures(),
+      FontFeature.tabularFigures(),
+    ],
     fontFamily: fontFamilyDeriv,
-    fontSize: FontSize.s75,
-    height: 1.67,
+    fontSize: 10,
+    fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w400,
-    fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+    height: 2, // lineHeight (20px) / fontSize (10px) = 2
   );
 
   static const TextStyle currentSpotLabel = TextStyle(
+    fontFeatures: <FontFeature>[
+      FontFeature.liningFigures(),
+      FontFeature.tabularFigures(),
+    ],
     fontFamily: fontFamilyDeriv,
-    fontSize: FontSize.s75,
-    height: 1.67,
+    fontSize: 12,
+    fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w600,
-    fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+    height: 1.67, // lineHeight (20px) / fontSize (12px) = 1.67
   );
 }
