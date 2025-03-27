@@ -57,10 +57,10 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
   GridStyle get axisGridStyle => GridStyle(
         gridLineColor: DefaultDarkThemeColors.axisGridDefault,
         xLabelStyle: textStyle(
-            textStyle: TextStyles.bodyXsRegular,
+            textStyle: TextStyles.axisLabel,
             color: DefaultDarkThemeColors.axisTextDefault),
         yLabelStyle: textStyle(
-            textStyle: TextStyles.bodyXsRegular,
+            textStyle: TextStyles.axisLabel,
             color: DefaultDarkThemeColors.axisTextDefault),
       );
 
