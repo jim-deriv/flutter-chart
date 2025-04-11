@@ -163,31 +163,6 @@ class DefaultDarkThemeColors {
   static const Color desktop = Color(0xFFFFFFFF); // #FFFFFF
 }
 
-/// Deriv theme colors
-class DerivThemeColors {
-  static const Color areaDerivLine = Color(0xFFFF444F); // Hex: #FF444F
-  static const Color areaDerivGradientStart =
-      Color(0x29FF444F); // Hex: #FF444F with 16% opacity
-  static const Color areaDerivGradientEnd =
-      Color(0x00FF444F); // Hex: #FF444F with 0% opacity
-  static const Color currentSpotDerivContainer =
-      Color(0xFFFF444F); // Hex: #FF444F
-  static const Color currentSpotDerivLabel = Color(0xFFFFFFFF); // Hex: #FFFFFF
-}
-
-/// Champion theme colors
-class ChampionThemeColors {
-  static const Color areaChampionLine = Color(0xFF00D0FF); // Hex: #00D0FF
-  static const Color areaChampionGradientStart =
-      Color(0x2900D0FF); // Hex: #00D0FF with 16% opacity
-  static const Color areaChampionGradientEnd =
-      Color(0x0000D0FF); // Hex: #00D0FF with 0% opacity
-  static const Color currentSpotChampionContainer =
-      Color(0xFF00D0FF); // Hex: #00D0FF
-  static const Color currentSpotChampionLabel =
-      Color(0xFF00375C); // Hex: #00375C
-}
-
 /// Candle Bullish colors for light, dark, and colorblind themes
 class CandleBullishThemeColors {
   static const Color candleBullishBodyDefault =
