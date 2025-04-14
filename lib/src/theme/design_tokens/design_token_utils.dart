@@ -11,7 +11,7 @@ class DesignTokenUtils {
   DesignTokenUtils._();
 
   /// Constants for token categories
-  
+
   /// Core token category identifier
   static const String categoryCore = 'core';
 
@@ -21,36 +21,51 @@ class DesignTokenUtils {
   /// Dark theme token category identifier
   static const String categoryDark = 'dark';
 
+  /// Component token category identifier
+  static const String categoryComponent = 'component';
+
   /// File paths
-  
+
   /// Path to the JSON file containing design tokens
-  static const String tokensJsonPath = 'lib/src/theme/design_tokens/tokens.json';
+  static const String tokensJsonPath =
+      'lib/src/theme/design_tokens/tokens.json';
 
   /// Path to the generated Dart file for core tokens
-  static const String coreDesignTokensPath = 'lib/src/theme/design_tokens/core_design_tokens.dart';
+  static const String coreDesignTokensPath =
+      'lib/src/theme/design_tokens/core_design_tokens.dart';
 
   /// Path to the generated Dart file for light theme tokens
-  static const String lightThemeDesignTokensPath = 'lib/src/theme/design_tokens/light_theme_design_tokens.dart';
+  static const String lightThemeDesignTokensPath =
+      'lib/src/theme/design_tokens/light_theme_design_tokens.dart';
 
   /// Path to the generated Dart file for dark theme tokens
-  static const String darkThemeDesignTokensPath = 'lib/src/theme/design_tokens/dark_theme_design_tokens.dart';
+  static const String darkThemeDesignTokensPath =
+      'lib/src/theme/design_tokens/dark_theme_design_tokens.dart';
+
+  /// Path to the generated Dart file for component tokens
+  static const String componentDesignTokensPath =
+      'lib/src/theme/design_tokens/component_design_tokens.dart';
 
   /// Path to the token configuration file
-  static const String configPath = 'lib/src/theme/design_tokens/design_token_config.json';
+  static const String configPath =
+      'lib/src/theme/design_tokens/design_token_config.json';
 
   /// Pre-compiled regex patterns
-  
+
   /// Pattern to match token references in curly braces, e.g. {core.color.red}
   static final RegExp tokenPattern = RegExp(r'\{([^{}]+)\}');
 
   /// Pattern to match RGBA color values, e.g. rgba(255, 0, 0, 0.5)
-  static final RegExp rgbaPattern = RegExp(r'rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+%?)\s*\)');
+  static final RegExp rgbaPattern =
+      RegExp(r'rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+%?)\s*\)');
 
   /// Pattern to match cubic bezier values, e.g. cubic-bezier(0.42, 0, 1, 1)
-  static final RegExp cubicBezierPattern = RegExp(r'cubic-bezier\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)');
+  static final RegExp cubicBezierPattern = RegExp(
+      r'cubic-bezier\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)');
 
   /// Pattern to match linear gradient values, e.g. linear-gradient(45deg, red, blue)
-  static final RegExp linearGradientPattern = RegExp(r'linear-gradient\(([^,]+),(.+)\)');
+  static final RegExp linearGradientPattern =
+      RegExp(r'linear-gradient\(([^,]+),(.+)\)');
 
   /// Pattern to match color stops in gradients, e.g. red 10%
   static final RegExp colorStopPattern = RegExp(r'(.+)\s+([0-9.]+%)');
@@ -109,22 +124,25 @@ class DesignTokenUtils {
       // Skip the first part if it's the category name (core, light, dark)
       int startIndex = 0;
       final bool isCoreToken = parts.isNotEmpty && parts[0] == categoryCore;
-      if (parts.isNotEmpty && (parts[0] == categoryCore || 
-                              parts[0] == categoryLight || 
-                              parts[0] == categoryDark)) {
+      if (parts.isNotEmpty &&
+          (parts[0] == categoryCore ||
+              parts[0] == categoryLight ||
+              parts[0] == categoryDark)) {
         startIndex = 1;
       }
-      
+
       // For core tokens in core category, add 'core' prefix
-      final String prefix = (category == categoryCore && isCoreToken) ? 'core' : '';
+      final String prefix =
+          (category == categoryCore && isCoreToken) ? 'core' : '';
       String result = prefix;
-      
+
       // Add first part after prefix
       if (startIndex < parts.length) {
         // If we have a prefix and it's not empty, capitalize the first part
         if (prefix.isNotEmpty) {
           // Capitalize the first letter of the first part after prefix
-          result += parts[startIndex][0].toUpperCase() + parts[startIndex].substring(1);
+          result += parts[startIndex][0].toUpperCase() +
+              parts[startIndex].substring(1);
         } else {
           // No prefix, first part stays lowercase
           result += parts[startIndex];
@@ -143,7 +161,7 @@ class DesignTokenUtils {
           }
         }
       }
-      
+
       return result;
     }
   }
@@ -254,7 +272,8 @@ class DesignTokenUtils {
     final String _value = value.replaceAll("'", '').replaceAll('"', '');
 
     // Replace each token reference with its camelCase version
-    final String formattedValue = _value.replaceAllMapped(tokenPattern, (match) {
+    final String formattedValue =
+        _value.replaceAllMapped(tokenPattern, (match) {
       final String tokenRef = match.group(1)!;
 
       // Check if the token is already in camelCase format
@@ -263,31 +282,18 @@ class DesignTokenUtils {
       }
 
       // Convert from dot notation to camelCase
-      final String camelCaseToken = convertToDartPropertyName(tokenRef, category);
+      final String camelCaseToken =
+          convertToDartPropertyName(tokenRef, category);
       return camelCaseToken;
     });
 
     return formattedValue;
   }
 
-  /// Determines if a token path should be skipped during processing
-  ///
-  /// Component tokens are currently not supported and should be skipped.
-  /// This function checks if the first element in the path is "component".
-  ///
-  /// Parameters:
-  /// - paths: The token path as a list of string segments
-  ///
-  /// Returns:
-  /// true if the path should be skipped, false otherwise
-  static bool shouldSkipProcessing(List<String> paths) {
-    return paths.isNotEmpty && paths[0].toLowerCase() == 'component';
-  }
-
   /// Determines if a token is a component token
   ///
-  /// Component tokens are currently not supported. This function checks
-  /// if the token key is "component" and the path is empty.
+  /// This function checks if the token key is "component" and the path is empty,
+  /// or if the first element in the path is "component".
   ///
   /// Parameters:
   /// - paths: The token path as a list of string segments
@@ -296,7 +302,20 @@ class DesignTokenUtils {
   /// Returns:
   /// true if the token is a component token, false otherwise
   static bool isComponentToken(List<String> paths, String key) {
-    return paths.isEmpty && key.toLowerCase() == 'component';
+    return (paths.isEmpty && key.toLowerCase() == 'component') ||
+        (paths.isNotEmpty && paths[0].toLowerCase() == 'component');
+  }
+
+  static bool isStructuralToken(String tokenType) {
+    const structuralToken = [
+      'typography',
+      'borderRadius',
+      'sizing',
+      'spacing',
+      'borderWidth',
+      'boxShadow'
+    ];
+    return structuralToken.contains(tokenType);
   }
 
   /// The standard header comment for design token class files.

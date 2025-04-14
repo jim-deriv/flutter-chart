@@ -31,6 +31,13 @@
       "tokenNames": [
         "semantic/theme/dark"
       ]
+    },
+    "component": {
+      "outputPath": "lib/src/theme/design_tokens/component_design_tokens.dart",
+      "className": "ComponentDesignTokens",
+      "tokenNames": [
+        "component/component"
+      ]
     }
   }
 }

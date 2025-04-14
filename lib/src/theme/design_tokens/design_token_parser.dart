@@ -1,5 +1,5 @@
 /// Design Token Parser
-/// 
+///
 /// This file contains the main functionality for parsing design tokens from a JSON file
 /// and generating Dart code files that can be used in the application. The parser handles
 /// different token categories (core, light theme, dark theme) and uses specialized formatters
@@ -27,7 +27,7 @@ import 'design_token_formatters.dart';
 import 'design_token_logger.dart';
 
 /// Main entry point for the token parser
-/// 
+///
 /// Executes the token parsing process:
 /// 1. Loads configuration from design_token_config.json or uses default configuration
 /// 2. Tests parsers with example inputs to ensure they work correctly
@@ -55,7 +55,7 @@ void main() {
 }
 
 /// Maps to track processed tokens to avoid duplicates
-/// 
+///
 /// These maps store token values that have been processed for each theme category.
 /// The key is the token name/path and the value is the processed Dart code.
 /// This helps prevent duplicate token processing and enables reference tracking.
@@ -64,41 +64,47 @@ void main() {
 /// isolation between different theme contexts.
 
 /// Core token values map
-/// 
+///
 /// Stores processed core token values (colors, spacing, typography, etc.)
 Map<String, String> coreTokenValues = {};
 
 /// Light theme token values map
-/// 
+///
 /// Stores processed light theme-specific token values
 Map<String, String> lightThemeTokenValues = {};
 
 /// Dark theme token values map
-/// 
+///
 /// Stores processed dark theme-specific token values
 Map<String, String> darkThemeTokenValues = {};
 
+/// Component token values map
+///
+/// Stores processed component-specific token values
+Map<String, String> componentTokenValues = {};
+
 /// Reset token tracking maps
-/// 
+///
 /// Clears all token tracking maps before processing a new set of tokens.
 /// This ensures that no residual data from previous runs affects the current processing.
 void resetTokenMaps() {
   coreTokenValues = {};
   lightThemeTokenValues = {};
   darkThemeTokenValues = {};
+  componentTokenValues = {};
 }
 
 /// Load configuration from design_token_config.json
-/// 
+///
 /// Attempts to read and parse the configuration file from the predefined path (configPath).
 /// If the file doesn't exist or can't be parsed, falls back to the default configuration.
-/// 
+///
 /// The configuration file defines:
 /// - Token categories (core, light, dark)
 /// - Output paths for generated Dart files
 /// - Class names for generated token classes
 /// - Token names/paths to process from tokens.json
-/// 
+///
 /// Returns:
 ///   A Map<String, dynamic> containing the configuration settings for token processing.
 ///
@@ -121,11 +127,11 @@ Map<String, dynamic> loadConfiguration() {
 }
 
 /// Default configuration if config file is not found
-/// 
+///
 /// This configuration defines the token categories, output paths, class names,
 /// and token names to process for each category. It's used when the configuration
 /// file cannot be found or loaded.
-/// 
+///
 /// Structure:
 /// - tokenCategories: Map of category configurations
 ///   - core: Core design tokens (colors, spacing, typography, etc.)
@@ -165,12 +171,17 @@ final Map<String, dynamic> defaultConfiguration = {
       'outputPath': DesignTokenUtils.darkThemeDesignTokensPath,
       'className': 'DarkThemeDesignTokens',
       'tokenNames': ['semantic/theme/dark']
+    },
+    'component': {
+      'outputPath': DesignTokenUtils.componentDesignTokensPath,
+      'className': 'ComponentDesignTokens',
+      'tokenNames': ['component/component']
     }
   }
 };
 
 /// Process the tokens.json file and generate token files
-/// 
+///
 /// This is the main function that reads the tokens.json file, parses its content,
 /// and processes each token category (core, light, dark) to generate the corresponding
 /// Dart files.
@@ -212,21 +223,27 @@ void processTokensFile(Map<String, dynamic> config) {
     final tokenCategories = config['tokenCategories'] as Map<String, dynamic>;
 
     // Process core tokens
-    _processTokenCategory(
-        tokens, tokenCategories['core'], DesignTokenUtils.categoryCore, coreTokenValues);
+    _processTokenCategory(tokens, tokenCategories['core'],
+        DesignTokenUtils.categoryCore, coreTokenValues);
 
     // Process light theme tokens
-    _processTokenCategory(tokens, tokenCategories['light'], DesignTokenUtils.categoryLight,
-        lightThemeTokenValues);
+    _processTokenCategory(tokens, tokenCategories['light'],
+        DesignTokenUtils.categoryLight, lightThemeTokenValues);
 
     // Process dark theme tokens
-    _processTokenCategory(
-        tokens, tokenCategories['dark'], DesignTokenUtils.categoryDark, darkThemeTokenValues);
+    _processTokenCategory(tokens, tokenCategories['dark'],
+        DesignTokenUtils.categoryDark, darkThemeTokenValues);
+
+    // Process component tokens
+    _processTokenCategory(tokens, tokenCategories['component'],
+        DesignTokenUtils.categoryComponent, componentTokenValues);
 
     // Print token counts
     DesignTokenLogger.info('Core tokens: ${coreTokenValues.length}');
-    DesignTokenLogger.info('Light theme tokens: ${lightThemeTokenValues.length}');
+    DesignTokenLogger.info(
+        'Light theme tokens: ${lightThemeTokenValues.length}');
     DesignTokenLogger.info('Dark theme tokens: ${darkThemeTokenValues.length}');
+    DesignTokenLogger.info('Component tokens: ${componentTokenValues.length}');
   } catch (e) {
     DesignTokenLogger.error('Error processing tokens file: $e');
     rethrow;
@@ -234,7 +251,7 @@ void processTokensFile(Map<String, dynamic> config) {
 }
 
 /// Process a token category
-/// 
+///
 /// This private helper function processes a specific token category (core, light, dark)
 /// using the provided configuration. It creates the appropriate token generator,
 /// generates the token file content, and writes it to the specified output path.
@@ -260,7 +277,8 @@ void _processTokenCategory(
   final List<dynamic> tokenNames = categoryConfig['tokenNames'];
 
   // Create the appropriate generator using the factory
-  final generator = DesignTokenGeneratorFactory.createGenerator(category, className);
+  final generator =
+      DesignTokenGeneratorFactory.createGenerator(category, className);
 
   // Generate the token file content
   final content = generator.generate(tokens, List<String>.from(tokenNames));
@@ -270,48 +288,52 @@ void _processTokenCategory(
 }
 
 /// Test the parsers with examples
-/// 
+///
 /// This function tests various token formatters and parsers with example inputs to ensure
 /// they work correctly before processing the actual tokens. This helps catch any issues
 /// with the parsing logic early in the process.
-/// 
+///
 /// It tests the following formatters:
-/// 
+///
 /// 1. RGBA color formatter - Tests transforming RGBA strings with token references
 /// 2. Linear gradient formatter - Tests transforming gradient strings with token references
 /// 3. Gradient to Dart object converter - Tests converting gradient strings to Dart LinearGradient objects
 /// 4. Numeric token reference converter - Tests converting token references to Dart property names
 /// 5. Cubic bezier formatter - Tests converting cubic-bezier strings to Dart Curves objects
-/// 
+///
 /// Each formatter is tested with different token categories (core, light, dark) to ensure
 /// proper handling of token references in different contexts.
-/// 
+///
 /// The results are logged using DesignTokenLogger.debug for inspection during development.
 /// These tests are only run in debug mode and don't affect the actual token generation.
 void testParsers() {
   final DesignTokenValueFormatter colorFormatter =
       TokenFormatterFactory.getFormatter('color');
   // Test the rgba parser with different categories
-  const String rgbaInput = 'rgba({core.color.solid.magenta.700},{core.opacity.700})';
-  
+  const String rgbaInput =
+      'rgba({core.color.solid.magenta.700},{core.opacity.700})';
+
   DesignTokenLogger.debug('RGBA Original: $rgbaInput');
 
   // Test with different categories
   DesignTokenLogger.debug('\nCore category:');
   final String transformedCore = (colorFormatter is ColorTokenFormatter)
-      ? colorFormatter.transformRgbaTokenString(rgbaInput, DesignTokenUtils.categoryCore)
+      ? colorFormatter.transformRgbaTokenString(
+          rgbaInput, DesignTokenUtils.categoryCore)
       : 'Invalid formatter';
   DesignTokenLogger.debug('Transformed: $transformedCore');
 
   DesignTokenLogger.debug('\nLight category:');
   final String transformedLight = (colorFormatter is ColorTokenFormatter)
-      ? colorFormatter.transformRgbaTokenString(rgbaInput, DesignTokenUtils.categoryLight)
+      ? colorFormatter.transformRgbaTokenString(
+          rgbaInput, DesignTokenUtils.categoryLight)
       : 'Invalid formatter';
   DesignTokenLogger.debug('Transformed: $transformedLight');
 
   DesignTokenLogger.debug('\nDark category:');
   final String transformedDark = (colorFormatter is ColorTokenFormatter)
-      ? colorFormatter.transformRgbaTokenString(rgbaInput, DesignTokenUtils.categoryDark)
+      ? colorFormatter.transformRgbaTokenString(
+          rgbaInput, DesignTokenUtils.categoryDark)
       : 'Invalid formatter';
   DesignTokenLogger.debug('Transformed: $transformedDark');
 
@@ -322,16 +344,18 @@ void testParsers() {
 
   // Test with different categories
   DesignTokenLogger.debug('\nCore category:');
-  final String gradientCore = DesignTokenUtils.formatLinearGradientValue(gradientInput, DesignTokenUtils.categoryCore);
+  final String gradientCore = DesignTokenUtils.formatLinearGradientValue(
+      gradientInput, DesignTokenUtils.categoryCore);
   DesignTokenLogger.debug('Transformed: $gradientCore');
 
   DesignTokenLogger.debug('\nLight category:');
-  final String gradientLight =
-      DesignTokenUtils.formatLinearGradientValue(gradientInput, DesignTokenUtils.categoryLight);
+  final String gradientLight = DesignTokenUtils.formatLinearGradientValue(
+      gradientInput, DesignTokenUtils.categoryLight);
   DesignTokenLogger.debug('Transformed: $gradientLight');
 
   DesignTokenLogger.debug('\nDark category:');
-  final String gradientDark = DesignTokenUtils.formatLinearGradientValue(gradientInput, DesignTokenUtils.categoryDark);
+  final String gradientDark = DesignTokenUtils.formatLinearGradientValue(
+      gradientInput, DesignTokenUtils.categoryDark);
   DesignTokenLogger.debug('Transformed: $gradientDark');
 
   // Test the gradient string to LinearGradient conversion
@@ -371,18 +395,18 @@ void testParsers() {
 
   // Test with different categories
   DesignTokenLogger.debug('\nCore category:');
-  final String numericTokenCore =
-      DesignTokenUtils.convertToDartPropertyName(numericTokenRef, DesignTokenUtils.categoryCore);
+  final String numericTokenCore = DesignTokenUtils.convertToDartPropertyName(
+      numericTokenRef, DesignTokenUtils.categoryCore);
   DesignTokenLogger.debug('Transformed: $numericTokenCore');
 
   DesignTokenLogger.debug('\nLight category:');
-  final String numericTokenLight =
-      DesignTokenUtils.convertToDartPropertyName(numericTokenRef, DesignTokenUtils.categoryLight);
+  final String numericTokenLight = DesignTokenUtils.convertToDartPropertyName(
+      numericTokenRef, DesignTokenUtils.categoryLight);
   DesignTokenLogger.debug('Transformed: $numericTokenLight');
 
   DesignTokenLogger.debug('\nDark category:');
-  final String numericTokenDark =
-      DesignTokenUtils.convertToDartPropertyName(numericTokenRef, DesignTokenUtils.categoryDark);
+  final String numericTokenDark = DesignTokenUtils.convertToDartPropertyName(
+      numericTokenRef, DesignTokenUtils.categoryDark);
   DesignTokenLogger.debug('Transformed: $numericTokenDark');
 
   // Test cubic-bezier parser

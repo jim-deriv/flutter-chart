@@ -1,5 +1,5 @@
 /// Design Token Generators
-/// 
+///
 /// This file contains the implementation of design token generators that transform
 /// raw design tokens from a JSON structure into Dart code. The generators create
 /// strongly-typed Dart classes that provide type-safe access to design tokens.
@@ -28,18 +28,17 @@ import 'design_token_logger.dart';
 /// This allows the token generator to work without requiring Flutter as a dependency
 /// while still providing color functionality for token processing.
 class Color {
-
   /// Creates a new Color with the given 32-bit value.
-  /// 
+  ///
   /// The value is a 32-bit integer with the following format:
   /// - Bits 24-31: Alpha channel (opacity)
   /// - Bits 16-23: Red channel
   /// - Bits 8-15: Green channel
   /// - Bits 0-7: Blue channel
   const Color(this.value);
-  
+
   /// Creates a color from red, green, blue, and opacity components.
-  /// 
+  ///
   /// Each RGB component ranges from 0 to 255, and opacity ranges from 0.0 to 1.0.
   /// This constructor is compatible with Flutter's Color.fromRGBO constructor.
   Color.fromRGBO(int r, int g, int b, double opacity)
@@ -50,16 +49,16 @@ class Color {
 
   /// The red channel value, from 0 to 255.
   int get red => (value >> 16) & 0xFF;
-  
+
   /// The green channel value, from 0 to 255.
   int get green => (value >> 8) & 0xFF;
-  
+
   /// The blue channel value, from 0 to 255.
   int get blue => value & 0xFF;
 }
 
 /// Abstract class defining the interface for all design token generators.
-/// 
+///
 /// This class is part of the Factory Pattern implementation, providing a common
 /// interface for different token generator implementations. Each generator is
 /// responsible for transforming raw design tokens into Dart code for a specific
@@ -73,7 +72,7 @@ abstract class DesignTokenGenerator {
   void writeToFile(String content, String filePath);
 
   /// Process tokens and add them to the output
-  /// 
+  ///
   /// This method recursively processes tokens from a section of the token hierarchy,
   /// formats them based on their type, and adds them to the output StringBuffer.
   /// It handles both leaf tokens (with values) and nested token groups.
@@ -93,7 +92,7 @@ abstract class DesignTokenGenerator {
 }
 
 /// Base implementation for design token generators that provides common functionality.
-/// 
+///
 /// This abstract class implements the DesignTokenGenerator interface and provides
 /// shared functionality for all token generators. It follows the Template Method
 /// pattern by defining the overall algorithm structure while allowing subclasses
@@ -106,12 +105,11 @@ abstract class DesignTokenGenerator {
 /// - Handling nested token structures
 ///
 abstract class BaseDesignTokenGenerator implements DesignTokenGenerator {
-  
   /// Creates a new BaseDesignTokenGenerator with the specified class name and category.
-  /// 
+  ///
   /// This constructor initializes a new token generator with the specified class name
   /// and category. It also initializes an empty tokenValues map to track processed tokens.
-  /// 
+  ///
   /// Parameters:
   /// - className: The name of the class to generate (e.g., CoreDesignTokens)
   /// - category: The token category (core, light, dark) that determines how tokens are processed
@@ -119,17 +117,17 @@ abstract class BaseDesignTokenGenerator implements DesignTokenGenerator {
 
   /// The name of the class to generate
   final String className;
-  
+
   /// The token category (core, light, dark)
   final String category;
-  
+
   /// Map to track processed tokens and avoid duplicates
   final Map<String, String> tokenValues = {};
 
-
   @override
+
   /// Writes the generated token content to a file
-  /// 
+  ///
   /// This method creates or overwrites a file at the specified path with the
   /// generated token content. It ensures the file is clean by deleting it first
   /// if it already exists.
@@ -155,20 +153,7 @@ abstract class BaseDesignTokenGenerator implements DesignTokenGenerator {
       required List<String> paths,
       required String category,
       required Map<String, String> tokenValues}) {
-    // Skip processing if the first path element is "component"
-    // This allows filtering out certain token categories
-    if (DesignTokenUtils.shouldSkipProcessing(paths)) {
-      return;
-    }
-
     section.forEach((key, value) {
-      // Skip if this key would create a component token
-      // Component tokens aren't supported yet
-      if (DesignTokenUtils.isComponentToken(paths, key)) {
-        // TODO(jim-deriv): Handle component tokens if needed
-        return;
-      }
-
       if (value is Map) {
         if (value.containsKey('value')) {
           // This is a leaf token with a value
@@ -310,7 +295,6 @@ abstract class BaseDesignTokenGenerator implements DesignTokenGenerator {
     // Use the TokenFormatterFactory to get the appropriate formatter
     return TokenFormatterFactory.getFormatter(type).format(value, category);
   }
-
 }
 
 /// Generator for core design tokens.
@@ -321,10 +305,11 @@ abstract class BaseDesignTokenGenerator implements DesignTokenGenerator {
 ///
 class CoreDesignTokenGenerator extends BaseDesignTokenGenerator {
   /// Creates a new CoreDesignTokenGenerator.
-  /// 
+  ///
   /// This generator is specifically for core tokens that are shared between
   /// light and dark themes.
-  CoreDesignTokenGenerator() : super('CoreDesignTokens', DesignTokenUtils.categoryCore);
+  CoreDesignTokenGenerator()
+      : super('CoreDesignTokens', DesignTokenUtils.categoryCore);
 
   @override
   String generate(Map<String, dynamic> tokens, List<String> tokenNames) {
@@ -362,7 +347,7 @@ class CoreDesignTokenGenerator extends BaseDesignTokenGenerator {
 ///
 class ThemeDesignTokenGenerator extends BaseDesignTokenGenerator {
   /// Creates a new ThemeDesignTokenGenerator with the specified class name and category.
-  /// 
+  ///
   /// Parameters:
   /// - className: The name of the class to generate (e.g., LightThemeTokens, DarkThemeTokens)
   /// - category: The token category (categoryLight, categoryDark)
@@ -398,6 +383,189 @@ class ThemeDesignTokenGenerator extends BaseDesignTokenGenerator {
   }
 }
 
+/// Generator for component tokens.
+///
+/// Component tokens are specific to UI components and include values for buttons,
+/// cards, fields, and other UI elements. This generator creates a ComponentDesignTokens
+/// class with static members for each token.
+///
+class ComponentDesignTokenGenerator extends BaseDesignTokenGenerator {
+  /// Creates a new ComponentDesignTokenGenerator with the specified class name.
+  ///
+  /// Parameters:
+  /// - className: The name of the class to generate (e.g., ComponentDesignTokens)
+  ComponentDesignTokenGenerator(String className)
+      : super(className, DesignTokenUtils.categoryComponent);
+
+  @override
+  String generate(Map<String, dynamic> tokens, List<String> tokenNames) {
+    final StringBuffer output = StringBuffer()
+      ..write(DesignTokenUtils.designTokenFileHeaderComment)
+      ..write(
+          'import \'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart\';\n')
+      ..write(
+          'import \'package:deriv_chart/src/theme/design_tokens/light_theme_design_tokens.dart\';\n')
+      ..write(
+          'import \'package:deriv_chart/src/theme/design_tokens/dark_theme_design_tokens.dart\';\n\n')
+      ..write('/// Component tokens for UI elements\n')
+      ..write('class $className {\n')
+      ..write('  $className._();\n\n');
+
+    // Process component tokens
+    DesignTokenLogger.info('Processing component tokens...');
+    for (final tokenName in tokenNames) {
+      if (tokens.containsKey(tokenName)) {
+        processTokens(
+            output: output,
+            section: tokens[tokenName] as Map<String, dynamic>,
+            paths: [],
+            category: category,
+            tokenValues: tokenValues);
+      }
+    }
+
+    output.write('}\n');
+
+    return output.toString();
+  }
+
+  @override
+  void processTokens(
+      {required StringBuffer output,
+      required Map<String, dynamic> section,
+      required List<String> paths,
+      required String category,
+      required Map<String, String> tokenValues}) {
+    section.forEach((key, value) {
+      if (value is Map) {
+        if (value.containsKey('value')) {
+          // This is a leaf token with a value
+          _processComponentValueToken(output, key,
+              value.cast<String, dynamic>(), paths, category, tokenValues);
+        } else {
+          // This is a nested token group
+          _processNestedToken(output, key, value.cast<String, dynamic>(), paths,
+              category, tokenValues);
+        }
+      }
+    });
+  }
+
+  /// Processes a component token that has a direct value.
+  ///
+  /// This method creates two copies of each component token variable - one with "Light" suffix
+  /// that references the light theme token, and one with "Dark" suffix that references the dark theme token.
+  /// For core tokens, it creates a single variable that references CoreDesignTokens directly.
+  ///
+  /// Parameters:
+  /// - output: The StringBuffer to write the generated code to
+  /// - key: The token key (name)
+  /// - value: The token value and metadata
+  /// - paths: The current path in the token hierarchy
+  /// - category: The token category (component)
+  /// - tokenValues: Map to track processed tokens and avoid duplicates
+  ///
+  void _processComponentValueToken(
+      StringBuffer output,
+      String key,
+      Map<String, dynamic> value,
+      List<String> paths,
+      String category,
+      Map<String, String> tokenValues) {
+    // Cast the map to the correct type
+    final Map<String, dynamic> typedValue = value.cast<String, dynamic>();
+
+    // Safely handle first character access
+    final String firstChar = key.isNotEmpty ? key[0] : '';
+    final String capitalizedKey = key.isNotEmpty
+        ? key.replaceFirst(firstChar, firstChar.toUpperCase())
+        : key;
+
+    final String tokenName = '${paths.join()}$capitalizedKey';
+
+    // Check if this token name has already been generated
+    if (!tokenValues.containsKey(tokenName)) {
+      final String rawValue = typedValue['value'].toString();
+      final String tokenType = typedValue['type']?.toString() ?? 'default';
+      final String tokenValue =
+          _formatTokenValue(rawValue, tokenType, category);
+      final String description = typedValue.containsKey('description') &&
+              typedValue['description'] != null
+          ? '/// ${typedValue['description']}'
+          : '';
+      final isColorToken = tokenType == 'color';
+      // Store the token value
+      tokenValues[tokenName] = tokenValue;
+
+      // Generate comment text
+      String commentText;
+      if (description.isNotEmpty) {
+        // If there's a description, use it and add the token value
+        commentText = '$description (Value: ${typedValue['value']})';
+      } else {
+        // Generate a comment with just the token value
+        commentText = '/// $tokenName with value: ${typedValue['value']}';
+      }
+
+      // For component tokens, we need to extract the token path from the raw value
+      // The raw value is typically in the format "{semantic.color.monochrome.textIcon.normal.low}"
+      // or "{core.color.solid.slate.1400}"
+      String tokenPath = rawValue;
+
+      // Remove curly braces if present
+      if (tokenPath.startsWith('{') && tokenPath.endsWith('}')) {
+        tokenPath = tokenPath.substring(1, tokenPath.length - 1);
+      }
+
+      // Check if this is a core token, a structural semantic token, or a regular semantic token
+      if (tokenPath.startsWith('core.')) {
+        // For core tokens, we use CoreDesignTokens directly
+        String coreTokenName =
+            DesignTokenUtils.convertToDartPropertyName(tokenPath, "");
+
+        output
+          ..write('  $commentText\n')
+          ..write('  static final $tokenName = $coreTokenName;\n\n');
+      } else if (tokenPath.startsWith('semantic.') &&
+          DesignTokenUtils.isStructuralToken(tokenType)) {
+        print('Semantic token: $tokenPath');
+        print('TypedValue: $typedValue');
+        // For semantic structural tokens (typography, borderRadius, sizing, spacing, etc.),
+        // we treat them as core tokens and prefix with CoreDesignTokens
+        String semanticTokenName =
+            DesignTokenUtils.convertToDartPropertyName(tokenPath, "");
+
+        output
+          ..write('  $commentText\n')
+          ..write(
+              '  static final $tokenName = CoreDesignTokens.$semanticTokenName;\n\n');
+      } else {
+        if (isColorToken && tokenPath.startsWith('semantic.')) {
+          // For semantic color tokens, we create light and dark versions
+          // For regular semantic tokens, we create light and dark versions
+          String semanticTokenName =
+              DesignTokenUtils.convertToDartPropertyName(tokenPath, "");
+
+          // Write the light theme version
+          output
+            ..write('  $commentText\n')
+            ..write(
+                '  static final ${tokenName}Light = LightThemeDesignTokens.$semanticTokenName;\n\n');
+
+          // Write the dark theme version
+          output
+            ..write('  $commentText\n')
+            ..write(
+                '  static final ${tokenName}Dark = DarkThemeDesignTokens.$semanticTokenName;\n\n');
+        }
+      }
+    } else {
+      DesignTokenLogger.warning(
+          'Duplicate token name detected in $category: $tokenName');
+    }
+  }
+}
+
 /// Factory for creating appropriate token generators based on token category.
 ///
 /// This factory implements the Factory Pattern to create the correct token generator
@@ -408,10 +576,10 @@ class DesignTokenGeneratorFactory {
   /// Creates a token generator based on the specified category.
   ///
   /// This factory method returns the appropriate generator instance for the given
-  /// token category. It supports core, light, and dark token categories.
+  /// token category. It supports core, light, dark, and component token categories.
   ///
   /// Parameters:
-  /// - category: The token category (categoryCore, categoryLight, categoryDark)
+  /// - category: The token category (categoryCore, categoryLight, categoryDark, categoryComponent)
   /// - className: The name of the class to generate
   ///
   /// Returns:
@@ -428,6 +596,8 @@ class DesignTokenGeneratorFactory {
       case DesignTokenUtils.categoryLight:
       case DesignTokenUtils.categoryDark:
         return ThemeDesignTokenGenerator(className, category);
+      case DesignTokenUtils.categoryComponent:
+        return ComponentDesignTokenGenerator(className);
       default:
         throw ArgumentError('Unknown token category: $category');
     }
@@ -441,7 +611,7 @@ class DesignTokenGeneratorFactory {
 ///
 extension StringExtension on String {
   /// Returns a new string with the first letter capitalized.
-  /// 
+  ///
   /// If the string is empty, returns an empty string.
   String capitalize() {
     return isEmpty ? '' : '${this[0].toUpperCase()}${substring(1)}';
