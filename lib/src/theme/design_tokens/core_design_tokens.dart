@@ -9,172 +9,172 @@ class CoreDesignTokens {
   CoreDesignTokens._();
 
   /// coreBorderRadius50 with value: 0px
-  static const coreBorderRadius50 = 0;
+  static const coreBorderRadius50 = 0.0;
 
   /// 0.125rem (Value: 2px)
-  static const coreBorderRadius100 = 2;
+  static const coreBorderRadius100 = 2.0;
 
   /// 0.25rem (Value: 4px)
-  static const coreBorderRadius200 = 4;
+  static const coreBorderRadius200 = 4.0;
 
   /// 0.375rem (Value: 6px)
-  static const coreBorderRadius300 = 6;
+  static const coreBorderRadius300 = 6.0;
 
   /// 0.5rem (Value: 8px)
-  static const coreBorderRadius400 = 8;
+  static const coreBorderRadius400 = 8.0;
 
   /// 0.625rem (Value: 10px)
-  static const coreBorderRadius500 = 10;
+  static const coreBorderRadius500 = 10.0;
 
   /// 0.75rem (Value: 12px)
-  static const coreBorderRadius600 = 12;
+  static const coreBorderRadius600 = 12.0;
 
   /// 0.875rem (Value: 14px)
-  static const coreBorderRadius700 = 14;
+  static const coreBorderRadius700 = 14.0;
 
   /// 1rem (Value: 16px)
-  static const coreBorderRadius800 = 16;
+  static const coreBorderRadius800 = 16.0;
 
   /// 1.125rem (Value: 18px)
-  static const coreBorderRadius900 = 18;
+  static const coreBorderRadius900 = 18.0;
 
   /// 1.25rem (Value: 20px)
-  static const coreBorderRadius1000 = 20;
+  static const coreBorderRadius1000 = 20.0;
 
   /// 1.375rem (Value: 22px)
-  static const coreBorderRadius1100 = 22;
+  static const coreBorderRadius1100 = 22.0;
 
   /// 1.5rem (Value: 24px)
-  static const coreBorderRadius1200 = 24;
+  static const coreBorderRadius1200 = 24.0;
 
   /// 1.625rem (Value: 26px)
-  static const coreBorderRadius1300 = 26;
+  static const coreBorderRadius1300 = 26.0;
 
   /// 1.75rem (Value: 28px)
-  static const coreBorderRadius1400 = 28;
+  static const coreBorderRadius1400 = 28.0;
 
   /// 1.875rem (Value: 30px)
-  static const coreBorderRadius1500 = 30;
+  static const coreBorderRadius1500 = 30.0;
 
   /// 2rem (Value: 32px)
-  static const coreBorderRadius1600 = 32;
+  static const coreBorderRadius1600 = 32.0;
 
   /// 2.125rem (Value: 34px)
-  static const coreBorderRadius1700 = 34;
+  static const coreBorderRadius1700 = 34.0;
 
   /// 2.25rem (Value: 36px)
-  static const coreBorderRadius1800 = 36;
+  static const coreBorderRadius1800 = 36.0;
 
   /// 2.375rem (Value: 38px)
-  static const coreBorderRadius1900 = 38;
+  static const coreBorderRadius1900 = 38.0;
 
   /// 2.5rem (Value: 40px)
-  static const coreBorderRadius2000 = 40;
+  static const coreBorderRadius2000 = 40.0;
 
   /// 2.625rem (Value: 42px)
-  static const coreBorderRadius2100 = 42;
+  static const coreBorderRadius2100 = 42.0;
 
   /// 2.75rem (Value: 44px)
-  static const coreBorderRadius2200 = 44;
+  static const coreBorderRadius2200 = 44.0;
 
   /// 2.875rem (Value: 46px)
-  static const coreBorderRadius2300 = 46;
+  static const coreBorderRadius2300 = 46.0;
 
   /// 3rem (Value: 48px)
-  static const coreBorderRadius2400 = 48;
+  static const coreBorderRadius2400 = 48.0;
 
   /// 3.125rem (Value: 50px)
-  static const coreBorderRadius2500 = 50;
+  static const coreBorderRadius2500 = 50.0;
 
   /// 3.25rem (Value: 52px)
-  static const coreBorderRadius2600 = 52;
+  static const coreBorderRadius2600 = 52.0;
 
   /// 3.375rem (Value: 54px)
-  static const coreBorderRadius2700 = 54;
+  static const coreBorderRadius2700 = 54.0;
 
   /// 3.5rem (Value: 56px)
-  static const coreBorderRadius2800 = 56;
+  static const coreBorderRadius2800 = 56.0;
 
   /// 3.625rem (Value: 58px)
-  static const coreBorderRadius2900 = 58;
+  static const coreBorderRadius2900 = 58.0;
 
   /// 3.75rem (Value: 60px)
-  static const coreBorderRadius3000 = 60;
+  static const coreBorderRadius3000 = 60.0;
 
   /// 3.875rem (Value: 62px)
-  static const coreBorderRadius3100 = 62;
+  static const coreBorderRadius3100 = 62.0;
 
   /// 4rem (Value: 64px)
-  static const coreBorderRadius3200 = 64;
+  static const coreBorderRadius3200 = 64.0;
 
   /// 4.125rem (Value: 66px)
-  static const coreBorderRadius3300 = 66;
+  static const coreBorderRadius3300 = 66.0;
 
   /// 4.25rem (Value: 68px)
-  static const coreBorderRadius3400 = 68;
+  static const coreBorderRadius3400 = 68.0;
 
   /// 4.375rem (Value: 70px)
-  static const coreBorderRadius3500 = 70;
+  static const coreBorderRadius3500 = 70.0;
 
   /// 4.5rem (Value: 72px)
-  static const coreBorderRadius3600 = 72;
+  static const coreBorderRadius3600 = 72.0;
 
   /// 4.625rem (Value: 74px)
-  static const coreBorderRadius3700 = 74;
+  static const coreBorderRadius3700 = 74.0;
 
   /// 4.75rem (Value: 76px)
-  static const coreBorderRadius3800 = 76;
+  static const coreBorderRadius3800 = 76.0;
 
   /// 4.875rem (Value: 78px)
-  static const coreBorderRadius3900 = 78;
+  static const coreBorderRadius3900 = 78.0;
 
   /// 5rem (Value: 80px)
-  static const coreBorderRadius4000 = 80;
+  static const coreBorderRadius4000 = 80.0;
 
   /// 5.125rem (Value: 82px)
-  static const coreBorderRadius4100 = 82;
+  static const coreBorderRadius4100 = 82.0;
 
   /// 5.25rem (Value: 84px)
-  static const coreBorderRadius4200 = 84;
+  static const coreBorderRadius4200 = 84.0;
 
   /// 5.375rem (Value: 86px)
-  static const coreBorderRadius4300 = 86;
+  static const coreBorderRadius4300 = 86.0;
 
   /// 5.5rem (Value: 88px)
-  static const coreBorderRadius4400 = 88;
+  static const coreBorderRadius4400 = 88.0;
 
   /// 5.625rem (Value: 90px)
-  static const coreBorderRadius4500 = 90;
+  static const coreBorderRadius4500 = 90.0;
 
   /// 5.75rem (Value: 92px)
-  static const coreBorderRadius4600 = 92;
+  static const coreBorderRadius4600 = 92.0;
 
   /// 5.875rem (Value: 94px)
-  static const coreBorderRadius4700 = 94;
+  static const coreBorderRadius4700 = 94.0;
 
   /// 6rem (Value: 96px)
-  static const coreBorderRadius4800 = 96;
+  static const coreBorderRadius4800 = 96.0;
 
   /// 6.125rem (Value: 98px)
-  static const coreBorderRadius4900 = 98;
+  static const coreBorderRadius4900 = 98.0;
 
   /// 6.25rem (Value: 100px)
-  static const coreBorderRadius5000 = 100;
+  static const coreBorderRadius5000 = 100.0;
 
   /// coreBorderWidth50 with value: 0
-  static const coreBorderWidth50 = 0;
+  static const coreBorderWidth50 = 0.0;
 
   /// 0.0625rem (Value: 1)
-  static const coreBorderWidth75 = 1;
+  static const coreBorderWidth75 = 1.0;
 
   /// 0.125 (Value: 2)
-  static const coreBorderWidth100 = 2;
+  static const coreBorderWidth100 = 2.0;
 
   /// 0.25rem (Value: 4)
-  static const coreBorderWidth200 = 4;
+  static const coreBorderWidth200 = 4.0;
 
   /// 0.5rem (Value: 8)
-  static const coreBorderWidth300 = 8;
+  static const coreBorderWidth300 = 8.0;
 
   /// coreColorSolidRed100 with value: #ffe6e6
   static const coreColorSolidRed100 = Color(0xFFffe6e6);
@@ -2890,217 +2890,217 @@ class CoreDesignTokens {
   static const coreOpacity1300 = 1.0;
 
   /// 0rem (Value: 0)
-  static const coreSpacing50 = 0;
+  static const coreSpacing50 = 0.0;
 
   /// 0.0625rem (Value: 1)
-  static const coreSpacing75 = 1;
+  static const coreSpacing75 = 1.0;
 
   /// 0.125rem (Value: 2)
-  static const coreSpacing100 = 2;
+  static const coreSpacing100 = 2.0;
 
   /// 0.25rem (Value: 4)
-  static const coreSpacing200 = 4;
+  static const coreSpacing200 = 4.0;
 
   /// 0.375rem (Value: 6)
-  static const coreSpacing300 = 6;
+  static const coreSpacing300 = 6.0;
 
   /// 0.5rem (Value: 8)
-  static const coreSpacing400 = 8;
+  static const coreSpacing400 = 8.0;
 
   /// 0.625rem (Value: 10)
-  static const coreSpacing500 = 10;
+  static const coreSpacing500 = 10.0;
 
   /// 0.75rem (Value: 12)
-  static const coreSpacing600 = 12;
+  static const coreSpacing600 = 12.0;
 
   /// 0.875rem (Value: 14)
-  static const coreSpacing700 = 14;
+  static const coreSpacing700 = 14.0;
 
   /// 1rem (Value: 16)
-  static const coreSpacing800 = 16;
+  static const coreSpacing800 = 16.0;
 
   /// 1.125rem (Value: 18)
-  static const coreSpacing900 = 18;
+  static const coreSpacing900 = 18.0;
 
   /// 1.25rem (Value: 20)
-  static const coreSpacing1000 = 20;
+  static const coreSpacing1000 = 20.0;
 
   /// 1.375rem (Value: 22)
-  static const coreSpacing1100 = 22;
+  static const coreSpacing1100 = 22.0;
 
   /// 1.5rem (Value: 24)
-  static const coreSpacing1200 = 24;
+  static const coreSpacing1200 = 24.0;
 
   /// 1.625rem (Value: 26)
-  static const coreSpacing1300 = 26;
+  static const coreSpacing1300 = 26.0;
 
   /// 1.75rem (Value: 28)
-  static const coreSpacing1400 = 28;
+  static const coreSpacing1400 = 28.0;
 
   /// 1.875rem (Value: 30)
-  static const coreSpacing1500 = 30;
+  static const coreSpacing1500 = 30.0;
 
   /// 2rem (Value: 32)
-  static const coreSpacing1600 = 32;
+  static const coreSpacing1600 = 32.0;
 
   /// 2.125rem (Value: 34)
-  static const coreSpacing1700 = 34;
+  static const coreSpacing1700 = 34.0;
 
   /// 2.25rem (Value: 36)
-  static const coreSpacing1800 = 36;
+  static const coreSpacing1800 = 36.0;
 
   /// 2.375rem (Value: 38)
-  static const coreSpacing1900 = 38;
+  static const coreSpacing1900 = 38.0;
 
   /// 2.5rem (Value: 40)
-  static const coreSpacing2000 = 40;
+  static const coreSpacing2000 = 40.0;
 
   /// 2.625rem (Value: 42)
-  static const coreSpacing2100 = 42;
+  static const coreSpacing2100 = 42.0;
 
   /// 2.75rem (Value: 44)
-  static const coreSpacing2200 = 44;
+  static const coreSpacing2200 = 44.0;
 
   /// 2.875rem (Value: 46)
-  static const coreSpacing2300 = 46;
+  static const coreSpacing2300 = 46.0;
 
   /// 3rem (Value: 48)
-  static const coreSpacing2400 = 48;
+  static const coreSpacing2400 = 48.0;
 
   /// 3.125rem (Value: 50)
-  static const coreSpacing2500 = 50;
+  static const coreSpacing2500 = 50.0;
 
   /// 3.25rem (Value: 52)
-  static const coreSpacing2600 = 52;
+  static const coreSpacing2600 = 52.0;
 
   /// 3.375rem (Value: 54)
-  static const coreSpacing2700 = 54;
+  static const coreSpacing2700 = 54.0;
 
   /// 3.5rem (Value: 56)
-  static const coreSpacing2800 = 56;
+  static const coreSpacing2800 = 56.0;
 
   /// 3.625rem (Value: 58)
-  static const coreSpacing2900 = 58;
+  static const coreSpacing2900 = 58.0;
 
   /// 3.75rem (Value: 60)
-  static const coreSpacing3000 = 60;
+  static const coreSpacing3000 = 60.0;
 
   /// 3.875rem (Value: 62)
-  static const coreSpacing3100 = 62;
+  static const coreSpacing3100 = 62.0;
 
   /// 4rem (Value: 64)
-  static const coreSpacing3200 = 64;
+  static const coreSpacing3200 = 64.0;
 
   /// 4.125rem (Value: 66)
-  static const coreSpacing3300 = 66;
+  static const coreSpacing3300 = 66.0;
 
   /// 4.25rem (Value: 68)
-  static const coreSpacing3400 = 68;
+  static const coreSpacing3400 = 68.0;
 
   /// 4.375rem (Value: 70)
-  static const coreSpacing3500 = 70;
+  static const coreSpacing3500 = 70.0;
 
   /// 4.5rem (Value: 72)
-  static const coreSpacing3600 = 72;
+  static const coreSpacing3600 = 72.0;
 
   /// 4.625rem (Value: 74)
-  static const coreSpacing3700 = 74;
+  static const coreSpacing3700 = 74.0;
 
   /// 4.75rem (Value: 76)
-  static const coreSpacing3800 = 76;
+  static const coreSpacing3800 = 76.0;
 
   /// 4.875rem (Value: 78)
-  static const coreSpacing3900 = 78;
+  static const coreSpacing3900 = 78.0;
 
   /// 5rem (Value: 80)
-  static const coreSpacing4000 = 80;
+  static const coreSpacing4000 = 80.0;
 
   /// 5.125rem (Value: 82)
-  static const coreSpacing4100 = 82;
+  static const coreSpacing4100 = 82.0;
 
   /// 5.25rem (Value: 84)
-  static const coreSpacing4200 = 84;
+  static const coreSpacing4200 = 84.0;
 
   /// 5.375rem (Value: 86)
-  static const coreSpacing4300 = 86;
+  static const coreSpacing4300 = 86.0;
 
   /// 5.5rem (Value: 88)
-  static const coreSpacing4400 = 88;
+  static const coreSpacing4400 = 88.0;
 
   /// 5.625rem (Value: 90)
-  static const coreSpacing4500 = 90;
+  static const coreSpacing4500 = 90.0;
 
   /// 5.75rem (Value: 92)
-  static const coreSpacing4600 = 92;
+  static const coreSpacing4600 = 92.0;
 
   /// 5.875rem (Value: 94)
-  static const coreSpacing4700 = 94;
+  static const coreSpacing4700 = 94.0;
 
   /// 6rem (Value: 96)
-  static const coreSpacing4800 = 96;
+  static const coreSpacing4800 = 96.0;
 
   /// 6.125rem (Value: 98)
-  static const coreSpacing4900 = 98;
+  static const coreSpacing4900 = 98.0;
 
   /// 6.25rem (Value: 100)
-  static const coreSpacing5000 = 100;
+  static const coreSpacing5000 = 100.0;
 
   /// 0.625rem (Value: 10)
-  static const coreFontSize25 = 10;
+  static const coreFontSize25 = 10.0;
 
   /// 0.75rem (Value: 12)
-  static const coreFontSize50 = 12;
+  static const coreFontSize50 = 12.0;
 
   /// 0.875rem (Value: 14)
-  static const coreFontSize75 = 14;
+  static const coreFontSize75 = 14.0;
 
   /// 1rem (Value: 16)
-  static const coreFontSize100 = 16;
+  static const coreFontSize100 = 16.0;
 
   /// 1.125rem (Value: 18)
-  static const coreFontSize200 = 18;
+  static const coreFontSize200 = 18.0;
 
   /// 1.25rem (Value: 20)
-  static const coreFontSize300 = 20;
+  static const coreFontSize300 = 20.0;
 
   /// 1.5rem (Value: 24)
-  static const coreFontSize400 = 24;
+  static const coreFontSize400 = 24.0;
 
   /// 2rem (Value: 32)
-  static const coreFontSize500 = 32;
+  static const coreFontSize500 = 32.0;
 
   /// 2.5rem (Value: 40)
-  static const coreFontSize600 = 40;
+  static const coreFontSize600 = 40.0;
 
   /// 3rem (Value: 48)
-  static const coreFontSize700 = 48;
+  static const coreFontSize700 = 48.0;
 
   /// 4rem (Value: 64)
-  static const coreFontSize800 = 64;
+  static const coreFontSize800 = 64.0;
 
   /// 5rem (Value: 80)
-  static const coreFontSize900 = 80;
+  static const coreFontSize900 = 80.0;
 
   /// 1.75rem (Value: 28)
-  static const coreFontSize1000 = 28;
+  static const coreFontSize1000 = 28.0;
 
   /// 2.125rem (Value: 34)
-  static const coreFontSize1100 = 34;
+  static const coreFontSize1100 = 34.0;
 
   /// 3.5rem (Value: 56)
-  static const coreFontSize1200 = 56;
+  static const coreFontSize1200 = 56.0;
 
   /// 4.5rem (Value: 72)
-  static const coreFontSize1300 = 72;
+  static const coreFontSize1300 = 72.0;
 
   /// 6rem (Value: 96)
-  static const coreFontSize1400 = 96;
+  static const coreFontSize1400 = 96.0;
 
   /// 7.5rem (Value: 120)
-  static const coreFontSize1500 = 120;
+  static const coreFontSize1500 = 120.0;
 
   /// 12.25rem (Value: 196)
-  static const coreFontSize1600 = 196;
+  static const coreFontSize1600 = 196.0;
 
   /// coreFontFamilyInter with value: Inter
   static const coreFontFamilyInter = 'Inter';
@@ -3145,61 +3145,61 @@ class CoreDesignTokens {
   static const coreFontWeightFill = 'Solid';
 
   /// 1rem (Value: 16)
-  static const coreLineHeight75 = 16;
+  static const coreLineHeight75 = 16.0;
 
   /// 1.125rem (Value: 18)
-  static const coreLineHeight100 = 18;
+  static const coreLineHeight100 = 18.0;
 
   /// 1.375rem (Value: 22)
-  static const coreLineHeight200 = 22;
+  static const coreLineHeight200 = 22.0;
 
   /// 1.5rem (Value: 24)
-  static const coreLineHeight300 = 24;
+  static const coreLineHeight300 = 24.0;
 
   /// 1.75rem (Value: 28)
-  static const coreLineHeight400 = 28;
+  static const coreLineHeight400 = 28.0;
 
   /// 1.875rem (Value: 30)
-  static const coreLineHeight500 = 30;
+  static const coreLineHeight500 = 30.0;
 
   /// 2rem (Value: 32)
-  static const coreLineHeight600 = 32;
+  static const coreLineHeight600 = 32.0;
 
   /// 2.25rem (Value: 36)
-  static const coreLineHeight700 = 36;
+  static const coreLineHeight700 = 36.0;
 
   /// 3rem (Value: 48)
-  static const coreLineHeight800 = 48;
+  static const coreLineHeight800 = 48.0;
 
   /// 4rem (Value: 64)
-  static const coreLineHeight900 = 64;
+  static const coreLineHeight900 = 64.0;
 
   /// 6rem (Value: 96)
-  static const coreLineHeight1000 = 96;
+  static const coreLineHeight1000 = 96.0;
 
   /// 1.25rem (Value: 20)
-  static const coreLineHeight1100 = 20;
+  static const coreLineHeight1100 = 20.0;
 
   /// 2.5rem (Value: 40)
-  static const coreLineHeight1200 = 40;
+  static const coreLineHeight1200 = 40.0;
 
   /// 3.5rem (Value: 56)
-  static const coreLineHeight1300 = 56;
+  static const coreLineHeight1300 = 56.0;
 
   /// 4.5rem (Value: 72)
-  static const coreLineHeight1400 = 72;
+  static const coreLineHeight1400 = 72.0;
 
   /// 5rem (Value: 80)
-  static const coreLineHeight1500 = 80;
+  static const coreLineHeight1500 = 80.0;
 
   /// 6.5rem (Value: 104)
-  static const coreLineHeight1600 = 104;
+  static const coreLineHeight1600 = 104.0;
 
   /// 8rem (Value: 128)
-  static const coreLineHeight1700 = 128;
+  static const coreLineHeight1700 = 128.0;
 
   /// 12.75rem (Value: 204)
-  static const coreLineHeight1800 = 204;
+  static const coreLineHeight1800 = 204.0;
 
   /// coreLineHeightAuto with value: auto
   static const coreLineHeightAuto = 'auto';
@@ -3211,58 +3211,58 @@ class CoreDesignTokens {
   static const coreFontDecorationUnderline = 'underline';
 
   /// 0.75 rem (Value: 12)
-  static const coreParagraphSpacing50 = 12;
+  static const coreParagraphSpacing50 = 12.0;
 
   /// 0.875rem (Value: 14)
-  static const coreParagraphSpacing75 = 14;
+  static const coreParagraphSpacing75 = 14.0;
 
   /// 1rem (Value: 16)
-  static const coreParagraphSpacing100 = 16;
+  static const coreParagraphSpacing100 = 16.0;
 
   /// 1.125rem (Value: 18)
-  static const coreParagraphSpacing200 = 18;
+  static const coreParagraphSpacing200 = 18.0;
 
   /// 1.25rem (Value: 20)
-  static const coreParagraphSpacing300 = 20;
+  static const coreParagraphSpacing300 = 20.0;
 
   /// 1.5rem (Value: 24)
-  static const coreParagraphSpacing400 = 24;
+  static const coreParagraphSpacing400 = 24.0;
 
   /// 2rem (Value: 32)
-  static const coreParagraphSpacing500 = 32;
+  static const coreParagraphSpacing500 = 32.0;
 
   /// 2.5rem (Value: 40)
-  static const coreParagraphSpacing600 = 40;
+  static const coreParagraphSpacing600 = 40.0;
 
   /// 3 (Value: 48)
-  static const coreParagraphSpacing700 = 48;
+  static const coreParagraphSpacing700 = 48.0;
 
   /// 4rem (Value: 64)
-  static const coreParagraphSpacing800 = 64;
+  static const coreParagraphSpacing800 = 64.0;
 
   /// 5rem (Value: 80)
-  static const coreParagraphSpacing900 = 80;
+  static const coreParagraphSpacing900 = 80.0;
 
   /// 1.75rem (Value: 28)
-  static const coreParagraphSpacing1000 = 28;
+  static const coreParagraphSpacing1000 = 28.0;
 
   /// 2.125rem (Value: 34)
-  static const coreParagraphSpacing1100 = 34;
+  static const coreParagraphSpacing1100 = 34.0;
 
   /// 3.5rem (Value: 56)
-  static const coreParagraphSpacing1200 = 56;
+  static const coreParagraphSpacing1200 = 56.0;
 
   /// 4.5rem (Value: 72)
-  static const coreParagraphSpacing1300 = 72;
+  static const coreParagraphSpacing1300 = 72.0;
 
   /// 6rem (Value: 96)
-  static const coreParagraphSpacing1400 = 96;
+  static const coreParagraphSpacing1400 = 96.0;
 
   /// 7.5rem (Value: 120)
-  static const coreParagraphSpacing1500 = 120;
+  static const coreParagraphSpacing1500 = 120.0;
 
   /// 12.25rem (Value: 196)
-  static const coreParagraphSpacing1600 = 196;
+  static const coreParagraphSpacing1600 = 196.0;
 
   /// coreMotionEase100 with value: cubic-bezier(0, 0, 1, 1)
   static const coreMotionEase100 = 'cubic-bezier(0, 0, 1, 1)';
@@ -3325,166 +3325,166 @@ class CoreDesignTokens {
   static const coreMotionDuration1500 = Duration(milliseconds: 4320);
 
   /// 0 (Value: 0)
-  static const coreSize50 = 0;
+  static const coreSize50 = 0.0;
 
   /// coreSize75 with value: 1
-  static const coreSize75 = 1;
+  static const coreSize75 = 1.0;
 
   /// 0.125 rem (Value: 2)
-  static const coreSize100 = 2;
+  static const coreSize100 = 2.0;
 
   /// 0.25 rem (Value: 4)
-  static const coreSize200 = 4;
+  static const coreSize200 = 4.0;
 
   /// 0.375 rem (Value: 6)
-  static const coreSize300 = 6;
+  static const coreSize300 = 6.0;
 
   /// 0.5 rem (Value: 8)
-  static const coreSize400 = 8;
+  static const coreSize400 = 8.0;
 
   /// 0.625 rem (Value: 10)
-  static const coreSize500 = 10;
+  static const coreSize500 = 10.0;
 
   /// 0.75 rem (Value: 12)
-  static const coreSize600 = 12;
+  static const coreSize600 = 12.0;
 
   /// 0.875 rem (Value: 14)
-  static const coreSize700 = 14;
+  static const coreSize700 = 14.0;
 
   /// 1 rem (Value: 16)
-  static const coreSize800 = 16;
+  static const coreSize800 = 16.0;
 
   /// 1.125 rem (Value: 18)
-  static const coreSize900 = 18;
+  static const coreSize900 = 18.0;
 
   /// 1.25 rem (Value: 20)
-  static const coreSize1000 = 20;
+  static const coreSize1000 = 20.0;
 
   /// 1.375 rem (Value: 22)
-  static const coreSize1100 = 22;
+  static const coreSize1100 = 22.0;
 
   /// 1.5 rem (Value: 24)
-  static const coreSize1200 = 24;
+  static const coreSize1200 = 24.0;
 
   /// 1.625 rem (Value: 26)
-  static const coreSize1300 = 26;
+  static const coreSize1300 = 26.0;
 
   /// 1.75 rem (Value: 28)
-  static const coreSize1400 = 28;
+  static const coreSize1400 = 28.0;
 
   /// 1.875 rem (Value: 30)
-  static const coreSize1500 = 30;
+  static const coreSize1500 = 30.0;
 
   /// 2 rem (Value: 32)
-  static const coreSize1600 = 32;
+  static const coreSize1600 = 32.0;
 
   /// 2.125 rem (Value: 34)
-  static const coreSize1700 = 34;
+  static const coreSize1700 = 34.0;
 
   /// 2.25 rem (Value: 36)
-  static const coreSize1800 = 36;
+  static const coreSize1800 = 36.0;
 
   /// 2.375 rem (Value: 38)
-  static const coreSize1900 = 38;
+  static const coreSize1900 = 38.0;
 
   /// 2.5 rem (Value: 40)
-  static const coreSize2000 = 40;
+  static const coreSize2000 = 40.0;
 
   /// 2.625 rem (Value: 42)
-  static const coreSize2100 = 42;
+  static const coreSize2100 = 42.0;
 
   /// 2.75 rem (Value: 44)
-  static const coreSize2200 = 44;
+  static const coreSize2200 = 44.0;
 
   /// 2.875 rem (Value: 46)
-  static const coreSize2300 = 46;
+  static const coreSize2300 = 46.0;
 
   /// 3 rem (Value: 48)
-  static const coreSize2400 = 48;
+  static const coreSize2400 = 48.0;
 
   /// 3.125 rem (Value: 50)
-  static const coreSize2500 = 50;
+  static const coreSize2500 = 50.0;
 
   /// 3.25 rem (Value: 52)
-  static const coreSize2600 = 52;
+  static const coreSize2600 = 52.0;
 
   /// 3.375 rem (Value: 54)
-  static const coreSize2700 = 54;
+  static const coreSize2700 = 54.0;
 
   /// 3.5 rem (Value: 56)
-  static const coreSize2800 = 56;
+  static const coreSize2800 = 56.0;
 
   /// 3.625 rem (Value: 58)
-  static const coreSize2900 = 58;
+  static const coreSize2900 = 58.0;
 
   /// 3.75 rem (Value: 60)
-  static const coreSize3000 = 60;
+  static const coreSize3000 = 60.0;
 
   /// 3.875 rem (Value: 62)
-  static const coreSize3100 = 62;
+  static const coreSize3100 = 62.0;
 
   /// 4 rem (Value: 64)
-  static const coreSize3200 = 64;
+  static const coreSize3200 = 64.0;
 
   /// 4.125 rem (Value: 66)
-  static const coreSize3300 = 66;
+  static const coreSize3300 = 66.0;
 
   /// 4.25 rem (Value: 68)
-  static const coreSize3400 = 68;
+  static const coreSize3400 = 68.0;
 
   /// 4.375 rem (Value: 70)
-  static const coreSize3500 = 70;
+  static const coreSize3500 = 70.0;
 
   /// 4.5 rem (Value: 72)
-  static const coreSize3600 = 72;
+  static const coreSize3600 = 72.0;
 
   /// 4.625 rem (Value: 74)
-  static const coreSize3700 = 74;
+  static const coreSize3700 = 74.0;
 
   /// 4.75 rem (Value: 76)
-  static const coreSize3800 = 76;
+  static const coreSize3800 = 76.0;
 
   /// 4.875 rem (Value: 78)
-  static const coreSize3900 = 78;
+  static const coreSize3900 = 78.0;
 
   /// 5 rem (Value: 80)
-  static const coreSize4000 = 80;
+  static const coreSize4000 = 80.0;
 
   /// 5.125 rem (Value: 82)
-  static const coreSize4100 = 82;
+  static const coreSize4100 = 82.0;
 
   /// 5.25 rem (Value: 84)
-  static const coreSize4200 = 84;
+  static const coreSize4200 = 84.0;
 
   /// 5.375 rem (Value: 86)
-  static const coreSize4300 = 86;
+  static const coreSize4300 = 86.0;
 
   /// 5.5 rem (Value: 88)
-  static const coreSize4400 = 88;
+  static const coreSize4400 = 88.0;
 
   /// 5.625 rem (Value: 90)
-  static const coreSize4500 = 90;
+  static const coreSize4500 = 90.0;
 
   /// 5.75 rem (Value: 92)
-  static const coreSize4600 = 92;
+  static const coreSize4600 = 92.0;
 
   /// 5.875 rem (Value: 94)
-  static const coreSize4700 = 94;
+  static const coreSize4700 = 94.0;
 
   /// 6 rem (Value: 96)
-  static const coreSize4800 = 96;
+  static const coreSize4800 = 96.0;
 
   /// 6.125 rem (Value: 98)
-  static const coreSize4900 = 98;
+  static const coreSize4900 = 98.0;
 
   /// 6.25 rem (Value: 100)
-  static const coreSize5000 = 100;
+  static const coreSize5000 = 100.0;
 
   /// 37.5 rem (Value: 600)
-  static const coreSize8100 = 600;
+  static const coreSize8100 = 600.0;
 
   /// 80 rem (Value: 1280)
-  static const coreSize9100 = 1280;
+  static const coreSize9100 = 1280.0;
 
   /// borderWidthNone with value: {core.borderWidth.50}
   static const borderWidthNone = coreBorderWidth50;

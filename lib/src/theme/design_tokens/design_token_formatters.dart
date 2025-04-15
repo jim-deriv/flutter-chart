@@ -260,9 +260,6 @@ class NumericTokenFormatter implements DesignTokenValueFormatter {
     }
     final double? numValue = double.tryParse(cleanedValue);
     if (numValue != null) {
-      if (numValue == numValue.toInt()) {
-        return numValue.toInt().toString();
-      }
       return numValue.toString();
     }
     return "'$originalValue'";
