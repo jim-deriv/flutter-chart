@@ -70,6 +70,29 @@ class DesignTokenUtils {
   /// Pattern to match color stops in gradients, e.g. red 10%
   static final RegExp colorStopPattern = RegExp(r'(.+)\s+([0-9.]+%)');
 
+  /// Capitalizes the first letter of a string if it doesn't start with a number
+  ///
+  /// This helper method is used to handle token name parts during conversion.
+  /// If the string starts with a number, it returns it unchanged.
+  /// Otherwise, it capitalizes the first letter using the StringExtension.
+  ///
+  /// Parameters:
+  /// - input: The string to process
+  ///
+  /// Returns:
+  /// The processed string with first letter capitalized if applicable
+  static String _capitalizeIfNotNumeric(String input) {
+    if (input.isEmpty) return input;
+
+    // If the part starts with a number, don't capitalize it
+    if (RegExp(r'^[0-9]').hasMatch(input[0])) {
+      return input;
+    }
+
+    // Otherwise capitalize the first letter using the extension
+    return input.capitalize();
+  }
+
   /// Converts dot notation token references to camelCase Dart property names
   ///
   /// This function transforms token references from dot notation (e.g., "core.color.red.500")
@@ -112,8 +135,8 @@ class DesignTokenUtils {
             // If the part starts with a number, don't capitalize it
             tokenName += parts[i];
           } else {
-            // Otherwise capitalize the first letter
-            tokenName += parts[i][0].toUpperCase() + parts[i].substring(1);
+            // Otherwise capitalize the first letter using the extension
+            tokenName += parts[i].capitalize();
           }
         }
       }
@@ -134,18 +157,17 @@ class DesignTokenUtils {
       // For core tokens in core category, add 'core' prefix
       final String prefix =
           (category == categoryCore && isCoreToken) ? 'core' : '';
-      String result = prefix;
+      final StringBuffer result = StringBuffer(prefix);
 
       // Add first part after prefix
       if (startIndex < parts.length) {
         // If we have a prefix and it's not empty, capitalize the first part
         if (prefix.isNotEmpty) {
           // Capitalize the first letter of the first part after prefix
-          result += parts[startIndex][0].toUpperCase() +
-              parts[startIndex].substring(1);
+          result.write(parts[startIndex].capitalize());
         } else {
           // No prefix, first part stays lowercase
-          result += parts[startIndex];
+          result.write(parts[startIndex]);
         }
       }
       // Convert remaining parts to camelCase
@@ -154,15 +176,15 @@ class DesignTokenUtils {
           // Handle numeric parts (like "730" in "core.elevation.shadow.730")
           if (RegExp(r'^[0-9]').hasMatch(parts[i][0])) {
             // If the part starts with a number, don't capitalize it
-            result += parts[i];
+            result.write(parts[i]);
           } else {
-            // Otherwise capitalize the first letter
-            result += parts[i][0].toUpperCase() + parts[i].substring(1);
+            // Otherwise capitalize the first letter using the extension
+            result.write(parts[i].capitalize());
           }
         }
       }
 
-      return result;
+      return result.toString();
     }
   }
 
@@ -182,6 +204,11 @@ class DesignTokenUtils {
   /// A list of string components from the rgba expression
   static List<String> splitRgbaString(String input) {
     final List<String> result = [];
+
+    // Return empty list for null or empty input
+    if (input.isEmpty) {
+      return result;
+    }
 
     // Find the opening 'rgba('
     int index = 0;
@@ -269,11 +296,11 @@ class DesignTokenUtils {
   /// A formatted linear gradient string with token references replaced by camelCase names
   static String formatLinearGradientValue(String value, String category) {
     // Remove any surrounding quotes
-    final String _value = value.replaceAll("'", '').replaceAll('"', '');
+    final String cleanValue = value.replaceAll("'", '').replaceAll('"', '');
 
     // Replace each token reference with its camelCase version
     final String formattedValue =
-        _value.replaceAllMapped(tokenPattern, (match) {
+        cleanValue.replaceAllMapped(tokenPattern, (match) {
       final String tokenRef = match.group(1)!;
 
       // Check if the token is already in camelCase format
@@ -306,8 +333,19 @@ class DesignTokenUtils {
         (paths.isNotEmpty && paths[0].toLowerCase() == 'component');
   }
 
+  /// Determines if a token is a structural token
+  ///
+  /// This function checks if the token type is one of the predefined structural token types:
+  /// typography, borderRadius, sizing, spacing, borderWidth, or boxShadow.
+  /// Structural tokens typically define the fundamental visual properties of the design system.
+  ///
+  /// Parameters:
+  /// - tokenType: The type of token to check
+  ///
+  /// Returns:
+  /// true if the token is a structural token, false otherwise
   static bool isStructuralToken(String tokenType) {
-    const structuralToken = [
+    const structuralTokenTypes = [
       'typography',
       'borderRadius',
       'sizing',
@@ -315,7 +353,7 @@ class DesignTokenUtils {
       'borderWidth',
       'boxShadow'
     ];
-    return structuralToken.contains(tokenType);
+    return structuralTokenTypes.contains(tokenType);
   }
 
   /// The standard header comment for design token class files.
@@ -330,5 +368,19 @@ class DesignTokenUtils {
 /// Design Tokens Repository: https://github.com/deriv-com/quill-tokens/blob/master/data/tokens.json
 
 ''';
+  }
+}
+
+/// Extension method to capitalize the first letter of a string.
+///
+/// This utility extension is used throughout the token generation process
+/// to ensure consistent capitalization of token names and paths.
+///
+extension StringExtension on String {
+  /// Returns a new string with the first letter capitalized.
+  ///
+  /// If the string is empty, returns an empty string.
+  String capitalize() {
+    return isEmpty ? '' : '${this[0].toUpperCase()}${substring(1)}';
   }
 }

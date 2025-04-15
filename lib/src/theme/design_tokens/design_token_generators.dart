@@ -520,20 +520,18 @@ class ComponentDesignTokenGenerator extends BaseDesignTokenGenerator {
       // Check if this is a core token, a structural semantic token, or a regular semantic token
       if (tokenPath.startsWith('core.')) {
         // For core tokens, we use CoreDesignTokens directly
-        String coreTokenName =
-            DesignTokenUtils.convertToDartPropertyName(tokenPath, "");
+        final String coreTokenName =
+            DesignTokenUtils.convertToDartPropertyName(tokenPath, '');
 
         output
           ..write('  $commentText\n')
           ..write('  static final $tokenName = $coreTokenName;\n\n');
       } else if (tokenPath.startsWith('semantic.') &&
           DesignTokenUtils.isStructuralToken(tokenType)) {
-        print('Semantic token: $tokenPath');
-        print('TypedValue: $typedValue');
         // For semantic structural tokens (typography, borderRadius, sizing, spacing, etc.),
         // we treat them as core tokens and prefix with CoreDesignTokens
-        String semanticTokenName =
-            DesignTokenUtils.convertToDartPropertyName(tokenPath, "");
+        final String semanticTokenName =
+            DesignTokenUtils.convertToDartPropertyName(tokenPath, '');
 
         output
           ..write('  $commentText\n')
@@ -543,8 +541,8 @@ class ComponentDesignTokenGenerator extends BaseDesignTokenGenerator {
         if (isColorToken && tokenPath.startsWith('semantic.')) {
           // For semantic color tokens, we create light and dark versions
           // For regular semantic tokens, we create light and dark versions
-          String semanticTokenName =
-              DesignTokenUtils.convertToDartPropertyName(tokenPath, "");
+          final String semanticTokenName =
+              DesignTokenUtils.convertToDartPropertyName(tokenPath, '');
 
           // Write the light theme version
           output
@@ -601,19 +599,5 @@ class DesignTokenGeneratorFactory {
       default:
         throw ArgumentError('Unknown token category: $category');
     }
-  }
-}
-
-/// Extension method to capitalize the first letter of a string.
-///
-/// This utility extension is used throughout the token generation process
-/// to ensure consistent capitalization of token names and paths.
-///
-extension StringExtension on String {
-  /// Returns a new string with the first letter capitalized.
-  ///
-  /// If the string is empty, returns an empty string.
-  String capitalize() {
-    return isEmpty ? '' : '${this[0].toUpperCase()}${substring(1)}';
   }
 }
