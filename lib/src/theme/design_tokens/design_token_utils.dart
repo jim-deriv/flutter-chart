@@ -121,13 +121,14 @@ class DesignTokenUtils {
       return result + tokenName;
     } else {
       // For core category or non-core token references, use standard camelCase
-      // Skip the first part if it's the category name (core, light, dark)
+      // Skip the first part if it's the category name (core, light, dark, component)
       int startIndex = 0;
       final bool isCoreToken = parts.isNotEmpty && parts[0] == categoryCore;
       if (parts.isNotEmpty &&
           (parts[0] == categoryCore ||
               parts[0] == categoryLight ||
-              parts[0] == categoryDark)) {
+              parts[0] == categoryDark ||
+              parts[0] == categoryComponent)) {
         startIndex = 1;
       }
 
