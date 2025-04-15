@@ -8,8 +8,8 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
   /// Initialize the custom dark theme.
   CustomDarkTheme({
     required this.customGridColor,
-    required this.customPositiveColor,
-    required this.customNegativeColor,
+    required this.customBullishColor,
+    required this.customBearishColor,
     required this.customBackgroundColor,
   });
 
@@ -17,10 +17,10 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
   final Color customGridColor;
 
   /// Custom positive color.
-  final Color customPositiveColor;
+  final Color customBullishColor;
 
   /// Custom negative color.
-  final Color customNegativeColor;
+  final Color customBearishColor;
 
   /// Custom background color.
   final Color customBackgroundColor;
@@ -32,10 +32,10 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
   Color get base08Color => customBackgroundColor;
 
   @override
-  Color get accentGreenColor => customPositiveColor;
+  Color get accentGreenColor => customBullishColor;
 
   @override
-  Color get accentRedColor => customNegativeColor;
+  Color get accentRedColor => customBearishColor;
 
   @override
   GridStyle get gridStyle => GridStyle(
@@ -52,8 +52,8 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
 
   @override
   CandleStyle get candleStyle => CandleStyle(
-        positiveColor: customPositiveColor,
-        negativeColor: customNegativeColor,
+        candleBullishBodyColor: customBullishColor,
+        candleBearishBodyColor: customBearishColor,
         neutralColor: base04Color,
       );
 }
@@ -63,8 +63,8 @@ class CustomLightTheme extends ChartDefaultLightTheme {
   /// Initialize the custom light theme.
   CustomLightTheme({
     required this.customGridColor,
-    required this.customPositiveColor,
-    required this.customNegativeColor,
+    required this.customBullishColor,
+    required this.customBearishColor,
     required this.customBackgroundColor,
   });
 
@@ -72,10 +72,10 @@ class CustomLightTheme extends ChartDefaultLightTheme {
   final Color customGridColor;
 
   /// Custom positive color.
-  final Color customPositiveColor;
+  final Color customBullishColor;
 
   /// Custom negative color.
-  final Color customNegativeColor;
+  final Color customBearishColor;
 
   /// Custom background color.
   final Color customBackgroundColor;
@@ -87,10 +87,10 @@ class CustomLightTheme extends ChartDefaultLightTheme {
   Color get base08Color => customBackgroundColor;
 
   @override
-  Color get accentGreenColor => customPositiveColor;
+  Color get accentGreenColor => customBullishColor;
 
   @override
-  Color get accentRedColor => customNegativeColor;
+  Color get accentRedColor => customBearishColor;
 
   @override
   GridStyle get gridStyle => GridStyle(
@@ -107,8 +107,8 @@ class CustomLightTheme extends ChartDefaultLightTheme {
 
   @override
   CandleStyle get candleStyle => CandleStyle(
-        positiveColor: customPositiveColor,
-        negativeColor: customNegativeColor,
+        candleBullishBodyColor: customBullishColor,
+        candleBearishBodyColor: customBearishColor,
         neutralColor: base04Color,
       );
 }
@@ -130,8 +130,8 @@ class _ThemeCustomizationScreenState
 
   // Custom theme colors
   Color _gridColor = const Color(0xFF323738);
-  Color _positiveColor = Colors.green;
-  Color _negativeColor = Colors.red;
+  Color _candleBullishBodyColor = Colors.green;
+  Color _candleBearishBodyColor = Colors.red;
   Color _backgroundColor = const Color(0xFF151717);
 
   @override
@@ -145,15 +145,15 @@ class _ThemeCustomizationScreenState
       if (_useDarkTheme) {
         theme = CustomDarkTheme(
           customGridColor: _gridColor,
-          customPositiveColor: _positiveColor,
-          customNegativeColor: _negativeColor,
+          customBullishColor: _candleBullishBodyColor,
+          customBearishColor: _candleBearishBodyColor,
           customBackgroundColor: _backgroundColor,
         );
       } else {
         theme = CustomLightTheme(
           customGridColor: _gridColor,
-          customPositiveColor: _positiveColor,
-          customNegativeColor: _negativeColor,
+          customBullishColor: _candleBullishBodyColor,
+          customBearishColor: _candleBearishBodyColor,
           customBackgroundColor: _backgroundColor,
         );
       }
@@ -265,16 +265,18 @@ class _ThemeCustomizationScreenState
             const SizedBox(height: 12),
 
             // Color pickers
-            _buildColorPicker('Positive Color:', _positiveColor, (color) {
+            _buildColorPicker('Positive Color:', _candleBullishBodyColor,
+                (color) {
               setState(() {
-                _positiveColor = color;
+                _candleBullishBodyColor = color;
               });
             }),
             const SizedBox(height: 8),
 
-            _buildColorPicker('Negative Color:', _negativeColor, (color) {
+            _buildColorPicker('Negative Color:', _candleBearishBodyColor,
+                (color) {
               setState(() {
-                _negativeColor = color;
+                _candleBearishBodyColor = color;
               });
             }),
             const SizedBox(height: 8),
