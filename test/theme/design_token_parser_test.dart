@@ -31,10 +31,13 @@ void main() {
       /// Verifies that token references in RGBA strings are correctly transformed
       /// to camelCase property names for the core category.
       test('RGBA Transformation - Core Category', () {
-        String input = "rgba({core.color.solid.magenta.700},{core.opacity.700})";
-        String expected = "Color.fromRGBO(coreColorSolidMagenta700.red, coreColorSolidMagenta700.green, coreColorSolidMagenta700.blue, coreOpacity700)";
-        String result = (TokenFormatterFactory.getFormatter('color') as ColorTokenFormatter)
-            .transformRgbaTokenString(input, DesignTokenUtils.categoryCore);
+        String input =
+            "rgba({core.color.solid.magenta.700},{core.opacity.700})";
+        String expected =
+            "Color.fromRGBO(coreColorSolidMagenta700.red, coreColorSolidMagenta700.green, coreColorSolidMagenta700.blue, coreOpacity700)";
+        String result =
+            (TokenFormatterFactory.getFormatter('color') as ColorTokenFormatter)
+                .transformRgbaTokenString(input, DesignTokenUtils.categoryCore);
         expect(result, equals(expected));
       });
 
@@ -43,9 +46,12 @@ void main() {
       /// Verifies that core token references in light theme context are correctly
       /// prefixed with CoreDesignTokens.
       test('RGBA Transformation - Light Category', () {
-        String input = "rgba({core.color.solid.magenta.700},{core.opacity.700})";
-        String expected = "Color.fromRGBO(CoreDesignTokens.coreColorSolidMagenta700.red, CoreDesignTokens.coreColorSolidMagenta700.green, CoreDesignTokens.coreColorSolidMagenta700.blue, CoreDesignTokens.coreOpacity700)";
-        String result = (TokenFormatterFactory.getFormatter('color') as ColorTokenFormatter)
+        String input =
+            "rgba({core.color.solid.magenta.700},{core.opacity.700})";
+        String expected =
+            "Color.fromRGBO(CoreDesignTokens.coreColorSolidMagenta700.red, CoreDesignTokens.coreColorSolidMagenta700.green, CoreDesignTokens.coreColorSolidMagenta700.blue, CoreDesignTokens.coreOpacity700)";
+        String result = (TokenFormatterFactory.getFormatter('color')
+                as ColorTokenFormatter)
             .transformRgbaTokenString(input, DesignTokenUtils.categoryLight);
         expect(result, equals(expected));
       });
@@ -55,10 +61,13 @@ void main() {
       /// Verifies that core token references in dark theme context are correctly
       /// prefixed with CoreDesignTokens.
       test('RGBA Transformation - Dark Category', () {
-        String input = "rgba({core.color.solid.magenta.700},{core.opacity.700})";
-        String expected = "Color.fromRGBO(CoreDesignTokens.coreColorSolidMagenta700.red, CoreDesignTokens.coreColorSolidMagenta700.green, CoreDesignTokens.coreColorSolidMagenta700.blue, CoreDesignTokens.coreOpacity700)";
-        String result = (TokenFormatterFactory.getFormatter('color') as ColorTokenFormatter)
-            .transformRgbaTokenString(input, DesignTokenUtils.categoryDark);
+        String input =
+            "rgba({core.color.solid.magenta.700},{core.opacity.700})";
+        String expected =
+            "Color.fromRGBO(CoreDesignTokens.coreColorSolidMagenta700.red, CoreDesignTokens.coreColorSolidMagenta700.green, CoreDesignTokens.coreColorSolidMagenta700.blue, CoreDesignTokens.coreOpacity700)";
+        String result =
+            (TokenFormatterFactory.getFormatter('color') as ColorTokenFormatter)
+                .transformRgbaTokenString(input, DesignTokenUtils.categoryDark);
         expect(result, equals(expected));
       });
     });
@@ -73,8 +82,10 @@ void main() {
       /// Verifies that token references in linear gradients are correctly
       /// transformed to camelCase property names.
       test('Linear Gradient Formatting - Core Category', () {
-        String input = "linear-gradient(1.93deg, {core.color.opacity.overflow.100} 1.56%, {core.color.solid.slate.50} 49.91%)";
-        String result = DesignTokenUtils.formatLinearGradientValue(input, DesignTokenUtils.categoryCore);
+        String input =
+            "linear-gradient(1.93deg, {core.color.opacity.overflow.100} 1.56%, {core.color.solid.slate.50} 49.91%)";
+        String result = DesignTokenUtils.formatLinearGradientValue(
+            input, DesignTokenUtils.categoryCore);
         expect(result, contains("coreColorOpacityOverflow100"));
         expect(result, contains("coreColorSolidSlate50"));
       });
@@ -84,9 +95,12 @@ void main() {
       /// Verifies that core token references in light theme context are correctly
       /// prefixed with CoreDesignTokens.
       test('Linear Gradient Formatting - Light Category', () {
-        String input = "linear-gradient(1.93deg, {core.color.opacity.overflow.100} 1.56%, {core.color.solid.slate.50} 49.91%)";
-        String result = DesignTokenUtils.formatLinearGradientValue(input, DesignTokenUtils.categoryLight);
-        expect(result, contains("CoreDesignTokens.coreColorOpacityOverflow100"));
+        String input =
+            "linear-gradient(1.93deg, {core.color.opacity.overflow.100} 1.56%, {core.color.solid.slate.50} 49.91%)";
+        String result = DesignTokenUtils.formatLinearGradientValue(
+            input, DesignTokenUtils.categoryLight);
+        expect(
+            result, contains("CoreDesignTokens.coreColorOpacityOverflow100"));
         expect(result, contains("CoreDesignTokens.coreColorSolidSlate50"));
       });
 
@@ -94,11 +108,17 @@ void main() {
       ///
       /// Verifies that the gradient is correctly parsed with proper angle, colors, and stops.
       test('Linear Gradient to Dart Object - Core Category', () {
-        String input = "linear-gradient(1.93deg, {core.color.opacity.overflow.100} 1.56%, {core.color.solid.slate.50} 49.91%)";
-        String result = (TokenFormatterFactory.getFormatter('color') as ColorTokenFormatter)
-            .convertGradientStringToDartObject(input, DesignTokenUtils.categoryCore);
+        String input =
+            "linear-gradient(1.93deg, {core.color.opacity.overflow.100} 1.56%, {core.color.solid.slate.50} 49.91%)";
+        String result =
+            (TokenFormatterFactory.getFormatter('color') as ColorTokenFormatter)
+                .convertGradientStringToDartObject(
+                    input, DesignTokenUtils.categoryCore);
         expect(result, contains("LinearGradient("));
-        expect(result, contains("colors: [coreColorOpacityOverflow100, coreColorSolidSlate50]"));
+        expect(
+            result,
+            contains(
+                "colors: [coreColorOpacityOverflow100, coreColorSolidSlate50]"));
         expect(result, contains("stops: [0.015600000000000001, 0.4991]"));
       });
     });
@@ -114,8 +134,8 @@ void main() {
       /// Flutter's Curves.linear and includes appropriate documentation.
       test('Cubic Bezier - Linear', () {
         String input = "cubic-bezier(0, 0, 1, 1)";
-        String result = CubicBezierTokenFormatter()
-            .convertCubicBezierToDartObject(input);
+        String result =
+            CubicBezierTokenFormatter().convertCubicBezierToDartObject(input);
         expect(result, contains("Curves.linear"));
       });
 
@@ -125,8 +145,8 @@ void main() {
       /// Flutter's Curves.ease and includes appropriate documentation.
       test('Cubic Bezier - Ease', () {
         String input = "cubic-bezier(0.42, 0, 1, 1)";
-        String result = CubicBezierTokenFormatter()
-            .convertCubicBezierToDartObject(input);
+        String result =
+            CubicBezierTokenFormatter().convertCubicBezierToDartObject(input);
         expect(result, contains("Curves.ease"));
       });
 
@@ -136,8 +156,8 @@ void main() {
       /// Flutter's Cubic constructor with the appropriate parameters.
       test('Cubic Bezier - Custom', () {
         String input = "cubic-bezier(0.1, 0.2, 0.3, 0.4)";
-        String result = CubicBezierTokenFormatter()
-            .convertCubicBezierToDartObject(input);
+        String result =
+            CubicBezierTokenFormatter().convertCubicBezierToDartObject(input);
         expect(result, contains("Cubic(0.1, 0.2, 0.3, 0.4)"));
       });
     });
@@ -153,7 +173,8 @@ void main() {
       /// to camelCase property names when used in the core category.
       test('Core Token in Core Category', () {
         String input = "core.color.solid.magenta.700";
-        String result = DesignTokenUtils.convertToDartPropertyName(input, DesignTokenUtils.categoryCore);
+        String result = DesignTokenUtils.convertToDartPropertyName(
+            input, DesignTokenUtils.categoryCore);
         expect(result, equals("coreColorSolidMagenta700"));
       });
 
@@ -163,7 +184,8 @@ void main() {
       /// CoreDesignTokens when used in the light category.
       test('Core Token in Light Category', () {
         String input = "core.color.solid.magenta.700";
-        String result = DesignTokenUtils.convertToDartPropertyName(input, DesignTokenUtils.categoryLight);
+        String result = DesignTokenUtils.convertToDartPropertyName(
+            input, DesignTokenUtils.categoryLight);
         expect(result, equals("CoreDesignTokens.coreColorSolidMagenta700"));
       });
 
@@ -173,7 +195,8 @@ void main() {
       /// camelCase property names without the "light" prefix.
       test('Light Token in Light Category', () {
         String input = "light.background.primary";
-        String result = DesignTokenUtils.convertToDartPropertyName(input, DesignTokenUtils.categoryLight);
+        String result = DesignTokenUtils.convertToDartPropertyName(
+            input, DesignTokenUtils.categoryLight);
         expect(result, equals("backgroundPrimary"));
       });
 
@@ -183,7 +206,8 @@ void main() {
       /// correctly preserved in the camelCase property name.
       test('Numeric Token Part', () {
         String input = "core.elevation.shadow.730";
-        String result = DesignTokenUtils.convertToDartPropertyName(input, DesignTokenUtils.categoryCore);
+        String result = DesignTokenUtils.convertToDartPropertyName(
+            input, DesignTokenUtils.categoryCore);
         expect(result, equals("coreElevationShadow730"));
       });
     });

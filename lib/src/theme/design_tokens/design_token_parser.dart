@@ -119,11 +119,86 @@ Map<String, dynamic> loadConfiguration() {
       return defaultConfiguration;
     }
 
-    return jsonDecode(configFile.readAsStringSync());
+    try {
+      final String configContent = configFile.readAsStringSync();
+      final Map<String, dynamic> config = jsonDecode(configContent);
+
+      // Validate configuration structure
+      if (!_validateConfiguration(config)) {
+        DesignTokenLogger.warning(
+            'Invalid configuration structure in ${DesignTokenUtils.configPath}. Using default configuration.');
+        return defaultConfiguration;
+      }
+
+      return config;
+    } on FileSystemException catch (e) {
+      DesignTokenLogger.error(
+          'Error reading configuration file: ${e.message}. Path: ${e.path}. OSError: ${e.osError}');
+      return defaultConfiguration;
+    } on FormatException catch (e) {
+      DesignTokenLogger.error(
+          'Invalid JSON format in configuration file: ${e.message}. Source: ${e.source}');
+      return defaultConfiguration;
+    }
   } on Exception catch (e) {
-    DesignTokenLogger.error('Error loading configuration: $e');
+    DesignTokenLogger.error('Unexpected error loading configuration: $e');
     return defaultConfiguration;
   }
+}
+
+/// Validates the configuration structure
+///
+/// Checks if the configuration has the required structure:
+/// - tokenCategories map
+/// - Each category has outputPath, className, and tokenNames
+///
+/// Returns:
+///   true if the configuration is valid, false otherwise
+bool _validateConfiguration(Map<String, dynamic> config) {
+  if (!config.containsKey('tokenCategories')) {
+    DesignTokenLogger.error('Configuration missing "tokenCategories" key');
+    return false;
+  }
+
+  final tokenCategories = config['tokenCategories'];
+  if (tokenCategories is! Map<String, dynamic>) {
+    DesignTokenLogger.error('Configuration "tokenCategories" is not a map');
+    return false;
+  }
+
+  for (final category in tokenCategories.entries) {
+    final categoryConfig = category.value;
+    if (categoryConfig is! Map<String, dynamic>) {
+      DesignTokenLogger.error('Category "${category.key}" is not a map');
+      return false;
+    }
+
+    if (!categoryConfig.containsKey('outputPath')) {
+      DesignTokenLogger.error(
+          'Category "${category.key}" missing "outputPath"');
+      return false;
+    }
+
+    if (!categoryConfig.containsKey('className')) {
+      DesignTokenLogger.error('Category "${category.key}" missing "className"');
+      return false;
+    }
+
+    if (!categoryConfig.containsKey('tokenNames')) {
+      DesignTokenLogger.error(
+          'Category "${category.key}" missing "tokenNames"');
+      return false;
+    }
+
+    final tokenNames = categoryConfig['tokenNames'];
+    if (tokenNames is! List) {
+      DesignTokenLogger.error(
+          'Category "${category.key}" "tokenNames" is not a list');
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /// Default configuration if config file is not found
@@ -199,44 +274,115 @@ final Map<String, dynamic> defaultConfiguration = {
 ///   config - The configuration map containing token categories, output paths, and class names
 ///
 /// Throws:
-///   FileSystemException - If the tokens.json file is not found
+///   FileSystemException - If the tokens.json file is not found or cannot be read
 ///   FormatException - If the tokens.json file contains invalid JSON
+///   ArgumentError - If the configuration is invalid
 ///   Other exceptions that might occur during processing (which are rethrown)
 void processTokensFile(Map<String, dynamic> config) {
   try {
+    // Validate config structure
+    if (!config.containsKey('tokenCategories')) {
+      throw ArgumentError(
+          'Invalid configuration: missing "tokenCategories" key');
+    }
+
+    final tokenCategories = config['tokenCategories'];
+    if (tokenCategories is! Map<String, dynamic>) {
+      throw ArgumentError(
+          'Invalid configuration: "tokenCategories" is not a map');
+    }
+
+    // Required categories
+    final requiredCategories = ['core', 'light', 'dark', 'component'];
+    for (final category in requiredCategories) {
+      if (!tokenCategories.containsKey(category)) {
+        DesignTokenLogger.warning('Configuration missing "$category" category');
+      }
+    }
+
+    // Check if tokens.json exists
     final file = File(DesignTokenUtils.tokensJsonPath);
     if (!file.existsSync()) {
-      throw FileSystemException('File not found', file.path);
+      throw const FileSystemException(
+          'Tokens file not found', DesignTokenUtils.tokensJsonPath);
     }
 
     DesignTokenLogger.info('\nParsing ${file.path}...');
 
-    final String jsonContent = file.readAsStringSync();
+    // Read tokens.json with error handling
+    String jsonContent;
+    try {
+      jsonContent = file.readAsStringSync();
+    } on FileSystemException catch (e) {
+      throw FileSystemException(
+          'Error reading tokens file: ${e.message}', e.path, e.osError);
+    }
+
+    // Parse JSON with error handling
     final Map<String, dynamic> tokens;
     try {
-      tokens = jsonDecode(jsonContent) as Map<String, dynamic>;
-    } catch (e) {
-      throw FormatException('Invalid JSON format in ${file.path}: $e');
+      final dynamic decodedJson = jsonDecode(jsonContent);
+      if (decodedJson is! Map<String, dynamic>) {
+        throw const FormatException(
+            'Invalid tokens.json format: root element is not an object');
+      }
+      tokens = decodedJson;
+    } on FormatException catch (e) {
+      throw FormatException(
+          'Invalid JSON format in ${file.path}: ${e.message}', e.source);
+    }
+
+    // Validate tokens structure
+    if (tokens.isEmpty) {
+      DesignTokenLogger.warning('tokens.json is empty');
     }
 
     // Process each token category
-    final tokenCategories = config['tokenCategories'] as Map<String, dynamic>;
+    int successCount = 0;
 
-    // Process core tokens
-    _processTokenCategory(tokens, tokenCategories['core'],
-        DesignTokenUtils.categoryCore, coreTokenValues);
+    // Process core tokens if available
+    if (tokenCategories.containsKey('core')) {
+      try {
+        _processTokenCategory(tokens, tokenCategories['core'],
+            DesignTokenUtils.categoryCore, coreTokenValues);
+        successCount++;
+      } on Exception catch (e) {
+        DesignTokenLogger.error('Error processing core tokens: $e');
+      }
+    }
 
-    // Process light theme tokens
-    _processTokenCategory(tokens, tokenCategories['light'],
-        DesignTokenUtils.categoryLight, lightThemeTokenValues);
+    // Process light theme tokens if available
+    if (tokenCategories.containsKey('light')) {
+      try {
+        _processTokenCategory(tokens, tokenCategories['light'],
+            DesignTokenUtils.categoryLight, lightThemeTokenValues);
+        successCount++;
+      } on Exception catch (e) {
+        DesignTokenLogger.error('Error processing light theme tokens: $e');
+      }
+    }
 
-    // Process dark theme tokens
-    _processTokenCategory(tokens, tokenCategories['dark'],
-        DesignTokenUtils.categoryDark, darkThemeTokenValues);
+    // Process dark theme tokens if available
+    if (tokenCategories.containsKey('dark')) {
+      try {
+        _processTokenCategory(tokens, tokenCategories['dark'],
+            DesignTokenUtils.categoryDark, darkThemeTokenValues);
+        successCount++;
+      } on Exception catch (e) {
+        DesignTokenLogger.error('Error processing dark theme tokens: $e');
+      }
+    }
 
-    // Process component tokens
-    _processTokenCategory(tokens, tokenCategories['component'],
-        DesignTokenUtils.categoryComponent, componentTokenValues);
+    // Process component tokens if available
+    if (tokenCategories.containsKey('component')) {
+      try {
+        _processTokenCategory(tokens, tokenCategories['component'],
+            DesignTokenUtils.categoryComponent, componentTokenValues);
+        successCount++;
+      } on Exception catch (e) {
+        DesignTokenLogger.error('Error processing component tokens: $e');
+      }
+    }
 
     // Print token counts
     DesignTokenLogger.info('Core tokens: ${coreTokenValues.length}');
@@ -244,6 +390,29 @@ void processTokensFile(Map<String, dynamic> config) {
         'Light theme tokens: ${lightThemeTokenValues.length}');
     DesignTokenLogger.info('Dark theme tokens: ${darkThemeTokenValues.length}');
     DesignTokenLogger.info('Component tokens: ${componentTokenValues.length}');
+
+    // Check if any categories were processed successfully
+    if (successCount == 0) {
+      throw Exception('Failed to process any token categories');
+    }
+
+    // Check if any tokens were generated
+    if (coreTokenValues.isEmpty &&
+        lightThemeTokenValues.isEmpty &&
+        darkThemeTokenValues.isEmpty &&
+        componentTokenValues.isEmpty) {
+      DesignTokenLogger.warning(
+          'No tokens were generated. Check if tokens.json has the expected structure and paths match the configuration.');
+    }
+  } on FileSystemException catch (e) {
+    DesignTokenLogger.error('File system error: ${e.message}. Path: ${e.path}');
+    rethrow;
+  } on FormatException catch (e) {
+    DesignTokenLogger.error('Format error: ${e.message}');
+    rethrow;
+  } on ArgumentError catch (e) {
+    DesignTokenLogger.error('Configuration error: ${e.message}');
+    rethrow;
   } catch (e) {
     DesignTokenLogger.error('Error processing tokens file: $e');
     rethrow;
@@ -267,24 +436,75 @@ void processTokensFile(Map<String, dynamic> config) {
 ///   categoryConfig - Configuration for this specific category (output path, class name, token names)
 ///   category - The category identifier (categoryCore, categoryLight, categoryDark)
 ///   tokenValues - The map to store processed token values for this category
+///
+/// Throws:
+///   ArgumentError - If the token category is unknown
+///   FileSystemException - If there's an error writing to the output file
+///   FormatException - If there's an error generating the token content
 void _processTokenCategory(
     Map<String, dynamic> tokens,
     Map<String, dynamic> categoryConfig,
     String category,
     Map<String, String> tokenValues) {
-  final String className = categoryConfig['className'];
-  final String outputPath = categoryConfig['outputPath'];
-  final List<dynamic> tokenNames = categoryConfig['tokenNames'];
+  try {
+    final String className = categoryConfig['className'];
+    final String outputPath = categoryConfig['outputPath'];
+    final List<dynamic> tokenNames = categoryConfig['tokenNames'];
 
-  // Create the appropriate generator using the factory
-  final generator =
-      DesignTokenGeneratorFactory.createGenerator(category, className);
+    // Validate token names exist in the tokens map
+    _validateTokenNames(tokens, tokenNames, category);
 
-  // Generate the token file content
-  final content = generator.generate(tokens, List<String>.from(tokenNames));
+    // Create the appropriate generator using the factory
+    final DesignTokenGenerator generator;
+    try {
+      generator =
+          DesignTokenGeneratorFactory.createGenerator(category, className);
+    } catch (e) {
+      throw ArgumentError(
+          'Failed to create generator for category "$category": $e');
+    }
 
-  // Write the content to the output file
-  generator.writeToFile(content, outputPath);
+    // Generate the token file content
+    String content;
+    try {
+      content = generator.generate(tokens, List<String>.from(tokenNames));
+    } catch (e) {
+      throw FormatException(
+          'Error generating token content for category "$category": $e');
+    }
+
+    // Write the content to the output file
+    try {
+      generator.writeToFile(content, outputPath);
+    } on FileSystemException catch (e) {
+      throw FileSystemException(
+          'Error writing token file for category "$category"',
+          outputPath,
+          e.osError);
+    }
+  } catch (e) {
+    DesignTokenLogger.error('Error processing token category "$category": $e');
+    rethrow;
+  }
+}
+
+/// Validates that token names exist in the tokens map
+///
+/// Checks if each token name in the tokenNames list exists in the tokens map.
+/// Logs a warning for each token name that doesn't exist.
+///
+/// Parameters:
+///   tokens - The complete tokens map from the tokens.json file
+///   tokenNames - The list of token names to validate
+///   category - The category identifier (categoryCore, categoryLight, categoryDark)
+void _validateTokenNames(
+    Map<String, dynamic> tokens, List<dynamic> tokenNames, String category) {
+  for (final tokenName in tokenNames) {
+    if (tokenName is String && !tokens.containsKey(tokenName)) {
+      DesignTokenLogger.warning(
+          'Token name "$tokenName" not found in tokens.json for category "$category"');
+    }
+  }
 }
 
 /// Test the parsers with examples
@@ -307,9 +527,66 @@ void _processTokenCategory(
 /// The results are logged using DesignTokenLogger.debug for inspection during development.
 /// These tests are only run in debug mode and don't affect the actual token generation.
 void testParsers() {
-  final DesignTokenValueFormatter colorFormatter =
-      TokenFormatterFactory.getFormatter('color');
-  // Test the rgba parser with different categories
+  try {
+    DesignTokenLogger.debug('Starting parser tests...');
+
+    // Get color formatter
+    final DesignTokenValueFormatter colorFormatter;
+    try {
+      colorFormatter = TokenFormatterFactory.getFormatter('color');
+      if (!(colorFormatter is ColorTokenFormatter)) {
+        DesignTokenLogger.warning(
+            'Color formatter is not a ColorTokenFormatter');
+      }
+    } on Exception catch (e) {
+      DesignTokenLogger.error('Error getting color formatter: $e');
+      return;
+    }
+
+    // Test the rgba parser with different categories
+    try {
+      _testRgbaParser(colorFormatter);
+    } on Exception catch (e) {
+      DesignTokenLogger.error('Error testing RGBA parser: $e');
+    }
+
+    // Test the linear gradient parser with different categories
+    try {
+      _testLinearGradientParser();
+    } on Exception catch (e) {
+      DesignTokenLogger.error('Error testing linear gradient parser: $e');
+    }
+
+    // Test the gradient string to LinearGradient conversion
+    try {
+      _testGradientToDartObject(colorFormatter);
+    } on Exception catch (e) {
+      DesignTokenLogger.error(
+          'Error testing gradient to Dart object conversion: $e');
+    }
+
+    // Test numeric token references
+    try {
+      _testNumericTokenReferences();
+    } on Exception catch (e) {
+      DesignTokenLogger.error('Error testing numeric token references: $e');
+    }
+
+    // Test cubic-bezier parser
+    try {
+      _testCubicBezierParser();
+    } on Exception catch (e) {
+      DesignTokenLogger.error('Error testing cubic-bezier parser: $e');
+    }
+
+    DesignTokenLogger.debug('Parser tests completed.');
+  } on Exception catch (e) {
+    DesignTokenLogger.error('Unexpected error in testParsers: $e');
+  }
+}
+
+/// Test the RGBA parser with different categories
+void _testRgbaParser(DesignTokenValueFormatter colorFormatter) {
   const String rgbaInput =
       'rgba({core.color.solid.magenta.700},{core.opacity.700})';
 
@@ -336,8 +613,10 @@ void testParsers() {
           rgbaInput, DesignTokenUtils.categoryDark)
       : 'Invalid formatter';
   DesignTokenLogger.debug('Transformed: $transformedDark');
+}
 
-  // Test the linear gradient parser with different categories
+/// Test the linear gradient parser with different categories
+void _testLinearGradientParser() {
   const String gradientInput =
       'linear-gradient(1.93deg, {core.color.opacity.overflow.100} 1.56%, {core.color.solid.slate.50} 49.91%)';
   DesignTokenLogger.debug('\n\nGRADIENT Original: $gradientInput');
@@ -357,8 +636,10 @@ void testParsers() {
   final String gradientDark = DesignTokenUtils.formatLinearGradientValue(
       gradientInput, DesignTokenUtils.categoryDark);
   DesignTokenLogger.debug('Transformed: $gradientDark');
+}
 
-  // Test the gradient string to LinearGradient conversion
+/// Test the gradient string to LinearGradient conversion
+void _testGradientToDartObject(DesignTokenValueFormatter colorFormatter) {
   const String dartGradientInput =
       'linear-gradient(1.93deg, {core.color.opacity.overflow.100} 1.56%, {core.color.solid.slate.50} 49.91%)';
   DesignTokenLogger.debug('\n\nDART GRADIENT Original: $dartGradientInput');
@@ -384,10 +665,20 @@ void testParsers() {
           dartGradientInput, DesignTokenUtils.categoryDark)
       : 'Invalid formatter';
   DesignTokenLogger.debug('Transformed: $dartGradientDark');
+}
 
-  // Test numeric token references
+/// Test numeric token references
+void _testNumericTokenReferences() {
   const String numericTokenInput = '{core.elevation.shadow.730}';
   DesignTokenLogger.debug('\n\nNUMERIC TOKEN Original: $numericTokenInput');
+
+  if (numericTokenInput.length < 2 ||
+      !numericTokenInput.startsWith('{') ||
+      !numericTokenInput.endsWith('}')) {
+    DesignTokenLogger.error(
+        'Invalid token reference format: $numericTokenInput');
+    return;
+  }
 
   // Extract the token reference (remove the curly braces)
   final String numericTokenRef =
@@ -408,19 +699,27 @@ void testParsers() {
   final String numericTokenDark = DesignTokenUtils.convertToDartPropertyName(
       numericTokenRef, DesignTokenUtils.categoryDark);
   DesignTokenLogger.debug('Transformed: $numericTokenDark');
+}
 
-  // Test cubic-bezier parser
+/// Test cubic-bezier parser
+void _testCubicBezierParser() {
   const String cubicBezierInput = 'cubic-bezier(0, 0, 1, 1)';
   DesignTokenLogger.debug('\n\nCUBIC BEZIER Original: $cubicBezierInput');
-  // Create a CubicBezierTokenFormatter directly instead of casting
-  final String cubicBezierTransformed = CubicBezierTokenFormatter()
-      .convertCubicBezierToDartObject(cubicBezierInput);
-  DesignTokenLogger.debug('Transformed: $cubicBezierTransformed');
 
-  // Test another cubic-bezier value
-  const String cubicBezierInput2 = 'cubic-bezier(0.42, 0, 1, 1)';
-  DesignTokenLogger.debug('\nCUBIC BEZIER 2 Original: $cubicBezierInput2');
-  final String cubicBezierTransformed2 = CubicBezierTokenFormatter()
-      .convertCubicBezierToDartObject(cubicBezierInput2);
-  DesignTokenLogger.debug('Transformed: $cubicBezierTransformed2');
+  try {
+    // Create a CubicBezierTokenFormatter directly
+    final formatter = CubicBezierTokenFormatter();
+    final String cubicBezierTransformed =
+        formatter.convertCubicBezierToDartObject(cubicBezierInput);
+    DesignTokenLogger.debug('Transformed: $cubicBezierTransformed');
+
+    // Test another cubic-bezier value
+    const String cubicBezierInput2 = 'cubic-bezier(0.42, 0, 1, 1)';
+    DesignTokenLogger.debug('\nCUBIC BEZIER 2 Original: $cubicBezierInput2');
+    final String cubicBezierTransformed2 =
+        formatter.convertCubicBezierToDartObject(cubicBezierInput2);
+    DesignTokenLogger.debug('Transformed: $cubicBezierTransformed2');
+  } on Exception catch (e) {
+    DesignTokenLogger.error('Error in cubic bezier transformation: $e');
+  }
 }
