@@ -1,3 +1,5 @@
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
+
 /// This class includes dimensions according to Deriv design guidelines.
 ///
 /// More dimens values can be added here following the convention margin_x
@@ -33,4 +35,35 @@ class Dimens {
 
   /// Border radius x-large.
   static const double borderRadius24 = 24;
+
+  /// 5 rem (Value: 80)
+  static const double crosshairInformationBoxContainerGlassBackgroundBlur =
+      CoreDesignTokens.coreSize4000;
+
+  /// Default area line thickness
+  static const double areaLineDefaultThickness = 1;
+
+  /// Medium area line thickness
+  static const double areaLineMediumThickness = 1.5;
+
+  /// Large area line thickness
+  static const double areaLineLargeThickness = 2;
+
+  /// Small candle body size
+  static const double candleBodyWidthSmall = 4;
+
+  /// Medium candle body size
+  static const double candleBodyWidthMedium = 8;
+
+  /// Large candle body size
+  static const double candleBodyWidthLarge = 16;
+
+  /// Small candle wick size
+  static const double candleWickWidthSmall = 1;
+
+  /// Medium candle wick size
+  static const double candleWickWidthMedium = 1;
+
+  /// Large candle wick size
+  static const double candleWickWidthLarge = 2;
 }

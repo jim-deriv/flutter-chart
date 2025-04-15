@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:deriv_chart/src/theme/design_tokens/component_design_tokens.dart';
+import 'package:deriv_chart/src/theme/design_tokens/dark_theme_design_tokens.dart';
+import 'package:deriv_chart/src/theme/design_tokens/light_theme_design_tokens.dart';
 import 'package:flutter/material.dart';
 
 /// Deriv branding colors, these colors should not be changed. It can be called
@@ -47,150 +50,140 @@ class LightThemeColors {
 class DefaultLightThemeColors {
   static const Color backgroundDynamicHighest =
       Color(0xFFFFFFFF); // Hex: #FFFFFF
-  static const Color axisGridDefault =
-      Color(0x0A181C25); // Hex: #181C25 with 4% opacity
-  static const Color axisTextDefault =
-      Color(0x3D181C25); // Hex: #181C25 with 24% opacity
-  static const Color areaDefaultLine = Color(0xFF181C25); // Hex: #181C25
-  static const Color areaDefaultGradientStart =
-      Color(0x29181C25); // Hex: #181C25 with 16% opacity
-  static const Color areaDefaultGradientEnd =
-      Color(0x00181C25); // Hex: #181C25 with 0% opacity
-  static const Color currentSpotDefaultContainer =
-      Color(0xFF181C25); // Hex: #181C25
-  static const Color currentSpotDefaultLabel =
-      Color(0xFFFFFFFF); // Hex: #FFFFFF
-//   static const Color crosshairGrid =
-//       Color(0x3D181C25); // Hex: #181C25 with 24% opacity
-  static const Color crosshairText = Color(0xFF181C25); // Hex: #181C25
-  static const Color crosshairLineDesktop =
-      Color(0x3D181C25); // Hex: #181C25 with 24% opacity
-  static const Color crosshairLineResponsiveUpperLineGradientStart =
-      Color(0x00181C25); // Hex: #181C25 with 0% opacity
-  static const Color crosshairLineResponsiveUpperLineGradientEnd =
-      Color(0x3D181C25); // Hex: #181C25 with 24% opacity
-  static const Color crosshairLineResponsiveLowerLineGradientStart =
-      Color(0x3D181C25); // Hex: #181C25 with 24% opacity
-  static const Color crosshairLineResponsiveLowerLineGradientEnd =
-      Color(0x00181C25); // Hex: #181C25 with 0% opacity
-  static const Color crosshairInformationBoxTextDefault =
-      Color(0xFF181C25); // Hex: #181C25
-  static const Color crosshairInformationBoxTextSubtle =
-      Color(0x7A181C25); // Hex: #181C25 with 48% opacity
-  static const Color crosshairInformationBoxTextStatic =
-      Color(0xFFFFFFFF); // Hex: #FFFFFF
-  static const Color crosshairInformationBoxTextProfit =
-      Color(0xFF00C390); // Hex: #00C390
-  static const Color crosshairInformationBoxTextLoss =
-      Color(0xFFDE0040); // Hex: #DE0040
-  static const Color crosshairInformationBoxContainerDefault =
-      Color(0xFFF6F7F8); // Hex: #F6F7F8
-  static const Color crosshairInformationBoxContainerGlass =
-      Color(0x0A181C25); // Hex: #181C25 with 4% opacity
-  static const Color crosshairDot = Color(0xFF181C25); // Hex: #181C25
-  static const Color crosshairDotEffect =
-      Color(0x29181C25); // Hex: #181C25 with 16% opacity
-  static const Color line = Color(0x7A181C25); // #181C25 with 48% opacity
-  static const Color text = Color(0xFF181C25); // #181C25
-  static const Color subtitle = Color(0xFF181C25); // #181C25
-  static const Color container = Color(0xFFF6F7F8); // #F6F7F8
-  static const Color gradientStart =
-      Color(0x00181C25); // #181C25 with 0% opacity
-  static const Color gradientEnd = Color(0x00181C25); // #181C25 with 0% opacity
-  static const Color dot = Color(0xFF181C25); // #181C25
-  static const Color effect = Color(0x29181C25); // #181C25 with 16% opacity
-  static const Color subtitle2 = Color(0x7A181C25); // #181C25 with 48% opacity
-  static const Color desktop = Color(0xFF181C25); // #181C25
+
+  static final Color gridLineColor = LightThemeDesignTokens
+      .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
+  static final Color gridTextColor = ComponentDesignTokens
+      .componentTextIconNormalDisabledLight; // Hex: #000000 with 24% opacity
+
+  static const Color areaLineColor = LightThemeDesignTokens
+      .semanticColorSlateSolidBorderInverseLowest; // Hex: #181C25
+  static final Color areaGradientStart = LightThemeDesignTokens
+      .semanticColorMonochromeSurfaceNormalMidLow; // Hex: #181C25 with 16% opacity
+  static const Color areaGradientEnd = Color(
+      0x00000000); // Hex: #000000 with 0% opacity //TODO(Jim): update this value with corresponding design token when available
+
+  static const Color currentSpotContainerColor = LightThemeDesignTokens
+      .semanticColorSlateSolidSurfaceInverseLowest; // Hex: #000000
+  static const Color currentSpotDotColor = LightThemeDesignTokens
+      .semanticColorSlateSolidSurfaceInverseLowest; // Hex: #000000
+  static final Color currentSpotDotEffect = LightThemeDesignTokens
+      .semanticColorMonochromeSurfaceNormalMidLow; // Hex: #000000 with 16% opacity
+  static const Color currentSpotLineColor = LightThemeDesignTokens
+      .semanticColorSlateSolidSurfaceInverseLowest; // Hex: #000000
+  static const Color currentSpotTextColor = ComponentDesignTokens
+      .componentTextIconInverseProminentLight; // Hex: #FFFFFF
+
+  static final Color crosshairLineDesktopColor = LightThemeDesignTokens
+      .semanticColorMonochromeBorderNormalHighest; // Hex: #000000 with 24% opacity
+  static const Color crosshairLineResponsiveUpperLineGradientStart = Color(
+      0x00000000); // Hex: #000000 with 0% opacity //TODO(Jim): update this value with corresponding design token when available
+  static final Color crosshairLineResponsiveUpperLineGradientEnd =
+      LightThemeDesignTokens
+          .semanticColorMonochromeSurfaceNormalMidHigh; // Hex: #000000 with 24% opacity
+  static final Color crosshairLineResponsiveLowerLineGradientStart =
+      LightThemeDesignTokens
+          .semanticColorMonochromeSurfaceNormalMidHigh; // Hex: #000000 with 24% opacity
+  static const Color crosshairLineResponsiveLowerLineGradientEnd = Color(
+      0x00000000); // Hex: #000000 with 0% opacity //TODO(Jim): update this value with corresponding design token when available
+
+  static const Color crosshairInformationBoxTextDefault = ComponentDesignTokens
+      .componentTextIconNormalProminentLight; // Hex: #181C25
+  static final Color crosshairInformationBoxTextSubtle = ComponentDesignTokens
+      .componentTextIconNormalSubtleLight; // Hex: #000000 with 48% opacity
+  static const Color crosshairInformationBoxTextStatic = ComponentDesignTokens
+      .componentTextIconStaticProminentDark; // Hex: #FFFFFF
+  static const Color crosshairInformationBoxTextProfit = LightThemeDesignTokens
+      .semanticColorEmeraldSolidSurfaceStaticHigh; // Hex: #00AE7A
+  static const Color crosshairInformationBoxTextLoss = LightThemeDesignTokens
+      .semanticColorCherrySolidSurfaceStaticHigh; // Hex: #C40025
+  static const Color crosshairInformationBoxContainerNormalColor =
+      LightThemeDesignTokens
+          .semanticColorSlateSolidSurfaceFrameMid; // Hex: #F6F7F8
+  static final Color crosshairInformationBoxContainerGlassColor =
+      LightThemeDesignTokens
+          .semanticColorMonochromeSurfaceNormalLowest; // Hex: #000000 with 4% opacity
 }
 
 /// Default colors for dark theme.
 class DefaultDarkThemeColors {
   static const Color backgroundDynamicHighest =
       Color(0xFF181C25); // Hex: #181C25
-  static const Color axisGridDefault =
-      Color(0x0AFFFFFF); // Hex: #FFFFFF with 4% opacity
-  static const Color axisTextDefault =
-      Color(0x3DFFFFFF); // Hex: #FFFFFF with 24% opacity
-  static const Color areaDefaultLine = Color(0xFFFFFFFF); // Hex: #FFFFFF
-  static const Color areaDefaultGradientStart =
-      Color(0x29FFFFFF); // Hex: #FFFFFF with 16% opacity
-  static const Color areaDefaultGradientEnd =
-      Color(0x00FFFFFF); // Hex: #FFFFFF with 0% opacity
-  static const Color currentSpotDefaultContainer =
-      Color(0xFFFFFFFF); // Hex: #FFFFFF
-  static const Color currentSpotDefaultLabel =
-      Color(0xFF181C25); // Hex: #181C25
-//   static const Color crosshairGrid =
-//       Color(0x3DFFFFFF); // Hex: #FFFFFF with 24% opacity
-  static const Color crosshairText = Color(0xFFFFFFFF); // Hex: #FFFFFF
-  static const Color crosshairInformationBoxContainer =
-      Color(0xFF20242F); // Hex: #20242F
-  static const Color crosshairContainerGlass =
-      Color(0x0AFFFFFF); // Hex: #FFFFFF with 4% opacity
-  static const Color crosshairLineDesktop =
-      Color(0x3DFFFFFF); // Hex: #FFFFFF with 24% opacity
-  static const Color crosshairLineResponsiveUpperLineGradientStart =
-      Color(0x00FFFFFF); // Hex: #FFFFFF with 0% opacity
-  static const Color crosshairLineResponsiveUpperLineGradientEnd =
-      Color(0x3DFFFFFF); // Hex: #FFFFFF with 24% opacity
-  static const Color crosshairLineResponsiveLowerLineGradientStart =
-      Color(0x3DFFFFFF); // Hex: #FFFFFF with 24% opacity
-  static const Color crosshairLineResponsiveLowerLineGradientEnd =
-      Color(0x00FFFFFF); // Hex: #FFFFFF with 0% opacity
-  static const Color crosshairInformationBoxTextDefault =
-      Color(0xFFFFFFFF); // Hex: #FFFFFF
-  static const Color crosshairInformationBoxTextSubtle =
-      Color(0x7AFFFFFF); // Hex: #FFFFFF with 48% opacity
-  static const Color crosshairInformationBoxTextStatic =
-      Color(0xFFFFFFFF); // Hex: #FFFFFF
-  static const Color crosshairInformationBoxTextProfit =
-      Color(0xFF00C390); // Hex: #00C390
-  static const Color crosshairInformationBoxTextLoss =
-      Color(0xFFDE0040); // Hex: #DE0040
-  static const Color crosshairDot = Color(0xFFFFFFFF); // Hex: #FFFFFF
-  static const Color crosshairDotEffect =
-      Color(0x29FFFFFF); // Hex: #FFFFFF with 16% opacity
-  static const Color line = Color(0x7AFFFFFF); // #FFFFFF with 48% opacity
-  static const Color text = Color(0xFFFFFFFF); // #FFFFFF
-  static const Color subtitle = Color(0xFFFFFFFF); // #FFFFFF
-  static const Color container = Color(0xFF20242F); // #20242F
-  static const Color gradientStart =
-      Color(0x00FFFFFF); // #FFFFFF with 0% opacity
-  static const Color gradientEnd = Color(0x00FFFFFF); // #FFFFFF with 0% opacity
-  static const Color dot = Color(0xFFFFFFFF); // #FFFFFF
-  static const Color effect = Color(0x29FFFFFF); // #FFFFFF with 16% opacity
-  static const Color subtitle2 = Color(0x7AFFFFFF); // #FFFFFF with 48% opacity
-  static const Color desktop = Color(0xFFFFFFFF); // #FFFFFF
+
+  static final Color gridLineColor = DarkThemeDesignTokens
+      .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
+  static final Color gridTextColor = ComponentDesignTokens
+      .componentTextIconNormalDisabledLight; // Hex: #000000 with 24% opacity
+
+  static const Color areaLineColor = DarkThemeDesignTokens
+      .semanticColorSlateSolidBorderInverseLowest; // Hex: #181C25
+  static final Color areaGradientStart = DarkThemeDesignTokens
+      .semanticColorMonochromeSurfaceNormalMidLow; // Hex: #181C25 with 16% opacity
+  static const Color areaGradientEnd = Color(
+      0x00FFFFFF); // Hex: #FFFFFF with 0% opacity //TODO(Jim): update this value with corresponding design token when available
+
+  static const Color currentSpotContainerColor = DarkThemeDesignTokens
+      .semanticColorSlateSolidSurfaceInverseLowest; // Hex: #000000
+  static const Color currentSpotDotColor = DarkThemeDesignTokens
+      .semanticColorSlateSolidSurfaceInverseLowest; // Hex: #000000
+  static final Color currentSpotDotEffect = DarkThemeDesignTokens
+      .semanticColorMonochromeSurfaceNormalMidLow; // Hex: #000000 with 16% opacity
+  static const Color currentSpotLineColor = DarkThemeDesignTokens
+      .semanticColorSlateSolidSurfaceInverseLowest; // Hex: #000000
+  static const Color currentSpotTextColor = ComponentDesignTokens
+      .componentTextIconInverseProminentLight; // Hex: #FFFFFF
+
+  static final Color crosshairLineDesktopColor = DarkThemeDesignTokens
+      .semanticColorMonochromeBorderNormalHighest; // Hex: #000000 with 24% opacity
+  static const Color crosshairLineResponsiveUpperLineGradientStart = Color(
+      0x00FFFFFF); // Hex: #FFFFFF with 0% opacity //TODO(Jim): update this value with corresponding design token when available
+  static final Color crosshairLineResponsiveUpperLineGradientEnd =
+      DarkThemeDesignTokens
+          .semanticColorMonochromeSurfaceNormalMidHigh; // Hex: #000000 with 24% opacity
+  static final Color crosshairLineResponsiveLowerLineGradientStart =
+      DarkThemeDesignTokens
+          .semanticColorMonochromeSurfaceNormalMidHigh; // Hex: #000000 with 24% opacity
+  static const Color crosshairLineResponsiveLowerLineGradientEnd = Color(
+      0x00FFFFFF); // Hex: #FFFFFF with 0% opacity //TODO(Jim): update this value with corresponding design token when available
+
+  static const Color crosshairInformationBoxTextDefault = ComponentDesignTokens
+      .componentTextIconNormalProminentLight; // Hex: #181C25
+  static final Color crosshairInformationBoxTextSubtle = ComponentDesignTokens
+      .componentTextIconNormalSubtleLight; // Hex: #000000 with 48% opacity
+  static const Color crosshairInformationBoxTextStatic = ComponentDesignTokens
+      .componentTextIconStaticProminentDark; // Hex: #FFFFFF
+  static const Color crosshairInformationBoxTextProfit = DarkThemeDesignTokens
+      .semanticColorEmeraldSolidSurfaceStaticHigh; // Hex: #00AE7A
+  static const Color crosshairInformationBoxTextLoss = DarkThemeDesignTokens
+      .semanticColorCherrySolidSurfaceStaticHigh; // Hex: #C40025
+  static const Color crosshairInformationBoxContainerNormalColor =
+      DarkThemeDesignTokens
+          .semanticColorSlateSolidSurfaceFrameMid; // Hex: #F6F7F8
+  static final Color crosshairInformationBoxContainerGlassColor =
+      DarkThemeDesignTokens
+          .semanticColorMonochromeSurfaceNormalLowest; // Hex: #000000 with 4% opacity
 }
 
-/// Candle Bullish colors for light, dark, and colorblind themes
+/// Candle Bullish colors for light, dark
 class CandleBullishThemeColors {
-  static const Color candleBullishBodyDefault =
-      Color(0xFF00C390); // Hex: #00C390
-  static const Color candleBullishBodyActive =
-      Color(0xFF4DECBC); // Hex: #4DECBC
-  static const Color candleBullishBodyColorBlind =
-      Color(0xFF2C9AFF); // Hex: #2C9AFF
-  static const Color candleBullishWickDefault =
-      Color(0xFF00AE7A); // Hex: #00AE7A
-  static const Color candleBullishWickActive =
-      Color(0xFF4DECBC); // Hex: #4DECBC
-  static const Color candleBullishWickColorBlind =
-      Color(0xFF0777C4); // Hex: #0777C4
+  static const Color candleBullishBodyDefault = LightThemeDesignTokens
+      .semanticColorEmeraldSolidSurfaceStaticHigh; // Hex: #00AE7A
+  static const Color candleBullishBodyActive = LightThemeDesignTokens
+      .semanticColorEmeraldSolidSurfaceStaticLow; // Hex: #4DECBC
+  static const Color candleBullishWickDefault = LightThemeDesignTokens
+      .semanticColorEmeraldSolidSurfaceStaticHigh; // Hex: #00AE7A
+  static const Color candleBullishWickActive = LightThemeDesignTokens
+      .semanticColorEmeraldSolidSurfaceStaticLow; // Hex: #4DECBC
 }
 
-/// Candle Bearish colors for light, dark, and colorblind themes
+/// Candle Bearish colors for light, dark
 class CandleBearishThemeColors {
-  static const Color candleBearishBodyDefault =
-      Color(0xFFDE0040); // Hex: #DE0040
-  static const Color candleBearishBodyActive =
-      Color(0xFFFF4D6E); // Hex: #FF4D6E
-  static const Color candleBearishBodyColorBlind =
-      Color(0xFFF7C60B); // Hex: #F7C60B
-  static const Color candleBearishWickDefault =
-      Color(0xFFC40025); // Hex: #C40025
-  static const Color candleBearishWickActive =
-      Color(0xFFFF4D6E); // Hex: #FF4D6E
-  static const Color candleBearishWickColorBlind =
-      Color(0xFFBD9808); // Hex: #BD9808
+  static const Color candleBearishBodyDefault = LightThemeDesignTokens
+      .semanticColorCherrySolidSurfaceStaticHigh; // Hex: #C40025
+  static const Color candleBearishBodyActive = LightThemeDesignTokens
+      .semanticColorCherrySolidSurfaceStaticLow; // Hex: #FF4D6E
+  static const Color candleBearishWickDefault = LightThemeDesignTokens
+      .semanticColorCherrySolidSurfaceStaticHigh; // Hex: #C40025
+  static const Color candleBearishWickActive = LightThemeDesignTokens
+      .semanticColorCherrySolidSurfaceStaticLow; // Hex: #FF4D6E
 }

@@ -12,31 +12,73 @@ import 'package:flutter/material.dart';
 abstract class ChartTheme {
   Color get backgroundColor;
 
-  GridStyle get axisGridStyle;
+  GridStyle get gridLineStyle;
 
   LineStyle get areaLineStyle;
 
   TextStyle get currentSpotLabelText;
 
-  Color get lineColor;
+  Color get gridLineColor;
 
-  Color get textColor;
+  Color get gridTextColor;
 
-  Color get subtitleColor;
+  Color get areaLineColor;
 
-  Color get containerColor;
+  Color get areaGradientStart;
 
-  Color get gradientStart;
+  Color get areaGradientEnd;
 
-  Color get gradientEnd;
+  Color get candleBullishBodyDefault;
 
-  Color get dotColor;
+  Color get candleBullishBodyActive;
 
-  Color get effectColor;
+  Color get candleBullishWickDefault;
 
-  Color get subtitle2Color;
+  Color get candleBullishWickActive;
 
-  Color get desktopColor;
+  Color get candleBearishBodyDefault;
+
+  Color get candleBearishBodyActive;
+
+  Color get candleBearishWickDefault;
+
+  Color get candleBearishWickActive;
+
+  Color get currentSpotContainerColor;
+
+  Color get currentSpotDotColor;
+
+  Color get currentSpotDotEffect;
+
+  Color get currentSpotLineColor;
+
+  Color get currentSpotTextColor;
+
+  Color get crosshairLineDesktopColor;
+
+  Color get crosshairLineResponsiveUpperLineGradientStart;
+
+  Color get crosshairLineResponsiveUpperLineGradientEnd;
+
+  Color get crosshairLineResponsiveLowerLineGradientStart;
+
+  Color get crosshairLineResponsiveLowerLineGradientEnd;
+
+  Color get crosshairInformationBoxTextDefault;
+
+  Color get crosshairInformationBoxTextSubtle;
+
+  Color get crosshairInformationBoxTextStatic;
+
+  Color get crosshairInformationBoxTextProfit;
+
+  Color get crosshairInformationBoxTextLoss;
+
+  Color get crosshairInformationBoxContainerNormalColor;
+
+  Color get crosshairInformationBoxContainerGlassColor;
+
+  double get crosshairInformationBoxContainerGlassBackgroundBlur;
 
   /// The style of the current tick indicator.
   HorizontalBarrierStyle get currentSpotStyle;
