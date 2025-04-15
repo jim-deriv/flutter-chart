@@ -51,6 +51,8 @@ class HorizontalBarrierStyle extends BarrierStyle {
     this.arrowSize = 5,
     this.hasArrow = true,
     this.hasLine = true,
+    this.labelShapeBackgroundColor = const Color(0xFF000000),
+    this.lineColor = const Color(0xFF000000),
     TextStyle textStyle = const TextStyle(
       fontSize: 10,
       height: 1.3,
@@ -102,8 +104,14 @@ class HorizontalBarrierStyle extends BarrierStyle {
   /// initial color.
   final Color secondaryBackgroundColor;
 
+  /// Background color of the label shape.
+  final Color labelShapeBackgroundColor;
+
+  /// Color of the line.
+  final Color lineColor;
+
   @override
-  String toString() => '${super.toString()}, $hasBlinkingDot $labelShape';
+  String toString() => '${super.toString()}, $hasBlinkingDot $labelShape $labelShapeBackgroundColor $lineColor';
 }
 
 /// Vertical barrier style.
