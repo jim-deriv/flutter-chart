@@ -111,7 +111,8 @@ class HorizontalBarrierStyle extends BarrierStyle {
   final Color lineColor;
 
   @override
-  String toString() => '${super.toString()}, $hasBlinkingDot $labelShape $labelShapeBackgroundColor $lineColor';
+  String toString() =>
+      '${super.toString()}, $hasBlinkingDot $labelShape $labelShapeBackgroundColor $lineColor';
 }
 
 /// Vertical barrier style.
