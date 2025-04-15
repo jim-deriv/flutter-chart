@@ -11,22 +11,22 @@
 enum LogLevel {
   /// Disables all logging output
   none(0),
-  
+
   /// Critical errors that prevent functionality
   error(1),
-  
+
   /// Potential issues that don't prevent functionality but might indicate problems
   warning(2),
-  
+
   /// General information about normal operations
   info(3),
-  
+
   /// Detailed information useful for debugging
   debug(4);
-  
+
   /// Creates a log level with the specified numeric value
   const LogLevel(this.value);
-  
+
   /// The numeric value of this log level, used for comparison
   final int value;
 }
@@ -58,11 +58,11 @@ enum LogLevel {
 class DesignTokenLogger {
   /// Private constructor to prevent instantiation
   DesignTokenLogger._();
-  
+
   /// The current log level that determines which messages are displayed.
   ///
   /// Default is [LogLevel.info], which shows errors, warnings, and info messages.
-  /// 
+  ///
   /// Messages with a severity level lower than or equal to this level will be displayed.
   /// For example, setting this to [LogLevel.warning] will display error and warning
   /// messages, but not info or debug messages.
@@ -79,7 +79,7 @@ class DesignTokenLogger {
   /// DesignTokenLogger.logLevel = LogLevel.none;
   /// ```
   static LogLevel logLevel = LogLevel.info;
-  
+
   /// Logs an error message.
   ///
   /// Use this for critical errors that prevent functionality.
@@ -96,7 +96,7 @@ class DesignTokenLogger {
       _printMessage('ERROR: $message');
     }
   }
-  
+
   /// Logs a warning message.
   ///
   /// Use this for potential issues that don't prevent functionality
@@ -114,7 +114,7 @@ class DesignTokenLogger {
       _printMessage('WARNING: $message');
     }
   }
-  
+
   /// Logs an informational message.
   ///
   /// Use this for general information about normal operations.
@@ -131,7 +131,7 @@ class DesignTokenLogger {
       _printMessage('INFO: $message');
     }
   }
-  
+
   /// Logs a debug message.
   ///
   /// Use this for detailed information that is useful for debugging.

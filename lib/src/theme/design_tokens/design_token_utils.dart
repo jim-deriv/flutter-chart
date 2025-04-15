@@ -70,29 +70,6 @@ class DesignTokenUtils {
   /// Pattern to match color stops in gradients, e.g. red 10%
   static final RegExp colorStopPattern = RegExp(r'(.+)\s+([0-9.]+%)');
 
-  /// Capitalizes the first letter of a string if it doesn't start with a number
-  ///
-  /// This helper method is used to handle token name parts during conversion.
-  /// If the string starts with a number, it returns it unchanged.
-  /// Otherwise, it capitalizes the first letter using the StringExtension.
-  ///
-  /// Parameters:
-  /// - input: The string to process
-  ///
-  /// Returns:
-  /// The processed string with first letter capitalized if applicable
-  static String _capitalizeIfNotNumeric(String input) {
-    if (input.isEmpty) return input;
-
-    // If the part starts with a number, don't capitalize it
-    if (RegExp(r'^[0-9]').hasMatch(input[0])) {
-      return input;
-    }
-
-    // Otherwise capitalize the first letter using the extension
-    return input.capitalize();
-  }
-
   /// Converts dot notation token references to camelCase Dart property names
   ///
   /// This function transforms token references from dot notation (e.g., "core.color.red.500")
@@ -377,10 +354,24 @@ class DesignTokenUtils {
 /// to ensure consistent capitalization of token names and paths.
 ///
 extension StringExtension on String {
-  /// Returns a new string with the first letter capitalized.
+  /// Capitalizes the first letter of a string if it doesn't start with a number
   ///
-  /// If the string is empty, returns an empty string.
+  /// This helper method is used to handle token name parts during conversion.
+  /// If the string is empty, it returns the empty string.
+  /// If the string starts with a number, it returns it unchanged.
+  /// Otherwise, it capitalizes the first letter.
+  ///
+  /// Returns:
+  /// The processed string with first letter capitalized if applicable
   String capitalize() {
+    if (isEmpty) {
+      return this;
+    }
+    // If the part starts with a number, don't capitalize it
+    if (RegExp(r'^[0-9]').hasMatch(this[0])) {
+      return this;
+    }
+    // Otherwise capitalize the first letter using the extension
     return isEmpty ? '' : '${this[0].toUpperCase()}${substring(1)}';
   }
 }

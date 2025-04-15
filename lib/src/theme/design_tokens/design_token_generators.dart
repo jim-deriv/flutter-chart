@@ -548,10 +548,9 @@ class ComponentDesignTokenGenerator extends BaseDesignTokenGenerator {
           output
             ..write('  $commentText\n')
             ..write(
-                '  static final ${tokenName}Light = LightThemeDesignTokens.$semanticTokenName;\n\n');
+                '  static final ${tokenName}Light = LightThemeDesignTokens.$semanticTokenName;\n\n')
 
-          // Write the dark theme version
-          output
+            // Write the dark theme version
             ..write('  $commentText\n')
             ..write(
                 '  static final ${tokenName}Dark = DarkThemeDesignTokens.$semanticTokenName;\n\n');

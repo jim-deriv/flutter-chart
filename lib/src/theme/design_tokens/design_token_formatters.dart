@@ -12,7 +12,7 @@ import 'design_token_utils.dart';
 /// and extensible.
 abstract class DesignTokenValueFormatter {
   /// Formats a token value based on its type
-  /// 
+  ///
   /// Parameters:
   /// - value: The raw token value to format (can be a string, number, map, etc.)
   /// - category: The token category (core, light, dark) to determine context
@@ -38,7 +38,7 @@ class ColorTokenFormatter implements DesignTokenValueFormatter {
   }
 
   /// Formats a color value to a Flutter Color
-  /// 
+  ///
   /// Handles different color formats and converts them to appropriate Flutter
   /// Color objects or expressions. Supports hex colors, rgba values, token
   /// references, and linear gradients.
@@ -116,8 +116,10 @@ class ColorTokenFormatter implements DesignTokenValueFormatter {
         parts[6] == '}' &&
         parts[7] == ')') {
       // Extract the color and opacity token references
-      final String colorToken = DesignTokenUtils.convertToDartPropertyName(parts[2], category);
-      final String opacityToken = DesignTokenUtils.convertToDartPropertyName(parts[5], category);
+      final String colorToken =
+          DesignTokenUtils.convertToDartPropertyName(parts[2], category);
+      final String opacityToken =
+          DesignTokenUtils.convertToDartPropertyName(parts[5], category);
 
       // Return a Color.fromRGBO expression directly
       return 'Color.fromRGBO($colorToken.red, $colorToken.green, $colorToken.blue, $opacityToken)';
@@ -134,7 +136,7 @@ class ColorTokenFormatter implements DesignTokenValueFormatter {
   ///
   /// For example:
   /// "linear-gradient(45deg, red 0%, blue 100%)" becomes
-  /// "LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, 
+  /// "LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight,
   ///  transform: GradientRotation(...), colors: [Color(...), Color(...)], stops: [0.0, 1.0])"
   ///
   /// Parameters:
@@ -146,7 +148,7 @@ class ColorTokenFormatter implements DesignTokenValueFormatter {
   String convertGradientStringToDartObject(String input, String category) {
     final String originalInput = input;
     String cleanedInput = originalInput;
-    
+
     // First, clean up the input if it's a full declaration
     if (cleanedInput.contains('=')) {
       // Extract just the gradient part
@@ -161,10 +163,12 @@ class ColorTokenFormatter implements DesignTokenValueFormatter {
     cleanedInput = cleanedInput.replaceAll('\'', '').replaceAll('"', '');
 
     // Format the token references
-    final String formattedGradient = DesignTokenUtils.formatLinearGradientValue(cleanedInput, category);
+    final String formattedGradient =
+        DesignTokenUtils.formatLinearGradientValue(cleanedInput, category);
 
     // Parse the angle and color stops
-    final Match? angleMatch = DesignTokenUtils.linearGradientPattern.firstMatch(formattedGradient);
+    final Match? angleMatch =
+        DesignTokenUtils.linearGradientPattern.firstMatch(formattedGradient);
 
     if (angleMatch != null) {
       final String angleStr = angleMatch.group(1)!.trim();
@@ -179,8 +183,7 @@ class ColorTokenFormatter implements DesignTokenValueFormatter {
 
       // Flutter's LinearGradient uses radians and a different coordinate system
       // Convert CSS angle to Flutter angle (CSS 0deg is bottom to top, Flutter 0 radians is left to right)
-      final String angleInRadians =
-          '${(angleInDegrees - 90) * pi / 180}';
+      final String angleInRadians = '${(angleInDegrees - 90) * pi / 180}';
 
       // Parse color stops
       final List<String> colorStops =
@@ -190,7 +193,8 @@ class ColorTokenFormatter implements DesignTokenValueFormatter {
 
       for (final String colorStop in colorStops) {
         // Split the color and position
-        final Match? colorStopMatch = DesignTokenUtils.colorStopPattern.firstMatch(colorStop);
+        final Match? colorStopMatch =
+            DesignTokenUtils.colorStopPattern.firstMatch(colorStop);
 
         if (colorStopMatch != null) {
           final String color = colorStopMatch.group(1)!.trim();
@@ -254,7 +258,7 @@ class NumericTokenFormatter implements DesignTokenValueFormatter {
 
     final String originalValue = value;
     String cleanedValue = originalValue;
-    
+
     if (cleanedValue.endsWith('px')) {
       cleanedValue = cleanedValue.substring(0, cleanedValue.length - 2);
     }
@@ -276,9 +280,10 @@ class PercentageTokenFormatter implements DesignTokenValueFormatter {
   /// Formats a percentage value
   String _formatPercentageValue(String value, String category) {
     final String originalValue = value;
-    
+
     if (originalValue.endsWith('%')) {
-      final String numericPart = originalValue.substring(0, originalValue.length - 1);
+      final String numericPart =
+          originalValue.substring(0, originalValue.length - 1);
       final double? numValue = double.tryParse(numericPart);
       if (numValue != null) {
         return (numValue / 100).toString();
@@ -287,7 +292,8 @@ class PercentageTokenFormatter implements DesignTokenValueFormatter {
     // Check if the value is a token reference
     if (originalValue.startsWith('{') && originalValue.endsWith('}')) {
       // Extract the token reference (remove the curly braces)
-      final String tokenRef = originalValue.substring(1, originalValue.length - 1);
+      final String tokenRef =
+          originalValue.substring(1, originalValue.length - 1);
 
       // Convert to camelCase using the existing convertToDartPropertyName function
       return DesignTokenUtils.convertToDartPropertyName(tokenRef, category);
@@ -374,7 +380,8 @@ class DurationTokenFormatter implements DesignTokenValueFormatter {
     // Check if the value ends with 'ms' (milliseconds)
     if (cleanedValue.endsWith('ms')) {
       // Extract the numeric part
-      final String numericPart = cleanedValue.substring(0, cleanedValue.length - 2);
+      final String numericPart =
+          cleanedValue.substring(0, cleanedValue.length - 2);
       final int? milliseconds = int.tryParse(numericPart);
 
       if (milliseconds != null) {
@@ -400,7 +407,8 @@ class CubicBezierTokenFormatter implements DesignTokenValueFormatter {
     final String cleanedInput = input.replaceAll('\'', '').replaceAll('"', '');
 
     // Pattern to match cubic-bezier values
-    final Match? match = DesignTokenUtils.cubicBezierPattern.firstMatch(cleanedInput);
+    final Match? match =
+        DesignTokenUtils.cubicBezierPattern.firstMatch(cleanedInput);
 
     if (match != null) {
       final double x1 = double.parse(match.group(1)!);
