@@ -216,6 +216,11 @@ class HorizontalBarrierPainter<T extends HorizontalBarrier>
   void paintLabelBackground(
       Canvas canvas, Rect rect, LabelShape shape, Paint paint,
       {double radius = 4}) {
+    final HorizontalBarrierStyle style =
+        series.style as HorizontalBarrierStyle? ?? theme.horizontalBarrierStyle;
+
+    paint.color = style.labelShapeBackgroundColor;
+
     if (shape == LabelShape.rectangle) {
       canvas.drawRRect(
         RRect.fromRectAndRadius(rect, Radius.elliptical(radius, 4)),
@@ -247,10 +252,11 @@ class HorizontalBarrierPainter<T extends HorizontalBarrier>
         mainLineEndX,
         mainLineStartX,
         y,
-        style.color,
+        style.lineColor,
         1,
       );
     } else {
+      _paint.color = style.lineColor;
       canvas.drawLine(
           Offset(mainLineStartX, y), Offset(mainLineEndX, y), _paint);
     }
