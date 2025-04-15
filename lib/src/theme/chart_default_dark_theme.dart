@@ -11,70 +11,117 @@ import 'colors.dart';
 /// dark theme-related colors and styles for the chart package.
 class ChartDefaultDarkTheme extends ChartDefaultTheme {
   @override
-  Color get lineColor => DefaultDarkThemeColors.line;
-
-  @override
   Color get backgroundColor => DefaultDarkThemeColors.backgroundDynamicHighest;
 
   @override
-  Color get textColor => DefaultDarkThemeColors.text;
+  Color get areaLineColor => DefaultLightThemeColors.areaLineColor;
 
   @override
-  Color get subtitleColor => DefaultDarkThemeColors.subtitle;
+  Color get areaGradientStart => DefaultLightThemeColors.areaGradientStart;
 
   @override
-  Color get containerColor => DefaultDarkThemeColors.container;
+  Color get areaGradientEnd => DefaultLightThemeColors.areaGradientEnd;
 
   @override
-  Color get gradientStart => DefaultDarkThemeColors.gradientStart;
+  Color get gridLineColor => DefaultLightThemeColors.gridLineColor;
 
   @override
-  Color get gradientEnd => DefaultDarkThemeColors.gradientEnd;
+  Color get currentSpotContainerColor =>
+      DefaultLightThemeColors.currentSpotContainerColor;
 
   @override
-  Color get dotColor => DefaultDarkThemeColors.dot;
+  Color get currentSpotTextColor =>
+      DefaultLightThemeColors.currentSpotTextColor;
 
   @override
-  Color get effectColor => DefaultDarkThemeColors.effect;
+  Color get currentSpotLineColor =>
+      DefaultLightThemeColors.currentSpotLineColor;
 
   @override
-  Color get subtitle2Color => DefaultDarkThemeColors.subtitle2;
+  Color get crosshairInformationBoxContainerGlassColor =>
+      DefaultDarkThemeColors.crosshairInformationBoxContainerGlassColor;
 
   @override
-  Color get desktopColor => DefaultDarkThemeColors.desktop;
+  Color get crosshairInformationBoxContainerNormalColor =>
+      DefaultDarkThemeColors.crosshairInformationBoxContainerNormalColor;
 
   @override
-  LineStyle get areaLineStyle => const LineStyle(
-        color: DefaultDarkThemeColors.areaDefaultLine,
+  Color get crosshairInformationBoxTextDefault =>
+      DefaultDarkThemeColors.crosshairInformationBoxTextDefault;
+
+  @override
+  Color get crosshairInformationBoxTextLoss =>
+      DefaultDarkThemeColors.crosshairInformationBoxTextLoss;
+
+  @override
+  Color get crosshairInformationBoxTextProfit =>
+      DefaultDarkThemeColors.crosshairInformationBoxTextProfit;
+
+  @override
+  Color get crosshairInformationBoxTextStatic =>
+      DefaultDarkThemeColors.crosshairInformationBoxTextStatic;
+
+  @override
+  Color get crosshairInformationBoxTextSubtle =>
+      DefaultDarkThemeColors.crosshairInformationBoxTextSubtle;
+
+  @override
+  Color get crosshairLineDesktopColor =>
+      DefaultDarkThemeColors.crosshairLineDesktopColor;
+
+  @override
+  Color get crosshairLineResponsiveLowerLineGradientEnd =>
+      DefaultDarkThemeColors.crosshairLineResponsiveLowerLineGradientEnd;
+
+  @override
+  Color get crosshairLineResponsiveLowerLineGradientStart =>
+      DefaultDarkThemeColors.crosshairLineResponsiveLowerLineGradientStart;
+
+  @override
+  Color get crosshairLineResponsiveUpperLineGradientEnd =>
+      DefaultDarkThemeColors.crosshairLineResponsiveUpperLineGradientEnd;
+
+  @override
+  Color get crosshairLineResponsiveUpperLineGradientStart =>
+      DefaultDarkThemeColors.crosshairLineResponsiveUpperLineGradientStart;
+
+  @override
+  Color get currentSpotDotColor => DefaultDarkThemeColors.currentSpotDotColor;
+
+  @override
+  Color get currentSpotDotEffect => DefaultDarkThemeColors.currentSpotDotEffect;
+
+  @override
+  Color get gridTextColor => DefaultDarkThemeColors.gridTextColor;
+
+  @override
+  GridStyle get gridLineStyle => GridStyle(
+        gridLineColor: gridLineColor,
+        xLabelStyle:
+            textStyle(textStyle: TextStyles.axisLabel, color: gridTextColor),
+        yLabelStyle:
+            textStyle(textStyle: TextStyles.axisLabel, color: gridTextColor),
+      );
+
+  @override
+  LineStyle get areaLineStyle => LineStyle(
+        color: areaLineColor,
         hasArea: true,
         areaGradientColors: (
-          start: DefaultDarkThemeColors.areaDefaultGradientStart,
-          end: DefaultDarkThemeColors.areaDefaultGradientEnd,
+          start: areaGradientStart,
+          end: areaGradientEnd,
         ),
       );
 
   @override
-  GridStyle get axisGridStyle => GridStyle(
-        gridLineColor: DefaultDarkThemeColors.axisGridDefault,
-        xLabelStyle: textStyle(
-            textStyle: TextStyles.axisLabel,
-            color: DefaultDarkThemeColors.axisTextDefault),
-        yLabelStyle: textStyle(
-            textStyle: TextStyles.axisLabel,
-            color: DefaultDarkThemeColors.axisTextDefault),
-      );
-
-  @override
   HorizontalBarrierStyle get currentSpotStyle => HorizontalBarrierStyle(
-      color: DefaultDarkThemeColors.currentSpotDefaultContainer,
+      color: currentSpotContainerColor,
       textStyle: textStyle(
-          textStyle: currentSpotLabelText,
-          color: DefaultDarkThemeColors.currentSpotDefaultLabel),
-      isDashed: false);
-
-  @override
-  LineStyle get lineStyle =>
-      const LineStyle(color: DefaultDarkThemeColors.line);
+          textStyle: currentSpotLabelText, color: currentSpotTextColor),
+      isDashed: false,
+      labelShapeBackgroundColor: currentSpotContainerColor,
+      lineColor: currentSpotLineColor,
+      blinkingDotColor: currentSpotDotColor);
 
   @override
   Color get accentRedColor => DarkThemeColors.accentRed;

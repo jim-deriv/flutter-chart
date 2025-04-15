@@ -76,6 +76,42 @@ abstract class ChartDefaultTheme implements ChartTheme {
   Color get brandOrangeColor => BrandColors.orange;
 
   @override
+  Color get candleBullishBodyDefault =>
+      CandleBullishThemeColors.candleBullishBodyDefault;
+
+  @override
+  Color get candleBullishBodyActive =>
+      CandleBullishThemeColors.candleBullishBodyActive;
+
+  @override
+  Color get candleBullishWickDefault =>
+      CandleBullishThemeColors.candleBullishWickDefault;
+
+  @override
+  Color get candleBullishWickActive =>
+      CandleBullishThemeColors.candleBullishWickActive;
+
+  @override
+  Color get candleBearishBodyDefault =>
+      CandleBearishThemeColors.candleBearishBodyDefault;
+
+  @override
+  Color get candleBearishBodyActive =>
+      CandleBearishThemeColors.candleBearishBodyActive;
+
+  @override
+  Color get candleBearishWickDefault =>
+      CandleBearishThemeColors.candleBearishWickDefault;
+
+  @override
+  Color get candleBearishWickActive =>
+      CandleBearishThemeColors.candleBearishWickActive;
+
+  @override
+  double get crosshairInformationBoxContainerGlassBackgroundBlur =>
+      Dimens.crosshairInformationBoxContainerGlassBackgroundBlur;
+
+  @override
   GridStyle get gridStyle => GridStyle(
         gridLineColor: base07Color,
         xLabelStyle: textStyle(
@@ -91,10 +127,8 @@ abstract class ChartDefaultTheme implements ChartTheme {
   @override
   CandleStyle get candleStyle => CandleStyle(
         neutralColor: base04Color,
-        candleBullishWickColor:
-            CandleBullishThemeColors.candleBullishWickDefault,
-        candleBearishWickColor:
-            CandleBearishThemeColors.candleBearishWickDefault,
+        candleBullishWickColor: candleBullishWickDefault,
+        candleBearishWickColor: candleBearishWickDefault,
       );
 
   @override
