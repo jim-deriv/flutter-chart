@@ -4,7 +4,6 @@ import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dar
 import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/y_axis/quote_grid.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -23,6 +22,7 @@ import 'interactive_states/interactive_adding_tool_state.dart';
 import 'interactive_states/interactive_normal_state.dart';
 import 'interactive_states/interactive_state.dart';
 import 'state_change_direction.dart';
+// ignore_for_file: public_member_api_docs
 
 /// Interactive layer of the chart package where elements can be drawn and can
 /// be interacted with.
@@ -78,8 +78,8 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   /// Timer for debouncing repository updates
   Timer? _debounceTimer;
 
-  /// Duration for debouncing repository updates (300ms is a good balance)
-  static const Duration _debounceDuration = Duration(milliseconds: 300);
+  /// Duration for debouncing repository updates (1-sec is a good balance)
+  static const Duration _debounceDuration = Duration(seconds: 1);
 
   @override
   void initState() {
@@ -152,7 +152,6 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuild InteractiveLayer ${widget.quoteRange} ${DateTime.now()}');
     return _InteractiveLayerGestureHandler(
       drawings: _interactableDrawings,
       epochFromX: widget.epochFromCanvasX,
@@ -259,24 +258,23 @@ class _InteractiveLayerGestureHandlerState
   Future<void> updateStateTo(
     InteractiveState state,
     StateChangeAnimationDirection direction, {
-    bool blocking = false,
+    bool waitForAnimation = false,
   }) async {
-    if (blocking) {
-      if (direction == StateChangeAnimationDirection.forward) {
-        _stateChangeController.reset();
-        await _stateChangeController.forward();
-      } else {
-        await _stateChangeController.reverse(from: 1);
-      }
+    if (waitForAnimation) {
+      await _runAnimation(direction);
       setState(() => _interactiveState = state);
     } else {
-      if (direction == StateChangeAnimationDirection.forward) {
-        _stateChangeController.reset();
-        unawaited(_stateChangeController.forward());
-      } else {
-        unawaited(_stateChangeController.reverse(from: 1));
-      }
-      _interactiveState = state;
+      unawaited(_runAnimation(direction));
+      setState(() => _interactiveState = state);
+    }
+  }
+
+  Future<void> _runAnimation(StateChangeAnimationDirection direction) async {
+    if (direction == StateChangeAnimationDirection.forward) {
+      _stateChangeController.reset();
+      await _stateChangeController.forward();
+    } else {
+      await _stateChangeController.reverse(from: 1);
     }
   }
 
@@ -316,15 +314,16 @@ class _InteractiveLayerGestureHandlerState
                                 epochToX: xAxis.xFromEpoch,
                                 quoteToY: widget.quoteToY,
                                 quoteFromY: widget.quoteFromY,
-                                getDrawingState: _interactiveState.getToolState,
-                                quoteRange: widget.quoteRange,
                                 epochRange: EpochRange(
-                                  leftEpoch: xAxis.leftBoundEpoch,
                                   rightEpoch: xAxis.rightBoundEpoch,
+                                  leftEpoch: xAxis.leftBoundEpoch,
                                 ),
+                                quoteRange: widget.quoteRange,
+                                getDrawingState: _interactiveState.getToolState,
                                 animationInfo: AnimationInfo(
                                   stateChangePercent: animationValue,
                                 ),
+                                // onDrawingToolClicked: () => _selectedDrawing = e,
                               ),
                             ))
                         .toList(),
@@ -332,24 +331,25 @@ class _InteractiveLayerGestureHandlerState
                         .map((e) => CustomPaint(
                               foregroundPainter:
                                   InteractableDrawingCustomPainter(
-                                drawing: e,
-                                series: widget.series,
-                                theme: context.watch<ChartTheme>(),
-                                chartConfig: widget.chartConfig,
-                                epochFromX: xAxis.epochFromX,
-                                epochToX: xAxis.xFromEpoch,
-                                quoteToY: widget.quoteToY,
-                                quoteFromY: widget.quoteFromY,
-                                getDrawingState: _interactiveState.getToolState,
-                                quoteRange: widget.quoteRange,
-                                epochRange: EpochRange(
-                                  leftEpoch: xAxis.leftBoundEpoch,
-                                  rightEpoch: xAxis.rightBoundEpoch,
-                                ),
-                                animationInfo: AnimationInfo(
-                                  stateChangePercent: animationValue,
-                                ),
-                              ),
+                                      drawing: e,
+                                      series: widget.series,
+                                      theme: context.watch<ChartTheme>(),
+                                      chartConfig: widget.chartConfig,
+                                      epochFromX: xAxis.epochFromX,
+                                      epochToX: xAxis.xFromEpoch,
+                                      quoteToY: widget.quoteToY,
+                                      quoteFromY: widget.quoteFromY,
+                                      epochRange: EpochRange(
+                                        rightEpoch: xAxis.rightBoundEpoch,
+                                        leftEpoch: xAxis.leftBoundEpoch,
+                                      ),
+                                      quoteRange: widget.quoteRange,
+                                      getDrawingState:
+                                          _interactiveState.getToolState,
+                                      animationInfo: AnimationInfo(
+                                          stateChangePercent: animationValue)
+                                      // onDrawingToolClicked: () => _selectedDrawing = e,
+                                      ),
                             ))
                         .toList(),
                   ],

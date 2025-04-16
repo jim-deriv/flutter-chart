@@ -2,6 +2,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_scale_model.dart';
 import 'package:deriv_chart/src/misc/chart_controller.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_axis_config.dart';
@@ -263,6 +264,10 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
       xAxis.scrollBy(pxShift);
     };
 
+    widget.controller?.toggleXScrollBlock = ({required bool isXScrollBlocked}) {
+      xAxis.isScrollBlocked = isXScrollBlocked;
+    };
+
     widget.controller?.toggleDataFitMode = ({required bool enableDataFit}) {
       if (enableDataFit) {
         xAxis.enableDataFit();
@@ -458,6 +463,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
                         theme: context.watch<ChartTheme>(),
                         epochToCanvasX: xAxis.xFromEpoch,
                         quoteToCanvasY: chartQuoteToCanvasY,
+                        chartScaleModel: context.watch<ChartScaleModel>(),
                       ),
                     ),
                   ),
@@ -529,6 +535,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
               leftBoundEpoch: xAxis.leftBoundEpoch,
               topY: chartQuoteToCanvasY(widget.mainSeries.maxValue),
               bottomY: chartQuoteToCanvasY(widget.mainSeries.minValue),
+              chartScaleModel: context.watch<ChartScaleModel>(),
             ),
           ),
         ),

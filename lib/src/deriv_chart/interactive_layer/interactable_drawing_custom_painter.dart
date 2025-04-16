@@ -1,5 +1,4 @@
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/y_axis/quote_grid.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
@@ -69,9 +68,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   /// Returns `true` if the drawing tool is selected.
   final Set<DrawingToolState> Function(InteractableDrawing) getDrawingState;
-
-  /// Y axis model.
-  final YAxisModel yAxisModel;
 
   @override
   void paint(Canvas canvas, Size size) {

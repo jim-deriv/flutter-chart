@@ -1,13 +1,24 @@
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/ray/ray_line_drawing.dart';
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/widgets/x_axis_mobile.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/widgets/x_axis_web.dart';
-import 'package:deriv_chart/src/misc/callbacks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const Duration _defaultDuration = Duration(milliseconds: 300);
 
-/// X-axis wrapper widget.
+/// X-axis wrapper widget that provides viewport management for chart widgets.
+///
+/// This widget wraps Chart widgets (MainChart and bottom indicator charts) and provides
+/// the X-axis viewport information to its children. It manages two key variables:
+/// [rightBoundEpoch] and [leftBoundEpoch], which define the time range of the current
+/// viewport by pointing to the chart's right and left edges respectively.
+///
+/// Through [XAxisModel] (which extends ChangeNotifier), it provides functionality for its
+/// children to convert their time-based data points (epoch, value) to x-positions on the
+/// canvas. When there are changes in the viewport (right and left bound epochs), the
+/// XAxisModel notifies its children, allowing them to update their data and repaint
+/// accordingly. Each child widget manages its own Y-axis range and conversion from
+/// y-axis values to y-positions.
 ///
 /// Renders x-axis web widget or mobile widget based on the [kIsWeb] flag.
 class XAxisWrapper extends StatelessWidget {
@@ -18,6 +29,7 @@ class XAxisWrapper extends StatelessWidget {
     required this.isLive,
     required this.startWithDataFitMode,
     required this.pipSize,
+    required this.chartAxisConfig,
     this.onVisibleAreaChanged,
     this.minEpoch,
     this.maxEpoch,
@@ -70,9 +82,12 @@ class XAxisWrapper extends StatelessWidget {
   /// Duration of the scroll animation.
   final Duration scrollAnimationDuration;
 
+  /// Chart axis configuration.
+  final ChartAxisConfig chartAxisConfig;
+
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
+    if (!chartAxisConfig.smoothScrolling) {
       return XAxisWeb(
         child: child,
         entries: entries,
