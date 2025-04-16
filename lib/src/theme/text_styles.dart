@@ -100,7 +100,7 @@ class TextStyles {
     fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
   );
 
-  static const TextStyle axisLabel = TextStyle(
+  static const TextStyle gridTextStyle = TextStyle(
     fontFeatures: <FontFeature>[
       FontFeature.liningFigures(),
       FontFeature.tabularFigures(),
