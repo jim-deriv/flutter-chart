@@ -17,8 +17,8 @@ class LineStyle extends DataSeriesStyle with EquatableMixin {
     this.hasArea = false,
     this.markerRadius = 4,
     this.areaGradientColors = const (
-      start: Colors.transparent,
-      end: Colors.transparent
+      start: Color(0x29000000), // DefaultLightThemeColors.areaGradientStart
+      end: Color(0x00000000), // DefaultLightThemeColors.areaGradientEnd
     ),
   });
 
@@ -42,7 +42,6 @@ class LineStyle extends DataSeriesStyle with EquatableMixin {
   final double markerRadius;
 
   /// Area gradient colors.
-  /// If not provided, the area will be transparent.
   final ({Color start, Color end}) areaGradientColors;
 
   /// Creates a copy of this object.
