@@ -217,9 +217,7 @@ class HorizontalBarrierPainter<T extends HorizontalBarrier>
   void paintLabelBackground(
       Canvas canvas, Rect rect, LabelShape shape, Paint paint,
       {double radius = 4, Color? labelBackgroundColor}) {
-    if (labelBackgroundColor != null) {
-      paint.color = labelBackgroundColor;
-    }
+    paint.color = labelBackgroundColor ?? paint.color;
 
     if (shape == LabelShape.rectangle) {
       canvas.drawRRect(
