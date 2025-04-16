@@ -132,8 +132,7 @@ class HorizontalBarrierStyle extends BarrierStyle {
         labelHeight: labelHeight ?? this.labelHeight,
         labelPadding: labelPadding ?? this.labelPadding,
         color: color ?? this.color,
-        titleBackgroundColor:
-            titleBackgroundColor ?? this.titleBackgroundColor,
+        titleBackgroundColor: titleBackgroundColor ?? this.titleBackgroundColor,
         secondaryBackgroundColor:
             secondaryBackgroundColor ?? this.secondaryBackgroundColor,
         isDashed: isDashed ?? this.isDashed,
@@ -146,7 +145,7 @@ class HorizontalBarrierStyle extends BarrierStyle {
         labelShapeBackgroundColor:
             labelShapeBackgroundColor ?? this.labelShapeBackgroundColor,
         lineColor: lineColor ?? this.lineColor,
-  );
+      );
 
   @override
   String toString() =>
