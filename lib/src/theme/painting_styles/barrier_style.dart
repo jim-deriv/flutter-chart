@@ -110,6 +110,44 @@ class HorizontalBarrierStyle extends BarrierStyle {
   /// Color of the line.
   final Color lineColor;
 
+  /// Creates a copy of this object.
+  HorizontalBarrierStyle copyWith({
+    LabelShape? labelShape,
+    double? labelHeight,
+    double? labelPadding,
+    Color? color,
+    Color? titleBackgroundColor,
+    Color? secondaryBackgroundColor,
+    bool? isDashed,
+    bool? hasBlinkingDot,
+    Color? blinkingDotColor,
+    double? arrowSize,
+    bool? hasArrow,
+    bool? hasLine,
+    Color? labelShapeBackgroundColor,
+    Color? lineColor,
+  }) =>
+      HorizontalBarrierStyle(
+        labelShape: labelShape ?? this.labelShape,
+        labelHeight: labelHeight ?? this.labelHeight,
+        labelPadding: labelPadding ?? this.labelPadding,
+        color: color ?? this.color,
+        titleBackgroundColor:
+            titleBackgroundColor ?? this.titleBackgroundColor,
+        secondaryBackgroundColor:
+            secondaryBackgroundColor ?? this.secondaryBackgroundColor,
+        isDashed: isDashed ?? this.isDashed,
+        hasBlinkingDot: hasBlinkingDot ?? this.hasBlinkingDot,
+        blinkingDotColor: blinkingDotColor ?? this.blinkingDotColor,
+        arrowSize: arrowSize ?? this.arrowSize,
+        hasArrow: hasArrow ?? this.hasArrow,
+        hasLine: hasLine ?? this.hasLine,
+        textStyle: textStyle.copyWith(),
+        labelShapeBackgroundColor:
+            labelShapeBackgroundColor ?? this.labelShapeBackgroundColor,
+        lineColor: lineColor ?? this.lineColor,
+  );
+
   @override
   String toString() =>
       '${super.toString()}, $hasBlinkingDot $labelShape $labelShapeBackgroundColor $lineColor';
