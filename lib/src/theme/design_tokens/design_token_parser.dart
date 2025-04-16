@@ -468,6 +468,11 @@ void _processTokenCategory(
     String content;
     try {
       content = generator.generate(tokens, List<String>.from(tokenNames));
+
+      // Copy the generator's token values to the global map
+      if (generator is BaseDesignTokenGenerator) {
+        tokenValues.addAll(generator.tokenValues);
+      }
     } catch (e) {
       throw FormatException(
           'Error generating token content for category "$category": $e');
