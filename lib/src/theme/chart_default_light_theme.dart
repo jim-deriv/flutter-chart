@@ -98,10 +98,8 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
   @override
   GridStyle get gridStyle => GridStyle(
         gridLineColor: gridLineColor,
-        xLabelStyle: textStyle(
-            textStyle: gridTextStyle, color: gridTextColor),
-        yLabelStyle: textStyle(
-            textStyle: gridTextStyle, color: gridTextColor),
+        xLabelStyle: textStyle(textStyle: gridTextStyle, color: gridTextColor),
+        yLabelStyle: textStyle(textStyle: gridTextStyle, color: gridTextColor),
       );
 
   @override
