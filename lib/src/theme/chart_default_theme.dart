@@ -118,18 +118,10 @@ abstract class ChartDefaultTheme implements ChartTheme {
   double get areaLineThickness => Dimens.areaLineDefaultThickness;
 
   @override
-  double get candleBodyWidth => Dimens.candleBodyWidthSmall;
-
-  @override
-  double get candleWickWidth => Dimens.candleWickWidthSmall;
-
-  @override
   CandleStyle get candleStyle => CandleStyle(
         neutralColor: base04Color,
         candleBullishWickColor: candleBullishWickDefault,
         candleBearishWickColor: candleBearishWickDefault,
-        candleBodyWidth: candleBodyWidth,
-        candleWickWidth: candleWickWidth,
       );
 
   @override

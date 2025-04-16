@@ -49,21 +49,4 @@ class Dimens {
   /// Large area line thickness 2
   static const double areaLineLargeThickness = 2;
 
-  /// Small candle body size 4
-  static const double candleBodyWidthSmall = 4;
-
-  /// Medium candle body size 8
-  static const double candleBodyWidthMedium = 8;
-
-  /// Large candle body size 16
-  static const double candleBodyWidthLarge = 16;
-
-  /// Small candle wick size 1
-  static const double candleWickWidthSmall = 1;
-
-  /// Medium candle wick size 1
-  static const double candleWickWidthMedium = 1;
-
-  /// Large candle wick size 2
-  static const double candleWickWidthLarge = 2;
 }

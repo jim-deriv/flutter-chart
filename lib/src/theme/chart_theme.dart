@@ -48,10 +48,6 @@ abstract class ChartTheme {
 
   Color get candleBearishWickActive;
 
-  double get candleBodyWidth;
-
-  double get candleWickWidth;
-
   Color get currentSpotContainerColor;
 
   Color get currentSpotDotColor;
