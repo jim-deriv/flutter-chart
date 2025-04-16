@@ -12,17 +12,19 @@ import 'package:flutter/material.dart';
 abstract class ChartTheme {
   Color get backgroundColor;
 
-  GridStyle get gridLineStyle;
+  GridStyle get gridStyle;
 
-  LineStyle get areaLineStyle;
+  LineStyle get areaStyle;
 
-  TextStyle get currentSpotLabelText;
+  TextStyle get currentSpotTextStyle;
 
   Color get gridLineColor;
 
   Color get gridTextColor;
 
   Color get areaLineColor;
+
+  double get areaLineThickness;
 
   Color get areaGradientStart;
 
@@ -80,6 +82,10 @@ abstract class ChartTheme {
 
   double get crosshairInformationBoxContainerGlassBackgroundBlur;
 
+  double get candleBodyWidth;
+
+  double get candleWickWidth;
+
   /// The style of the current tick indicator.
   HorizontalBarrierStyle get currentSpotStyle;
 
@@ -136,8 +142,6 @@ abstract class ChartTheme {
   double get borderRadius24Chart;
 
   TextStyle get caption2;
-
-  GridStyle get gridStyle;
 
   TextStyle get subheading;
 

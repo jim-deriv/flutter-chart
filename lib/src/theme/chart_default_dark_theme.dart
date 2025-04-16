@@ -95,7 +95,7 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
   Color get gridTextColor => DefaultDarkThemeColors.gridTextColor;
 
   @override
-  GridStyle get gridLineStyle => GridStyle(
+  GridStyle get gridStyle => GridStyle(
         gridLineColor: gridLineColor,
         xLabelStyle:
             textStyle(textStyle: TextStyles.axisLabel, color: gridTextColor),
@@ -104,20 +104,21 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
       );
 
   @override
-  LineStyle get areaLineStyle => LineStyle(
+  LineStyle get areaStyle => LineStyle(
         color: areaLineColor,
         hasArea: true,
         areaGradientColors: (
           start: areaGradientStart,
           end: areaGradientEnd,
         ),
+        thickness: areaLineThickness,
       );
 
   @override
   HorizontalBarrierStyle get currentSpotStyle => HorizontalBarrierStyle(
       color: currentSpotContainerColor,
       textStyle: textStyle(
-          textStyle: currentSpotLabelText, color: currentSpotTextColor),
+          textStyle: currentSpotTextStyle, color: currentSpotTextColor),
       isDashed: false,
       labelShapeBackgroundColor: currentSpotContainerColor,
       lineColor: currentSpotLineColor,

@@ -16,7 +16,7 @@ abstract class ChartDefaultTheme implements ChartTheme {
       <TextStyle, Map<Color, TextStyle>>{};
 
   @override
-  TextStyle get currentSpotLabelText => TextStyles.currentSpotLabel;
+  TextStyle get currentSpotTextStyle => TextStyles.currentSpotTextStyle;
 
   @override
   double get margin04Chart => Dimens.margin04;
@@ -112,23 +112,21 @@ abstract class ChartDefaultTheme implements ChartTheme {
       Dimens.crosshairInformationBoxContainerGlassBackgroundBlur;
 
   @override
-  GridStyle get gridStyle => GridStyle(
-        gridLineColor: base07Color,
-        xLabelStyle: textStyle(
-          textStyle: caption2,
-          color: base03Color,
-        ),
-        yLabelStyle: textStyle(
-          textStyle: caption2,
-          color: base03Color,
-        ),
-      );
+  double get areaLineThickness => Dimens.areaLineDefaultThickness;
+
+  @override
+  double get candleBodyWidth => Dimens.candleBodyWidthSmall;
+
+  @override
+  double get candleWickWidth => Dimens.candleWickWidthSmall;
 
   @override
   CandleStyle get candleStyle => CandleStyle(
         neutralColor: base04Color,
         candleBullishWickColor: candleBullishWickDefault,
         candleBearishWickColor: candleBearishWickDefault,
+        candleBodyWidth: candleBodyWidth,
+        candleWickWidth: candleWickWidth,
       );
 
   @override
