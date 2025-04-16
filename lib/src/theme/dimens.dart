@@ -48,5 +48,4 @@ class Dimens {
 
   /// Large area line thickness 2
   static const double areaLineLargeThickness = 2;
-
 }

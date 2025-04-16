@@ -33,8 +33,8 @@ class CandlePainter extends OhlcPainter {
           : style.candleBearishWickColor
       ..strokeWidth = 1.2;
 
-    _candleBullishColorPaint = Paint()..color = style.candleBullishWickColor;
-    _candleBearishColorPaint = Paint()..color = style.candleBearishWickColor;
+    _candleBullishColorPaint = Paint()..color = style.candleBullishBodyColor;
+    _candleBearishColorPaint = Paint()..color = style.candleBearishBodyColor;
 
     canvas.drawLine(
       Offset(currentPainting.xCenter, currentPainting.yHigh),
