@@ -19,6 +19,9 @@ abstract class ChartDefaultTheme implements ChartTheme {
   TextStyle get currentSpotTextStyle => TextStyles.currentSpotTextStyle;
 
   @override
+  TextStyle get gridTextStyle => TextStyles.gridTextStyle;
+
+  @override
   double get margin04Chart => Dimens.margin04;
 
   @override

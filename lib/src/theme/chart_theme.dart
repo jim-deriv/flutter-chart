@@ -22,6 +22,8 @@ abstract class ChartTheme {
 
   Color get gridTextColor;
 
+  TextStyle get gridTextStyle;
+
   Color get areaLineColor;
 
   double get areaLineThickness;
@@ -45,6 +47,10 @@ abstract class ChartTheme {
   Color get candleBearishWickDefault;
 
   Color get candleBearishWickActive;
+
+  double get candleBodyWidth;
+
+  double get candleWickWidth;
 
   Color get currentSpotContainerColor;
 
@@ -81,10 +87,6 @@ abstract class ChartTheme {
   Color get crosshairInformationBoxContainerGlassColor;
 
   double get crosshairInformationBoxContainerGlassBackgroundBlur;
-
-  double get candleBodyWidth;
-
-  double get candleWickWidth;
 
   /// The style of the current tick indicator.
   HorizontalBarrierStyle get currentSpotStyle;
