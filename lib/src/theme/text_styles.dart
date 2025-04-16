@@ -112,7 +112,7 @@ class TextStyles {
     height: 2, // lineHeight (20px) / fontSize (10px) = 2
   );
 
-  static const TextStyle currentSpotLabel = TextStyle(
+  static const TextStyle currentSpotTextStyle = TextStyle(
     fontFeatures: <FontFeature>[
       FontFeature.liningFigures(),
       FontFeature.tabularFigures(),
