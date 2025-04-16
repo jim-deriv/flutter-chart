@@ -181,7 +181,7 @@ class HorizontalBarrierPainter<T extends HorizontalBarrier>
 
     // Label.
     paintLabelBackground(canvas, labelArea, style.labelShape, _paint,
-        style.labelShapeBackgroundColor);
+        labelBackgroundColor: style.labelShapeBackgroundColor);
     paintWithTextPainter(
       canvas,
       painter: valuePainter,
@@ -214,10 +214,12 @@ class HorizontalBarrierPainter<T extends HorizontalBarrier>
   }
 
   /// Paints a background based on the given [LabelShape] for the label text.
-  void paintLabelBackground(Canvas canvas, Rect rect, LabelShape shape,
-      Paint paint, Color labelBackgroundColor,
-      {double radius = 4}) {
-    paint.color = labelBackgroundColor;
+  void paintLabelBackground(
+      Canvas canvas, Rect rect, LabelShape shape, Paint paint,
+      {double radius = 4, Color? labelBackgroundColor}) {
+    if (labelBackgroundColor != null) {
+      paint.color = labelBackgroundColor;
+    }
 
     if (shape == LabelShape.rectangle) {
       canvas.drawRRect(
