@@ -10,7 +10,6 @@ import 'colors.dart';
 /// An implementation of [ChartDefaultTheme] which provides access to
 /// dark theme-related colors and styles for the chart package.
 class ChartDefaultDarkTheme extends ChartDefaultTheme {
-
   @override
   Color get areaLineColor => DefaultDarkThemeColors.areaLineColor;
 
@@ -28,12 +27,10 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
       DefaultDarkThemeColors.currentSpotContainerColor;
 
   @override
-  Color get currentSpotTextColor =>
-      DefaultDarkThemeColors.currentSpotTextColor;
+  Color get currentSpotTextColor => DefaultDarkThemeColors.currentSpotTextColor;
 
   @override
-  Color get currentSpotLineColor =>
-      DefaultDarkThemeColors.currentSpotLineColor;
+  Color get currentSpotLineColor => DefaultDarkThemeColors.currentSpotLineColor;
 
   @override
   Color get crosshairInformationBoxContainerGlassColor =>

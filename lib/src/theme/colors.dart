@@ -48,7 +48,6 @@ class LightThemeColors {
 
 /// Default colors for light theme.
 class DefaultLightThemeColors {
-
   static final Color gridLineColor = LightThemeDesignTokens
       .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
   static final Color gridTextColor = ComponentDesignTokens
@@ -105,7 +104,6 @@ class DefaultLightThemeColors {
 
 /// Default colors for dark theme.
 class DefaultDarkThemeColors {
-
   static final Color gridLineColor = DarkThemeDesignTokens
       .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
   static final Color gridTextColor = ComponentDesignTokens
