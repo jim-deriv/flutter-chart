@@ -12,28 +12,28 @@ import 'colors.dart';
 class ChartDefaultDarkTheme extends ChartDefaultTheme {
 
   @override
-  Color get areaLineColor => DefaultLightThemeColors.areaLineColor;
+  Color get areaLineColor => DefaultDarkThemeColors.areaLineColor;
 
   @override
-  Color get areaGradientStart => DefaultLightThemeColors.areaGradientStart;
+  Color get areaGradientStart => DefaultDarkThemeColors.areaGradientStart;
 
   @override
-  Color get areaGradientEnd => DefaultLightThemeColors.areaGradientEnd;
+  Color get areaGradientEnd => DefaultDarkThemeColors.areaGradientEnd;
 
   @override
-  Color get gridLineColor => DefaultLightThemeColors.gridLineColor;
+  Color get gridLineColor => DefaultDarkThemeColors.gridLineColor;
 
   @override
   Color get currentSpotContainerColor =>
-      DefaultLightThemeColors.currentSpotContainerColor;
+      DefaultDarkThemeColors.currentSpotContainerColor;
 
   @override
   Color get currentSpotTextColor =>
-      DefaultLightThemeColors.currentSpotTextColor;
+      DefaultDarkThemeColors.currentSpotTextColor;
 
   @override
   Color get currentSpotLineColor =>
-      DefaultLightThemeColors.currentSpotLineColor;
+      DefaultDarkThemeColors.currentSpotLineColor;
 
   @override
   Color get crosshairInformationBoxContainerGlassColor =>
