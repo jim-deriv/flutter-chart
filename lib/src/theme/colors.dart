@@ -48,8 +48,6 @@ class LightThemeColors {
 
 /// Default colors for light theme.
 class DefaultLightThemeColors {
-  static const Color backgroundDynamicHighest =
-      Color(0xFFFFFFFF); // Hex: #FFFFFF
 
   static final Color gridLineColor = LightThemeDesignTokens
       .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
@@ -107,8 +105,6 @@ class DefaultLightThemeColors {
 
 /// Default colors for dark theme.
 class DefaultDarkThemeColors {
-  static const Color backgroundDynamicHighest =
-      Color(0xFF181C25); // Hex: #181C25
 
   static final Color gridLineColor = DarkThemeDesignTokens
       .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
