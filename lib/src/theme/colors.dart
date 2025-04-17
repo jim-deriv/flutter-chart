@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:deriv_chart/src/theme/design_tokens/component_design_tokens.dart';
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:deriv_chart/src/theme/design_tokens/dark_theme_design_tokens.dart';
 import 'package:deriv_chart/src/theme/design_tokens/light_theme_design_tokens.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,8 @@ class LightThemeColors {
 
 /// Default colors for light theme.
 class DefaultLightThemeColors {
+  static const Color backgroundDynamicHighest =
+      CoreDesignTokens.coreColorSolidSlate50; // Hex: #FFFFFF
   static final Color gridLineColor = LightThemeDesignTokens
       .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
   static final Color gridTextColor = ComponentDesignTokens
@@ -104,6 +107,8 @@ class DefaultLightThemeColors {
 
 /// Default colors for dark theme.
 class DefaultDarkThemeColors {
+  static const Color backgroundDynamicHighest =
+      CoreDesignTokens.coreColorSolidSlate1200; // Hex: #181C25
   static final Color gridLineColor = DarkThemeDesignTokens
       .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
   static final Color gridTextColor = ComponentDesignTokens
