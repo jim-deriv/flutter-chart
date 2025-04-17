@@ -10,6 +10,7 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
     required this.customGridColor,
     required this.customBullishColor,
     required this.customBearishColor,
+    required this.customBackgroundColor,
   });
 
   /// custom grid color
@@ -20,6 +21,12 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
 
   /// Custom negative color.
   final Color customBearishColor;
+
+  /// Custom background color.
+  final Color customBackgroundColor;
+
+  @override
+  Color get backgroundColor => customBackgroundColor;
 
   @override
   Color get gridLineColor => customGridColor;
@@ -65,6 +72,7 @@ class CustomLightTheme extends ChartDefaultLightTheme {
     required this.customGridColor,
     required this.customBullishColor,
     required this.customBearishColor,
+    required this.customBackgroundColor,
   });
 
   /// custom grid color
@@ -75,6 +83,12 @@ class CustomLightTheme extends ChartDefaultLightTheme {
 
   /// Custom negative color.
   final Color customBearishColor;
+
+  /// Custom background color.
+  final Color customBackgroundColor;
+
+  @override
+  Color get backgroundColor => customBackgroundColor;
 
   @override
   Color get gridLineColor => customGridColor;
@@ -132,6 +146,8 @@ class _ThemeCustomizationScreenState
   Color _gridColor = const Color(0xFF323738);
   Color _candleBullishBodyColor = Colors.green;
   Color _candleBearishBodyColor = Colors.red;
+  Color _backgroundColor =
+      const Color(0xFF181C25); // Default dark theme background
 
   @override
   String getTitle() => 'Theme Customization';
@@ -146,12 +162,14 @@ class _ThemeCustomizationScreenState
           customGridColor: _gridColor,
           customBullishColor: _candleBullishBodyColor,
           customBearishColor: _candleBearishBodyColor,
+          customBackgroundColor: _backgroundColor,
         );
       } else {
         theme = CustomLightTheme(
           customGridColor: _gridColor,
           customBullishColor: _candleBullishBodyColor,
           customBearishColor: _candleBearishBodyColor,
+          customBackgroundColor: _backgroundColor,
         );
       }
     } else {
@@ -209,9 +227,11 @@ class _ThemeCustomizationScreenState
                           if (value) {
                             // Dark theme
                             _gridColor = const Color(0xFF323738);
+                            _backgroundColor = const Color(0xFF181C25);
                           } else {
                             // Light theme
                             _gridColor = const Color(0xFFE0E0E0);
+                            _backgroundColor = const Color(0xFFFFFFFF);
                           }
                         }
                       });
@@ -235,8 +255,10 @@ class _ThemeCustomizationScreenState
                         if (value) {
                           if (_useDarkTheme) {
                             _gridColor = const Color(0xFF323738);
+                            _backgroundColor = const Color(0xFF181C25);
                           } else {
                             _gridColor = const Color(0xFFE0E0E0);
+                            _backgroundColor = const Color(0xFFFFFFFF);
                           }
                         }
                       });
@@ -277,6 +299,13 @@ class _ThemeCustomizationScreenState
             _buildColorPicker('Grid Color:', _gridColor, (color) {
               setState(() {
                 _gridColor = color;
+              });
+            }),
+            const SizedBox(height: 8),
+
+            _buildColorPicker('Background Color:', _backgroundColor, (color) {
+              setState(() {
+                _backgroundColor = color;
               });
             }),
             const SizedBox(height: 8),
