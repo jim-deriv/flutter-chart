@@ -107,7 +107,7 @@ class DefaultDarkThemeColors {
   static final Color gridLineColor = DarkThemeDesignTokens
       .semanticColorMonochromeBorderNormalLow; // Hex: #000000 with 4% opacity
   static final Color gridTextColor = ComponentDesignTokens
-      .componentTextIconNormalDisabledLight; // Hex: #000000 with 24% opacity
+      .componentTextIconNormalDisabledDark; // Hex: #000000 with 24% opacity
 
   static const Color areaLineColor = DarkThemeDesignTokens
       .semanticColorSlateSolidBorderInverseLowest; // Hex: #181C25
@@ -125,7 +125,7 @@ class DefaultDarkThemeColors {
   static const Color currentSpotLineColor = DarkThemeDesignTokens
       .semanticColorSlateSolidSurfaceInverseLowest; // Hex: #000000
   static const Color currentSpotTextColor = ComponentDesignTokens
-      .componentTextIconInverseProminentLight; // Hex: #FFFFFF
+      .componentTextIconInverseProminentDark; // Hex: #FFFFFF
 
   static final Color crosshairLineDesktopColor = DarkThemeDesignTokens
       .semanticColorMonochromeBorderNormalHighest; // Hex: #000000 with 24% opacity
@@ -141,9 +141,9 @@ class DefaultDarkThemeColors {
       0x00FFFFFF); // Hex: #FFFFFF with 0% opacity //TODO(Jim): update this value with corresponding design token when available
 
   static const Color crosshairInformationBoxTextDefault = ComponentDesignTokens
-      .componentTextIconNormalProminentLight; // Hex: #181C25
+      .componentTextIconNormalProminentDark; // Hex: #181C25
   static final Color crosshairInformationBoxTextSubtle = ComponentDesignTokens
-      .componentTextIconNormalSubtleLight; // Hex: #000000 with 48% opacity
+      .componentTextIconNormalSubtleDark; // Hex: #000000 with 48% opacity
   static const Color crosshairInformationBoxTextStatic = ComponentDesignTokens
       .componentTextIconStaticProminentDark; // Hex: #FFFFFF
   static const Color crosshairInformationBoxTextProfit = DarkThemeDesignTokens
