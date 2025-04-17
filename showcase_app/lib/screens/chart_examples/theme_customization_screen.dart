@@ -10,7 +10,6 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
     required this.customGridColor,
     required this.customBullishColor,
     required this.customBearishColor,
-    required this.customBackgroundColor,
   });
 
   /// custom grid color
@@ -21,9 +20,6 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
 
   /// Custom negative color.
   final Color customBearishColor;
-
-  /// Custom background color.
-  final Color customBackgroundColor;
 
   @override
   Color get gridLineColor => customGridColor;
@@ -69,7 +65,6 @@ class CustomLightTheme extends ChartDefaultLightTheme {
     required this.customGridColor,
     required this.customBullishColor,
     required this.customBearishColor,
-    required this.customBackgroundColor,
   });
 
   /// custom grid color
@@ -80,9 +75,6 @@ class CustomLightTheme extends ChartDefaultLightTheme {
 
   /// Custom negative color.
   final Color customBearishColor;
-
-  /// Custom background color.
-  final Color customBackgroundColor;
 
   @override
   Color get gridLineColor => customGridColor;
@@ -140,7 +132,6 @@ class _ThemeCustomizationScreenState
   Color _gridColor = const Color(0xFF323738);
   Color _candleBullishBodyColor = Colors.green;
   Color _candleBearishBodyColor = Colors.red;
-  Color _backgroundColor = const Color(0xFF151717);
 
   @override
   String getTitle() => 'Theme Customization';
@@ -155,14 +146,12 @@ class _ThemeCustomizationScreenState
           customGridColor: _gridColor,
           customBullishColor: _candleBullishBodyColor,
           customBearishColor: _candleBearishBodyColor,
-          customBackgroundColor: _backgroundColor,
         );
       } else {
         theme = CustomLightTheme(
           customGridColor: _gridColor,
           customBullishColor: _candleBullishBodyColor,
           customBearishColor: _candleBearishBodyColor,
-          customBackgroundColor: _backgroundColor,
         );
       }
     } else {
@@ -220,11 +209,9 @@ class _ThemeCustomizationScreenState
                           if (value) {
                             // Dark theme
                             _gridColor = const Color(0xFF323738);
-                            _backgroundColor = const Color(0xFF151717);
                           } else {
                             // Light theme
                             _gridColor = const Color(0xFFE0E0E0);
-                            _backgroundColor = const Color(0xFFF5F5F5);
                           }
                         }
                       });
@@ -248,10 +235,8 @@ class _ThemeCustomizationScreenState
                         if (value) {
                           if (_useDarkTheme) {
                             _gridColor = const Color(0xFF323738);
-                            _backgroundColor = const Color(0xFF151717);
                           } else {
                             _gridColor = const Color(0xFFE0E0E0);
-                            _backgroundColor = const Color(0xFFF5F5F5);
                           }
                         }
                       });
@@ -295,12 +280,6 @@ class _ThemeCustomizationScreenState
               });
             }),
             const SizedBox(height: 8),
-
-            _buildColorPicker('Background:', _backgroundColor, (color) {
-              setState(() {
-                _backgroundColor = color;
-              });
-            }),
           ] else ...[
             const Text(
               'The chart library supports both light and dark themes, as well as fully customizable themes.',
