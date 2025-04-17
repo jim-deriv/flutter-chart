@@ -26,36 +26,40 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
   final Color customBackgroundColor;
 
   @override
-  Color get base07Color => customGridColor;
+  Color get gridLineColor => customGridColor;
 
   @override
-  Color get base08Color => customBackgroundColor;
+  Color get candleBullishBodyDefault => customBullishColor;
 
   @override
-  Color get accentGreenColor => customBullishColor;
+  Color get candleBullishWickDefault => customBullishColor;
 
   @override
-  Color get accentRedColor => customBearishColor;
+  Color get candleBearishBodyDefault => customBearishColor;
+
+  @override
+  Color get candleBearishWickDefault => customBearishColor;
 
   @override
   GridStyle get gridStyle => GridStyle(
         gridLineColor: customGridColor,
         xLabelStyle: textStyle(
-          textStyle: caption2,
-          color: base03Color,
+          textStyle: gridTextStyle,
+          color: gridTextColor,
         ),
         yLabelStyle: textStyle(
-          textStyle: caption2,
-          color: base03Color,
+          textStyle: gridTextStyle,
+          color: gridTextColor,
         ),
       );
 
   @override
   CandleStyle get candleStyle => CandleStyle(
-        candleBullishBodyColor: customBullishColor,
-        candleBearishBodyColor: customBearishColor,
-        neutralColor: base04Color,
-      );
+      candleBullishBodyColor: customBullishColor,
+      candleBearishBodyColor: customBearishColor,
+      neutralColor: base04Color,
+      candleBullishWickColor: customBullishColor,
+      candleBearishWickColor: customBearishColor);
 }
 
 /// A custom theme that extends the default light theme.
@@ -81,36 +85,40 @@ class CustomLightTheme extends ChartDefaultLightTheme {
   final Color customBackgroundColor;
 
   @override
-  Color get base07Color => customGridColor;
+  Color get gridLineColor => customGridColor;
 
   @override
-  Color get base08Color => customBackgroundColor;
+  Color get candleBullishBodyDefault => customBullishColor;
 
   @override
-  Color get accentGreenColor => customBullishColor;
+  Color get candleBullishWickDefault => customBullishColor;
 
   @override
-  Color get accentRedColor => customBearishColor;
+  Color get candleBearishBodyDefault => customBearishColor;
+
+  @override
+  Color get candleBearishWickDefault => customBearishColor;
 
   @override
   GridStyle get gridStyle => GridStyle(
         gridLineColor: customGridColor,
         xLabelStyle: textStyle(
-          textStyle: caption2,
-          color: base03Color,
+          textStyle: gridTextStyle,
+          color: gridTextColor,
         ),
         yLabelStyle: textStyle(
-          textStyle: caption2,
-          color: base03Color,
+          textStyle: gridTextStyle,
+          color: gridTextColor,
         ),
       );
 
   @override
   CandleStyle get candleStyle => CandleStyle(
-        candleBullishBodyColor: customBullishColor,
-        candleBearishBodyColor: customBearishColor,
-        neutralColor: base04Color,
-      );
+      candleBullishBodyColor: customBullishColor,
+      candleBearishBodyColor: customBearishColor,
+      neutralColor: base04Color,
+      candleBullishWickColor: customBullishColor,
+      candleBearishWickColor: customBearishColor);
 }
 
 /// Screen that displays a chart with theme customization.
@@ -265,7 +273,7 @@ class _ThemeCustomizationScreenState
             const SizedBox(height: 12),
 
             // Color pickers
-            _buildColorPicker('Positive Color:', _candleBullishBodyColor,
+            _buildColorPicker('Bullish Color:', _candleBullishBodyColor,
                 (color) {
               setState(() {
                 _candleBullishBodyColor = color;
@@ -273,7 +281,7 @@ class _ThemeCustomizationScreenState
             }),
             const SizedBox(height: 8),
 
-            _buildColorPicker('Negative Color:', _candleBearishBodyColor,
+            _buildColorPicker('Bearish Color:', _candleBearishBodyColor,
                 (color) {
               setState(() {
                 _candleBearishBodyColor = color;
