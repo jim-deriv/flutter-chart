@@ -25,8 +25,8 @@ class ColorUtils {
     ];
   }
 
-  /// Returns a list of positive color presets.
-  static List<Color> getPositiveColors() {
+  /// Returns a list of bullish color presets.
+  static List<Color> getBullishColors() {
     return [
       Colors.green,
       Colors.lightGreen,
@@ -37,8 +37,8 @@ class ColorUtils {
     ];
   }
 
-  /// Returns a list of negative color presets.
-  static List<Color> getNegativeColors() {
+  /// Returns a list of bearish color presets.
+  static List<Color> getBearishColors() {
     return [
       Colors.red,
       Colors.redAccent,

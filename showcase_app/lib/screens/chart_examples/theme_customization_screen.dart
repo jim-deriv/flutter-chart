@@ -16,10 +16,10 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
   /// custom grid color
   final Color customGridColor;
 
-  /// Custom positive color.
+  /// Custom bullish color.
   final Color customBullishColor;
 
-  /// Custom negative color.
+  /// Custom bearish color.
   final Color customBearishColor;
 
   /// Custom background color.
@@ -78,10 +78,10 @@ class CustomLightTheme extends ChartDefaultLightTheme {
   /// custom grid color
   final Color customGridColor;
 
-  /// Custom positive color.
+  /// Custom bullish color.
   final Color customBullishColor;
 
-  /// Custom negative color.
+  /// Custom bearish color.
   final Color customBearishColor;
 
   /// Custom background color.
