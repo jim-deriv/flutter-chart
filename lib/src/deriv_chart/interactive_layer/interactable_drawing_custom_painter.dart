@@ -94,20 +94,15 @@ class InteractableDrawingCustomPainter extends CustomPainter {
       epochRange.rightEpoch,
     );
 
-    // TODO(Ramin): determine these lazily to avoid unnecessary calculations
-    final epochRangIsChanged = oldDelegate.epochRange != epochRange;
-    final quoteRangeIsChanged = oldDelegate.quoteRange != quoteRange;
-    final drawingStateIsChanged =
-        !_areSetsEqual(oldDelegate.drawingState, drawingState);
-
-    final drawingNeedsRepaint =
-        drawing.shouldRepaint(getDrawingState, oldDelegate.drawing);
-
     return drawingIsInRange &&
-        (drawingStateIsChanged ||
-            epochRangIsChanged ||
-            quoteRangeIsChanged ||
-            drawingNeedsRepaint);
+        // Drawing state is changed
+        (!_areSetsEqual(oldDelegate.drawingState, drawingState) ||
+            // Epoch range is changed
+            oldDelegate.epochRange != epochRange ||
+            // Quote range is changed
+            oldDelegate.quoteRange != quoteRange ||
+            // Drawing needs repaint
+            drawing.shouldRepaint(getDrawingState, oldDelegate.drawing));
   }
 
   bool _areSetsEqual(Set<dynamic> a, Set<dynamic> b) =>
