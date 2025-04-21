@@ -1,5 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/line/line_drawing_tool_config.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/channel/channel_drawing.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/extensions/extensions.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -475,6 +477,11 @@ class LineInteractableDrawing
         getState(this).contains(DrawingToolState.hovered) ||
         getState(this).contains(DrawingToolState.dragging);
   }
+
+  @override
+  bool isInEpochRange(int leftEpoch, int rightEpoch) =>
+      (startPoint?.isInViewPortRange(leftEpoch, rightEpoch) ?? true) ||
+      (endPoint?.isInViewPortRange(leftEpoch, rightEpoch) ?? true);
 }
 
 /// A circular array for dash patterns

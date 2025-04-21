@@ -1,5 +1,7 @@
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/draggable_edge_point.dart';
 
+import '../drawing_tools/data_model/edge_point.dart';
+
 // TODO(NA): consider EdgePoint radius as well in this calculation.
 /// The distance from the left and right sides of the chart viewport that should
 /// still be considered part of the visible area. This ensures that a point is
@@ -30,9 +32,19 @@ extension DraggableEdgePointExtension on DraggableEdgePoint {
   /// The view port range is defined by the left and right epoch values.
   /// returns true if the edge point is on the view port range.
   bool isInViewPortRange(int leftEpoch, int rightEpoch) =>
-      draggedEdgePoint.epoch >=
+      draggedEdgePoint.isInViewPortRange(leftEpoch, rightEpoch);
+}
+
+/// An extension on DraggableEdgePoint class that adds some helper methods.
+extension EdgePointExtension on EdgePoint {
+  /// Checks if the edge point is on the view port range.
+  ///
+  /// The view port range is defined by the left and right epoch values.
+  /// returns true if the edge point is on the view port range.
+  bool isInViewPortRange(int leftEpoch, int rightEpoch) =>
+      epoch >=
           (leftEpoch -
               getPointOffScreenBufferDistance(leftEpoch, rightEpoch)) &&
-      draggedEdgePoint.epoch <=
+      epoch <=
           (rightEpoch + getPointOffScreenBufferDistance(leftEpoch, rightEpoch));
 }

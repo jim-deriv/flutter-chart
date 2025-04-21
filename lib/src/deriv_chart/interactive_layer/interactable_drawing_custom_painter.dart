@@ -85,12 +85,14 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(InteractableDrawingCustomPainter oldDelegate) {
-    return oldDelegate.drawing != drawing ||
-        oldDelegate.epochRange != epochRange ||
-        oldDelegate.quoteRange != quoteRange ||
-        drawing.shouldRepaint(getDrawingState);
-  }
+  bool shouldRepaint(InteractableDrawingCustomPainter oldDelegate) =>
+      drawing.isInEpochRange(
+        epochRange.leftEpoch,
+        epochRange.rightEpoch,
+      ) &&
+      (oldDelegate.epochRange != epochRange ||
+          oldDelegate.quoteRange != quoteRange ||
+          drawing.shouldRepaint(getDrawingState));
 
   @override
   bool shouldRebuildSemantics(InteractableDrawingCustomPainter oldDelegate) =>
