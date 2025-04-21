@@ -165,13 +165,13 @@ class _OHLCChartWithIndicatorScreenState
           const SizedBox(height: 16),
           // OHLC chart controls
           _buildColorRow(
-            label: 'Positive Color:',
+            label: 'Bullish Color:',
             colors: [Colors.green, Colors.blue, Colors.purple, Colors.teal],
             isPositive: true,
           ),
           const SizedBox(height: 12),
           _buildColorRow(
-            label: 'Negative Color:',
+            label: 'Bearish Color:',
             colors: [Colors.red, Colors.orange, Colors.pink, Colors.brown],
             isPositive: false,
           ),

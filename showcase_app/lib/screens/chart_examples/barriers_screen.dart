@@ -71,13 +71,14 @@ class _BarriersScreenState extends BaseChartScreenState<BarriersScreen> {
       ),
     );
 
+    final theme = Theme.of(context).brightness == Brightness.dark
+        ? ChartDefaultDarkTheme()
+        : ChartDefaultLightTheme();
+
     _tickIndicator = TickIndicator(
       lastTick,
-      style: const HorizontalBarrierStyle(
+      style: theme.currentSpotStyle.copyWith(
         color: Colors.orange,
-        labelShape: LabelShape.pentagon,
-        hasBlinkingDot: true,
-        hasArrow: false,
       ),
       visibility: HorizontalBarrierVisibility.keepBarrierLabelVisible,
     );

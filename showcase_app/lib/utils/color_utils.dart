@@ -32,7 +32,7 @@ class ColorUtils {
       Colors.lightGreen,
       Colors.teal,
       Colors.cyan,
-      DarkThemeColors.accentGreen,
+      CandleBullishThemeColors.candleBullishBodyDefault,
       Colors.greenAccent,
     ];
   }
@@ -44,7 +44,7 @@ class ColorUtils {
       Colors.redAccent,
       Colors.deepOrange,
       Colors.pink,
-      DarkThemeColors.accentRed,
+      CandleBearishThemeColors.candleBearishBodyDefault,
       BrandColors.coral,
     ];
   }

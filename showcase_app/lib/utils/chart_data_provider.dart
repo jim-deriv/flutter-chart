@@ -62,7 +62,10 @@ class ChartDataProvider {
   }
 
   /// Generate sample barriers.
-  static List<ChartAnnotation<ChartObject>> generateBarriers(List<Tick> ticks) {
+  static List<ChartAnnotation<ChartObject>> generateBarriers(
+    List<Tick> ticks, {
+    ChartTheme? theme,
+  }) {
     if (ticks.isEmpty) {
       return [];
     }
@@ -96,12 +99,15 @@ class ChartDataProvider {
       // Tick indicator at the last tick
       TickIndicator(
         lastTick,
-        style: const HorizontalBarrierStyle(
-          color: Color(0xFFFF6444),
-          labelShape: LabelShape.pentagon,
-          hasBlinkingDot: true,
-          hasArrow: false,
-        ),
+        style: theme?.currentSpotStyle.copyWith(
+              color: const Color(0xFFFF6444),
+            ) ??
+            const HorizontalBarrierStyle(
+              color: Color(0xFFFF6444),
+              labelShape: LabelShape.pentagon,
+              hasBlinkingDot: true,
+              hasArrow: false,
+            ),
         visibility: HorizontalBarrierVisibility.keepBarrierLabelVisible,
       ),
     ];

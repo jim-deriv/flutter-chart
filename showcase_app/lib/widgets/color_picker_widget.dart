@@ -326,12 +326,10 @@ class _DerivColorPickerDialogState extends State<DerivColorPickerDialog> {
               _buildMaterialColorButton(BrandColors.coral),
               _buildMaterialColorButton(BrandColors.greenish),
               _buildMaterialColorButton(BrandColors.orange),
-              _buildMaterialColorButton(isDarkTheme
-                  ? DarkThemeColors.accentGreen
-                  : LightThemeColors.accentGreen),
-              _buildMaterialColorButton(isDarkTheme
-                  ? DarkThemeColors.accentRed
-                  : LightThemeColors.accentRed),
+              _buildMaterialColorButton(
+                  CandleBullishThemeColors.candleBullishBodyDefault),
+              _buildMaterialColorButton(
+                  CandleBearishThemeColors.candleBearishBodyDefault),
               _buildMaterialColorButton(isDarkTheme
                   ? DarkThemeColors.accentYellow
                   : LightThemeColors.accentYellow),

@@ -57,14 +57,16 @@ class _LineChartWithIndicatorScreenState
 
     final lastTick = ticks.last;
 
+    final theme = Theme.of(context).brightness == Brightness.dark
+        ? ChartDefaultDarkTheme()
+        : ChartDefaultLightTheme();
+
     _tickIndicator = TickIndicator(
       lastTick,
-      style: HorizontalBarrierStyle(
-        color: _lineColor, // Match the line color
-        labelShape: LabelShape.pentagon,
-        hasBlinkingDot: true,
-        hasArrow: false,
-      ),
+      style: theme.currentSpotStyle.copyWith(
+          color: _lineColor,
+          lineColor: _lineColor,
+          labelShapeBackgroundColor: _lineColor),
       visibility: HorizontalBarrierVisibility.keepBarrierLabelVisible,
     );
 
