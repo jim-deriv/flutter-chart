@@ -132,6 +132,13 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
     GetDrawingState getDrawingState,
   );
 
+  /// Returns true if the drawing tool should repaint.
+  bool shouldRepaint(
+    GetDrawingState getState,
+    InteractableDrawing<T> oldDrawing,
+  ) =>
+      getState(this).contains(DrawingToolState.dragging) ||
+      getState(this).contains(DrawingToolState.adding);
 
   /// Whether this drawing is in  epoch range.
   bool isInEpochRange(int leftEpoch, int rightEpoch) => true;

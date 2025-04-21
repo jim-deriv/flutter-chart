@@ -100,16 +100,14 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     final drawingStateIsChanged =
         !_areSetsEqual(oldDelegate.drawingState, drawingState);
 
-    final drawingIsBeingInteracted =
-        drawingState.contains(DrawingToolState.dragging) ||
-            drawingState.contains(DrawingToolState.adding);
+    final drawingNeedsRepaint =
+        drawing.shouldRepaint(getDrawingState, oldDelegate.drawing);
 
-    // return true;
     return drawingIsInRange &&
         (drawingStateIsChanged ||
             epochRangIsChanged ||
             quoteRangeIsChanged ||
-            drawingIsBeingInteracted);
+            drawingNeedsRepaint);
   }
 
   bool _areSetsEqual(Set<dynamic> a, Set<dynamic> b) =>
