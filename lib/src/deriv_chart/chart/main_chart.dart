@@ -350,7 +350,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
 
           updateVisibleData();
           // TODO(mohammadamir-fs): Remove Extra ClipRect.
-          return Provider<YAxisNotifier>.value(
+          return ListenableProvider<YAxisNotifier>.value(
             value: _yAxisNotifier,
             child: ClipRect(
               child: Stack(
@@ -388,13 +388,15 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
                         epochFromCanvasX: xAxis.epochFromX,
                         quoteRange: QuoteRange(
                           topQuote: topBoundQuoteAnimationController.value,
-                          bottomQuote: bottomBoundQuoteAnimationController.value,
+                          bottomQuote:
+                              bottomBoundQuoteAnimationController.value,
                         ),
                       ),
                     ),
                   // TODO(Ramin): move and handle cross-hair inside the InteractiveLayer
                   if (kIsWeb) _buildCrosshairAreaWeb(),
-                  if (!kIsWeb && !(widget.drawingTools?.isDrawingMoving ?? false))
+                  if (!kIsWeb &&
+                      !(widget.drawingTools?.isDrawingMoving ?? false))
                     _buildCrosshairArea(),
                   if (widget.showScrollToLastTickButton &&
                       _isScrollToLastTickAvailable)
