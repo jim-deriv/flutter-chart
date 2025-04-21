@@ -469,13 +469,12 @@ class LineInteractableDrawing
 
   @override
   bool shouldRepaint(GetDrawingState getState) {
-    if (startPoint == null || endPoint == null) {
-      return false;
-    }
+    final state = getState(this);
 
-    return getState(this).contains(DrawingToolState.selected) ||
-        getState(this).contains(DrawingToolState.hovered) ||
-        getState(this).contains(DrawingToolState.dragging);
+    return state.contains(DrawingToolState.selected) ||
+        state.contains(DrawingToolState.hovered) ||
+        state.contains(DrawingToolState.dragging) ||
+        state.contains(DrawingToolState.adding);
   }
 
   @override

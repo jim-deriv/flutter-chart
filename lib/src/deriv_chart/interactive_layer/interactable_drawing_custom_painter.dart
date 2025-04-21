@@ -71,7 +71,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print('#### Painting ${DateTime.now()}');
+    // print('#### Painting ${DateTime.now()}');
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       drawing.paint(
         canvas,
@@ -96,10 +96,10 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     final quoteRangeIsChanged = oldDelegate.quoteRange != quoteRange;
     final drawingShouldRepaint = drawing.shouldRepaint(getDrawingState);
 
-    // print('DrawingIsInRange: $drawingIsInRange, '
-    //     'epochRangIsChanged: $epochRangIsChanged, '
-    //     'quoteRangeIsChanged: $quoteRangeIsChanged, '
-    //     'drawingShouldRepaint: $drawingShouldRepaint');
+    print('DrawingIsInRange: $drawingIsInRange, '
+        // 'epochRangIsChanged: $epochRangIsChanged, '
+        // 'quoteRangeIsChanged: $quoteRangeIsChanged, '
+        'drawingShouldRepaint: $drawingShouldRepaint');
 
     // return true;
     return drawingIsInRange &&
