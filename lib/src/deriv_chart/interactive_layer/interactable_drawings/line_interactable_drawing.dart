@@ -1,6 +1,5 @@
 import 'dart:ui' as ui;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/line/line_drawing_tool_config.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/channel/channel_drawing.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/extensions/extensions.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
@@ -466,16 +465,6 @@ class LineInteractableDrawing
 
   @override
   List<Object?> get props => [startPoint, endPoint];
-
-  @override
-  bool shouldRepaint(GetDrawingState getState) {
-    final state = getState(this);
-
-    return state.contains(DrawingToolState.selected) ||
-        state.contains(DrawingToolState.hovered) ||
-        state.contains(DrawingToolState.dragging) ||
-        state.contains(DrawingToolState.adding);
-  }
 
   @override
   bool isInEpochRange(int leftEpoch, int rightEpoch) =>

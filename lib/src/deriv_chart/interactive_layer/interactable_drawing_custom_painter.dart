@@ -28,6 +28,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     required this.quoteToY,
     required this.quoteFromY,
     required this.getDrawingState,
+    required this.drawingState,
     required this.epochRange,
     required this.quoteRange,
     this.animationInfo = const AnimationInfo(),
@@ -35,6 +36,8 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   /// Drawing to paint.
   final InteractableDrawing drawing;
+
+  final Set<DrawingToolState> drawingState;
 
   /// The main series of the chart.
   final DataSeries<Tick> series;
@@ -71,7 +74,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // print('#### Painting ${DateTime.now()}');
+    print('#### Drawing ${DateTime.now()} ${drawing.runtimeType}');
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       drawing.paint(
         canvas,
@@ -94,17 +97,23 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     // TODO(Ramin): determine these lazily to avoid unnecessary calculations
     final epochRangIsChanged = oldDelegate.epochRange != epochRange;
     final quoteRangeIsChanged = oldDelegate.quoteRange != quoteRange;
-    final drawingShouldRepaint = drawing.shouldRepaint(getDrawingState);
+    final drawingStateIsChanged =
+        !_areSetsEqual(oldDelegate.drawingState, drawingState);
 
-    print('DrawingIsInRange: $drawingIsInRange, '
-        // 'epochRangIsChanged: $epochRangIsChanged, '
-        // 'quoteRangeIsChanged: $quoteRangeIsChanged, '
-        'drawingShouldRepaint: $drawingShouldRepaint');
+    final drawingIsBeingInteracted =
+        drawingState.contains(DrawingToolState.dragging) ||
+            drawingState.contains(DrawingToolState.adding);
 
     // return true;
     return drawingIsInRange &&
-        (epochRangIsChanged || quoteRangeIsChanged || drawingShouldRepaint);
+        (drawingStateIsChanged ||
+            epochRangIsChanged ||
+            quoteRangeIsChanged ||
+            drawingIsBeingInteracted);
   }
+
+  bool _areSetsEqual(Set<dynamic> a, Set<dynamic> b) =>
+      a.length == b.length && a.containsAll(b);
 
   @override
   bool shouldRebuildSemantics(InteractableDrawingCustomPainter oldDelegate) =>

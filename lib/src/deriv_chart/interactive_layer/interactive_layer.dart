@@ -320,6 +320,7 @@ class _InteractiveLayerGestureHandlerState
                               foregroundPainter:
                                   InteractableDrawingCustomPainter(
                                 drawing: e,
+                                drawingState: _interactiveState.getToolState(e),
                                 series: widget.series,
                                 theme: context.watch<ChartTheme>(),
                                 chartConfig: widget.chartConfig,
@@ -346,6 +347,8 @@ class _InteractiveLayerGestureHandlerState
                                   InteractableDrawingCustomPainter(
                                       drawing: e,
                                       series: widget.series,
+                                      drawingState:
+                                          _interactiveState.getToolState(e),
                                       theme: context.watch<ChartTheme>(),
                                       chartConfig: widget.chartConfig,
                                       epochFromX: xAxis.epochFromX,
