@@ -284,12 +284,25 @@ class _InteractiveLayerGestureHandlerState
     return MouseRegion(
       onHover: (event) {
         _interactiveState.onHover(event);
+        setState(() {});
       },
       child: GestureDetector(
-        onTapUp: (details) => _interactiveState.onTap(details),
-        onPanStart: (details) => _interactiveState.onPanStart(details),
-        onPanUpdate: (details) => _interactiveState.onPanUpdate(details),
-        onPanEnd: (details) => _interactiveState.onPanEnd(details),
+        onTapUp: (details) {
+          _interactiveState.onTap(details);
+          setState(() {});
+        },
+        onPanStart: (details) {
+          _interactiveState.onPanStart(details);
+          setState(() {});
+        },
+        onPanUpdate: (details) {
+          _interactiveState.onPanUpdate(details);
+          setState(() {});
+        },
+        onPanEnd: (details) {
+          _interactiveState.onPanEnd(details);
+          setState(() {});
+        },
         // TODO(NA): Move this part into separate widget. InteractiveLayer only cares about the interactions and selected tool movement
         // It can delegate it to an inner component as well. which we can have different interaction behaviours like per platform as well.
         child: AnimatedBuilder(
@@ -362,6 +375,7 @@ class _InteractiveLayerGestureHandlerState
 
   void onTap(TapUpDetails details) {
     _interactiveState.onTap(details);
+    setState(() {});
   }
 
   @override

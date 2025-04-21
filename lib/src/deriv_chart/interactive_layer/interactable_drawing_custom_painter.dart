@@ -71,7 +71,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print('####.painting ${DateTime.now()}');
+    print('#### Painting ${DateTime.now()}');
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       drawing.paint(
         canvas,
@@ -85,14 +85,26 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(InteractableDrawingCustomPainter oldDelegate) =>
-      drawing.isInEpochRange(
-        epochRange.leftEpoch,
-        epochRange.rightEpoch,
-      ) &&
-      (oldDelegate.epochRange != epochRange ||
-          oldDelegate.quoteRange != quoteRange ||
-          drawing.shouldRepaint(getDrawingState));
+  bool shouldRepaint(InteractableDrawingCustomPainter oldDelegate) {
+    final drawingIsInRange = drawing.isInEpochRange(
+      epochRange.leftEpoch,
+      epochRange.rightEpoch,
+    );
+
+    // TODO(Ramin): determine these lazily to avoid unnecessary calculations
+    final epochRangIsChanged = oldDelegate.epochRange != epochRange;
+    final quoteRangeIsChanged = oldDelegate.quoteRange != quoteRange;
+    final drawingShouldRepaint = drawing.shouldRepaint(getDrawingState);
+
+    // print('DrawingIsInRange: $drawingIsInRange, '
+    //     'epochRangIsChanged: $epochRangIsChanged, '
+    //     'quoteRangeIsChanged: $quoteRangeIsChanged, '
+    //     'drawingShouldRepaint: $drawingShouldRepaint');
+
+    // return true;
+    return drawingIsInRange &&
+        (epochRangIsChanged || quoteRangeIsChanged || drawingShouldRepaint);
+  }
 
   @override
   bool shouldRebuildSemantics(InteractableDrawingCustomPainter oldDelegate) =>
