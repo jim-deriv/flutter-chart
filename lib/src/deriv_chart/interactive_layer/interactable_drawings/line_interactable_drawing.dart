@@ -464,9 +464,6 @@ class LineInteractableDrawing
       ]);
 
   @override
-  List<Object?> get props => [startPoint, endPoint];
-
-  @override
   bool isInEpochRange(int leftEpoch, int rightEpoch) =>
       (startPoint?.isInViewPortRange(leftEpoch, rightEpoch) ?? true) ||
       (endPoint?.isInViewPortRange(leftEpoch, rightEpoch) ?? true);
