@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'dart:math';
 import 'package:deriv_chart/deriv_chart.dart';
-import 'package:flutter/material.dart';
 
 /// Utility class for generating sample chart data.
 class ChartDataProvider {
@@ -100,13 +99,7 @@ class ChartDataProvider {
       TickIndicator(
         lastTick,
         style: theme?.currentSpotStyle.copyWith(
-              color: theme?.brandOrangeColor ?? BrandColors.orange,
-            ) ??
-            HorizontalBarrierStyle(
-              color: theme?.brandOrangeColor ?? BrandColors.orange,
-              labelShape: LabelShape.pentagon,
-              hasBlinkingDot: true,
-              hasArrow: false,
+              color: theme.brandOrangeColor,
             ),
         visibility: HorizontalBarrierVisibility.keepBarrierLabelVisible,
       ),
