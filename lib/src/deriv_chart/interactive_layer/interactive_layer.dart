@@ -224,6 +224,10 @@ class _InteractiveLayerGestureHandlerState
   static const Curve _stateChangeCurve = Curves.easeInOut;
 
   @override
+  AnimationController? get stateChangeAnimationController =>
+      _stateChangeController;
+
+  @override
   void initState() {
     super.initState();
 
@@ -305,14 +309,14 @@ class _InteractiveLayerGestureHandlerState
         },
         // TODO(NA): Move this part into separate widget. InteractiveLayer only cares about the interactions and selected tool movement
         // It can delegate it to an inner component as well. which we can have different interaction behaviours like per platform as well.
-        child: AnimatedBuilder(
-            animation: _stateChangeController,
-            builder: (_, __) {
-              final double animationValue =
-                  _stateChangeCurve.transform(_stateChangeController.value);
+        child: RepaintBoundary(
+          child: AnimatedBuilder(
+              animation: _stateChangeController,
+              builder: (_, __) {
+                final double animationValue =
+                    _stateChangeCurve.transform(_stateChangeController.value);
 
-              return RepaintBoundary(
-                child: Stack(
+                return Stack(
                   fit: StackFit.expand,
                   children: [
                     ...widget.drawings
@@ -369,9 +373,9 @@ class _InteractiveLayerGestureHandlerState
                             ))
                         .toList(),
                   ],
-                ),
-              );
-            }),
+                );
+              }),
+        ),
       ),
     );
   }

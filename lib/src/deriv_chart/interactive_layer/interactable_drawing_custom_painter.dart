@@ -74,7 +74,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print('#### Drawing ${DateTime.now()} ${drawing.runtimeType}');
+    // print('#### Drawing ${DateTime.now()} ${drawing.runtimeType}');
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       drawing.paint(
         canvas,
