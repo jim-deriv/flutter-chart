@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/multiple_animated_builder.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
@@ -17,6 +18,7 @@ import '../chart/data_visualization/models/animation_info.dart';
 import '../drawing_tool_chart/drawing_tools.dart';
 import 'interactable_drawings/interactable_drawing.dart';
 import 'interactable_drawing_custom_painter.dart';
+import 'interaction_notifier.dart';
 import 'interactive_layer_base.dart';
 import 'interactive_states/interactive_adding_tool_state.dart';
 import 'interactive_states/interactive_normal_state.dart';
@@ -222,6 +224,7 @@ class _InteractiveLayerGestureHandlerState
   late InteractiveState _interactiveState;
   late AnimationController _stateChangeController;
   static const Curve _stateChangeCurve = Curves.easeInOut;
+  final InteractionNotifier _interactionNotifier = InteractionNotifier();
 
   @override
   AnimationController? get stateChangeAnimationController =>
@@ -288,30 +291,30 @@ class _InteractiveLayerGestureHandlerState
     return MouseRegion(
       onHover: (event) {
         _interactiveState.onHover(event);
-        setState(() {});
+        _interactionNotifier.notify();
       },
       child: GestureDetector(
         onTapUp: (details) {
           _interactiveState.onTap(details);
-          setState(() {});
+          _interactionNotifier.notify();
         },
         onPanStart: (details) {
           _interactiveState.onPanStart(details);
-          setState(() {});
+          _interactionNotifier.notify();
         },
         onPanUpdate: (details) {
           _interactiveState.onPanUpdate(details);
-          setState(() {});
+          _interactionNotifier.notify();
         },
         onPanEnd: (details) {
           _interactiveState.onPanEnd(details);
-          setState(() {});
+          _interactionNotifier.notify();
         },
         // TODO(NA): Move this part into separate widget. InteractiveLayer only cares about the interactions and selected tool movement
         // It can delegate it to an inner component as well. which we can have different interaction behaviours like per platform as well.
         child: RepaintBoundary(
-          child: AnimatedBuilder(
-              animation: _stateChangeController,
+          child: MultipleAnimatedBuilder(
+              animations: [_stateChangeController, _interactionNotifier],
               builder: (_, __) {
                 final double animationValue =
                     _stateChangeCurve.transform(_stateChangeController.value);
@@ -382,7 +385,7 @@ class _InteractiveLayerGestureHandlerState
 
   void onTap(TapUpDetails details) {
     _interactiveState.onTap(details);
-    setState(() {});
+    _interactionNotifier.notify();
   }
 
   @override
