@@ -91,6 +91,8 @@ class InteractiveAddingToolState extends InteractiveState
             InteractiveSelectedToolState(
               selected: drawing,
               interactiveLayer: interactiveLayer,
+              selectionAnimationController:
+                  interactiveLayer.stateChangeAnimationController,
             ),
             StateChangeAnimationDirection.forward,
           );
