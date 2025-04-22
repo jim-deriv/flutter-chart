@@ -27,7 +27,6 @@ class InteractiveSelectedToolState extends InteractiveState
   InteractiveSelectedToolState({
     required this.selected,
     required super.interactiveLayer,
-    this.selectionAnimationController,
   });
 
   /// The selected tool.
@@ -37,9 +36,6 @@ class InteractiveSelectedToolState extends InteractiveState
   final InteractableDrawing selected;
 
   bool _draggingStartedOnTool = false;
-
-  /// The animation controller that play the selection animation.
-  final AnimationController? selectionAnimationController;
 
   @override
   Set<DrawingToolState> getToolState(
@@ -57,8 +53,8 @@ class InteractiveSelectedToolState extends InteractiveState
       hoveredState.add(DrawingToolState.selected);
     }
 
-    if (selectionAnimationController != null &&
-        selectionAnimationController!.isAnimating) {
+    if (interactiveLayer.stateChangeAnimationController != null &&
+        interactiveLayer.stateChangeAnimationController!.isAnimating) {
       hoveredState.add(DrawingToolState.animating);
     }
 

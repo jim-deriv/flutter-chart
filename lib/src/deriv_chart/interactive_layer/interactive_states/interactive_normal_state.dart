@@ -62,10 +62,9 @@ class InteractiveNormalState extends InteractiveState
 
     interactiveLayer.updateStateTo(
       InteractiveSelectedToolState(
-          selected: hitDrawing,
-          interactiveLayer: interactiveLayer,
-          selectionAnimationController:
-              interactiveLayer.stateChangeAnimationController),
+        selected: hitDrawing,
+        interactiveLayer: interactiveLayer,
+      ),
       StateChangeAnimationDirection.forward,
     );
   }

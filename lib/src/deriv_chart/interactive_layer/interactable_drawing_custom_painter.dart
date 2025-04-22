@@ -37,6 +37,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   /// Drawing to paint.
   final InteractableDrawing drawing;
 
+  /// [drawing]'s state.
   final Set<DrawingToolState> drawingState;
 
   /// The main series of the chart.
@@ -74,7 +75,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // print('#### Drawing ${DateTime.now()} ${drawing.runtimeType}');
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       drawing.paint(
         canvas,

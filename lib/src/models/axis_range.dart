@@ -20,7 +20,12 @@ class EpochRange with EquatableMixin {
 /// Can use to represent the Y-axis range of the chart.
 class QuoteRange with EquatableMixin {
   /// Initializes.
-  QuoteRange({required this.topQuote, required this.bottomQuote});
+  QuoteRange({
+    required this.topQuote,
+    required this.bottomQuote,
+    required this.topPadding,
+    required this.bottomPadding,
+  });
 
   /// The top-most quote.
   final double topQuote;
@@ -28,6 +33,12 @@ class QuoteRange with EquatableMixin {
   /// The bottom-most quote.
   final double bottomQuote;
 
+  /// The padding on the top of the chart.
+  final double topPadding;
+
+  /// The padding on the bottom of the chart.
+  final double bottomPadding;
+
   @override
-  List<Object?> get props => [topQuote, bottomQuote];
+  List<Object?> get props => [topQuote, bottomQuote, topPadding, bottomPadding];
 }

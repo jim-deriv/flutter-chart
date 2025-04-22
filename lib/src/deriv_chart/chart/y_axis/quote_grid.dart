@@ -24,6 +24,7 @@ class YAxisModel {
         _topPadding = topPadding,
         _bottomPadding = bottomPadding;
 
+  /// Initializes a model with zero values.
   YAxisModel.zero()
       : _quoteGridInterval = 0,
         _topBoundQuote = 0,
@@ -38,6 +39,12 @@ class YAxisModel {
   final double _canvasHeight;
   final double _topPadding;
   final double _bottomPadding;
+
+  /// Top padding.
+  double get topPadding => _topPadding;
+
+  /// Bottom padding.
+  double get bottomPadding => _bottomPadding;
 
   /// Calculates the grid lines for a quote.
   List<double> gridQuotes() {
@@ -125,6 +132,8 @@ double quoteGridInterval(
   );
 }
 
+/// A notifier for the Y-axis model.
 class YAxisNotifier extends ValueNotifier<YAxisModel> {
+  /// Initializes a notifier for the Y-axis model.
   YAxisNotifier(super.value);
 }
