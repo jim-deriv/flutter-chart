@@ -99,8 +99,8 @@ class ChartDataProvider {
       TickIndicator(
         lastTick,
         style: theme?.currentSpotStyle.copyWith(
-              color: theme.brandOrangeColor,
-            ),
+          color: theme.brandOrangeColor,
+        ),
         visibility: HorizontalBarrierVisibility.keepBarrierLabelVisible,
       ),
     ];
