@@ -32,17 +32,14 @@ class OhlcCandlePainter extends OhlcPainter {
     _candleBullishWickColor = style.candleBullishWickColor;
     _candleBearishWickColor = style.candleBearishWickColor;
 
-    final Color _candleColor = currentPainting.yClose > prevPainting.yClose
-        ? _candleBearishBodyColor
-        : currentPainting.yClose < prevPainting.yClose
-            ? _candleBullishBodyColor
-            : _neutralColor;
+    // Check if the current candle is bullish or bearish.
+    final bool isBullishCandle = currentPainting.yOpen > currentPainting.yClose;
 
-    final Color candleWickColor = currentPainting.yClose > prevPainting.yClose
-        ? _candleBearishWickColor
-        : currentPainting.yClose < prevPainting.yClose
-            ? _candleBullishWickColor
-            : _neutralColor;
+    final Color _candleColor =
+        isBullishCandle ? _candleBullishBodyColor : _candleBearishBodyColor;
+
+    final Color candleWickColor =
+        isBullishCandle ? _candleBullishWickColor : _candleBearishWickColor;
 
     _drawWick(canvas, candleWickColor, currentPainting);
     _drawOpenCloseLines(canvas, _candleColor, currentPainting);

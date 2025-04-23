@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
+import 'package:deriv_chart/src/theme/colors.dart';
 import '../../widgets/color_picker_widget.dart';
 import 'base_chart_screen.dart';
 
@@ -13,8 +14,10 @@ class CandleChartScreen extends BaseChartScreen {
 }
 
 class _CandleChartScreenState extends BaseChartScreenState<CandleChartScreen> {
-  Color _bullishColor = Colors.green;
-  Color _bearishColor = Colors.red;
+  Color _bullishBodyColor = CandleBullishThemeColors.candleBullishBodyDefault;
+  Color _bearishBodyColor = CandleBearishThemeColors.candleBearishBodyDefault;
+  Color _bullishWickColor = CandleBullishThemeColors.candleBullishWickDefault;
+  Color _bearishWickColor = CandleBearishThemeColors.candleBearishWickDefault;
 
   @override
   String getTitle() => 'Candle Chart';
@@ -33,8 +36,10 @@ class _CandleChartScreenState extends BaseChartScreenState<CandleChartScreen> {
       mainSeries: CandleSeries(
         candles,
         style: CandleStyle(
-          candleBullishBodyColor: _bullishColor,
-          candleBearishBodyColor: _bearishColor,
+          candleBullishBodyColor: _bullishBodyColor,
+          candleBearishBodyColor: _bearishBodyColor,
+          candleBullishWickColor: _bullishWickColor,
+          candleBearishWickColor: _bearishWickColor,
         ),
       ),
       controller: controller,
@@ -55,38 +60,74 @@ class _CandleChartScreenState extends BaseChartScreenState<CandleChartScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             DerivColorPicker(
-              label: 'Bullish Color:',
-              selectedColor: _bullishColor,
+              label: 'Bullish Body:',
+              selectedColor: _bullishBodyColor,
               onColorChanged: (color) {
                 setState(() {
-                  _bullishColor = color;
+                  _bullishBodyColor = color;
                 });
               },
               presetColors: const [
+                CandleBullishThemeColors.candleBullishBodyDefault,
+                CandleBullishThemeColors.candleBullishBodyActive,
                 Colors.green,
                 Colors.blue,
-                Colors.purple,
                 Colors.teal,
-                Colors.lightGreen,
                 Colors.cyan
               ],
             ),
             const SizedBox(height: 12),
             DerivColorPicker(
-              label: 'Bearish Color:',
-              selectedColor: _bearishColor,
+              label: 'Bearish Body:',
+              selectedColor: _bearishBodyColor,
               onColorChanged: (color) {
                 setState(() {
-                  _bearishColor = color;
+                  _bearishBodyColor = color;
                 });
               },
               presetColors: const [
+                CandleBearishThemeColors.candleBearishBodyDefault,
+                CandleBearishThemeColors.candleBearishBodyActive,
                 Colors.red,
                 Colors.orange,
                 Colors.pink,
-                Colors.brown,
-                Colors.deepOrange,
-                Colors.redAccent
+                Colors.brown
+              ],
+            ),
+            const SizedBox(height: 20),
+            DerivColorPicker(
+              label: 'Bullish Wick:',
+              selectedColor: _bullishWickColor,
+              onColorChanged: (color) {
+                setState(() {
+                  _bullishWickColor = color;
+                });
+              },
+              presetColors: const [
+                CandleBullishThemeColors.candleBullishWickDefault,
+                CandleBullishThemeColors.candleBullishWickActive,
+                Colors.green,
+                Colors.blue,
+                Colors.teal,
+                Colors.cyan
+              ],
+            ),
+            const SizedBox(height: 12),
+            DerivColorPicker(
+              label: 'Bearish Wick:',
+              selectedColor: _bearishWickColor,
+              onColorChanged: (color) {
+                setState(() {
+                  _bearishWickColor = color;
+                });
+              },
+              presetColors: const [
+                CandleBearishThemeColors.candleBearishWickDefault,
+                CandleBearishThemeColors.candleBearishWickActive,
+                Colors.red,
+                Colors.orange,
+                Colors.pink,
+                Colors.brown
               ],
             ),
           ],
