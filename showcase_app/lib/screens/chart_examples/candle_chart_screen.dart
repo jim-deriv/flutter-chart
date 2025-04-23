@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
-import 'package:deriv_chart/src/theme/colors.dart';
 import '../../widgets/color_picker_widget.dart';
 import 'base_chart_screen.dart';
 

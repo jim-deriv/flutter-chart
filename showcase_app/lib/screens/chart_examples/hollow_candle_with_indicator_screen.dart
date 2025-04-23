@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
-import 'package:deriv_chart/src/theme/colors.dart';
 import 'base_chart_screen.dart';
 
 /// Enum to identify which color is being modified
-enum ColorType { bullishBody, bearishBody, bullishWick, bearishWick }
+enum ColorType {
+  /// Color for the body of bullish candles
+  bullishBody,
+
+  /// Color for the body of bearish candles
+  bearishBody,
+
+  /// Color for the wick of bullish candles
+  bullishWick,
+
+  /// Color for the wick of bearish candles
+  bearishWick
+}
 
 /// Screen that displays a hollow candle chart with an indicator.
 class HollowCandleWithIndicatorScreen extends BaseChartScreen {

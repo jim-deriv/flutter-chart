@@ -14,7 +14,6 @@ class HollowCandlePainter extends OhlcPainter {
 
   late Color _candleBullishBodyColor;
   late Color _candleBearishBodyColor;
-  late Color _neutralColor;
   late Color _candleBullishWickColor;
   late Color _candleBearishWickColor;
 
@@ -28,7 +27,6 @@ class HollowCandlePainter extends OhlcPainter {
 
     _candleBullishBodyColor = style.candleBullishBodyColor;
     _candleBearishBodyColor = style.candleBearishBodyColor;
-    _neutralColor = style.neutralColor;
     _candleBullishWickColor = style.candleBullishWickColor;
     _candleBearishWickColor = style.candleBearishWickColor;
 
