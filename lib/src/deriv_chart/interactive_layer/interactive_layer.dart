@@ -77,8 +77,8 @@ class InteractiveLayer extends StatefulWidget {
 class _InteractiveLayerState extends State<InteractiveLayer> {
   final List<InteractableDrawing> _interactableDrawings = [];
 
-  /// Timer for debouncing repository updates
-  Timer? _debounceTimer;
+  /// Timers for debouncing repository updates
+  final Map<String, Timer> _debounceTimers = <String, Timer>{};
 
   /// Duration for debouncing repository updates (1-sec is a good balance)
   static const Duration _debounceDuration = Duration(seconds: 1);
@@ -105,12 +105,20 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   }
 
   /// Updates the config in the repository with debouncing
-  void _updateConfigInRepository(InteractableDrawing<dynamic> drawing) {
+  void _updateConfigInRepository(
+    InteractableDrawing<DrawingToolConfig> drawing,
+  ) {
+    final String? configId = drawing.config.configId;
+
+    if (configId == null) {
+      return;
+    }
+
     // Cancel any existing timer
-    _debounceTimer?.cancel();
+    _debounceTimers[configId]?.cancel();
 
     // Create a new timer
-    _debounceTimer = Timer(_debounceDuration, () {
+    _debounceTimers[configId] = Timer(_debounceDuration, () {
       // Only proceed if the widget is still mounted
       if (!mounted) {
         return;
@@ -145,8 +153,11 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
 
   @override
   void dispose() {
-    // Cancel the debounce timer when the widget is disposed
-    _debounceTimer?.cancel();
+    // Cancel the debounce timers when the widget is disposed
+    for (final Timer timer in _debounceTimers.values) {
+      timer.cancel();
+    }
+    _debounceTimers.clear();
 
     widget.drawingToolsRepo.removeListener(_setDrawingsFromConfigs);
     super.dispose();
@@ -189,7 +200,7 @@ class _InteractiveLayerGestureHandler extends StatefulWidget {
 
   final List<InteractableDrawing> drawings;
 
-  final Function(InteractableDrawing<dynamic>)? onSaveDrawingChange;
+  final Function(InteractableDrawing<DrawingToolConfig>)? onSaveDrawingChange;
   final DrawingToolConfig Function(InteractableDrawing<DrawingToolConfig>)
       onAddDrawing;
 
