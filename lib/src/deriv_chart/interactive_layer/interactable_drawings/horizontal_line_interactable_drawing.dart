@@ -8,7 +8,6 @@ import '../../chart/data_visualization/chart_data.dart';
 import '../../chart/data_visualization/drawing_tools/data_model/drawing_paint_style.dart';
 import '../../chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
-import '../interactable_drawing_custom_painter.dart';
 import 'interactable_drawing.dart';
 
 /// Interactable drawing for horizontal line drawing tool.
