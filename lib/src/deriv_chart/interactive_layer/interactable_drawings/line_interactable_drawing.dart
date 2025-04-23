@@ -463,7 +463,7 @@ class LineInteractableDrawing
       ]);
 
   @override
-  bool isInEpochRange(EpochRange epochRange) =>
+  bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange) =>
       (startPoint?.isInViewPortRange(
             epochRange.leftEpoch,
             epochRange.rightEpoch,

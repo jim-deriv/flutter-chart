@@ -147,5 +147,5 @@ abstract class InteractableDrawing<T extends DrawingToolConfig> {
   }
 
   /// Whether this drawing is in epoch range.
-  bool isInEpochRange(EpochRange epochRange);
+  bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange);
 }

@@ -85,7 +85,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(InteractableDrawingCustomPainter oldDelegate) {
-    final drawingIsInRange = drawing.isInEpochRange(epochRange);
+    final drawingIsInRange = drawing.isInViewPort(epochRange, quoteRange);
 
     return drawingIsInRange &&
         // Drawing state is changed
