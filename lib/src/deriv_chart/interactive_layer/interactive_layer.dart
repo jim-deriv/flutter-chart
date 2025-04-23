@@ -351,11 +351,9 @@ class _InteractiveLayerGestureHandlerState
                                   leftEpoch: xAxis.leftBoundEpoch,
                                 ),
                                 quoteRange: widget.quoteRange,
-                                getDrawingState: _interactiveState.getToolState,
                                 animationInfo: AnimationInfo(
                                   stateChangePercent: animationValue,
                                 ),
-                                // onDrawingToolClicked: () => _selectedDrawing = e,
                               ),
                             ))
                         .toList(),
@@ -378,8 +376,6 @@ class _InteractiveLayerGestureHandlerState
                                         leftEpoch: xAxis.leftBoundEpoch,
                                       ),
                                       quoteRange: widget.quoteRange,
-                                      getDrawingState:
-                                          _interactiveState.getToolState,
                                       animationInfo: AnimationInfo(
                                           stateChangePercent: animationValue)
                                       // onDrawingToolClicked: () => _selectedDrawing = e,

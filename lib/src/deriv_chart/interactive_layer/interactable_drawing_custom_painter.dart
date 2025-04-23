@@ -27,7 +27,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     required this.epochToX,
     required this.quoteToY,
     required this.quoteFromY,
-    required this.getDrawingState,
     required this.drawingState,
     required this.epochRange,
     required this.quoteRange,
@@ -70,9 +69,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   /// Current quote range (y-axis) of the chart;
   final QuoteRange quoteRange;
 
-  /// Returns `true` if the drawing tool is selected.
-  final Set<DrawingToolState> Function(InteractableDrawing) getDrawingState;
-
   @override
   void paint(Canvas canvas, Size size) {
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
@@ -82,7 +78,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
         epochToX,
         quoteToY,
         animationInfo,
-        getDrawingState,
+        drawingState,
       );
     });
   }
@@ -102,7 +98,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
             // Quote range is changed
             oldDelegate.quoteRange != quoteRange ||
             // Drawing needs repaint
-            drawing.shouldRepaint(getDrawingState, oldDelegate.drawing));
+            drawing.shouldRepaint(drawingState, oldDelegate.drawing));
   }
 
   bool _areSetsEqual(Set<dynamic> a, Set<dynamic> b) =>

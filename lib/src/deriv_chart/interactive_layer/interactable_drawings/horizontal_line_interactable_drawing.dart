@@ -80,7 +80,7 @@ class HorizontalLineInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
-    GetDrawingState getDrawingState,
+    Set<DrawingToolState> drawingState,
   ) {
     final LineStyle lineStyle = config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
@@ -91,12 +91,9 @@ class HorizontalLineInteractableDrawing
       final Offset endOffset =
           Offset(size.width, quoteToY(startPoint!.quote)); // End at right edge
 
-      // Check if this drawing is selected
-      final Set<DrawingToolState> state = getDrawingState(this);
-
       // Use glowy paint style if selected, otherwise use normal paint style
-      final Paint paint = state.contains(DrawingToolState.selected) ||
-              state.contains(DrawingToolState.dragging)
+      final Paint paint = drawingState.contains(DrawingToolState.selected) ||
+              drawingState.contains(DrawingToolState.dragging)
           ? paintStyle.linePaintStyle(
               lineStyle.color, 1 + 1 * animationInfo.stateChangePercent)
           : paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness);
@@ -104,8 +101,8 @@ class HorizontalLineInteractableDrawing
       canvas.drawLine(startOffset, endOffset, paint);
 
       // Draw endpoints with glowy effect if selected
-      if (state.contains(DrawingToolState.selected) ||
-          state.contains(DrawingToolState.dragging)) {
+      if (drawingState.contains(DrawingToolState.selected) ||
+          drawingState.contains(DrawingToolState.dragging)) {
         _drawPointsFocusedCircle(
           paintStyle,
           lineStyle,
@@ -115,13 +112,13 @@ class HorizontalLineInteractableDrawing
           3 * animationInfo.stateChangePercent,
           endOffset,
         );
-      } else if (state.contains(DrawingToolState.hovered)) {
+      } else if (drawingState.contains(DrawingToolState.hovered)) {
         _drawPointsFocusedCircle(
             paintStyle, lineStyle, canvas, startOffset, 10, 3, endOffset);
       }
 
       // Draw alignment guides when dragging
-      if (state.contains(DrawingToolState.dragging)) {
+      if (drawingState.contains(DrawingToolState.dragging)) {
         _drawAlignmentGuides(canvas, size, startOffset);
       }
     } else {

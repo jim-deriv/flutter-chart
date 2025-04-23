@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 
 import '../../chart/data_visualization/chart_data.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
-import '../interactable_drawing_custom_painter.dart';
 
 /// Represents the current state of a drawing tool on the chart.
 ///
@@ -133,19 +132,17 @@ abstract class InteractableDrawing<T extends DrawingToolConfig> {
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
-    GetDrawingState getDrawingState,
+    Set<DrawingToolState> drawingState,
   );
 
   /// Returns true if the drawing tool should repaint.
   bool shouldRepaint(
-    GetDrawingState getState,
+    Set<DrawingToolState> drawingState,
     InteractableDrawing<T> oldDrawing,
   ) {
-    final Set<DrawingToolState> currentState = getState(this);
-
-    return currentState.contains(DrawingToolState.dragging) ||
-        currentState.contains(DrawingToolState.adding) ||
-        currentState.contains(DrawingToolState.animating);
+    return drawingState.contains(DrawingToolState.dragging) ||
+        drawingState.contains(DrawingToolState.adding) ||
+        drawingState.contains(DrawingToolState.animating);
   }
 
   /// Whether this drawing is in  epoch range.
