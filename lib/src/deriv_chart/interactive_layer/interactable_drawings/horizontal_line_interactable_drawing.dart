@@ -1,5 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/horizontal/horizontal_drawing_tool_config.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/extensions/extensions.dart';
+import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -302,6 +304,12 @@ class HorizontalLineInteractableDrawing
   @override
   HorizontalDrawingToolConfig getUpdatedConfig() => config
       .copyWith(edgePoints: <EdgePoint>[if (startPoint != null) startPoint!]);
+
+  @override
+  bool isInEpochRange(EpochRange epochRange) =>
+      // Since horizontal line is not bound to any specific epoch range, it's
+      // always visible no matter where is the current chart's view-port.
+      true;
 }
 
 /// A circular array for dash patterns

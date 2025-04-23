@@ -1,4 +1,5 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
@@ -145,6 +146,6 @@ abstract class InteractableDrawing<T extends DrawingToolConfig> {
         drawingState.contains(DrawingToolState.animating);
   }
 
-  /// Whether this drawing is in  epoch range.
-  bool isInEpochRange(int leftEpoch, int rightEpoch) => true;
+  /// Whether this drawing is in epoch range.
+  bool isInEpochRange(EpochRange epochRange);
 }
