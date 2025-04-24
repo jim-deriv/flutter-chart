@@ -151,9 +151,9 @@ class DefaultDarkThemeColors {
   static const Color crosshairInformationBoxTextStatic = ComponentDesignTokens
       .componentTextIconStaticProminentDark; // Hex: #FFFFFF
   static const Color crosshairInformationBoxTextProfit = DarkThemeDesignTokens
-      .semanticColorEmeraldSolidSurfaceStaticHigh; // Hex: #00AE7A
+      .semanticColorEmeraldSolidSurfaceStaticMid; // Hex: #00c390
   static const Color crosshairInformationBoxTextLoss = DarkThemeDesignTokens
-      .semanticColorCherrySolidSurfaceStaticHigh; // Hex: #C40025
+      .semanticColorCherrySolidSurfaceStaticMid; // Hex: #de0040
   static const Color crosshairInformationBoxContainerNormalColor =
       DarkThemeDesignTokens
           .semanticColorSlateSolidSurfaceFrameMid; // Hex: #F6F7F8
@@ -165,7 +165,7 @@ class DefaultDarkThemeColors {
 /// Candle Bullish colors for light, dark
 class CandleBullishThemeColors {
   static const Color candleBullishBodyDefault = LightThemeDesignTokens
-      .semanticColorEmeraldSolidSurfaceStaticHigh; // Hex: #00AE7A
+      .semanticColorEmeraldSolidSurfaceStaticMid; // Hex: #00c390
   static const Color candleBullishBodyActive = LightThemeDesignTokens
       .semanticColorEmeraldSolidSurfaceStaticLow; // Hex: #4DECBC
   static const Color candleBullishWickDefault = LightThemeDesignTokens
@@ -177,7 +177,7 @@ class CandleBullishThemeColors {
 /// Candle Bearish colors for light, dark
 class CandleBearishThemeColors {
   static const Color candleBearishBodyDefault = LightThemeDesignTokens
-      .semanticColorCherrySolidSurfaceStaticHigh; // Hex: #C40025
+      .semanticColorCherrySolidSurfaceStaticMid; // Hex: #de0040
   static const Color candleBearishBodyActive = LightThemeDesignTokens
       .semanticColorCherrySolidSurfaceStaticLow; // Hex: #FF4D6E
   static const Color candleBearishWickDefault = LightThemeDesignTokens
