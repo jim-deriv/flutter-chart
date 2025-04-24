@@ -360,7 +360,7 @@ class _FullscreenChartState extends State<FullscreenChart> {
 
   @override
   Widget build(BuildContext context) => Material(
-        color: const Color(0xFF0E0E0E),
+        color: DefaultDarkThemeColors.backgroundDynamicHighest,
         child: Column(
           children: <Widget>[
             Padding(
@@ -395,10 +395,22 @@ class _FullscreenChartState extends State<FullscreenChart> {
                               TickIndicator(
                                 ticks.last,
                                 style: const HorizontalBarrierStyle(
-                                  color: Colors.redAccent,
+                                  color: DefaultDarkThemeColors
+                                      .currentSpotDotColor,
                                   labelShape: LabelShape.pentagon,
                                   hasBlinkingDot: true,
                                   hasArrow: false,
+                                  lineColor: DefaultDarkThemeColors
+                                      .currentSpotLineColor,
+                                  isDashed: false,
+                                  labelShapeBackgroundColor:
+                                      DefaultDarkThemeColors
+                                          .currentSpotContainerColor,
+                                  textStyle: TextStyle(
+                                    color: DefaultDarkThemeColors
+                                        .currentSpotTextColor,
+                                    fontSize: 10,
+                                  ),
                                 ),
                                 visibility: HorizontalBarrierVisibility
                                     .keepBarrierLabelVisible,
