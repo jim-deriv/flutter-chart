@@ -16,7 +16,7 @@ typedef SwapCallback = Function(int offset);
 class BottomChart extends BasicChart {
   /// Initializes a bottom chart.
   const BottomChart({
-    required DataSeries<Tick> series,
+    required Series series,
     required this.granularity,
     required this.title,
     int pipSize = 4,

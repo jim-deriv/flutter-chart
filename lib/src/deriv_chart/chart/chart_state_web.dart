@@ -57,7 +57,7 @@ class _ChartStateWeb extends _ChartState {
             return Expanded(
               flex: isExpanded ? bottomSeries.length : 1,
               child: BottomChart(
-                series: series as DataSeries,
+                series: series,
                 granularity: widget.granularity,
                 pipSize: widget.bottomConfigs[index].pipSize,
                 title: widget.bottomConfigs[index].title,

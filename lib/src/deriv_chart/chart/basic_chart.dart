@@ -1,4 +1,3 @@
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/custom_painters/chart_data_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_scale_model.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/y_axis/y_axis_config.dart';
@@ -40,7 +39,7 @@ class BasicChart extends StatefulWidget {
         super(key: key);
 
   /// The main series to display on the chart.
-  final DataSeries<Tick> mainSeries;
+  final Series mainSeries;
 
   /// The pip size of to paint marker labels.
   final int pipSize;
@@ -159,14 +158,6 @@ class BasicChartState<T extends BasicChart> extends State<T>
   @override
   void didUpdateWidget(BasicChart oldWidget) {
     super.didUpdateWidget(oldWidget as T);
-
-    final bool isSeriesChanged = widget.mainSeries.input.isEmpty ||
-        oldWidget.mainSeries.input.isEmpty ||
-        widget.mainSeries.input.first != oldWidget.mainSeries.input.first;
-
-    if (isSeriesChanged) {
-      _updateQuoteBoundTargets(false);
-    }
 
     didUpdateChartData(oldWidget);
     _updateChartPosition();
@@ -305,7 +296,7 @@ class BasicChartState<T extends BasicChart> extends State<T>
   List<double> getSeriesMinMaxValue() =>
       <double>[widget.mainSeries.minValue, widget.mainSeries.maxValue];
 
-  void _updateQuoteBoundTargets(bool animate) {
+  void _updateQuoteBoundTargets() {
     final List<double> minMaxValues = getSeriesMinMaxValue();
     double minQuote = minMaxValues[0];
     double maxQuote = minMaxValues[1];
@@ -322,7 +313,6 @@ class BasicChartState<T extends BasicChart> extends State<T>
       bottomBoundQuoteAnimationController.animateTo(
         bottomBoundQuoteTarget,
         curve: Curves.easeOut,
-        duration: animate ? null : Duration.zero,
       );
     }
     if (!maxQuote.isNaN && maxQuote != topBoundQuoteTarget) {
@@ -330,7 +320,6 @@ class BasicChartState<T extends BasicChart> extends State<T>
       topBoundQuoteAnimationController.animateTo(
         topBoundQuoteTarget,
         curve: Curves.easeOut,
-        duration: animate ? null : Duration.zero,
       );
     }
   }
@@ -367,7 +356,7 @@ class BasicChartState<T extends BasicChart> extends State<T>
           );
 
           updateVisibleData();
-          _updateQuoteBoundTargets(true);
+          _updateQuoteBoundTargets();
 
           final YAxisModel yAxisModel = _setupYAxisModel(canvasSize!);
 
