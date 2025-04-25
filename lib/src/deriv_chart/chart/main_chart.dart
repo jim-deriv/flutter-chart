@@ -368,10 +368,10 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
                     _buildSeries(widget.overlaySeries!),
                   _buildAnnotations(),
                   if (widget.markerSeries != null) _buildMarkerArea(),
-                  // if (widget.drawingTools != null)
-                  //   _buildDrawingToolChart(widget.drawingTools!),
                   if (widget.drawingTools != null)
-                    _buildInteractiveLayer(context, xAxis),
+                    _buildDrawingToolChart(widget.drawingTools!),
+                  // if (widget.drawingTools != null)
+                  //   _buildInteractiveLayer(context, xAxis),
                   // TODO(Ramin): move and handle cross-hair inside the InteractiveLayer
                   if (kIsWeb) _buildCrosshairAreaWeb(),
                   if (!kIsWeb &&
