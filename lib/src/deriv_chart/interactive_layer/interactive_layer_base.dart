@@ -1,11 +1,11 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_states/interactive_selected_tool_state.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_states/interactive_selected_tool_state.dart';
 import 'package:flutter/animation.dart';
 
 import '../chart/data_visualization/chart_data.dart';
 import 'interactable_drawings/interactable_drawing.dart';
-import 'interactive_states/interactive_state.dart';
-import 'state_change_direction.dart';
+import 'interactive_layer_states/interactive_state.dart';
+import 'enums/state_change_direction.dart';
 
 /// The interactive layer base class interface.
 abstract class InteractiveLayerBase {

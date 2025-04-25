@@ -265,7 +265,7 @@ class _DerivChartState extends State<DerivChart> {
       //   ..init()
       //   ..drawingToolsRepo = _drawingToolsRepo;
       // Comment above statement and uncomment below line, when using [InteractiveLayer]
-      _drawingTools.drawingToolsRepo = _drawingToolsRepo;
+      // _drawingTools.drawingToolsRepo = _drawingToolsRepo;
     });
     showDialog<void>(
       context: context,

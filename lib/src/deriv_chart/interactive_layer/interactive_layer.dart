@@ -20,11 +20,10 @@ import 'interactable_drawings/interactable_drawing.dart';
 import 'interactable_drawing_custom_painter.dart';
 import 'interaction_notifier.dart';
 import 'interactive_layer_base.dart';
-import 'interactive_states/interactive_adding_tool_state.dart';
-import 'interactive_states/interactive_normal_state.dart';
-import 'interactive_states/interactive_state.dart';
-import 'state_change_direction.dart';
-// ignore_for_file: public_member_api_docs
+import 'interactive_layer_states/interactive_adding_tool_state.dart';
+import 'interactive_layer_states/interactive_normal_state.dart';
+import 'interactive_layer_states/interactive_state.dart';
+import 'enums/state_change_direction.dart';
 
 /// Interactive layer of the chart package where elements can be drawn and can
 /// be interacted with.
