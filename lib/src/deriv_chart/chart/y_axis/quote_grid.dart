@@ -46,6 +46,15 @@ class YAxisModel {
   /// Bottom padding.
   double get bottomPadding => _bottomPadding;
 
+  /// Top bound quote
+  double get topBoundQuote => _topBoundQuote;
+
+  /// Bottom bound quote
+  double get bottomBoundQuote => _bottomBoundQuote;
+
+  /// The height of the canvas.
+  double get canvasHeight => _canvasHeight;
+
   /// Calculates the grid lines for a quote.
   List<double> gridQuotes() {
     final double pixelToQuote = (_topBoundQuote - _bottomBoundQuote) /

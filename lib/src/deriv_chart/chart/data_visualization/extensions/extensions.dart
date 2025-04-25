@@ -1,4 +1,5 @@
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/draggable_edge_point.dart';
+import 'package:deriv_chart/src/models/axis_range.dart';
 
 import '../drawing_tools/data_model/edge_point.dart';
 
@@ -32,7 +33,7 @@ extension DraggableEdgePointExtension on DraggableEdgePoint {
   /// The view port range is defined by the left and right epoch values.
   /// returns true if the edge point is on the view port range.
   bool isInViewPortRange(int leftEpoch, int rightEpoch) =>
-      draggedEdgePoint.isInViewPortRange(leftEpoch, rightEpoch);
+      draggedEdgePoint.isInEpochRange(leftEpoch, rightEpoch);
 }
 
 /// An extension on DraggableEdgePoint class that adds some helper methods.
@@ -41,10 +42,25 @@ extension EdgePointExtension on EdgePoint {
   ///
   /// The view port range is defined by the left and right epoch values.
   /// returns true if the edge point is on the view port range.
-  bool isInViewPortRange(int leftEpoch, int rightEpoch) =>
+  bool isInEpochRange(int leftEpoch, int rightEpoch) =>
       epoch >=
           (leftEpoch -
               getPointOffScreenBufferDistance(leftEpoch, rightEpoch)) &&
       epoch <=
           (rightEpoch + getPointOffScreenBufferDistance(leftEpoch, rightEpoch));
+
+  /// Whether the point is in the quote range.
+  bool isInQuoteRange(QuoteRange quoteRange) {
+    final double topQuote = quoteRange.topQuote;
+    final double bottomQuote = quoteRange.bottomQuote;
+    final double quoteLengthBuffer = (topQuote - bottomQuote) / 4;
+
+    return (quote <= (topQuote + quoteLengthBuffer)) &&
+        (quote >= (bottomQuote - quoteLengthBuffer));
+  }
+
+  /// Whether the point is in the view port range. horizontally and vertically.
+  bool isInViewPortRange(EpochRange epochRange, QuoteRange quoteRange) =>
+      isInEpochRange(epochRange.leftEpoch, epochRange.rightEpoch) ||
+      isInQuoteRange(quoteRange);
 }

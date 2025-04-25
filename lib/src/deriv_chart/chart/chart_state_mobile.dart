@@ -54,7 +54,7 @@ class _ChartStateMobile extends _ChartState {
               referenceIndexOf(widget.bottomConfigs, config);
 
           final Widget bottomChart = BottomChartMobile(
-            series: series,
+            series: series as DataSeries,
             isHidden: repository?.getHiddenStatus(index) ?? false,
             granularity: widget.granularity,
             pipSize: config.pipSize,

@@ -1,4 +1,6 @@
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/gaps/helpers.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/y_axis/quote_grid.dart';
+import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/time_range.dart';
 
 /// Returns resulting epoch when given [epoch] is shifted by [pxShift]

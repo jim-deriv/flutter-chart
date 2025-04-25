@@ -2,6 +2,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_scale_model.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/helpers/functions/conversion.dart';
 import 'package:deriv_chart/src/misc/chart_controller.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_axis_config.dart';
@@ -368,10 +369,10 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
                     _buildSeries(widget.overlaySeries!),
                   _buildAnnotations(),
                   if (widget.markerSeries != null) _buildMarkerArea(),
-                  if (widget.drawingTools != null)
-                    _buildDrawingToolChart(widget.drawingTools!),
                   // if (widget.drawingTools != null)
-                  //   _buildInteractiveLayer(context, xAxis),
+                  //   _buildDrawingToolChart(widget.drawingTools!),
+                  if (widget.drawingTools != null)
+                    _buildInteractiveLayer(context, xAxis),
                   // TODO(Ramin): move and handle cross-hair inside the InteractiveLayer
                   if (kIsWeb) _buildCrosshairAreaWeb(),
                   if (!kIsWeb &&
@@ -399,31 +400,31 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
       );
 
   // ignore: unused_element
-  Widget _buildInteractiveLayer(BuildContext context, XAxisModel xAxis) {
-    return MultipleAnimatedBuilder(
-      animations: [
-        topBoundQuoteAnimationController,
-        bottomBoundQuoteAnimationController,
-        _yAxisNotifier,
-      ],
-      builder: (_, __) => InteractiveLayer(
-        drawingTools: widget.drawingTools!,
-        series: widget.mainSeries as DataSeries<Tick>,
-        drawingToolsRepo: context.watch<Repository<DrawingToolConfig>>(),
-        chartConfig: context.watch<ChartConfig>(),
-        quoteToCanvasY: chartQuoteToCanvasY,
-        epochToCanvasX: xAxis.xFromEpoch,
-        quoteFromCanvasY: chartQuoteFromCanvasY,
-        epochFromCanvasX: xAxis.epochFromX,
-        quoteRange: QuoteRange(
-          topQuote: topBoundQuoteAnimationController.value,
-          bottomQuote: bottomBoundQuoteAnimationController.value,
-          topPadding: _yAxisNotifier.value.topPadding,
-          bottomPadding: _yAxisNotifier.value.bottomPadding,
-        ),
-      ),
-    );
-  }
+  Widget _buildInteractiveLayer(BuildContext context, XAxisModel xAxis) =>
+      MultipleAnimatedBuilder(
+        animations: [
+          topBoundQuoteAnimationController,
+          bottomBoundQuoteAnimationController,
+          _yAxisNotifier,
+        ],
+        builder: (_, __) {
+          return InteractiveLayer(
+            drawingTools: widget.drawingTools!,
+            series: widget.mainSeries as DataSeries<Tick>,
+            drawingToolsRepo: context.watch<Repository<DrawingToolConfig>>(),
+            chartConfig: context.watch<ChartConfig>(),
+            quoteToCanvasY: chartQuoteToCanvasY,
+            epochToCanvasX: xAxis.xFromEpoch,
+            quoteFromCanvasY: chartQuoteFromCanvasY,
+            epochFromCanvasX: xAxis.epochFromX,
+            quoteRange: QuoteRange(
+              topQuote: chartQuoteFromCanvasY(0),
+              bottomQuote:
+                  chartQuoteFromCanvasY(_yAxisNotifier.value.canvasHeight),
+            ),
+          );
+        },
+      );
 
   Widget _buildDrawingToolChart(DrawingTools drawingTools) =>
       MultipleAnimatedBuilder(

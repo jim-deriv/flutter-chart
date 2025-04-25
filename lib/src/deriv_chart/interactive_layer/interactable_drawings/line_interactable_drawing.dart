@@ -464,12 +464,12 @@ class LineInteractableDrawing
 
   @override
   bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange) =>
-      (startPoint?.isInViewPortRange(
+      (startPoint?.isInEpochRange(
             epochRange.leftEpoch,
             epochRange.rightEpoch,
           ) ??
           true) ||
-      (endPoint?.isInViewPortRange(
+      (endPoint?.isInEpochRange(
             epochRange.leftEpoch,
             epochRange.rightEpoch,
           ) ??

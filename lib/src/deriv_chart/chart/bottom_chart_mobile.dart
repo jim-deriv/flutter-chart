@@ -8,14 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'basic_chart.dart';
 import 'bottom_chart.dart';
-import 'data_visualization/chart_series/series.dart';
+import 'data_visualization/chart_series/data_series.dart';
+import 'data_visualization/drawing_tools/ray/ray_line_drawing.dart';
 import 'x_axis/x_axis_model.dart';
 
 /// Mobile version of the chart to add the bottom indicators too.
 class BottomChartMobile extends BasicChart {
   /// Initializes a bottom chart mobile.
   const BottomChartMobile({
-    required Series series,
+    required DataSeries<Tick> series,
     required this.granularity,
     required this.title,
     this.showFrame = true,

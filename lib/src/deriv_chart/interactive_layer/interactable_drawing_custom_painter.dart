@@ -71,6 +71,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // print('##### Repaint ${DateTime.now()}');
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       drawing.paint(
         canvas,
@@ -87,15 +88,22 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   bool shouldRepaint(InteractableDrawingCustomPainter oldDelegate) {
     final drawingIsInRange = drawing.isInViewPort(epochRange, quoteRange);
 
-    return drawingIsInRange &&
-        // Drawing state is changed
-        (!_areSetsEqual(oldDelegate.drawingState, drawingState) ||
-            // Epoch range is changed
-            oldDelegate.epochRange != epochRange ||
-            // Quote range is changed
-            oldDelegate.quoteRange != quoteRange ||
-            // Drawing needs repaint
-            drawing.shouldRepaint(drawingState, oldDelegate.drawing));
+    final bool isSeriesChanged = series.input.isEmpty ||
+        oldDelegate.series.input.isEmpty ||
+        series.input.first != oldDelegate.series.input.first;
+
+    // print('##### IsSeriesChanged ${isSeriesChanged}');
+
+    return isSeriesChanged ||
+        (drawingIsInRange &&
+            // Drawing state is changed
+            (!_areSetsEqual(oldDelegate.drawingState, drawingState) ||
+                // Epoch range is changed
+                oldDelegate.epochRange != epochRange ||
+                // Quote range is changed
+                oldDelegate.quoteRange != quoteRange ||
+                // Drawing needs repaint
+                drawing.shouldRepaint(drawingState, oldDelegate.drawing)));
   }
 
   bool _areSetsEqual(Set<dynamic> a, Set<dynamic> b) =>
