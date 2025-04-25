@@ -151,9 +151,6 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
   Color get base07Color => DarkThemeColors.base07;
 
   @override
-  Color get base08Color => DarkThemeColors.base08;
-
-  @override
   Color get hoverColor => LightThemeColors.hover;
 
   @override

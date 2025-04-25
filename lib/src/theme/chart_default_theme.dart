@@ -147,7 +147,7 @@ abstract class ChartDefaultTheme implements ChartTheme {
   @override
   HorizontalBarrierStyle get horizontalBarrierStyle => HorizontalBarrierStyle(
         color: base04Color,
-        titleBackgroundColor: base08Color,
+        titleBackgroundColor: backgroundColor,
         textStyle: TextStyles.overLine,
       );
 

@@ -154,9 +154,6 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
   Color get base07Color => LightThemeColors.base07;
 
   @override
-  Color get base08Color => LightThemeColors.base08;
-
-  @override
   Color get hoverColor => LightThemeColors.hover;
 
   @override
