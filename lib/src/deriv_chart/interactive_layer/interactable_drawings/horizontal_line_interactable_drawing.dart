@@ -1,6 +1,5 @@
 import 'dart:ui' as ui;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/horizontal/horizontal_drawing_tool_config.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/extensions/extensions.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
@@ -306,20 +305,14 @@ class HorizontalLineInteractableDrawing
       .copyWith(edgePoints: <EdgePoint>[if (startPoint != null) startPoint!]);
 
   @override
-  bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange) {
-    // return (startPoint?.isInEpochRange(
-    //           epochRange.leftEpoch,
-    //           epochRange.rightEpoch,
-    //         ) ??
-    //         true) ||
-    //     (startPoint?.isInQuoteRange(quoteRange) ?? true);
-
-    // print('##### ${startPoint?.isInQuoteRange(quoteRange)}');
-
-    final bool isInRange = startPoint?.isInQuoteRange(quoteRange) ?? true;
-
-    return isInRange;
-  }
+  bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange) =>
+      // On X-axis range horizontal line is always visible
+      // TODO(NA): consider Y-axis (quoteRange) checking when finding a solution
+      // to clear dismiss the existing drawing, if main series is changed and the
+      // tool is not supposed to be visible because it's outside of view-port.
+      // For now it won't impact that much in terms of performance, since the
+      // number tools we allow to add in total is limited to a few.
+      true;
 }
 
 /// A circular array for dash patterns
