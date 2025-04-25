@@ -71,7 +71,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // print('##### Repaint ${DateTime.now()}');
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       drawing.paint(
         canvas,
@@ -91,8 +90,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     final bool isSeriesChanged = series.input.isEmpty ||
         oldDelegate.series.input.isEmpty ||
         series.input.first != oldDelegate.series.input.first;
-
-    // print('##### IsSeriesChanged ${isSeriesChanged}');
 
     return isSeriesChanged ||
         (drawingIsInRange &&
