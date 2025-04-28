@@ -3,6 +3,7 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawi
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 import '../chart/data_visualization/chart_series/data_series.dart';
@@ -95,7 +96,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     return isSeriesChanged ||
         (drawingIsInRange &&
             // Drawing state is changed
-            (!_areSetsEqual(oldDelegate.drawingState, drawingState) ||
+            (!setEquals(oldDelegate.drawingState, drawingState) ||
                 // Epoch range is changed
                 oldDelegate.epochRange != epochRange ||
                 // Quote range is changed
@@ -103,9 +104,6 @@ class InteractableDrawingCustomPainter extends CustomPainter {
                 // Drawing needs repaint
                 drawing.shouldRepaint(drawingState, oldDelegate.drawing)));
   }
-
-  bool _areSetsEqual(Set<dynamic> a, Set<dynamic> b) =>
-      a.length == b.length && a.containsAll(b);
 
   @override
   bool shouldRebuildSemantics(InteractableDrawingCustomPainter oldDelegate) =>
