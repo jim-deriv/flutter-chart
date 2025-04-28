@@ -77,6 +77,11 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   final List<InteractableDrawing> _interactableDrawings = [];
 
   /// Timers for debouncing repository updates
+  ///
+  /// We use a map to have one timer per each drawing tool config. This is
+  /// because the request to update the config of different tools can come at
+  /// the same time. If we use only one timer a new request from a different
+  /// tool will cancel the previous one.
   final Map<String, Timer> _debounceTimers = <String, Timer>{};
 
   /// Duration for debouncing repository updates (1-sec is a good balance)
