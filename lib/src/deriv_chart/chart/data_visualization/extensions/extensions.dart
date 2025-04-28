@@ -26,6 +26,10 @@ import '../drawing_tools/data_model/edge_point.dart';
 double getPointOffScreenBufferDistance(int leftEpoch, int rightEpoch) =>
     (rightEpoch - leftEpoch) / 4;
 
+/// Similar to [getPointOffScreenBufferDistance], but for the quote range.
+double getQuoteBufferDistance(double topQuote, double bottomQuote) =>
+    (topQuote - bottomQuote) / 4;
+
 /// An extension on DraggableEdgePoint class that adds some helper methods.
 extension DraggableEdgePointExtension on DraggableEdgePoint {
   /// Checks if the edge point is on the view port range.
@@ -53,7 +57,8 @@ extension EdgePointExtension on EdgePoint {
   bool isInQuoteRange(QuoteRange quoteRange) {
     final double topQuote = quoteRange.topQuote;
     final double bottomQuote = quoteRange.bottomQuote;
-    final double quoteLengthBuffer = (topQuote - bottomQuote) / 4;
+    final double quoteLengthBuffer =
+        getQuoteBufferDistance(topQuote, bottomQuote);
 
     return (quote <= (topQuote + quoteLengthBuffer)) &&
         (quote >= (bottomQuote - quoteLengthBuffer));
