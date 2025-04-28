@@ -55,7 +55,7 @@ class InteractiveAddingToolState extends InteractiveState
   ) =>
       drawing.config.configId == addingTool.configId
           ? {DrawingToolState.adding}
-          : {DrawingToolState.normal};
+          : {DrawingToolState.idle};
 
   @override
   void onPanEnd(DragEndDetails details) {}
