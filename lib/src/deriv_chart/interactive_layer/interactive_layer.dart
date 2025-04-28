@@ -336,39 +336,17 @@ class _InteractiveLayerGestureHandlerState
 
                 return Stack(
                   fit: StackFit.expand,
-                  children: [
-                    ...widget.drawings
-                        .map((e) => CustomPaint(
-                              foregroundPainter:
-                                  InteractableDrawingCustomPainter(
-                                drawing: e,
-                                drawingState: _interactiveState.getToolState(e),
-                                series: widget.series,
-                                theme: context.watch<ChartTheme>(),
-                                chartConfig: widget.chartConfig,
-                                epochFromX: xAxis.epochFromX,
-                                epochToX: xAxis.xFromEpoch,
-                                quoteToY: widget.quoteToY,
-                                quoteFromY: widget.quoteFromY,
-                                epochRange: EpochRange(
-                                  rightEpoch: xAxis.rightBoundEpoch,
-                                  leftEpoch: xAxis.leftBoundEpoch,
-                                ),
-                                quoteRange: widget.quoteRange,
-                                animationInfo: AnimationInfo(
-                                  stateChangePercent: animationValue,
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                    ..._interactiveState.previewDrawings
-                        .map((e) => CustomPaint(
-                              foregroundPainter:
-                                  InteractableDrawingCustomPainter(
+                  children: widget.series.input.isEmpty
+                      ? []
+                      : [
+                          ...widget.drawings
+                              .map((e) => CustomPaint(
+                                    foregroundPainter:
+                                        InteractableDrawingCustomPainter(
                                       drawing: e,
-                                      series: widget.series,
                                       drawingState:
                                           _interactiveState.getToolState(e),
+                                      series: widget.series,
                                       theme: context.watch<ChartTheme>(),
                                       chartConfig: widget.chartConfig,
                                       epochFromX: xAxis.epochFromX,
@@ -381,12 +359,38 @@ class _InteractiveLayerGestureHandlerState
                                       ),
                                       quoteRange: widget.quoteRange,
                                       animationInfo: AnimationInfo(
-                                          stateChangePercent: animationValue)
-                                      // onDrawingToolClicked: () => _selectedDrawing = e,
+                                        stateChangePercent: animationValue,
                                       ),
-                            ))
-                        .toList(),
-                  ],
+                                    ),
+                                  ))
+                              .toList(),
+                          ..._interactiveState.previewDrawings
+                              .map((e) => CustomPaint(
+                                    foregroundPainter:
+                                        InteractableDrawingCustomPainter(
+                                            drawing: e,
+                                            series: widget.series,
+                                            drawingState: _interactiveState
+                                                .getToolState(e),
+                                            theme: context.watch<ChartTheme>(),
+                                            chartConfig: widget.chartConfig,
+                                            epochFromX: xAxis.epochFromX,
+                                            epochToX: xAxis.xFromEpoch,
+                                            quoteToY: widget.quoteToY,
+                                            quoteFromY: widget.quoteFromY,
+                                            epochRange: EpochRange(
+                                              rightEpoch: xAxis.rightBoundEpoch,
+                                              leftEpoch: xAxis.leftBoundEpoch,
+                                            ),
+                                            quoteRange: widget.quoteRange,
+                                            animationInfo: AnimationInfo(
+                                                stateChangePercent:
+                                                    animationValue)
+                                            // onDrawingToolClicked: () => _selectedDrawing = e,
+                                            ),
+                                  ))
+                              .toList(),
+                        ],
                 );
               }),
         ),
