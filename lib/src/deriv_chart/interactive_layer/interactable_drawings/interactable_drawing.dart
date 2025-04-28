@@ -64,6 +64,10 @@ abstract class InteractableDrawing<T extends DrawingToolConfig> {
   /// Each drawing will know how to handle and update itself accordingly based
   /// on where the dragging position is like if it's dragging a point or a line
   /// of the tool.
+  ///
+  /// The drawing tools will update its properties based on the dragging at
+  /// runtime. Saving the new updates to a persistent storage is not the
+  /// responsibility of this method.
   void onDragUpdate(
     DragUpdateDetails details,
     EpochFromX epochFromX,
