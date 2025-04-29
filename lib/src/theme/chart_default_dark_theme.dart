@@ -121,8 +121,5 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
       blinkingDotColor: currentSpotDotColor);
 
   @override
-  Color get base07Color => DarkThemeColors.base07;
-
-  @override
   TextStyle get overLine => TextStyles.overLine;
 }

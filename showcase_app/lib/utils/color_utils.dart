@@ -19,7 +19,7 @@ class ColorUtils {
       // Base colors
       isDarkTheme ? const Color(0xFFFFFFFF) : const Color(0xFF0E0E0E),
       isDarkTheme ? const Color(0xFF6E6E6E) : const Color(0xFF3E3E3E),
-      isDarkTheme ? DarkThemeColors.base07 : LightThemeColors.base07,
+      isDarkTheme ? const Color(0xFF151717) : const Color(0xFFEAECED),
     ];
   }
 

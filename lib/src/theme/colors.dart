@@ -14,15 +14,11 @@ class BrandColors {
 }
 
 /// These colors suits the dark theme of Deriv.
-class DarkThemeColors {
-  static const Color base07 = Color(0xFF151717);
-}
+class DarkThemeColors {}
 
 /// These colors suits the light theme of Deriv.
 // TODO(Ramin): replace values based on light theme when available
-class LightThemeColors {
-  static const Color base07 = Color(0xFFEAECED);
-}
+class LightThemeColors {}
 
 /// Default colors for light theme.
 class DefaultLightThemeColors {

@@ -124,8 +124,5 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
       blinkingDotColor: currentSpotDotColor);
 
   @override
-  Color get base07Color => LightThemeColors.base07;
-
-  @override
   TextStyle get overLine => TextStyles.overLine;
 }
