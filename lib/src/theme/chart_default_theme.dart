@@ -70,15 +70,6 @@ abstract class ChartDefaultTheme implements ChartTheme {
   TextStyle get title => TextStyles.title;
 
   @override
-  Color get brandCoralColor => BrandColors.coral;
-
-  @override
-  Color get brandGreenishColor => BrandColors.greenish;
-
-  @override
-  Color get brandOrangeColor => BrandColors.orange;
-
-  @override
   Color get candleBullishBodyDefault =>
       CandleBullishThemeColors.candleBullishBodyDefault;
 
@@ -129,7 +120,7 @@ abstract class ChartDefaultTheme implements ChartTheme {
       );
 
   @override
-  LineStyle get lineStyle => LineStyle(color: brandGreenishColor);
+  LineStyle get lineStyle => const LineStyle();
 
   // TODO(Ramin): Use the values from the chart theme itself. so if later the
   // theme changes the default styles also get updated accordingly.

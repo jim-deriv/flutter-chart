@@ -90,8 +90,8 @@ class ChartDataProvider {
       VerticalBarrier.onTick(
         ticks[ticks.length ~/ 2],
         title: 'Mid-point',
-        style: VerticalBarrierStyle(
-          color: theme?.brandOrangeColor ?? BrandColors.orange,
+        style: const VerticalBarrierStyle(
+          color: BrandColors.orange,
         ),
       ),
 
@@ -99,7 +99,7 @@ class ChartDataProvider {
       TickIndicator(
         lastTick,
         style: theme?.currentSpotStyle.copyWith(
-          color: theme.brandOrangeColor,
+          color: BrandColors.orange,
         ),
         visibility: HorizontalBarrierVisibility.keepBarrierLabelVisible,
       ),

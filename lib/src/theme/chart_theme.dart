@@ -89,12 +89,6 @@ abstract class ChartTheme {
 
   String get fontFamily;
 
-  Color get brandCoralColor;
-
-  Color get brandGreenishColor;
-
-  Color get brandOrangeColor;
-
   double get margin04Chart;
 
   double get margin08Chart;
