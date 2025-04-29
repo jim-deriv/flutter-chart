@@ -4,6 +4,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_serie
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_dot.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_text.dart';
+import 'package:deriv_chart/src/theme/chart_default_dark_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/barrier_style.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,9 @@ class AccumulatorsRecentlyClosedIndicatorPainter
         series.style as HorizontalBarrierStyle? ?? theme.horizontalBarrierStyle;
 
     // Change the barrier color based on the contract status and tick quote.
-    Color color = theme.base03Color;
+    Color color = theme is ChartDefaultDarkTheme
+        ? const Color(0xFFC2C2C2)
+        : const Color(0xFF323738);
     if (series.activeContract?.profit != null) {
       if (series.activeContract!.profit! > 0) {
         color = const Color(0xFF00A79E);

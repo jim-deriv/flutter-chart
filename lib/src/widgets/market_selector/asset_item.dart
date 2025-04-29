@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/theme/chart_default_dark_theme.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +54,9 @@ class AssetItem extends StatelessWidget {
               highlightText: filterText,
               style: theme.textStyle(
                 textStyle: theme.body1,
-                color: theme.base03Color,
+                color: theme is ChartDefaultDarkTheme
+                    ? const Color(0xFFC2C2C2)
+                    : const Color(0xFF323738),
               ),
             ),
           ),
