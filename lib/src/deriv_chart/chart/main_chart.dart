@@ -3,6 +3,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/char
 import 'package:deriv_chart/src/misc/chart_controller.dart';
 import 'package:deriv_chart/src/models/chart_axis_config.dart';
 import 'package:deriv_chart/src/models/tick.dart';
+import 'package:deriv_chart/src/theme/chart_default_light_theme.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:deriv_chart/src/deriv_chart/chart/crosshair/crosshair_area_web.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/custom_painters/chart_data_painter.dart';
@@ -484,7 +485,9 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
         child: IconButton(
           icon: const Icon(Icons.arrow_forward),
           onPressed: xAxis.scrollToLastTick,
-          color: context.read<ChartTheme>().base01Color,
+          color: context.read<ChartTheme>() is ChartDefaultLightTheme
+              ? const Color(0xFF0E0E0E)
+              : const Color(0xFFFFFFFF),
         ),
       );
 

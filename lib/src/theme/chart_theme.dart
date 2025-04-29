@@ -96,9 +96,6 @@ abstract class ChartTheme {
   Color get brandOrangeColor;
 
   // TODO(Jim): Remove this once the theme is finalised and we have a replacement for it.
-  Color get base01Color;
-
-  // TODO(Jim): Remove this once the theme is finalised and we have a replacement for it.
   Color get base03Color;
 
   Color get base05Color;

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:deriv_chart/src/deriv_chart/chart/mobile_chart_frame_dividers.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
+import 'package:deriv_chart/src/theme/chart_default_light_theme.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/dimens.dart';
 import 'package:deriv_chart/src/theme/text_styles.dart';
@@ -208,10 +209,14 @@ class IndicatorLabelMobile extends StatelessWidget {
               BottomIndicatorTitle(
                 title,
                 theme.textStyle(
-                  color: theme.base01Color,
+                  color: theme is ChartDefaultLightTheme
+                      ? const Color(0xFF0E0E0E)
+                      : const Color(0xFFFFFFFF),
                   textStyle: theme.textStyle(
                     textStyle: TextStyles.caption,
-                    color: theme.base01Color,
+                    color: theme is ChartDefaultLightTheme
+                        ? const Color(0xFF0E0E0E)
+                        : const Color(0xFFFFFFFF),
                   ),
                 ),
               ),
@@ -269,7 +274,9 @@ class IndicatorLabelMobile extends StatelessWidget {
             icon: Icon(
               iconData,
               size: 16,
-              color: context.read<ChartTheme>().base01Color,
+              color: context.read<ChartTheme>() is ChartDefaultLightTheme
+                  ? const Color(0xFF0E0E0E)
+                  : const Color(0xFFFFFFFF),
             ),
             onPressed: onPressed,
             padding: EdgeInsets.zero,

@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/theme/chart_default_light_theme.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +54,9 @@ class MarketItem extends StatelessWidget {
               market.displayName,
               style: theme.textStyle(
                 textStyle: theme.body2,
-                color: theme.base01Color,
+                color: theme is ChartDefaultLightTheme
+                    ? const Color(0xFF0E0E0E)
+                    : const Color(0xFFFFFFFF),
               ),
             ),
           ),

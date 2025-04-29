@@ -11,6 +11,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_text.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_vertical_line.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/y_axis/y_axis_config.dart';
+import 'package:deriv_chart/src/theme/chart_default_light_theme.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/marker_style.dart';
 import 'package:flutter/material.dart';
@@ -239,7 +240,10 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
           );
           break;
         case MarkerType.tick:
-          final Paint paint = Paint()..color = theme.base01Color;
+          final Paint paint = Paint()
+            ..color = theme is ChartDefaultLightTheme
+                ? const Color(0xFF0E0E0E)
+                : const Color(0xFFFFFFFF);
           _drawTickPoint(canvas, anchor, paint, zoom);
           break;
         case MarkerType.latestTick:

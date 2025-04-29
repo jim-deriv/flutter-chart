@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/theme/chart_default_light_theme.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +73,9 @@ class _AssetsSearchBarState extends State<AssetsSearchBar> {
           textAlign: TextAlign.center,
           style: _theme.textStyle(
             textStyle: _theme.subheading,
-            color: _theme.base01Color,
+            color: _theme is ChartDefaultLightTheme
+                ? const Color(0xFF0E0E0E)
+                : const Color(0xFFFFFFFF),
           ),
         ),
         onTap: () => _switchToSearchMode(),
@@ -107,7 +110,9 @@ class _AssetsSearchBarState extends State<AssetsSearchBar> {
         textAlign: TextAlign.left,
         style: _theme.textStyle(
           textStyle: _theme.subheading,
-          color: _theme.base01Color,
+          color: _theme is ChartDefaultLightTheme
+              ? const Color(0xFF0E0E0E)
+              : const Color(0xFFFFFFFF),
         ),
         decoration: InputDecoration(
           border: InputBorder.none,
