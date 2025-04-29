@@ -62,7 +62,7 @@ class AccumulatorIndicatorPainter extends SeriesPainter<AccumulatorIndicator> {
     Color color = theme.base03Color;
     if (series.activeContract?.profit != null) {
       if (series.activeContract!.profit! > 0) {
-        color = theme.accentGreenColor;
+        color = const Color(0xFF00A79E);
       } else if (series.activeContract!.profit! < 0) {
         color = const Color(0xFFCC2E3D);
       }

@@ -123,9 +123,6 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
       lineColor: currentSpotLineColor,
       blinkingDotColor: currentSpotDotColor);
 
-  @override
-  Color get accentGreenColor => LightThemeColors.accentGreen;
-
   // TODO(Jim): Remove this once the theme is finalised and we have a replacement for it.
   @override
   Color get base01Color => LightThemeColors.base01;

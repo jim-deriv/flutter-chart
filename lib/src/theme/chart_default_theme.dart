@@ -124,8 +124,8 @@ abstract class ChartDefaultTheme implements ChartTheme {
       );
 
   @override
-  BarStyle get barStyle => BarStyle(
-        positiveColor: accentGreenColor,
+  BarStyle get barStyle => const BarStyle(
+        positiveColor: Color(0xFF00A79E),
       );
 
   @override
@@ -134,9 +134,7 @@ abstract class ChartDefaultTheme implements ChartTheme {
   // TODO(Ramin): Use the values from the chart theme itself. so if later the
   // theme changes the default styles also get updated accordingly.
   @override
-  MarkerStyle get markerStyle => MarkerStyle(
-        upColor: accentGreenColor,
-      );
+  MarkerStyle get markerStyle => const MarkerStyle();
 
   @override
   EntrySpotStyle get entrySpotStyle => const EntrySpotStyle();
