@@ -95,8 +95,6 @@ abstract class ChartTheme {
 
   Color get brandOrangeColor;
 
-  Color get base05Color;
-
   Color get base07Color;
 
   double get margin04Chart;
