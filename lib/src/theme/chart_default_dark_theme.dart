@@ -121,9 +121,6 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
       blinkingDotColor: currentSpotDotColor);
 
   @override
-  Color get accentRedColor => DarkThemeColors.accentRed;
-
-  @override
   Color get accentGreenColor => DarkThemeColors.accentGreen;
 
   // TODO(Jim): Remove this once the theme is finalised and we have a replacement for it.

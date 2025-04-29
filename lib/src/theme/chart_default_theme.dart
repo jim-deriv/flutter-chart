@@ -126,7 +126,6 @@ abstract class ChartDefaultTheme implements ChartTheme {
   @override
   BarStyle get barStyle => BarStyle(
         positiveColor: accentGreenColor,
-        negativeColor: accentRedColor,
       );
 
   @override
@@ -137,7 +136,6 @@ abstract class ChartDefaultTheme implements ChartTheme {
   @override
   MarkerStyle get markerStyle => MarkerStyle(
         upColor: accentGreenColor,
-        downColor: accentRedColor,
       );
 
   @override

@@ -14,13 +14,13 @@ class ClosedTag extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(4)),
-        border: Border.all(color: theme.accentRedColor, width: 0.8),
+        border: Border.all(color: const Color(0xFFCC2E3D), width: 0.8),
       ),
       child: Text(
         'CLOSED',
         style: theme.textStyle(
           textStyle: theme.caption2,
-          color: theme.accentRedColor,
+          color: const Color(0xFFCC2E3D),
         ),
       ),
     );

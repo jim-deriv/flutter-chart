@@ -13,7 +13,7 @@ class ColorUtils {
 
       // Accent colors
       isDarkTheme ? DarkThemeColors.accentGreen : LightThemeColors.accentGreen,
-      isDarkTheme ? DarkThemeColors.accentRed : LightThemeColors.accentRed,
+      const Color(0xFFCC2E3D), // accentRed
       const Color(0xFFFFAD3A), // accentYellow
 
       // Base colors
