@@ -11,89 +11,86 @@ import 'colors.dart';
 /// light theme-related colors and styles for the chart package.
 class ChartDefaultLightTheme extends ChartDefaultTheme {
   @override
-  Color get backgroundColor => DefaultLightThemeColors.backgroundDynamicHighest;
+  Color get backgroundColor => LightThemeColors.backgroundDynamicHighest;
 
   @override
-  Color get areaLineColor => DefaultLightThemeColors.areaLineColor;
+  Color get areaLineColor => LightThemeColors.areaLineColor;
 
   @override
-  Color get areaGradientStart => DefaultLightThemeColors.areaGradientStart;
+  Color get areaGradientStart => LightThemeColors.areaGradientStart;
 
   @override
-  Color get areaGradientEnd => DefaultLightThemeColors.areaGradientEnd;
+  Color get areaGradientEnd => LightThemeColors.areaGradientEnd;
 
   @override
-  Color get gridLineColor => DefaultLightThemeColors.gridLineColor;
+  Color get gridLineColor => LightThemeColors.gridLineColor;
 
   @override
   Color get currentSpotContainerColor =>
-      DefaultLightThemeColors.currentSpotContainerColor;
+      LightThemeColors.currentSpotContainerColor;
 
   @override
-  Color get currentSpotTextColor =>
-      DefaultLightThemeColors.currentSpotTextColor;
+  Color get currentSpotTextColor => LightThemeColors.currentSpotTextColor;
 
   @override
-  Color get currentSpotLineColor =>
-      DefaultLightThemeColors.currentSpotLineColor;
+  Color get currentSpotLineColor => LightThemeColors.currentSpotLineColor;
 
   @override
   Color get crosshairInformationBoxContainerGlassColor =>
-      DefaultLightThemeColors.crosshairInformationBoxContainerGlassColor;
+      LightThemeColors.crosshairInformationBoxContainerGlassColor;
 
   @override
   Color get crosshairInformationBoxContainerNormalColor =>
-      DefaultLightThemeColors.crosshairInformationBoxContainerNormalColor;
+      LightThemeColors.crosshairInformationBoxContainerNormalColor;
 
   @override
   Color get crosshairInformationBoxTextDefault =>
-      DefaultLightThemeColors.crosshairInformationBoxTextDefault;
+      LightThemeColors.crosshairInformationBoxTextDefault;
 
   @override
   Color get crosshairInformationBoxTextLoss =>
-      DefaultLightThemeColors.crosshairInformationBoxTextLoss;
+      LightThemeColors.crosshairInformationBoxTextLoss;
 
   @override
   Color get crosshairInformationBoxTextProfit =>
-      DefaultLightThemeColors.crosshairInformationBoxTextProfit;
+      LightThemeColors.crosshairInformationBoxTextProfit;
 
   @override
   Color get crosshairInformationBoxTextStatic =>
-      DefaultLightThemeColors.crosshairInformationBoxTextStatic;
+      LightThemeColors.crosshairInformationBoxTextStatic;
 
   @override
   Color get crosshairInformationBoxTextSubtle =>
-      DefaultLightThemeColors.crosshairInformationBoxTextSubtle;
+      LightThemeColors.crosshairInformationBoxTextSubtle;
 
   @override
   Color get crosshairLineDesktopColor =>
-      DefaultLightThemeColors.crosshairLineDesktopColor;
+      LightThemeColors.crosshairLineDesktopColor;
 
   @override
   Color get crosshairLineResponsiveLowerLineGradientEnd =>
-      DefaultLightThemeColors.crosshairLineResponsiveLowerLineGradientEnd;
+      LightThemeColors.crosshairLineResponsiveLowerLineGradientEnd;
 
   @override
   Color get crosshairLineResponsiveLowerLineGradientStart =>
-      DefaultLightThemeColors.crosshairLineResponsiveLowerLineGradientStart;
+      LightThemeColors.crosshairLineResponsiveLowerLineGradientStart;
 
   @override
   Color get crosshairLineResponsiveUpperLineGradientEnd =>
-      DefaultLightThemeColors.crosshairLineResponsiveUpperLineGradientEnd;
+      LightThemeColors.crosshairLineResponsiveUpperLineGradientEnd;
 
   @override
   Color get crosshairLineResponsiveUpperLineGradientStart =>
-      DefaultLightThemeColors.crosshairLineResponsiveUpperLineGradientStart;
+      LightThemeColors.crosshairLineResponsiveUpperLineGradientStart;
 
   @override
-  Color get currentSpotDotColor => DefaultLightThemeColors.currentSpotDotColor;
+  Color get currentSpotDotColor => LightThemeColors.currentSpotDotColor;
 
   @override
-  Color get currentSpotDotEffect =>
-      DefaultLightThemeColors.currentSpotDotEffect;
+  Color get currentSpotDotEffect => LightThemeColors.currentSpotDotEffect;
 
   @override
-  Color get gridTextColor => DefaultLightThemeColors.gridTextColor;
+  Color get gridTextColor => LightThemeColors.gridTextColor;
 
   @override
   GridStyle get gridStyle => GridStyle(

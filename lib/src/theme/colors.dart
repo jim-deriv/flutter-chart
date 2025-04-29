@@ -13,15 +13,8 @@ class BrandColors {
   static const Color orange = Color(0xFFFF6444);
 }
 
-/// These colors suits the dark theme of Deriv.
-class DarkThemeColors {}
-
-/// These colors suits the light theme of Deriv.
-// TODO(Ramin): replace values based on light theme when available
-class LightThemeColors {}
-
 /// Default colors for light theme.
-class DefaultLightThemeColors {
+class LightThemeColors {
   static const Color backgroundDynamicHighest = LightThemeDesignTokens
       .semanticColorSlateSolidSurfaceFrameLow; // Hex: #FFFFFF
   static final Color gridLineColor = LightThemeDesignTokens
@@ -79,7 +72,7 @@ class DefaultLightThemeColors {
 }
 
 /// Default colors for dark theme.
-class DefaultDarkThemeColors {
+class DarkThemeColors {
   static const Color backgroundDynamicHighest = DarkThemeDesignTokens
       .semanticColorSlateSolidSurfaceFrameLow; // Hex: #181C25
   static final Color gridLineColor = DarkThemeDesignTokens
