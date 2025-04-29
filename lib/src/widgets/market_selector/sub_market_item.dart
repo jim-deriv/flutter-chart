@@ -63,8 +63,8 @@ class SubMarketItem extends StatelessWidget {
                       style: theme.textStyle(
                         textStyle: theme.body1,
                         color: theme is ChartDefaultDarkTheme
-                    ? const Color(0xFF6E6E6E)
-                    : const Color(0xFF3E3E3E),
+                            ? const Color(0xFF6E6E6E)
+                            : const Color(0xFF3E3E3E),
                       ),
                     ),
                   ),

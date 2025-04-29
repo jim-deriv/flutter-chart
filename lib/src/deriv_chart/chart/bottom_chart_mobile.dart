@@ -131,7 +131,7 @@ class _BottomChartMobileState extends BasicChartState<BottomChartMobile> {
   Widget _buildDivider() => const Divider(
         height: 0.5,
         thickness: 1,
-        color:Color(0xFF242828),
+        color: Color(0xFF242828),
       );
 
   Widget _buildCollapsedBottomChart(BuildContext context) => Container(
