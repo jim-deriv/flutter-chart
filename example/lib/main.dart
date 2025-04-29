@@ -357,12 +357,12 @@ class _FullscreenChartState extends State<FullscreenChart> {
     return LineSeries(ticks,
         style: const LineStyle(
             hasArea: true,
-            color: DefaultDarkThemeColors.areaLineColor)) as DataSeries<Tick>;
+            color: DarkThemeColors.areaLineColor)) as DataSeries<Tick>;
   }
 
   @override
   Widget build(BuildContext context) => Material(
-        color: DefaultDarkThemeColors.backgroundDynamicHighest,
+        color: DarkThemeColors.backgroundDynamicHighest,
         child: Column(
           children: <Widget>[
             Padding(
@@ -397,20 +397,17 @@ class _FullscreenChartState extends State<FullscreenChart> {
                               TickIndicator(
                                 ticks.last,
                                 style: const HorizontalBarrierStyle(
-                                  color: DefaultDarkThemeColors
-                                      .currentSpotDotColor,
+                                  color: DarkThemeColors.currentSpotDotColor,
                                   labelShape: LabelShape.pentagon,
                                   hasBlinkingDot: true,
                                   hasArrow: false,
-                                  lineColor: DefaultDarkThemeColors
-                                      .currentSpotLineColor,
+                                  lineColor:
+                                      DarkThemeColors.currentSpotLineColor,
                                   isDashed: false,
                                   labelShapeBackgroundColor:
-                                      DefaultDarkThemeColors
-                                          .currentSpotContainerColor,
+                                      DarkThemeColors.currentSpotContainerColor,
                                   textStyle: TextStyle(
-                                    color: DefaultDarkThemeColors
-                                        .currentSpotTextColor,
+                                    color: DarkThemeColors.currentSpotTextColor,
                                     fontSize: 10,
                                   ),
                                 ),
