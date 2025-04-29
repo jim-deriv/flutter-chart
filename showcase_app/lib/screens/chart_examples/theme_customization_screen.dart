@@ -60,7 +60,6 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
   CandleStyle get candleStyle => CandleStyle(
       candleBullishBodyColor: customBullishColor,
       candleBearishBodyColor: customBearishColor,
-      neutralColor: base04Color,
       candleBullishWickColor: customBullishColor,
       candleBearishWickColor: customBearishColor);
 }
@@ -122,7 +121,6 @@ class CustomLightTheme extends ChartDefaultLightTheme {
   CandleStyle get candleStyle => CandleStyle(
       candleBullishBodyColor: customBullishColor,
       candleBearishBodyColor: customBearishColor,
-      neutralColor: base04Color,
       candleBullishWickColor: customBullishColor,
       candleBearishWickColor: customBearishColor);
 }

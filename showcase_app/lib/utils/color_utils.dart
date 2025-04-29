@@ -14,13 +14,11 @@ class ColorUtils {
       // Accent colors
       isDarkTheme ? DarkThemeColors.accentGreen : LightThemeColors.accentGreen,
       isDarkTheme ? DarkThemeColors.accentRed : LightThemeColors.accentRed,
-      isDarkTheme
-          ? DarkThemeColors.accentYellow
-          : LightThemeColors.accentYellow,
+      const Color(0xFFFFAD3A), // accentYellow
 
       // Base colors
       isDarkTheme ? DarkThemeColors.base01 : LightThemeColors.base01,
-      isDarkTheme ? DarkThemeColors.base04 : LightThemeColors.base04,
+      isDarkTheme ? const Color(0xFF6E6E6E) : const Color(0xFF3E3E3E),
       isDarkTheme ? DarkThemeColors.base07 : LightThemeColors.base07,
     ];
   }

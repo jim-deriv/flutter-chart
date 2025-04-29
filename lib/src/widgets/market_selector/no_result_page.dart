@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/theme/chart_default_dark_theme.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,10 @@ class NoResultPage extends StatelessWidget {
               ChartLocalization.of(context).warnCheckAssetSearchingText,
               style: theme.textStyle(
                 textStyle: theme.body1,
-                color: theme.base04Color,
+                // TODO(Jim): Use the theme's color for this text when available.
+                color: theme is ChartDefaultDarkTheme
+                    ? const Color(0xFF6E6E6E)
+                    : const Color(0xFF3E3E3E),
               ),
             ),
             SizedBox(height: theme.margin08Chart),

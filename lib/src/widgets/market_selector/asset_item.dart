@@ -65,8 +65,9 @@ class AssetItem extends StatelessWidget {
         key: ValueKey<String>('${asset.name}-fav-icon'),
         icon: Icon(
           asset.isFavourite ? Icons.star : Icons.star_border,
-          color:
-              asset.isFavourite ? theme.accentYellowColor : theme.base04Color,
+          color: asset.isFavourite
+              ? const Color(0xFFFFAD3A)
+              : const Color(0xFF3E3E3E),
           size: 20,
         ),
         onPressed: () => onAssetClicked.call(

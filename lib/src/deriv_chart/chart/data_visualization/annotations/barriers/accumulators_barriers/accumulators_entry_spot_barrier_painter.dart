@@ -74,7 +74,7 @@ class AccumulatorsEntrySpotBarrierPainter<
         series.epoch != null ? epochToX(series.startingEpoch) : 0;
 
     if (lineStartX > lineEndX && style.hasLine) {
-      _paintLine(canvas, lineStartX, lineEndX, y, DarkThemeColors.base04);
+      _paintLine(canvas, lineStartX, lineEndX, y, const Color(0xFF6E6E6E));
     }
 
     _paintEntrySpotDot(canvas, dotX ?? 0, y, entrySpotStyle);

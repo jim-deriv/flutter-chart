@@ -112,7 +112,7 @@ class _BottomChartMobileState extends BasicChartState<BottomChartMobile> {
   Widget _buildChartFrame(BuildContext context) => Container(
         constraints: const BoxConstraints.expand(),
         child: MobileChartFrameDividers(
-          color: context.read<ChartTheme>().hoverColor,
+          color: const Color(0xFF242828),
           rightPadding: (context.read<XAxisModel>().rightPadding ?? 0) +
               context.read<ChartTheme>().gridStyle.labelHorizontalPadding,
           sides: const ChartFrameSides(right: true),
@@ -128,10 +128,10 @@ class _BottomChartMobileState extends BasicChartState<BottomChartMobile> {
         onSwap: widget.onSwap,
       );
 
-  Widget _buildDivider() => Divider(
+  Widget _buildDivider() => const Divider(
         height: 0.5,
         thickness: 1,
-        color: theme.hoverColor,
+        color:Color(0xFF242828),
       );
 
   Widget _buildCollapsedBottomChart(BuildContext context) => Container(

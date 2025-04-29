@@ -129,32 +129,18 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
   @override
   Color get accentGreenColor => LightThemeColors.accentGreen;
 
-  @override
-  Color get accentYellowColor => LightThemeColors.accentYellow;
-
+  // TODO(Jim): Remove this once the theme is finalised and we have a replacement for it.
   @override
   Color get base01Color => LightThemeColors.base01;
-
-  @override
-  Color get base02Color => LightThemeColors.base02;
 
   @override
   Color get base03Color => LightThemeColors.base03;
 
   @override
-  Color get base04Color => LightThemeColors.base04;
-
-  @override
   Color get base05Color => LightThemeColors.base05;
 
   @override
-  Color get base06Color => LightThemeColors.base06;
-
-  @override
   Color get base07Color => LightThemeColors.base07;
-
-  @override
-  Color get hoverColor => LightThemeColors.hover;
 
   @override
   TextStyle get overLine => TextStyles.overLine;

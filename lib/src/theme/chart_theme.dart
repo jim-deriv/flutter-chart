@@ -99,23 +99,15 @@ abstract class ChartTheme {
 
   Color get accentGreenColor;
 
-  Color get accentYellowColor;
-
+  // TODO(Jim): Remove this once the theme is finalised and we have a replacement for it.
   Color get base01Color;
 
-  Color get base02Color;
-
+  // TODO(Jim): Remove this once the theme is finalised and we have a replacement for it.
   Color get base03Color;
-
-  Color get base04Color;
 
   Color get base05Color;
 
-  Color get base06Color;
-
   Color get base07Color;
-
-  Color get hoverColor;
 
   double get margin04Chart;
 

@@ -119,7 +119,6 @@ abstract class ChartDefaultTheme implements ChartTheme {
 
   @override
   CandleStyle get candleStyle => CandleStyle(
-        neutralColor: base04Color,
         candleBullishWickColor: candleBullishWickDefault,
         candleBearishWickColor: candleBearishWickDefault,
       );
@@ -146,7 +145,6 @@ abstract class ChartDefaultTheme implements ChartTheme {
 
   @override
   HorizontalBarrierStyle get horizontalBarrierStyle => HorizontalBarrierStyle(
-        color: base04Color,
         titleBackgroundColor: backgroundColor,
         textStyle: TextStyles.overLine,
       );
