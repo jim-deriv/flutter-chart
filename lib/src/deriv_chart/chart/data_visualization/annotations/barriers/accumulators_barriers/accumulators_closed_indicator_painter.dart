@@ -1,3 +1,4 @@
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/annotations/barriers/accumulators_barriers/accumulators_closed_indicator.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_series/series_painter.dart';
@@ -47,7 +48,7 @@ class AccumulatorsClosedIndicatorPainter
     Color color = theme.base03Color;
     if (series.activeContract?.profit != null) {
       if (series.activeContract!.profit! > 0) {
-        color = const Color(0xFF00A79E);
+        color = LegacyLightThemeColors.accentGreen;
       } else if (series.activeContract!.profit! < 0) {
         color = const Color(0xFFCC2E3D);
       }

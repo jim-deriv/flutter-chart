@@ -116,7 +116,7 @@ abstract class ChartDefaultTheme implements ChartTheme {
 
   @override
   BarStyle get barStyle => const BarStyle(
-        positiveColor: Color(0xFF00A79E),
+        positiveColor: LegacyLightThemeColors.accentGreen,
       );
 
   @override

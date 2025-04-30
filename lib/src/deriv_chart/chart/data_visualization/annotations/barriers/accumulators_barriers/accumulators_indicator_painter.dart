@@ -10,6 +10,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/create
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_dot.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_line.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_text.dart';
+import 'package:deriv_chart/src/theme/colors.dart';
 import 'package:deriv_chart/src/theme/painting_styles/barrier_style.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +63,7 @@ class AccumulatorIndicatorPainter extends SeriesPainter<AccumulatorIndicator> {
     Color color = theme.base03Color;
     if (series.activeContract?.profit != null) {
       if (series.activeContract!.profit! > 0) {
-        color = const Color(0xFF00A79E);
+        color = LegacyLightThemeColors.accentGreen;
       } else if (series.activeContract!.profit! < 0) {
         color = const Color(0xFFCC2E3D);
       }

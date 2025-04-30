@@ -12,7 +12,7 @@ class ColorUtils {
       BrandColors.orange,
 
       // Accent colors
-      const Color(0xFF00A79E), // accentGreen
+      LegacyDarkThemeColors.accentGreen,
       const Color(0xFFCC2E3D), // accentRed
       const Color(0xFFFFAD3A), // accentYellow
 
