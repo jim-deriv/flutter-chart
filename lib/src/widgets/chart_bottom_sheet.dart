@@ -66,9 +66,7 @@ class _ChartBottomSheetState extends State<ChartBottomSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: _theme is ChartDefaultDarkTheme
-                  ? const Color(0xFF3E3E3E)
-                  : const Color(0xFF6E6E6E),
+              color: _theme.base05Color,
               borderRadius: BorderRadius.circular(_theme.borderRadius04Chart),
             ),
           ),

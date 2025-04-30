@@ -160,6 +160,12 @@ abstract class ChartTheme {
   // TODO(Jim): Remove this method when an alternative is available.
   Color get base01Color;
 
+  /// This is a legacy method to get the legacy base05 color.
+  /// It is used for backward compatibility with older versions of the chart.
+  /// It should not be used in new code, as it'll be removed soon.
+  // TODO(Jim): Remove this method when an alternative is available.
+  Color get base05Color;
+
   /// This is a legacy method to get the legacy base07 color.
   /// It is used for backward compatibility with older versions of the chart.
   /// It should not be used in new code, as it'll be removed soon.

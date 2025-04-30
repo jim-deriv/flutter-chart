@@ -21,11 +21,7 @@ class NoResultPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Icon(Icons.search,
-                size: 96,
-                color: theme is ChartDefaultDarkTheme
-                    ? const Color(0xFF3E3E3E)
-                    : const Color(0xFF6E6E6E)),
+            Icon(Icons.search, size: 96, color: theme.base05Color),
             SizedBox(height: theme.margin16Chart),
             Flexible(
               child: Text(
