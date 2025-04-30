@@ -48,9 +48,7 @@ class SubMarketItem extends StatelessWidget {
     return assets.isEmpty
         ? const SizedBox.shrink()
         : Material(
-            color: theme is ChartDefaultDarkTheme
-                ? const Color(0xFF151717)
-                : const Color(0xFFEAECED),
+            color: theme.base07Color,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

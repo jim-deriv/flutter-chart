@@ -155,9 +155,7 @@ class _BottomChartState extends BasicChartState<BottomChart> {
       child: Container(
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: theme is ChartDefaultLightTheme
-              ? const Color(0xFFEAECED)
-              : const Color(0xFF151717),
+          color: theme.base07Color,
           borderRadius: BorderRadius.circular(2),
         ),
         child: Row(

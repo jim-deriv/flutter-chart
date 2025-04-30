@@ -21,7 +21,9 @@ class ColorUtils {
           ? LegacyDarkThemeColors.base01
           : LegacyLightThemeColors.base01,
       isDarkTheme ? const Color(0xFF6E6E6E) : const Color(0xFF3E3E3E),
-      isDarkTheme ? const Color(0xFF151717) : const Color(0xFFEAECED),
+      isDarkTheme
+          ? LegacyDarkThemeColors.base07
+          : LegacyLightThemeColors.base07,
     ];
   }
 

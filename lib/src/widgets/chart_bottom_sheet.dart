@@ -46,9 +46,7 @@ class _ChartBottomSheetState extends State<ChartBottomSheet> {
             ),
             child: Material(
               elevation: 8,
-              color: _theme is ChartDefaultLightTheme
-                  ? const Color(0xFFEAECED)
-                  : const Color(0xFF151717),
+              color: _theme.base07Color,
               child: Column(
                 children: <Widget>[
                   _buildTopHandle(),
