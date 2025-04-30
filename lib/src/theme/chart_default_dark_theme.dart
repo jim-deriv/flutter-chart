@@ -127,6 +127,9 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
   Color get base01Color => LegacyDarkThemeColors.base01;
 
   @override
+  Color get base03Color => LegacyDarkThemeColors.base03;
+
+  @override
   Color get base05Color => LegacyDarkThemeColors.base05;
 
   @override

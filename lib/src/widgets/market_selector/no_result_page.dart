@@ -29,9 +29,7 @@ class NoResultPage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: theme.textStyle(
                   textStyle: theme.title,
-                  color: theme is ChartDefaultDarkTheme
-                      ? const Color(0xFFC2C2C2)
-                      : const Color(0xFF323738),
+                  color: theme.base03Color,
                 ),
               ),
             ),
