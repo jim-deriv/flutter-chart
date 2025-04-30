@@ -159,7 +159,7 @@ abstract class ChartDefaultTheme implements ChartTheme {
     required TextStyle textStyle,
     Color? color,
   }) {
-    color ??= const Color(0xFFFFFFFF);
+    color ??= LegacyDarkThemeColors.base01;
 
     return _getStyle(textStyle: textStyle, color: color);
   }

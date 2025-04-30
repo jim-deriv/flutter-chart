@@ -485,9 +485,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
         child: IconButton(
           icon: const Icon(Icons.arrow_forward),
           onPressed: xAxis.scrollToLastTick,
-          color: context.read<ChartTheme>() is ChartDefaultLightTheme
-              ? const Color(0xFF0E0E0E)
-              : const Color(0xFFFFFFFF),
+          color: context.read<ChartTheme>().base01Color,
         ),
       );
 

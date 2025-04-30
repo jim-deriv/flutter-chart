@@ -240,10 +240,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
           );
           break;
         case MarkerType.tick:
-          final Paint paint = Paint()
-            ..color = theme is ChartDefaultLightTheme
-                ? const Color(0xFF0E0E0E)
-                : const Color(0xFFFFFFFF);
+          final Paint paint = Paint()..color = theme.base01Color;
           _drawTickPoint(canvas, anchor, paint, zoom);
           break;
         case MarkerType.latestTick:

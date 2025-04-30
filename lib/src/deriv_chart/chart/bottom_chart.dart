@@ -101,9 +101,7 @@ class _BottomChartState extends BasicChartState<BottomChart> {
             icon: Icon(
               iconData,
               size: 16,
-              color: theme is ChartDefaultLightTheme
-                  ? const Color(0xFF0E0E0E)
-                  : const Color(0xFFFFFFFF),
+              color: theme.base01Color,
             ),
             onPressed: onPressed,
             padding: EdgeInsets.zero,
@@ -167,9 +165,7 @@ class _BottomChartState extends BasicChartState<BottomChart> {
             BottomIndicatorTitle(
               widget.title,
               theme.textStyle(
-                color: theme is ChartDefaultLightTheme
-                    ? const Color(0xFF0E0E0E)
-                    : const Color(0xFFFFFFFF),
+                color: theme.base01Color,
                 textStyle:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
@@ -210,9 +206,7 @@ class _BottomChartState extends BasicChartState<BottomChart> {
                 Divider(
                   height: 0.5,
                   thickness: 1,
-                  color: theme is ChartDefaultLightTheme
-                      ? const Color(0xFF0E0E0E)
-                      : const Color(0xFFFFFFFF),
+                  color: theme.base01Color,
                 ),
                 Expanded(child: super.build(context)),
               ],

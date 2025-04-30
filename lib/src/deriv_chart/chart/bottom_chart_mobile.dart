@@ -209,14 +209,10 @@ class IndicatorLabelMobile extends StatelessWidget {
               BottomIndicatorTitle(
                 title,
                 theme.textStyle(
-                  color: theme is ChartDefaultLightTheme
-                      ? const Color(0xFF0E0E0E)
-                      : const Color(0xFFFFFFFF),
+                  color: theme.base01Color,
                   textStyle: theme.textStyle(
                     textStyle: TextStyles.caption,
-                    color: theme is ChartDefaultLightTheme
-                        ? const Color(0xFF0E0E0E)
-                        : const Color(0xFFFFFFFF),
+                    color: theme.base01Color,
                   ),
                 ),
               ),
@@ -274,9 +270,7 @@ class IndicatorLabelMobile extends StatelessWidget {
             icon: Icon(
               iconData,
               size: 16,
-              color: context.read<ChartTheme>() is ChartDefaultLightTheme
-                  ? const Color(0xFF0E0E0E)
-                  : const Color(0xFFFFFFFF),
+              color: context.read<ChartTheme>().base01Color,
             ),
             onPressed: onPressed,
             padding: EdgeInsets.zero,

@@ -73,9 +73,7 @@ class _AssetsSearchBarState extends State<AssetsSearchBar> {
           textAlign: TextAlign.center,
           style: _theme.textStyle(
             textStyle: _theme.subheading,
-            color: _theme is ChartDefaultLightTheme
-                ? const Color(0xFF0E0E0E)
-                : const Color(0xFFFFFFFF),
+            color: _theme.base01Color,
           ),
         ),
         onTap: () => _switchToSearchMode(),
@@ -110,9 +108,7 @@ class _AssetsSearchBarState extends State<AssetsSearchBar> {
         textAlign: TextAlign.left,
         style: _theme.textStyle(
           textStyle: _theme.subheading,
-          color: _theme is ChartDefaultLightTheme
-              ? const Color(0xFF0E0E0E)
-              : const Color(0xFFFFFFFF),
+          color: _theme.base01Color,
         ),
         decoration: InputDecoration(
           border: InputBorder.none,

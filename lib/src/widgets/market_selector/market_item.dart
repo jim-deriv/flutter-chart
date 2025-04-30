@@ -54,9 +54,7 @@ class MarketItem extends StatelessWidget {
               market.displayName,
               style: theme.textStyle(
                 textStyle: theme.body2,
-                color: theme is ChartDefaultLightTheme
-                    ? const Color(0xFF0E0E0E)
-                    : const Color(0xFFFFFFFF),
+                color: theme.base01Color,
               ),
             ),
           ),
