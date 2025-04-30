@@ -65,13 +65,13 @@ class AccumulatorIndicatorPainter extends SeriesPainter<AccumulatorIndicator> {
       if (series.activeContract!.profit! > 0) {
         color = LegacyLightThemeColors.accentGreen;
       } else if (series.activeContract!.profit! < 0) {
-        color = const Color(0xFFCC2E3D);
+        color = LegacyLightThemeColors.accentRed;
       }
     }
 
     if (series.tick.quote > series.highBarrier ||
         series.tick.quote < series.lowBarrier) {
-      color = const Color(0xFFCC2E3D);
+      color = LegacyLightThemeColors.accentRed;
     }
     _linePaint.color = color;
     _linePaintFill.color = color;

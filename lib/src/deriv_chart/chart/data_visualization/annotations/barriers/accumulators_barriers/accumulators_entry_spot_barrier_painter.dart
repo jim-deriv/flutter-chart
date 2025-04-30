@@ -6,6 +6,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/anim
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/barrier_objects.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_accumulators_entry_spot.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/paint_functions/paint_line.dart';
+import 'package:deriv_chart/src/theme/colors.dart';
 import 'package:deriv_chart/src/theme/painting_styles/barrier_style.dart';
 import 'package:deriv_chart/src/theme/painting_styles/entry_spot_style.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,8 @@ class AccumulatorsEntrySpotBarrierPainter<
         series.epoch != null ? epochToX(series.startingEpoch) : 0;
 
     if (lineStartX > lineEndX && style.hasLine) {
-      _paintLine(canvas, lineStartX, lineEndX, y, const Color(0xFF6E6E6E));
+      _paintLine(
+          canvas, lineStartX, lineEndX, y, LegacyLightThemeColors.base04);
     }
 
     _paintEntrySpotDot(canvas, dotX ?? 0, y, entrySpotStyle);

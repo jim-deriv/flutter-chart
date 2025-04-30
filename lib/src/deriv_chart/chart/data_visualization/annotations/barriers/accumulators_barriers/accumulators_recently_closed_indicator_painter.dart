@@ -50,13 +50,13 @@ class AccumulatorsRecentlyClosedIndicatorPainter
       if (series.activeContract!.profit! > 0) {
         color = LegacyDarkThemeColors.accentGreen;
       } else if (series.activeContract!.profit! < 0) {
-        color = const Color(0xFFCC2E3D);
+        color = LegacyDarkThemeColors.accentRed;
       }
     }
 
     if (series.exitTick.quote > series.highBarrier ||
         series.exitTick.quote < series.lowBarrier) {
-      color = const Color(0xFFCC2E3D);
+      color = LegacyDarkThemeColors.accentRed;
     }
     _linePaint.color = color;
     _linePaintFill.color = color;

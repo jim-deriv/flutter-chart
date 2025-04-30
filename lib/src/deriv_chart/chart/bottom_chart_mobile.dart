@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:deriv_chart/src/deriv_chart/chart/mobile_chart_frame_dividers.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
-import 'package:deriv_chart/src/theme/chart_default_light_theme.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
+import 'package:deriv_chart/src/theme/colors.dart';
 import 'package:deriv_chart/src/theme/dimens.dart';
 import 'package:deriv_chart/src/theme/text_styles.dart';
 import 'package:deriv_chart/src/widgets/bottom_indicator_title.dart';
@@ -113,7 +113,7 @@ class _BottomChartMobileState extends BasicChartState<BottomChartMobile> {
   Widget _buildChartFrame(BuildContext context) => Container(
         constraints: const BoxConstraints.expand(),
         child: MobileChartFrameDividers(
-          color: const Color(0xFF242828),
+          color: LegacyLightThemeColors.hover,
           rightPadding: (context.read<XAxisModel>().rightPadding ?? 0) +
               context.read<ChartTheme>().gridStyle.labelHorizontalPadding,
           sides: const ChartFrameSides(right: true),
@@ -132,7 +132,7 @@ class _BottomChartMobileState extends BasicChartState<BottomChartMobile> {
   Widget _buildDivider() => const Divider(
         height: 0.5,
         thickness: 1,
-        color: Color(0xFF242828),
+        color: LegacyLightThemeColors.hover,
       );
 
   Widget _buildCollapsedBottomChart(BuildContext context) => Container(

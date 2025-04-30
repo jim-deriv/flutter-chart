@@ -3,7 +3,6 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/char
 import 'package:deriv_chart/src/misc/chart_controller.dart';
 import 'package:deriv_chart/src/models/chart_axis_config.dart';
 import 'package:deriv_chart/src/models/tick.dart';
-import 'package:deriv_chart/src/theme/chart_default_light_theme.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:deriv_chart/src/deriv_chart/chart/crosshair/crosshair_area_web.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/custom_painters/chart_data_painter.dart';

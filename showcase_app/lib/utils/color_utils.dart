@@ -13,14 +13,16 @@ class ColorUtils {
 
       // Accent colors
       LegacyDarkThemeColors.accentGreen,
-      const Color(0xFFCC2E3D), // accentRed
+      LegacyLightThemeColors.accentRed,
       const Color(0xFFFFAD3A), // accentYellow
 
       // Base colors
       isDarkTheme
           ? LegacyDarkThemeColors.base01
           : LegacyLightThemeColors.base01,
-      isDarkTheme ? const Color(0xFF6E6E6E) : const Color(0xFF3E3E3E),
+      isDarkTheme
+          ? LegacyDarkThemeColors.base04
+          : LegacyLightThemeColors.base04,
       isDarkTheme
           ? LegacyDarkThemeColors.base07
           : LegacyLightThemeColors.base07,

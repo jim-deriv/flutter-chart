@@ -330,7 +330,7 @@ class _DerivColorPickerDialogState extends State<DerivColorPickerDialog> {
                   CandleBullishThemeColors.candleBullishBodyDefault),
               _buildMaterialColorButton(
                   CandleBearishThemeColors.candleBearishBodyDefault),
-              _buildMaterialColorButton(const Color(0xFFFFAD3A)),
+              _buildMaterialColorButton(LegacyLightThemeColors.accentYellow),
             ],
           ),
 

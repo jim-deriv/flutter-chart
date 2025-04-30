@@ -1,4 +1,5 @@
 import 'package:deriv_chart/src/theme/chart_theme.dart';
+import 'package:deriv_chart/src/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -66,8 +67,8 @@ class AssetItem extends StatelessWidget {
         icon: Icon(
           asset.isFavourite ? Icons.star : Icons.star_border,
           color: asset.isFavourite
-              ? const Color(0xFFFFAD3A)
-              : const Color(0xFF3E3E3E),
+              ? LegacyLightThemeColors.accentYellow
+              : theme.base04Color,
           size: 20,
         ),
         onPressed: () => onAssetClicked.call(

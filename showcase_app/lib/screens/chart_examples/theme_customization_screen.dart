@@ -61,7 +61,8 @@ class CustomDarkTheme extends ChartDefaultDarkTheme {
       candleBullishBodyColor: customBullishColor,
       candleBearishBodyColor: customBearishColor,
       candleBullishWickColor: customBullishColor,
-      candleBearishWickColor: customBearishColor);
+      candleBearishWickColor: customBearishColor,
+      neutralColor: base04Color);
 }
 
 /// A custom theme that extends the default light theme.
@@ -122,7 +123,8 @@ class CustomLightTheme extends ChartDefaultLightTheme {
       candleBullishBodyColor: customBullishColor,
       candleBearishBodyColor: customBearishColor,
       candleBullishWickColor: customBullishColor,
-      candleBearishWickColor: customBearishColor);
+      candleBearishWickColor: customBearishColor,
+      neutralColor: base04Color);
 }
 
 /// Screen that displays a chart with theme customization.

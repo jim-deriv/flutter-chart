@@ -1,4 +1,3 @@
-import 'package:deriv_chart/src/theme/chart_default_light_theme.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
