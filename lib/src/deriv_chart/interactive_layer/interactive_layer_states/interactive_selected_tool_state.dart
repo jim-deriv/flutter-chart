@@ -1,5 +1,6 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meta/dart2js.dart';
 
 import '../enums/drawing_tool_state.dart';
 import '../interactable_drawings/interactable_drawing.dart';
@@ -27,7 +28,7 @@ class InteractiveSelectedToolState extends InteractiveState
   /// access to the layer's methods and properties.
   InteractiveSelectedToolState({
     required this.selected,
-    required super.interactiveLayer,
+    required super.interactiveLayerBehaviour,
   });
 
   /// The selected tool.
@@ -82,10 +83,10 @@ class InteractiveSelectedToolState extends InteractiveState
       // If a tool is selected, but user starts dragging on another tool
       // Switch the selected tool
       if (hitDrawing != null) {
-        interactiveLayer.updateStateTo(
+        interactiveLayerBehaviour.updateStateTo(
           InteractiveSelectedToolState(
             selected: hitDrawing,
-            interactiveLayer: interactiveLayer,
+            interactiveLayerBehaviour: interactiveLayerBehaviour,
           )..onPanStart(details),
           StateChangeAnimationDirection.forward,
         );
@@ -116,17 +117,18 @@ class InteractiveSelectedToolState extends InteractiveState
     if (hitDrawing != null) {
       // when a tool is tap/hit, keep selected state. it might be the same
       // tool or a different tool.
-      interactiveLayer.updateStateTo(
+      interactiveLayerBehaviour.updateStateTo(
         InteractiveSelectedToolState(
           selected: hitDrawing,
-          interactiveLayer: interactiveLayer,
+          interactiveLayerBehaviour: interactiveLayerBehaviour,
         ),
         StateChangeAnimationDirection.forward,
       );
     } else {
       // If tap is on empty space, return to normal state.
-      interactiveLayer.updateStateTo(
-        InteractiveNormalState(interactiveLayer: interactiveLayer),
+      interactiveLayerBehaviour.updateStateTo(
+        InteractiveNormalState(
+            interactiveLayerBehaviour: interactiveLayerBehaviour),
         StateChangeAnimationDirection.backward,
         waitForAnimation: true,
       );

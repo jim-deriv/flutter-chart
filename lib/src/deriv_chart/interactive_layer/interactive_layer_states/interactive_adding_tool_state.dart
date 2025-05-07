@@ -28,7 +28,7 @@ class InteractiveAddingToolState extends InteractiveState
   /// access to the layer's methods and properties.
   InteractiveAddingToolState(
     this.addingTool, {
-    required super.interactiveLayer,
+    required super.interactiveLayerBehaviour,
   }) {
     _addingDrawing ??= addingTool.getInteractableDrawing();
   }
@@ -88,10 +88,10 @@ class InteractiveAddingToolState extends InteractiveState
 
       for (final drawing in interactiveLayer.drawings) {
         if (drawing.config.configId == addedConfig.configId) {
-          interactiveLayer.updateStateTo(
+          interactiveLayerBehaviour.updateStateTo(
             InteractiveSelectedToolState(
               selected: drawing,
-              interactiveLayer: interactiveLayer,
+              interactiveLayerBehaviour: interactiveLayerBehaviour,
             ),
             StateChangeAnimationDirection.forward,
           );

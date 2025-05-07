@@ -25,7 +25,7 @@ abstract class InteractiveState {
   /// The [interactiveLayer] parameter provides a reference to the layer that owns
   /// this state, allowing the state to call methods on the layer such as updating
   /// to a new state or adding/saving drawings.
-  InteractiveState({required this.interactiveLayer});
+  InteractiveState({required this.interactiveLayerBehaviour});
 
   /// Returns the state of the drawing tool.
   ///
@@ -50,7 +50,10 @@ abstract class InteractiveState {
   ///
   /// A reference to the layer that owns this state, allowing the state to
   /// access layer properties and methods.
-  final InteractiveLayerBase interactiveLayer;
+  final InteractiveLayerBehaviour interactiveLayerBehaviour;
+
+  InteractiveLayerBase get interactiveLayer =>
+      interactiveLayerBehaviour.interactiveLayer;
 
   /// Converts x coordinate (in pixels) to epoch timestamp.
   ///
