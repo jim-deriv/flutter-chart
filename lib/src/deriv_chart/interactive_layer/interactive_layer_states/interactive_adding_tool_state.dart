@@ -64,7 +64,19 @@ class InteractiveAddingToolState extends InteractiveState
   void onPanStart(DragStartDetails details) {}
 
   @override
-  void onPanUpdate(DragUpdateDetails details) {}
+  void onPanUpdate(DragUpdateDetails details) {
+    if (_addingDrawing != null) {
+      if (_addingDrawing!.hitTest(details.localPosition, epochToX, quoteToY)) {
+        _addingDrawing!.onDragUpdate(
+          details,
+          epochFromX,
+          quoteFromY,
+          epochToX,
+          quoteToY,
+        );
+      }
+    }
+  }
 
   @override
   void onHover(PointerHoverEvent event) {

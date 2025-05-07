@@ -143,7 +143,21 @@ abstract class InteractiveLayerBehaviour {
 }
 
 /// The mobile-specific implementation of the interactive layer behaviour.
-class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {}
+class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
+  @override
+  void onAddDrawingTool(DrawingToolConfig drawingTool) {
+    final newState = InteractiveAddingToolState(drawingTool,
+        interactiveLayerBehaviour: this);
+
+    newState.onTap(TapUpDetails(
+        kind: PointerDeviceKind.touch, localPosition: Offset(100, 100)));
+
+    updateStateTo(
+      newState,
+      StateChangeAnimationDirection.forward,
+    );
+  }
+}
 
 /// The Desktop-specific implementation of the interactive layer behaviour.
 class InteractiveLayerDesktopBehaviour extends InteractiveLayerBehaviour {}

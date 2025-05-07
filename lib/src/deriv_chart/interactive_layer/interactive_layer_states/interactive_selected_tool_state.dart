@@ -1,6 +1,5 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:flutter/widgets.dart';
-import 'package:meta/dart2js.dart';
 
 import '../enums/drawing_tool_state.dart';
 import '../interactable_drawings/interactable_drawing.dart';

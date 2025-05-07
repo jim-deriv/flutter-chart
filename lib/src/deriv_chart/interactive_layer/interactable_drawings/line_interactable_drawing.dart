@@ -51,6 +51,19 @@ class LineInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
+    if (startPoint != null && endPoint == null) {
+      final Offset startOffset = Offset(
+        epochToX(startPoint!.epoch),
+        quoteToY(startPoint!.quote),
+      );
+
+      // Check if the drag is starting on the start point
+      if ((details.localPosition - startOffset).distance <= hitTestMargin) {
+        _isDraggingStartPoint = true;
+        return;
+      }
+    }
+
     if (startPoint == null || endPoint == null) {
       return;
     }
@@ -90,6 +103,16 @@ class LineInteractableDrawing
 
   @override
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
+    if (startPoint != null) {
+      final startOffset = Offset(
+        epochToX(startPoint!.epoch),
+        quoteToY(startPoint!.quote),
+      );
+
+      if ((offset - startOffset).distance <= hitTestMargin) {
+        return true;
+      }
+    }
     if (startPoint == null || endPoint == null) {
       return false;
     }
@@ -365,6 +388,34 @@ class LineInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
+    if (startPoint != null &&
+        endPoint == null &&
+        (Offset(
+                      epochToX(startPoint!.epoch),
+                      quoteToY(startPoint!.quote),
+                    ) -
+                    details.localPosition)
+                .distance <
+            hitTestMargin) {
+      // If we're dragging the start point, we need to update its position
+      final Offset startOffset = Offset(
+        epochToX(startPoint!.epoch),
+        quoteToY(startPoint!.quote),
+      );
+
+      // Apply the delta to get the new screen position
+      final Offset newOffset = startOffset + details.delta;
+
+      // Convert back to epoch and quote coordinates
+      final int newEpoch = epochFromX(newOffset.dx);
+      final double newQuote = quoteFromY(newOffset.dy);
+
+      // Update the start point
+      startPoint = EdgePoint(
+        epoch: newEpoch,
+        quote: newQuote,
+      );
+    }
     if (startPoint == null || endPoint == null) {
       return;
     }
