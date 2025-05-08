@@ -1,4 +1,17 @@
+import 'dart:ui';
+
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_item.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_pattern.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/drawing_data.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/horizontal_line_interactable_drawing.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
+import 'package:deriv_chart/src/models/axis_range.dart';
+import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
 import '../enums/drawing_tool_state.dart';
@@ -116,9 +129,13 @@ class InteractiveAddingToolState extends InteractiveState
   }
 }
 
+/// The mobile-specific implementation of the interactive adding tool state.
 class InteractiveAddingToolStateMobile extends InteractiveAddingToolState {
-  InteractiveAddingToolStateMobile(super.addingTool,
-      {required super.interactiveLayerBehaviour});
+  /// Adding tool state for mobile devices.
+  InteractiveAddingToolStateMobile(
+    super.addingTool, {
+    required super.interactiveLayerBehaviour,
+  });
 
   @override
   void onTap(TapUpDetails details) {
@@ -126,4 +143,175 @@ class InteractiveAddingToolStateMobile extends InteractiveAddingToolState {
       super.onTap(details);
     }
   }
+}
+
+/// The desktop-specific implementation of the interactive adding tool state.
+class InteractiveAddingToolStateDesktop
+    extends InteractiveAddingToolStateMobile {
+  /// Initializes the state with the interactive layer and the [addingTool].
+  InteractiveAddingToolStateDesktop(
+    super.addingTool, {
+    required super.interactiveLayerBehaviour,
+  });
+
+  final AddingToolAlignmentCrossHair _crossHair =
+      AddingToolAlignmentCrossHair();
+
+  @override
+  List<InteractableDrawing<DrawingToolConfig>> get previewDrawings =>
+      [...super.previewDrawings, _crossHair];
+
+  @override
+  void onHover(PointerHoverEvent event) {
+    super.onHover(event);
+    _crossHair.onHover(event, epochFromX, quoteFromY, epochToX, quoteToY);
+  }
+}
+
+// TODO(NA): make an interface above InteractableDrawing that this class can
+// also implement, so it won't need to have a config instance.
+/// A cross-hair used for aligning the adding tool.
+class AddingToolAlignmentCrossHair
+    extends InteractableDrawing<CrosshairTempConfig> {
+  ///
+  AddingToolAlignmentCrossHair() : super(config: _config);
+
+  Offset? _currentHoverPosition;
+
+  static final _config = CrosshairTempConfig(
+    configId: '',
+    drawingData: DrawingData(id: '', drawingParts: []),
+    edgePoints: const [],
+  );
+
+  @override
+  CrosshairTempConfig get config => _config;
+
+  @override
+  InteractableDrawing<DrawingToolConfig> getAddingPreview(
+      InteractiveLayerBehaviour layerBehaviour) {
+    return this;
+  }
+
+  @override
+  CrosshairTempConfig getUpdatedConfig() {
+    return config;
+  }
+
+  @override
+  bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
+    return false;
+  }
+
+  @override
+  bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange) {
+    return true;
+  }
+
+  @override
+  void onDragUpdate(DragUpdateDetails details, EpochFromX epochFromX,
+      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {}
+
+  @override
+  void onHover(PointerHoverEvent event, EpochFromX epochFromX,
+      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
+    _currentHoverPosition = event.localPosition;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size, EpochToX epochToX, QuoteToY quoteToY,
+      AnimationInfo animationInfo, Set<DrawingToolState> drawingState) {
+    if (_currentHoverPosition == null) {
+      return;
+    }
+    _drawPointAlignmentGuides(canvas, size, _currentHoverPosition!);
+  }
+
+  /// Draws alignment guides (horizontal and vertical lines) for a single point
+  void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
+    // Create a dashed paint style for the alignment guides
+    final Paint guidesPaint = Paint()
+      ..color = const Color(0x80FFFFFF) // Semi-transparent white
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    // Create paths for horizontal and vertical guides
+    final Path horizontalPath = Path();
+    final Path verticalPath = Path();
+
+    // Draw horizontal and vertical guides from the point
+    horizontalPath
+      ..moveTo(0, pointOffset.dy)
+      ..lineTo(size.width, pointOffset.dy);
+
+    verticalPath
+      ..moveTo(pointOffset.dx, 0)
+      ..lineTo(pointOffset.dx, size.height);
+
+    // Draw the dashed lines
+    canvas
+      ..drawPath(
+        _dashPath(horizontalPath,
+            dashArray: CircularIntervalList<double>(<double>[5, 5])),
+        guidesPaint,
+      )
+      ..drawPath(
+        _dashPath(verticalPath,
+            dashArray: CircularIntervalList<double>(<double>[5, 5])),
+        guidesPaint,
+      );
+  }
+
+  Path _dashPath(
+    Path source, {
+    required CircularIntervalList<double> dashArray,
+  }) {
+    final Path dest = Path();
+    for (final PathMetric metric in source.computeMetrics()) {
+      double distance = 0;
+      bool draw = true;
+      while (distance < metric.length) {
+        final double len = dashArray.next;
+        if (draw) {
+          dest.addPath(
+            metric.extractPath(distance, distance + len),
+            Offset.zero,
+          );
+        }
+        distance += len;
+        draw = !draw;
+      }
+    }
+    return dest;
+  }
+}
+
+class CrosshairTempConfig extends DrawingToolConfig {
+  CrosshairTempConfig({
+    required super.configId,
+    required super.drawingData,
+    required super.edgePoints,
+  });
+
+  @override
+  DrawingToolConfig copyWith({
+    String? configId,
+    DrawingData? drawingData,
+    LineStyle? lineStyle,
+    LineStyle? fillStyle,
+    DrawingPatterns? pattern,
+    List<EdgePoint>? edgePoints,
+    bool? enableLabel,
+    int? number,
+  }) =>
+      this;
+
+  @override
+  DrawingToolItem getItem(
+      UpdateDrawingTool updateDrawingTool, VoidCallback deleteDrawingTool) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, dynamic> toJson() => {};
 }

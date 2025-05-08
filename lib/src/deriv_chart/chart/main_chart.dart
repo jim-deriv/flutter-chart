@@ -191,7 +191,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
     super.initState();
 
     _interactiveLayerBehaviour =
-        widget.interactiveLayerBehaviour ?? InteractiveLayerMobileBehaviour();
+        widget.interactiveLayerBehaviour ?? InteractiveLayerDesktopBehaviour();
 
     if (widget.verticalPaddingFraction != null) {
       verticalPaddingFraction = widget.verticalPaddingFraction!;

@@ -147,10 +147,11 @@ class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
   @override
   void onAddDrawingTool(DrawingToolConfig drawingTool) {
     final newState = InteractiveAddingToolStateMobile(drawingTool,
-        interactiveLayerBehaviour: this);
-
-    newState.onTap(TapUpDetails(
-        kind: PointerDeviceKind.touch, localPosition: Offset(100, 100)));
+        interactiveLayerBehaviour: this)
+      ..onTap(TapUpDetails(
+        kind: PointerDeviceKind.touch,
+        localPosition: const Offset(100, 100),
+      ));
 
     updateStateTo(
       newState,
@@ -160,4 +161,15 @@ class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
 }
 
 /// The Desktop-specific implementation of the interactive layer behaviour.
-class InteractiveLayerDesktopBehaviour extends InteractiveLayerBehaviour {}
+class InteractiveLayerDesktopBehaviour extends InteractiveLayerBehaviour {
+  @override
+  void onAddDrawingTool(DrawingToolConfig drawingTool) {
+    updateStateTo(
+      InteractiveAddingToolStateDesktop(
+        drawingTool,
+        interactiveLayerBehaviour: this,
+      ),
+      StateChangeAnimationDirection.forward,
+    );
+  }
+}

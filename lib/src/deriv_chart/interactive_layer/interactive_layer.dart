@@ -270,8 +270,6 @@ class _InteractiveLayerGestureHandlerState
   void didUpdateWidget(covariant _InteractiveLayerGestureHandler oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    print('### Old ${oldWidget.drawings.length} new: ${widget.drawings.length}');
-
     if (widget.addingDrawingTool != null &&
         widget.addingDrawingTool != oldWidget.addingDrawingTool) {
       widget.interactiveLayerBehaviour

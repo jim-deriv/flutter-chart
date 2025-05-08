@@ -191,7 +191,7 @@ class HorizontalLineInteractableDrawing
     // Draw the dashed line
     canvas.drawPath(
       _dashPath(horizontalPath,
-          dashArray: _CircularIntervalList<double>(<double>[5, 5])),
+          dashArray: CircularIntervalList<double>(<double>[5, 5])),
       guidesPaint,
     );
   }
@@ -199,7 +199,7 @@ class HorizontalLineInteractableDrawing
   /// Creates a dashed path from a regular path
   Path _dashPath(
     Path source, {
-    required _CircularIntervalList<double> dashArray,
+    required CircularIntervalList<double> dashArray,
   }) {
     final Path dest = Path();
     for (final ui.PathMetric metric in source.computeMetrics()) {
@@ -235,7 +235,7 @@ class HorizontalLineInteractableDrawing
     // Draw the dashed line
     canvas.drawPath(
       _dashPath(horizontalPath,
-          dashArray: _CircularIntervalList<double>(<double>[5, 5])),
+          dashArray: CircularIntervalList<double>(<double>[5, 5])),
       guidesPaint,
     );
   }
@@ -317,8 +317,8 @@ class HorizontalLineInteractableDrawing
 }
 
 /// A circular array for dash patterns
-class _CircularIntervalList<T> {
-  _CircularIntervalList(this._values);
+class CircularIntervalList<T> {
+  CircularIntervalList(this._values);
 
   final List<T> _values;
   int _index = 0;
