@@ -172,20 +172,20 @@ class InteractiveAddingToolStateDesktop
 // also implement, so it won't need to have a config instance.
 /// A cross-hair used for aligning the adding tool.
 class AddingToolAlignmentCrossHair
-    extends InteractableDrawing<CrosshairTempConfig> {
-  ///
+    extends InteractableDrawing<AlignmentCrossHairConfig> {
+  /// Initializes the cross-hair with a configuration.
   AddingToolAlignmentCrossHair() : super(config: _config);
 
   Offset? _currentHoverPosition;
 
-  static final _config = CrosshairTempConfig(
+  static final _config = AlignmentCrossHairConfig(
     configId: '',
     drawingData: DrawingData(id: '', drawingParts: []),
     edgePoints: const [],
   );
 
   @override
-  CrosshairTempConfig get config => _config;
+  AlignmentCrossHairConfig get config => _config;
 
   @override
   InteractableDrawing<DrawingToolConfig> getAddingPreview(
@@ -194,7 +194,7 @@ class AddingToolAlignmentCrossHair
   }
 
   @override
-  CrosshairTempConfig getUpdatedConfig() {
+  AlignmentCrossHairConfig getUpdatedConfig() {
     return config;
   }
 
@@ -286,8 +286,10 @@ class AddingToolAlignmentCrossHair
   }
 }
 
-class CrosshairTempConfig extends DrawingToolConfig {
-  CrosshairTempConfig({
+/// A temporary configuration class for the cross-hair used in the adding tool.
+class AlignmentCrossHairConfig extends DrawingToolConfig {
+  /// Initializes the cross-hair configuration.
+  const AlignmentCrossHairConfig({
     required super.configId,
     required super.drawingData,
     required super.edgePoints,
