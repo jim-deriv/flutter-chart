@@ -12,6 +12,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_serie
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/markers/marker_series.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_object.dart';
 import 'package:deriv_chart/src/deriv_chart/drawing_tool_chart/drawing_tools.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
 import 'package:deriv_chart/src/misc/callbacks.dart';
 import 'package:deriv_chart/src/misc/chart_controller.dart';
 import 'package:deriv_chart/src/models/chart_axis_config.dart';
@@ -19,6 +20,7 @@ import 'package:deriv_chart/src/misc/extensions.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/widgets/animated_popup.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -184,6 +186,10 @@ class _DerivChartState extends State<DerivChart> {
   late AddOnsRepository<DrawingToolConfig> _drawingToolsRepo;
 
   final DrawingTools _drawingTools = DrawingTools();
+
+  final InteractiveLayerBehaviour _interactiveLayerBehaviour = kIsWeb
+      ? InteractiveLayerDesktopBehaviour()
+      : InteractiveLayerMobileBehaviour();
 
   @override
   void initState() {
@@ -355,6 +361,7 @@ class _DerivChartState extends State<DerivChart> {
                 showScrollToLastTickButton: widget.showScrollToLastTickButton,
                 loadingAnimationColor: widget.loadingAnimationColor,
                 chartAxisConfig: widget.chartAxisConfig,
+                interactiveLayerBehaviour: _interactiveLayerBehaviour,
               ),
               if (widget.indicatorsRepo == null) _buildIndicatorsIcon(),
               if (widget.drawingToolsRepo == null) _buildDrawingToolsIcon(),
