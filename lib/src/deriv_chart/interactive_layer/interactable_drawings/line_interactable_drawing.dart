@@ -552,6 +552,8 @@ class _CircularIntervalList<T> {
   }
 }
 
+/// A Line interactable just for the preview of the line when we're adding the
+/// line tool on mobile.
 class LineAddingPreviewMobile extends LineInteractableDrawing {
   /// Initializes [LineInteractableDrawing].
   LineAddingPreviewMobile({
@@ -559,20 +561,6 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
     required super.startPoint,
     required super.endPoint,
   });
-
-  // Tracks which point is being dragged, if any
-  // null: dragging the whole line
-  // true: dragging the start point
-  // false: dragging the end point
-  bool? _isDraggingStartPoint;
-
-  Offset? _hoverPosition;
-
-  @override
-  void onHover(PointerHoverEvent event, EpochFromX epochFromX,
-      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
-    _hoverPosition = event.localPosition;
-  }
 
   @override
   void onDragStart(
@@ -661,40 +649,6 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
     }
   }
 
-  void _drawPointsFocusedCircle(
-      DrawingPaintStyle paintStyle,
-      LineStyle lineStyle,
-      ui.Canvas canvas,
-      ui.Offset startOffset,
-      double outerCircleRadius,
-      double innerCircleRadius,
-      ui.Offset endOffset) {
-    final normalPaintStyle = paintStyle.glowyCirclePaintStyle(lineStyle.color);
-    final glowyPaintStyle =
-        paintStyle.glowyCirclePaintStyle(lineStyle.color.withOpacity(0.3));
-    canvas
-      ..drawCircle(
-        startOffset,
-        outerCircleRadius,
-        glowyPaintStyle,
-      )
-      ..drawCircle(
-        startOffset,
-        innerCircleRadius,
-        normalPaintStyle,
-      )
-      ..drawCircle(
-        endOffset,
-        outerCircleRadius,
-        glowyPaintStyle,
-      )
-      ..drawCircle(
-        endOffset,
-        innerCircleRadius,
-        normalPaintStyle,
-      );
-  }
-
   @override
   void onCreateTap(
     TapUpDetails details,
@@ -766,17 +720,5 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
         quote: newQuote,
       );
     }
-  }
-
-  @override
-  void onDragEnd(
-    DragEndDetails details,
-    EpochFromX epochFromX,
-    QuoteFromY quoteFromY,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-  ) {
-    // Reset the dragging flag when drag is complete
-    _isDraggingStartPoint = null;
   }
 }

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_scale_model.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/mobile_chart_frame_dividers.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
 import 'package:deriv_chart/src/theme/dimens.dart';
 import 'package:flutter/foundation.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
@@ -43,6 +44,7 @@ class Chart extends StatefulWidget {
   const Chart({
     required this.mainSeries,
     required this.granularity,
+    this.interactiveLayerBehaviour,
     this.drawingTools,
     this.pipSize = 4,
     this.controller,
@@ -184,6 +186,9 @@ class Chart extends StatefulWidget {
 
   /// Chart's indicators
   final Repository<IndicatorConfig>? indicatorsRepo;
+
+  /// The interactive layer behaviour.
+  final InteractiveLayerBehaviour? interactiveLayerBehaviour;
 
   @override
   State<StatefulWidget> createState() =>

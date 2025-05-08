@@ -63,6 +63,7 @@ class MainChart extends BasicChart {
     double opacity = 1,
     ChartAxisConfig? chartAxisConfig,
     VisibleQuoteAreaChangedCallback? onQuoteAreaChanged,
+    this.interactiveLayerBehaviour,
     this.showCrosshair = false,
   })  : _mainSeries = mainSeries,
         chartDataList = <ChartData>[
@@ -133,6 +134,10 @@ class MainChart extends BasicChart {
   /// Whether to show current tick blink animation or not.
   final bool showCurrentTickBlinkAnimation;
 
+  /// Defines the interactive layer behaviour. like when adding a tools or
+  /// dragging/hovering.
+  final InteractiveLayerBehaviour? interactiveLayerBehaviour;
+
   @override
   _ChartImplementationState createState() => _ChartImplementationState();
 }
@@ -160,8 +165,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
 
   final YAxisNotifier _yAxisNotifier = YAxisNotifier(YAxisModel.zero());
 
-  final InteractiveLayerBehaviour interactiveLayerBehaviour =
-      InteractiveLayerMobileBehaviour();
+  late final InteractiveLayerBehaviour _interactiveLayerBehaviour;
 
   @override
   double get verticalPadding {
@@ -185,6 +189,9 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
   @override
   void initState() {
     super.initState();
+
+    _interactiveLayerBehaviour =
+        widget.interactiveLayerBehaviour ?? InteractiveLayerMobileBehaviour();
 
     if (widget.verticalPaddingFraction != null) {
       verticalPaddingFraction = widget.verticalPaddingFraction!;
@@ -425,7 +432,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
               bottomQuote:
                   chartQuoteFromCanvasY(_yAxisNotifier.value.canvasHeight),
             ),
-            interactiveLayerBehaviour: interactiveLayerBehaviour,
+            interactiveLayerBehaviour: _interactiveLayerBehaviour,
           );
         },
       );
