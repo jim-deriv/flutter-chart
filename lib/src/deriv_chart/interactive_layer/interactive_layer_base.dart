@@ -146,7 +146,7 @@ abstract class InteractiveLayerBehaviour {
 class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
   @override
   void onAddDrawingTool(DrawingToolConfig drawingTool) {
-    final newState = InteractiveAddingToolState(drawingTool,
+    final newState = InteractiveAddingToolStateMobile(drawingTool,
         interactiveLayerBehaviour: this);
 
     newState.onTap(TapUpDetails(

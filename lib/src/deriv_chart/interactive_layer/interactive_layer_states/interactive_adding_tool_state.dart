@@ -30,7 +30,9 @@ class InteractiveAddingToolState extends InteractiveState
     this.addingTool, {
     required super.interactiveLayerBehaviour,
   }) {
-    _addingDrawing ??= addingTool.getInteractableDrawing();
+    _addingDrawing ??= addingTool
+        .getInteractableDrawing()
+        .getAddingPreview(interactiveLayerBehaviour);
   }
 
   /// The tool being added.
@@ -111,5 +113,17 @@ class InteractiveAddingToolState extends InteractiveState
         }
       }
     });
+  }
+}
+
+class InteractiveAddingToolStateMobile extends InteractiveAddingToolState {
+  InteractiveAddingToolStateMobile(super.addingTool,
+      {required super.interactiveLayerBehaviour});
+
+  @override
+  void onTap(TapUpDetails details) {
+    if (!_addingDrawing!.hitTest(details.localPosition, epochToX, quoteToY)) {
+      super.onTap(details);
+    }
   }
 }

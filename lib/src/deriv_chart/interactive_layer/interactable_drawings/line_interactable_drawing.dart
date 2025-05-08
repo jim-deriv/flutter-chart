@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/line/line_drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/extensions/extensions.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
@@ -519,6 +521,20 @@ class LineInteractableDrawing
             epochRange.rightEpoch,
           ) ??
           true);
+
+  @override
+  InteractableDrawing<DrawingToolConfig> getAddingPreview(
+    InteractiveLayerBehaviour layerBehaviour,
+  ) {
+    if (layerBehaviour is InteractiveLayerMobileBehaviour) {
+      return LineAddingPreviewMobile(
+        config: config,
+        startPoint: startPoint,
+        endPoint: endPoint,
+      );
+    }
+    return this;
+  }
 }
 
 /// A circular array for dash patterns
@@ -533,5 +549,234 @@ class _CircularIntervalList<T> {
       _index = 0;
     }
     return _values[_index++];
+  }
+}
+
+class LineAddingPreviewMobile extends LineInteractableDrawing {
+  /// Initializes [LineInteractableDrawing].
+  LineAddingPreviewMobile({
+    required super.config,
+    required super.startPoint,
+    required super.endPoint,
+  });
+
+  // Tracks which point is being dragged, if any
+  // null: dragging the whole line
+  // true: dragging the start point
+  // false: dragging the end point
+  bool? _isDraggingStartPoint;
+
+  Offset? _hoverPosition;
+
+  @override
+  void onHover(PointerHoverEvent event, EpochFromX epochFromX,
+      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
+    _hoverPosition = event.localPosition;
+  }
+
+  @override
+  void onDragStart(
+    DragStartDetails details,
+    EpochFromX epochFromX,
+    QuoteFromY quoteFromY,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+  ) {
+    if (startPoint != null && endPoint == null) {
+      final Offset startOffset = Offset(
+        epochToX(startPoint!.epoch),
+        quoteToY(startPoint!.quote),
+      );
+
+      // Check if the drag is starting on the start point
+      if ((details.localPosition - startOffset).distance <= hitTestMargin) {
+        _isDraggingStartPoint = true;
+        return;
+      }
+    }
+  }
+
+  @override
+  bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
+    if (startPoint != null && endPoint == null) {
+      final startOffset = Offset(
+        epochToX(startPoint!.epoch),
+        quoteToY(startPoint!.quote),
+      );
+
+      if ((offset - startOffset).distance <= hitTestMargin) {
+        return true;
+      }
+    } else if (endPoint != null) {
+      final endOffset = Offset(
+        epochToX(endPoint!.epoch),
+        quoteToY(endPoint!.quote),
+      );
+
+      if ((offset - endOffset).distance <= hitTestMargin) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  void paint(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    Set<DrawingToolState> drawingState,
+  ) {
+    final LineStyle lineStyle = config.lineStyle;
+    final DrawingPaintStyle paintStyle = DrawingPaintStyle();
+    // Check if this drawing is selected
+
+    if (startPoint != null && endPoint == null) {
+      _drawPoint(
+          startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
+      _drawPointAlignmentGuides(canvas, size,
+          Offset(epochToX(startPoint!.epoch), quoteToY(startPoint!.quote)));
+    } else if (startPoint != null && endPoint != null) {
+      _drawPoint(endPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
+      _drawPointAlignmentGuides(canvas, size,
+          Offset(epochToX(endPoint!.epoch), quoteToY(endPoint!.quote)));
+      final startOffset = Offset(
+        epochToX(startPoint!.epoch),
+        quoteToY(startPoint!.quote),
+      );
+      final endOffset = Offset(
+        epochToX(endPoint!.epoch),
+        quoteToY(endPoint!.quote),
+      );
+
+      // Use glowy paint style if selected, otherwise use normal paint style
+      final Paint paint = drawingState.contains(DrawingToolState.selected) ||
+              drawingState.contains(DrawingToolState.dragging)
+          ? paintStyle.linePaintStyle(
+              lineStyle.color, 1 + 1 * animationInfo.stateChangePercent)
+          : paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness);
+      canvas.drawLine(startOffset, endOffset, paint);
+    }
+  }
+
+  void _drawPointsFocusedCircle(
+      DrawingPaintStyle paintStyle,
+      LineStyle lineStyle,
+      ui.Canvas canvas,
+      ui.Offset startOffset,
+      double outerCircleRadius,
+      double innerCircleRadius,
+      ui.Offset endOffset) {
+    final normalPaintStyle = paintStyle.glowyCirclePaintStyle(lineStyle.color);
+    final glowyPaintStyle =
+        paintStyle.glowyCirclePaintStyle(lineStyle.color.withOpacity(0.3));
+    canvas
+      ..drawCircle(
+        startOffset,
+        outerCircleRadius,
+        glowyPaintStyle,
+      )
+      ..drawCircle(
+        startOffset,
+        innerCircleRadius,
+        normalPaintStyle,
+      )
+      ..drawCircle(
+        endOffset,
+        outerCircleRadius,
+        glowyPaintStyle,
+      )
+      ..drawCircle(
+        endOffset,
+        innerCircleRadius,
+        normalPaintStyle,
+      );
+  }
+
+  @override
+  void onCreateTap(
+    TapUpDetails details,
+    EpochFromX epochFromX,
+    QuoteFromY quoteFromY,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    VoidCallback onDone,
+  ) {
+    if (startPoint == null) {
+      startPoint = EdgePoint(
+        epoch: epochFromX(details.localPosition.dx),
+        quote: quoteFromY(details.localPosition.dy),
+      );
+    } else if (startPoint != null && endPoint == null) {
+      endPoint = EdgePoint(
+        epoch: epochFromX(200),
+        quote: quoteFromY(200),
+      );
+    } else if (startPoint != null && endPoint != null) {
+      onDone();
+    }
+  }
+
+  @override
+  void onDragUpdate(
+    DragUpdateDetails details,
+    EpochFromX epochFromX,
+    QuoteFromY quoteFromY,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+  ) {
+    if (startPoint != null && endPoint == null) {
+      // If we're dragging the start point, we need to update its position
+      final Offset startOffset = Offset(
+        epochToX(startPoint!.epoch),
+        quoteToY(startPoint!.quote),
+      );
+
+      // Apply the delta to get the new screen position
+      final Offset newOffset = startOffset + details.delta;
+
+      // Convert back to epoch and quote coordinates
+      final int newEpoch = epochFromX(newOffset.dx);
+      final double newQuote = quoteFromY(newOffset.dy);
+
+      // Update the start point
+      startPoint = EdgePoint(
+        epoch: newEpoch,
+        quote: newQuote,
+      );
+    } else if (endPoint != null) {
+      // If we're dragging the start point, we need to update its position
+      final Offset endOffset = Offset(
+        epochToX(endPoint!.epoch),
+        quoteToY(endPoint!.quote),
+      );
+
+      // Apply the delta to get the new screen position
+      final Offset newOffset = endOffset + details.delta;
+
+      // Convert back to epoch and quote coordinates
+      final int newEpoch = epochFromX(newOffset.dx);
+      final double newQuote = quoteFromY(newOffset.dy);
+
+      // Update the start point
+      endPoint = EdgePoint(
+        epoch: newEpoch,
+        quote: newQuote,
+      );
+    }
+  }
+
+  @override
+  void onDragEnd(
+    DragEndDetails details,
+    EpochFromX epochFromX,
+    QuoteFromY quoteFromY,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+  ) {
+    // Reset the dragging flag when drag is complete
+    _isDraggingStartPoint = null;
   }
 }
