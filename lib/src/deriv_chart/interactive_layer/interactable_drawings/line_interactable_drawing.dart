@@ -523,18 +523,14 @@ class LineInteractableDrawing
           true);
 
   @override
-  InteractableDrawing<DrawingToolConfig> getAddingPreview(
-    InteractiveLayerBehaviour layerBehaviour,
-  ) {
-    if (layerBehaviour is InteractiveLayerMobileBehaviour) {
-      return LineAddingPreviewMobile(
+  InteractableDrawing<DrawingToolConfig> getAddingPreviewForMobileBehaviour(
+    InteractiveLayerMobileBehaviour layerBehaviour,
+  ) =>
+      LineAddingPreviewMobile(
         config: config,
         startPoint: startPoint,
         endPoint: endPoint,
       );
-    }
-    return this;
-  }
 }
 
 /// A circular array for dash patterns

@@ -318,11 +318,13 @@ class HorizontalLineInteractableDrawing
 
 /// A circular array for dash patterns
 class CircularIntervalList<T> {
+  /// Initializes [CircularIntervalList].
   CircularIntervalList(this._values);
 
   final List<T> _values;
   int _index = 0;
 
+  /// Returns the next value in the circular list.
   T get next {
     if (_index >= _values.length) {
       _index = 0;

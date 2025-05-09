@@ -118,9 +118,23 @@ abstract class InteractableDrawing<T extends DrawingToolConfig> {
   /// Whether this drawing is in epoch range.
   bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange);
 
-  /// Returns back the [InteractableDrawing] instance of this drawing tool
-  InteractableDrawing getAddingPreview(
-      InteractiveLayerBehaviour layerBehaviour) {
-    throw UnimplementedError('getAddingPreview() is not implemented.');
-  }
+  /// Returns back the [InteractableDrawing] which is used for showing the
+  /// preview of the tool when we're on [InteractiveLayerMobileBehaviour].
+  ///
+  /// Override this method if you want to show a different preview for mobile
+  /// other than the default one.
+  InteractableDrawing getAddingPreviewForMobileBehaviour(
+    InteractiveLayerMobileBehaviour layerBehaviour,
+  ) =>
+      this;
+
+  /// Returns back the [InteractableDrawing] which is used for showing the
+  /// preview of the tool when we're on [InteractiveLayerDesktopBehaviour].
+  ///
+  /// Override this method if you want to show a different preview for desktop
+  /// other than the default one.
+  InteractableDrawing getAddingPreviewForDesktopBehaviour(
+    InteractiveLayerDesktopBehaviour layerBehaviour,
+  ) =>
+      this;
 }

@@ -73,6 +73,10 @@ abstract class InteractiveLayerBehaviour {
     _interactiveState = InteractiveNormalState(interactiveLayerBehaviour: this);
   }
 
+  /// Return the adding preview of the [drawing] we're currently adding for this
+  /// Behaviour.
+  InteractableDrawing getAddingDrawingPreview(InteractableDrawing drawing);
+
   /// Updates the interactive layer state to the new state.
   Future<void> updateStateTo(
     InteractiveState newState,
@@ -158,6 +162,12 @@ class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
       StateChangeAnimationDirection.forward,
     );
   }
+
+  @override
+  InteractableDrawing<DrawingToolConfig> getAddingDrawingPreview(
+    InteractableDrawing<DrawingToolConfig> drawing,
+  ) =>
+      drawing.getAddingPreviewForMobileBehaviour(this);
 }
 
 /// The Desktop-specific implementation of the interactive layer behaviour.
@@ -172,4 +182,10 @@ class InteractiveLayerDesktopBehaviour extends InteractiveLayerBehaviour {
       StateChangeAnimationDirection.forward,
     );
   }
+
+  @override
+  InteractableDrawing<DrawingToolConfig> getAddingDrawingPreview(
+    InteractableDrawing<DrawingToolConfig> drawing,
+  ) =>
+      drawing.getAddingPreviewForDesktopBehaviour(this);
 }

@@ -43,9 +43,8 @@ class InteractiveAddingToolState extends InteractiveState
     this.addingTool, {
     required super.interactiveLayerBehaviour,
   }) {
-    _addingDrawing ??= addingTool
-        .getInteractableDrawing()
-        .getAddingPreview(interactiveLayerBehaviour);
+    _addingDrawing ??= interactiveLayerBehaviour
+        .getAddingDrawingPreview(addingTool.getInteractableDrawing());
   }
 
   /// The tool being added.
@@ -186,12 +185,6 @@ class AddingToolAlignmentCrossHair
 
   @override
   AlignmentCrossHairConfig get config => _config;
-
-  @override
-  InteractableDrawing<DrawingToolConfig> getAddingPreview(
-      InteractiveLayerBehaviour layerBehaviour) {
-    return this;
-  }
 
   @override
   AlignmentCrossHairConfig getUpdatedConfig() {
