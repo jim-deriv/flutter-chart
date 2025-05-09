@@ -19,7 +19,13 @@ class LineAddingPreviewMobile
   LineAddingPreviewMobile({
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
-  });
+  }) {
+    // TODO(Ramin): use center of the screen which is received from interactive layer instead of hardcoded values
+    interactableDrawing.startPoint = EdgePoint(
+      epoch: interactiveLayerBehaviour.interactiveLayer.epochFromX(200),
+      quote: interactiveLayerBehaviour.interactiveLayer.quoteFromY(200),
+    );
+  }
 
   @override
   void onDragStart(
