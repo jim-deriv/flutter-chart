@@ -1,4 +1,5 @@
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_v2.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
@@ -36,7 +37,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   });
 
   /// Drawing to paint.
-  final InteractableDrawing drawing;
+  final DrawingV2 drawing;
 
   /// [drawing]'s state.
   final Set<DrawingToolState> drawingState;

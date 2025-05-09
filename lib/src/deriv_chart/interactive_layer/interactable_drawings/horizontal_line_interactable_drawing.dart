@@ -1,5 +1,8 @@
 import 'dart:ui' as ui;
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/horizontal/horizontal_drawing_tool_config.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
@@ -10,6 +13,7 @@ import '../../chart/data_visualization/drawing_tools/data_model/drawing_paint_st
 import '../../chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
 import '../enums/drawing_tool_state.dart';
+import 'drawing_v2.dart';
 import 'interactable_drawing.dart';
 
 /// Interactable drawing for horizontal line drawing tool.
@@ -314,6 +318,25 @@ class HorizontalLineInteractableDrawing
       // For now it won't impact that much in terms of performance, since the
       // number tools we allow to add in total is limited to a few.
       true;
+
+  @override
+  DrawingAddingPreview<InteractableDrawing<DrawingToolConfig>>
+      getAddingPreviewForDesktopBehaviour(
+    InteractiveLayerDesktopBehaviour layerBehaviour,
+  ) {
+    throw UnimplementedError();
+  }
+
+  @override
+  DrawingAddingPreview<InteractableDrawing<DrawingToolConfig>>
+      getAddingPreviewForMobileBehaviour(
+    InteractiveLayerMobileBehaviour layerBehaviour,
+  ) {
+    return HorizontalLineAddingPreviewMobile(
+      interactiveLayerBehaviour: layerBehaviour,
+      interactableDrawing: this,
+    );
+  }
 }
 
 /// A circular array for dash patterns
@@ -330,5 +353,33 @@ class CircularIntervalList<T> {
       _index = 0;
     }
     return _values[_index++];
+  }
+}
+
+class HorizontalLineAddingPreviewMobile
+    extends DrawingAddingPreview<HorizontalLineInteractableDrawing> {
+  HorizontalLineAddingPreviewMobile({
+    required super.interactiveLayerBehaviour,
+    required super.interactableDrawing,
+  });
+
+  @override
+  bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
+    // TODO: implement hitTest
+    throw UnimplementedError();
+  }
+
+  @override
+  String get id => 'Horizontal-line-adding-preview';
+
+  @override
+  void paint(
+    ui.Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    Set<DrawingToolState> drawingState,
+  ) {
   }
 }

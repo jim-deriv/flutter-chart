@@ -7,6 +7,8 @@ import 'package:flutter/gestures.dart';
 
 import '../chart/data_visualization/chart_data.dart';
 import 'enums/drawing_tool_state.dart';
+import 'interactable_drawings/drawing_adding_preview.dart';
+import 'interactable_drawings/drawing_v2.dart';
 import 'interactable_drawings/interactable_drawing.dart';
 import 'interactive_layer_states/interactive_adding_tool_state.dart';
 import 'interactive_layer_states/interactive_normal_state.dart';
@@ -75,7 +77,7 @@ abstract class InteractiveLayerBehaviour {
 
   /// Return the adding preview of the [drawing] we're currently adding for this
   /// Behaviour.
-  InteractableDrawing getAddingDrawingPreview(InteractableDrawing drawing);
+  DrawingAddingPreview getAddingDrawingPreview(InteractableDrawing drawing);
 
   /// Updates the interactive layer state to the new state.
   Future<void> updateStateTo(
@@ -111,14 +113,11 @@ abstract class InteractiveLayerBehaviour {
   late final VoidCallback onUpdate;
 
   /// The drawings of the interactive layer.
-  Set<DrawingToolState> getToolState(
-    InteractableDrawing<DrawingToolConfig> drawing,
-  ) =>
+  Set<DrawingToolState> getToolState(DrawingV2 drawing) =>
       _interactiveState.getToolState(drawing);
 
   /// The drawings of the interactive layer.
-  List<InteractableDrawing<DrawingToolConfig>> get previewDrawings =>
-      _interactiveState.previewDrawings;
+  List<DrawingV2> get previewDrawings => _interactiveState.previewDrawings;
 
   /// Handles tap event.
   void onTap(TapUpDetails details) {
@@ -162,7 +161,7 @@ class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
   }
 
   @override
-  InteractableDrawing<DrawingToolConfig> getAddingDrawingPreview(
+  DrawingAddingPreview getAddingDrawingPreview(
     InteractableDrawing<DrawingToolConfig> drawing,
   ) =>
       drawing.getAddingPreviewForMobileBehaviour(this);
@@ -182,7 +181,7 @@ class InteractiveLayerDesktopBehaviour extends InteractiveLayerBehaviour {
   }
 
   @override
-  InteractableDrawing<DrawingToolConfig> getAddingDrawingPreview(
+  DrawingAddingPreview getAddingDrawingPreview(
     InteractableDrawing<DrawingToolConfig> drawing,
   ) =>
       drawing.getAddingPreviewForDesktopBehaviour(this);

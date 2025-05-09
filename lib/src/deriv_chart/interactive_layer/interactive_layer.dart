@@ -285,7 +285,8 @@ class _InteractiveLayerGestureHandlerState
   }
 
   @override
-  Future<void> animateStateChange(StateChangeAnimationDirection direction) async {
+  Future<void> animateStateChange(
+      StateChangeAnimationDirection direction) async {
     await _runAnimation(direction);
     // if (waitForAnimation) {
     //   await _runAnimation(direction);

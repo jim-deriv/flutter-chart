@@ -13,6 +13,8 @@ import '../../chart/data_visualization/drawing_tools/data_model/drawing_paint_st
 import '../../chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
 import '../enums/drawing_tool_state.dart';
+import 'drawing_adding_preview.dart';
+import 'drawing_v2.dart';
 import 'interactable_drawing.dart';
 
 /// Interactable drawing for line drawing tool.
@@ -523,14 +525,21 @@ class LineInteractableDrawing
           true);
 
   @override
-  InteractableDrawing<DrawingToolConfig> getAddingPreviewForMobileBehaviour(
+  DrawingAddingPreview getAddingPreviewForMobileBehaviour(
     InteractiveLayerMobileBehaviour layerBehaviour,
   ) =>
       LineAddingPreviewMobile(
-        config: config,
-        startPoint: startPoint,
-        endPoint: endPoint,
+        interactiveLayerBehaviour: layerBehaviour,
+        interactableDrawing: this,
       );
+
+  @override
+  DrawingAddingPreview<InteractableDrawing<DrawingToolConfig>>
+      getAddingPreviewForDesktopBehaviour(
+    InteractiveLayerDesktopBehaviour layerBehaviour,
+  ) {
+    throw UnimplementedError();
+  }
 }
 
 /// A circular array for dash patterns
@@ -550,12 +559,12 @@ class _CircularIntervalList<T> {
 
 /// A Line interactable just for the preview of the line when we're adding the
 /// line tool on mobile.
-class LineAddingPreviewMobile extends LineInteractableDrawing {
+class LineAddingPreviewMobile
+    extends DrawingAddingPreview<LineInteractableDrawing> {
   /// Initializes [LineInteractableDrawing].
   LineAddingPreviewMobile({
-    required super.config,
-    required super.startPoint,
-    required super.endPoint,
+    required super.interactiveLayerBehaviour,
+    required super.interactableDrawing,
   });
 
   @override
@@ -566,15 +575,16 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    if (startPoint != null && endPoint == null) {
+    if (interactableDrawing.startPoint != null &&
+        interactableDrawing.endPoint == null) {
       final Offset startOffset = Offset(
-        epochToX(startPoint!.epoch),
-        quoteToY(startPoint!.quote),
+        epochToX(interactableDrawing.startPoint!.epoch),
+        quoteToY(interactableDrawing.startPoint!.quote),
       );
 
       // Check if the drag is starting on the start point
       if ((details.localPosition - startOffset).distance <= hitTestMargin) {
-        _isDraggingStartPoint = true;
+        // _isDraggingStartPoint = true;
         return;
       }
     }
@@ -582,19 +592,20 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
 
   @override
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
-    if (startPoint != null && endPoint == null) {
+    if (interactableDrawing.startPoint != null &&
+        interactableDrawing.endPoint == null) {
       final startOffset = Offset(
-        epochToX(startPoint!.epoch),
-        quoteToY(startPoint!.quote),
+        epochToX(interactableDrawing.startPoint!.epoch),
+        quoteToY(interactableDrawing.startPoint!.quote),
       );
 
       if ((offset - startOffset).distance <= hitTestMargin) {
         return true;
       }
-    } else if (endPoint != null) {
+    } else if (interactableDrawing.endPoint != null) {
       final endOffset = Offset(
-        epochToX(endPoint!.epoch),
-        quoteToY(endPoint!.quote),
+        epochToX(interactableDrawing.endPoint!.epoch),
+        quoteToY(interactableDrawing.endPoint!.quote),
       );
 
       if ((offset - endOffset).distance <= hitTestMargin) {
@@ -613,26 +624,35 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
     AnimationInfo animationInfo,
     Set<DrawingToolState> drawingState,
   ) {
-    final LineStyle lineStyle = config.lineStyle;
+    final LineStyle lineStyle = interactableDrawing.config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
     // Check if this drawing is selected
 
-    if (startPoint != null && endPoint == null) {
-      _drawPoint(
-          startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
-      _drawPointAlignmentGuides(canvas, size,
-          Offset(epochToX(startPoint!.epoch), quoteToY(startPoint!.quote)));
-    } else if (startPoint != null && endPoint != null) {
-      _drawPoint(endPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
-      _drawPointAlignmentGuides(canvas, size,
-          Offset(epochToX(endPoint!.epoch), quoteToY(endPoint!.quote)));
+    if (interactableDrawing.startPoint != null &&
+        interactableDrawing.endPoint == null) {
+      _drawPoint(interactableDrawing.startPoint!, epochToX, quoteToY, canvas,
+          paintStyle, lineStyle);
+      _drawPointAlignmentGuides(
+          canvas,
+          size,
+          Offset(epochToX(interactableDrawing.startPoint!.epoch),
+              quoteToY(interactableDrawing.startPoint!.quote)));
+    } else if (interactableDrawing.startPoint != null &&
+        interactableDrawing.endPoint != null) {
+      _drawPoint(interactableDrawing.endPoint!, epochToX, quoteToY, canvas,
+          paintStyle, lineStyle);
+      _drawPointAlignmentGuides(
+          canvas,
+          size,
+          Offset(epochToX(interactableDrawing.endPoint!.epoch),
+              quoteToY(interactableDrawing.endPoint!.quote)));
       final startOffset = Offset(
-        epochToX(startPoint!.epoch),
-        quoteToY(startPoint!.quote),
+        epochToX(interactableDrawing.startPoint!.epoch),
+        quoteToY(interactableDrawing.startPoint!.quote),
       );
       final endOffset = Offset(
-        epochToX(endPoint!.epoch),
-        quoteToY(endPoint!.quote),
+        epochToX(interactableDrawing.endPoint!.epoch),
+        quoteToY(interactableDrawing.endPoint!.quote),
       );
 
       // Use glowy paint style if selected, otherwise use normal paint style
@@ -645,6 +665,81 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
     }
   }
 
+  // TODO(NA): reuse this method from the line interactable drawing
+  void _drawPoint(
+    EdgePoint point,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    Canvas canvas,
+    DrawingPaintStyle paintStyle,
+    LineStyle lineStyle,
+  ) {
+    canvas.drawCircle(
+      Offset(epochToX(point.epoch), quoteToY(point.quote)),
+      5,
+      paintStyle.glowyCirclePaintStyle(lineStyle.color),
+    );
+  }
+
+  // Draws alignment guides (horizontal and vertical lines) for a single point
+  void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
+    // Create a dashed paint style for the alignment guides
+    final Paint guidesPaint = Paint()
+      ..color = const Color(0x80FFFFFF) // Semi-transparent white
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    // Create paths for horizontal and vertical guides
+    final Path horizontalPath = Path();
+    final Path verticalPath = Path();
+
+    // Draw horizontal and vertical guides from the point
+    horizontalPath
+      ..moveTo(0, pointOffset.dy)
+      ..lineTo(size.width, pointOffset.dy);
+
+    verticalPath
+      ..moveTo(pointOffset.dx, 0)
+      ..lineTo(pointOffset.dx, size.height);
+
+    // Draw the dashed lines
+    canvas
+      ..drawPath(
+        _dashPath(horizontalPath,
+            dashArray: _CircularIntervalList<double>(<double>[5, 5])),
+        guidesPaint,
+      )
+      ..drawPath(
+        _dashPath(verticalPath,
+            dashArray: _CircularIntervalList<double>(<double>[5, 5])),
+        guidesPaint,
+      );
+  }
+
+  /// Creates a dashed path from a regular path
+  Path _dashPath(
+    Path source, {
+    required _CircularIntervalList<double> dashArray,
+  }) {
+    final Path dest = Path();
+    for (final ui.PathMetric metric in source.computeMetrics()) {
+      double distance = 0;
+      bool draw = true;
+      while (distance < metric.length) {
+        final double len = dashArray.next;
+        if (draw) {
+          dest.addPath(
+            metric.extractPath(distance, distance + len),
+            Offset.zero,
+          );
+        }
+        distance += len;
+        draw = !draw;
+      }
+    }
+    return dest;
+  }
+
   @override
   void onCreateTap(
     TapUpDetails details,
@@ -654,17 +749,19 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
     QuoteToY quoteToY,
     VoidCallback onDone,
   ) {
-    if (startPoint == null) {
-      startPoint = EdgePoint(
+    if (interactableDrawing.startPoint == null) {
+      interactableDrawing.startPoint = EdgePoint(
         epoch: epochFromX(details.localPosition.dx),
         quote: quoteFromY(details.localPosition.dy),
       );
-    } else if (startPoint != null && endPoint == null) {
-      endPoint = EdgePoint(
+    } else if (interactableDrawing.startPoint != null &&
+        interactableDrawing.endPoint == null) {
+      interactableDrawing.endPoint = EdgePoint(
         epoch: epochFromX(200),
         quote: quoteFromY(200),
       );
-    } else if (startPoint != null && endPoint != null) {
+    } else if (interactableDrawing.startPoint != null &&
+        interactableDrawing.endPoint != null) {
       onDone();
     }
   }
@@ -677,11 +774,12 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    if (startPoint != null && endPoint == null) {
+    if (interactableDrawing.startPoint != null &&
+        interactableDrawing.endPoint == null) {
       // If we're dragging the start point, we need to update its position
       final Offset startOffset = Offset(
-        epochToX(startPoint!.epoch),
-        quoteToY(startPoint!.quote),
+        epochToX(interactableDrawing.startPoint!.epoch),
+        quoteToY(interactableDrawing.startPoint!.quote),
       );
 
       // Apply the delta to get the new screen position
@@ -692,15 +790,15 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
       final double newQuote = quoteFromY(newOffset.dy);
 
       // Update the start point
-      startPoint = EdgePoint(
+      interactableDrawing.startPoint = EdgePoint(
         epoch: newEpoch,
         quote: newQuote,
       );
-    } else if (endPoint != null) {
+    } else if (interactableDrawing.endPoint != null) {
       // If we're dragging the start point, we need to update its position
       final Offset endOffset = Offset(
-        epochToX(endPoint!.epoch),
-        quoteToY(endPoint!.quote),
+        epochToX(interactableDrawing.endPoint!.epoch),
+        quoteToY(interactableDrawing.endPoint!.quote),
       );
 
       // Apply the delta to get the new screen position
@@ -711,10 +809,13 @@ class LineAddingPreviewMobile extends LineInteractableDrawing {
       final double newQuote = quoteFromY(newOffset.dy);
 
       // Update the start point
-      endPoint = EdgePoint(
+      interactableDrawing.endPoint = EdgePoint(
         epoch: newEpoch,
         quote: newQuote,
       );
     }
   }
+
+  @override
+  String get id => 'LineAddingPreview';
 }

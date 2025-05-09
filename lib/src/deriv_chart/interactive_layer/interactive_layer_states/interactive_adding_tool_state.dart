@@ -8,12 +8,14 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/drawing_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/horizontal_line_interactable_drawing.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
 import '../enums/drawing_tool_state.dart';
+import '../interactable_drawings/drawing_v2.dart';
 import '../interactable_drawings/interactable_drawing.dart';
 import '../enums/state_change_direction.dart';
 import 'interactive_hover_state.dart';
@@ -56,17 +58,15 @@ class InteractiveAddingToolState extends InteractiveState
   ///
   /// This is initialized when the user first taps on the chart and is used
   /// to render a preview of the drawing being added.
-  InteractableDrawing<DrawingToolConfig>? _addingDrawing;
+  DrawingAddingPreview? _addingDrawing;
 
   @override
-  List<InteractableDrawing<DrawingToolConfig>> get previewDrawings =>
+  List<DrawingV2> get previewDrawings =>
       [if (_addingDrawing != null) _addingDrawing!];
 
   @override
-  Set<DrawingToolState> getToolState(
-    InteractableDrawing<DrawingToolConfig> drawing,
-  ) =>
-      drawing.config.configId == addingTool.configId
+  Set<DrawingToolState> getToolState(DrawingV2 drawing) =>
+      drawing.id == addingTool.configId
           ? {DrawingToolState.adding}
           : {DrawingToolState.idle};
 
@@ -109,7 +109,7 @@ class InteractiveAddingToolState extends InteractiveState
       interactiveLayer.clearAddingDrawing();
 
       final DrawingToolConfig addedConfig =
-          interactiveLayer.onAddDrawing(_addingDrawing!);
+          interactiveLayer.onAddDrawing(_addingDrawing!.interactableDrawing);
 
       for (final drawing in interactiveLayer.drawings) {
         if (drawing.config.configId == addedConfig.configId) {
@@ -156,8 +156,7 @@ class InteractiveAddingToolStateDesktop
       AddingToolAlignmentCrossHair();
 
   @override
-  List<InteractableDrawing<DrawingToolConfig>> get previewDrawings =>
-      [...super.previewDrawings, _crossHair];
+  List<DrawingV2> get previewDrawings => [...super.previewDrawings, _crossHair];
 
   @override
   void onHover(PointerHoverEvent event) {
@@ -166,29 +165,13 @@ class InteractiveAddingToolStateDesktop
   }
 }
 
-// TODO(NA): make an interface above InteractableDrawing that this class can
 // also implement, so it won't need to have a config instance.
 /// A cross-hair used for aligning the adding tool.
-class AddingToolAlignmentCrossHair
-    extends InteractableDrawing<AlignmentCrossHairConfig> {
+class AddingToolAlignmentCrossHair extends DrawingV2 {
   /// Initializes the cross-hair with a configuration.
-  AddingToolAlignmentCrossHair() : super(config: _config);
+  AddingToolAlignmentCrossHair();
 
   Offset? _currentHoverPosition;
-
-  static final _config = AlignmentCrossHairConfig(
-    configId: '',
-    drawingData: DrawingData(id: '', drawingParts: []),
-    edgePoints: const [],
-  );
-
-  @override
-  AlignmentCrossHairConfig get config => _config;
-
-  @override
-  AlignmentCrossHairConfig getUpdatedConfig() {
-    return config;
-  }
 
   @override
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
@@ -219,6 +202,7 @@ class AddingToolAlignmentCrossHair
     _drawPointAlignmentGuides(canvas, size, _currentHoverPosition!);
   }
 
+  // TODO(NA): reuse this method from other places.
   /// Draws alignment guides (horizontal and vertical lines) for a single point
   void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
     // Create a dashed paint style for the alignment guides
@@ -276,6 +260,26 @@ class AddingToolAlignmentCrossHair
     }
     return dest;
   }
+
+  @override
+  String get id => 'alignment-cross-hair';
+
+  @override
+  void onCreateTap(
+      TapUpDetails details,
+      EpochFromX epochFromX,
+      QuoteFromY quoteFromY,
+      EpochToX epochToX,
+      QuoteToY quoteToY,
+      VoidCallback onDone) {}
+
+  @override
+  void onDragEnd(DragEndDetails details, EpochFromX epochFromX,
+      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {}
+
+  @override
+  void onDragStart(DragStartDetails details, EpochFromX epochFromX,
+      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {}
 }
 
 /// A temporary configuration class for the cross-hair used in the adding tool.
