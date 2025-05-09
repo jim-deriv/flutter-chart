@@ -49,16 +49,6 @@ class AddingToolAlignmentCrossHair extends DrawingV2 {
   String get id => 'alignment-cross-hair';
 
   @override
-  void onCreateTap(
-    TapUpDetails details,
-    EpochFromX epochFromX,
-    QuoteFromY quoteFromY,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-    VoidCallback onDone,
-  ) {}
-
-  @override
   void onDragEnd(DragEndDetails details, EpochFromX epochFromX,
       QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {}
 
