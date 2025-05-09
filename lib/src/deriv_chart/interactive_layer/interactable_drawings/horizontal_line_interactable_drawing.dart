@@ -13,6 +13,7 @@ import '../../chart/data_visualization/drawing_tools/data_model/drawing_paint_st
 import '../../chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
 import '../enums/drawing_tool_state.dart';
+import '../helpers/paint_helpers.dart';
 import 'drawing_v2.dart';
 import 'interactable_drawing.dart';
 
@@ -124,7 +125,7 @@ class HorizontalLineInteractableDrawing
 
       // Draw alignment guides when dragging
       if (drawingState.contains(DrawingToolState.dragging)) {
-        _drawAlignmentGuides(canvas, size, startOffset);
+        drawPointAlignmentGuides(canvas, size, startOffset);
       }
     } else {
       if (startPoint == null && _hoverPosition != null) {
@@ -140,7 +141,7 @@ class HorizontalLineInteractableDrawing
         );
         canvas.drawLine(startPosition, endPosition,
             paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
-        _drawPointAlignmentGuides(canvas, size, startPosition);
+        drawPointAlignmentGuides(canvas, size, startPosition);
       }
     }
   }
@@ -179,70 +180,6 @@ class HorizontalLineInteractableDrawing
       );
   }
 
-  /// Draws alignment guides (horizontal lines) for the point
-  void _drawAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
-    // Create a dashed paint style for the alignment guides
-    final Paint guidesPaint = Paint()
-      ..color = const Color(0x80FFFFFF) // Semi-transparent white
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
-
-    // Create path for horizontal guide
-    final Path horizontalPath = Path()
-      ..moveTo(0, pointOffset.dy)
-      ..lineTo(size.width, pointOffset.dy);
-
-    // Draw the dashed line
-    canvas.drawPath(
-      _dashPath(horizontalPath,
-          dashArray: CircularIntervalList<double>(<double>[5, 5])),
-      guidesPaint,
-    );
-  }
-
-  /// Creates a dashed path from a regular path
-  Path _dashPath(
-    Path source, {
-    required CircularIntervalList<double> dashArray,
-  }) {
-    final Path dest = Path();
-    for (final ui.PathMetric metric in source.computeMetrics()) {
-      double distance = 0;
-      bool draw = true;
-      while (distance < metric.length) {
-        final double len = dashArray.next;
-        if (draw) {
-          dest.addPath(
-            metric.extractPath(distance, distance + len),
-            Offset.zero,
-          );
-        }
-        distance += len;
-        draw = !draw;
-      }
-    }
-    return dest;
-  }
-
-  void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
-    // Create a dashed paint style for the alignment guides
-    final Paint guidesPaint = Paint()
-      ..color = const Color(0x80FFFFFF) // Semi-transparent white
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
-
-    // Create path for horizontal guide
-    final Path horizontalPath = Path()
-      ..moveTo(0, pointOffset.dy)
-      ..lineTo(size.width, pointOffset.dy);
-
-    // Draw the dashed line
-    canvas.drawPath(
-      _dashPath(horizontalPath,
-          dashArray: CircularIntervalList<double>(<double>[5, 5])),
-      guidesPaint,
-    );
-  }
 
   @override
   void onCreateTap(
@@ -339,22 +276,7 @@ class HorizontalLineInteractableDrawing
   }
 }
 
-/// A circular array for dash patterns
-class CircularIntervalList<T> {
-  /// Initializes [CircularIntervalList].
-  CircularIntervalList(this._values);
 
-  final List<T> _values;
-  int _index = 0;
-
-  /// Returns the next value in the circular list.
-  T get next {
-    if (_index >= _values.length) {
-      _index = 0;
-    }
-    return _values[_index++];
-  }
-}
 
 class HorizontalLineAddingPreviewMobile
     extends DrawingAddingPreview<HorizontalLineInteractableDrawing> {

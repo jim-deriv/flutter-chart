@@ -9,14 +9,13 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/drawing_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/horizontal_line_interactable_drawing.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
 import '../enums/drawing_tool_state.dart';
+import '../helpers/paint_helpers.dart';
 import '../interactable_drawings/drawing_v2.dart';
-import '../interactable_drawings/interactable_drawing.dart';
 import '../enums/state_change_direction.dart';
 import 'interactive_hover_state.dart';
 import 'interactive_normal_state.dart';
@@ -199,66 +198,7 @@ class AddingToolAlignmentCrossHair extends DrawingV2 {
     if (_currentHoverPosition == null) {
       return;
     }
-    _drawPointAlignmentGuides(canvas, size, _currentHoverPosition!);
-  }
-
-  // TODO(NA): reuse this method from other places.
-  /// Draws alignment guides (horizontal and vertical lines) for a single point
-  void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
-    // Create a dashed paint style for the alignment guides
-    final Paint guidesPaint = Paint()
-      ..color = const Color(0x80FFFFFF) // Semi-transparent white
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
-
-    // Create paths for horizontal and vertical guides
-    final Path horizontalPath = Path();
-    final Path verticalPath = Path();
-
-    // Draw horizontal and vertical guides from the point
-    horizontalPath
-      ..moveTo(0, pointOffset.dy)
-      ..lineTo(size.width, pointOffset.dy);
-
-    verticalPath
-      ..moveTo(pointOffset.dx, 0)
-      ..lineTo(pointOffset.dx, size.height);
-
-    // Draw the dashed lines
-    canvas
-      ..drawPath(
-        _dashPath(horizontalPath,
-            dashArray: CircularIntervalList<double>(<double>[5, 5])),
-        guidesPaint,
-      )
-      ..drawPath(
-        _dashPath(verticalPath,
-            dashArray: CircularIntervalList<double>(<double>[5, 5])),
-        guidesPaint,
-      );
-  }
-
-  Path _dashPath(
-    Path source, {
-    required CircularIntervalList<double> dashArray,
-  }) {
-    final Path dest = Path();
-    for (final PathMetric metric in source.computeMetrics()) {
-      double distance = 0;
-      bool draw = true;
-      while (distance < metric.length) {
-        final double len = dashArray.next;
-        if (draw) {
-          dest.addPath(
-            metric.extractPath(distance, distance + len),
-            Offset.zero,
-          );
-        }
-        distance += len;
-        draw = !draw;
-      }
-    }
-    return dest;
+    drawPointAlignmentGuides(canvas, size, _currentHoverPosition!);
   }
 
   @override
@@ -266,12 +206,13 @@ class AddingToolAlignmentCrossHair extends DrawingV2 {
 
   @override
   void onCreateTap(
-      TapUpDetails details,
-      EpochFromX epochFromX,
-      QuoteFromY quoteFromY,
-      EpochToX epochToX,
-      QuoteToY quoteToY,
-      VoidCallback onDone) {}
+    TapUpDetails details,
+    EpochFromX epochFromX,
+    QuoteFromY quoteFromY,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    VoidCallback onDone,
+  ) {}
 
   @override
   void onDragEnd(DragEndDetails details, EpochFromX epochFromX,

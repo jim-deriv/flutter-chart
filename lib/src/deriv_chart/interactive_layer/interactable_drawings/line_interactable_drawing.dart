@@ -13,6 +13,7 @@ import '../../chart/data_visualization/drawing_tools/data_model/drawing_paint_st
 import '../../chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
 import '../enums/drawing_tool_state.dart';
+import '../helpers/paint_helpers.dart';
 import 'drawing_adding_preview.dart';
 import 'drawing_v2.dart';
 import 'interactable_drawing.dart';
@@ -200,7 +201,7 @@ class LineInteractableDrawing
       // Draw endpoints with glowy effect if selected
       if (drawingState.contains(DrawingToolState.selected) ||
           drawingState.contains(DrawingToolState.dragging)) {
-        _drawPointsFocusedCircle(
+        drawPointsFocusedCircle(
           paintStyle,
           lineStyle,
           canvas,
@@ -210,7 +211,7 @@ class LineInteractableDrawing
           endOffset,
         );
       } else if (drawingState.contains(DrawingToolState.hovered)) {
-        _drawPointsFocusedCircle(
+        drawPointsFocusedCircle(
             paintStyle, lineStyle, canvas, startOffset, 10, 3, endOffset);
       }
 
@@ -220,9 +221,9 @@ class LineInteractableDrawing
       }
     } else if (drawingState.contains(DrawingToolState.adding)) {
       if (startPoint != null) {
-        _drawPoint(
+        drawPoint(
             startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
-        _drawPointAlignmentGuides(canvas, size,
+        drawPointAlignmentGuides(canvas, size,
             Offset(epochToX(startPoint!.epoch), quoteToY(startPoint!.quote)));
 
         if (_hoverPosition != null) {
@@ -234,131 +235,22 @@ class LineInteractableDrawing
           );
           canvas.drawLine(startPosition, _hoverPosition!,
               paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
-          _drawPointAlignmentGuides(canvas, size, _hoverPosition!);
+          drawPointAlignmentGuides(canvas, size, _hoverPosition!);
         }
       }
 
       if (endPoint != null) {
-        _drawPoint(
-            endPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
+        drawPoint(endPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
       }
     }
-  }
-
-  void _drawPointsFocusedCircle(
-      DrawingPaintStyle paintStyle,
-      LineStyle lineStyle,
-      ui.Canvas canvas,
-      ui.Offset startOffset,
-      double outerCircleRadius,
-      double innerCircleRadius,
-      ui.Offset endOffset) {
-    final normalPaintStyle = paintStyle.glowyCirclePaintStyle(lineStyle.color);
-    final glowyPaintStyle =
-        paintStyle.glowyCirclePaintStyle(lineStyle.color.withOpacity(0.3));
-    canvas
-      ..drawCircle(
-        startOffset,
-        outerCircleRadius,
-        glowyPaintStyle,
-      )
-      ..drawCircle(
-        startOffset,
-        innerCircleRadius,
-        normalPaintStyle,
-      )
-      ..drawCircle(
-        endOffset,
-        outerCircleRadius,
-        glowyPaintStyle,
-      )
-      ..drawCircle(
-        endOffset,
-        innerCircleRadius,
-        normalPaintStyle,
-      );
   }
 
   /// Draws alignment guides (horizontal and vertical lines) from the points
   void _drawAlignmentGuides(Canvas canvas, Size size, Offset startOffset,
       Offset endOffset, DrawingPaintStyle paintStyle) {
     // Draw alignment guides for both start and end points
-    _drawPointAlignmentGuides(canvas, size, startOffset);
-    _drawPointAlignmentGuides(canvas, size, endOffset);
-  }
-
-  /// Draws alignment guides (horizontal and vertical lines) for a single point
-  void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
-    // Create a dashed paint style for the alignment guides
-    final Paint guidesPaint = Paint()
-      ..color = const Color(0x80FFFFFF) // Semi-transparent white
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
-
-    // Create paths for horizontal and vertical guides
-    final Path horizontalPath = Path();
-    final Path verticalPath = Path();
-
-    // Draw horizontal and vertical guides from the point
-    horizontalPath
-      ..moveTo(0, pointOffset.dy)
-      ..lineTo(size.width, pointOffset.dy);
-
-    verticalPath
-      ..moveTo(pointOffset.dx, 0)
-      ..lineTo(pointOffset.dx, size.height);
-
-    // Draw the dashed lines
-    canvas
-      ..drawPath(
-        _dashPath(horizontalPath,
-            dashArray: _CircularIntervalList<double>(<double>[5, 5])),
-        guidesPaint,
-      )
-      ..drawPath(
-        _dashPath(verticalPath,
-            dashArray: _CircularIntervalList<double>(<double>[5, 5])),
-        guidesPaint,
-      );
-  }
-
-  /// Creates a dashed path from a regular path
-  Path _dashPath(
-    Path source, {
-    required _CircularIntervalList<double> dashArray,
-  }) {
-    final Path dest = Path();
-    for (final ui.PathMetric metric in source.computeMetrics()) {
-      double distance = 0;
-      bool draw = true;
-      while (distance < metric.length) {
-        final double len = dashArray.next;
-        if (draw) {
-          dest.addPath(
-            metric.extractPath(distance, distance + len),
-            Offset.zero,
-          );
-        }
-        distance += len;
-        draw = !draw;
-      }
-    }
-    return dest;
-  }
-
-  void _drawPoint(
-    EdgePoint point,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-    Canvas canvas,
-    DrawingPaintStyle paintStyle,
-    LineStyle lineStyle,
-  ) {
-    canvas.drawCircle(
-      Offset(epochToX(point.epoch), quoteToY(point.quote)),
-      5,
-      paintStyle.glowyCirclePaintStyle(lineStyle.color),
-    );
+    drawPointAlignmentGuides(canvas, size, startOffset);
+    drawPointAlignmentGuides(canvas, size, endOffset);
   }
 
   @override
