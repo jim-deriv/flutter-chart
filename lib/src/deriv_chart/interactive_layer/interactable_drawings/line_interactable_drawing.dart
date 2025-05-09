@@ -40,14 +40,6 @@ class LineInteractableDrawing
   // false: dragging the end point
   bool? _isDraggingStartPoint;
 
-  Offset? _hoverPosition;
-
-  @override
-  void onHover(PointerHoverEvent event, EpochFromX epochFromX,
-      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
-    _hoverPosition = event.localPosition;
-  }
-
   @override
   void onDragStart(
     DragStartDetails details,
@@ -225,18 +217,6 @@ class LineInteractableDrawing
             startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
         drawPointAlignmentGuides(canvas, size,
             Offset(epochToX(startPoint!.epoch), quoteToY(startPoint!.quote)));
-
-        if (_hoverPosition != null) {
-          // endPoint doesn't exist yet and it means we're creating this line.
-          // Drawing preview line from startPoint to hoverPosition.
-          final Offset startPosition = Offset(
-            epochToX(startPoint!.epoch),
-            quoteToY(startPoint!.quote),
-          );
-          canvas.drawLine(startPosition, _hoverPosition!,
-              paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
-          drawPointAlignmentGuides(canvas, size, _hoverPosition!);
-        }
       }
 
       if (endPoint != null) {
@@ -429,9 +409,11 @@ class LineInteractableDrawing
   DrawingAddingPreview<InteractableDrawing<DrawingToolConfig>>
       getAddingPreviewForDesktopBehaviour(
     InteractiveLayerDesktopBehaviour layerBehaviour,
-  ) {
-    throw UnimplementedError();
-  }
+  ) =>
+          LineAddingPreviewDesktop(
+            interactiveLayerBehaviour: layerBehaviour,
+            interactableDrawing: this,
+          );
 }
 
 /// A circular array for dash patterns
@@ -709,5 +691,92 @@ class LineAddingPreviewMobile
   }
 
   @override
-  String get id => 'LineAddingPreview';
+  String get id => 'line-adding-preview-mobile';
+}
+
+/// Interactable drawing for line drawing tool.
+class LineAddingPreviewDesktop
+    extends DrawingAddingPreview<LineInteractableDrawing> {
+  /// Initializes [LineInteractableDrawing].
+  LineAddingPreviewDesktop({
+    required super.interactiveLayerBehaviour,
+    required super.interactableDrawing,
+  });
+
+  Offset? _hoverPosition;
+
+  @override
+  void onHover(PointerHoverEvent event, EpochFromX epochFromX,
+      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
+    _hoverPosition = event.localPosition;
+  }
+
+  @override
+  void paint(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    Set<DrawingToolState> drawingState,
+  ) {
+    final LineStyle lineStyle = interactableDrawing.config.lineStyle;
+    final DrawingPaintStyle paintStyle = DrawingPaintStyle();
+
+    if (interactableDrawing.startPoint != null) {
+      drawPoint(interactableDrawing.startPoint!, epochToX, quoteToY, canvas,
+          paintStyle, lineStyle);
+      drawPointAlignmentGuides(
+          canvas,
+          size,
+          Offset(epochToX(interactableDrawing.startPoint!.epoch),
+              quoteToY(interactableDrawing.startPoint!.quote)));
+
+      if (_hoverPosition != null) {
+        // endPoint doesn't exist yet and it means we're creating this line.
+        // Drawing preview line from startPoint to hoverPosition.
+        final Offset startPosition = Offset(
+          epochToX(interactableDrawing.startPoint!.epoch),
+          quoteToY(interactableDrawing.startPoint!.quote),
+        );
+        canvas.drawLine(startPosition, _hoverPosition!,
+            paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
+        drawPointAlignmentGuides(canvas, size, _hoverPosition!);
+      }
+    }
+
+    if (interactableDrawing.endPoint != null) {
+      drawPoint(interactableDrawing.endPoint!, epochToX, quoteToY, canvas,
+          paintStyle, lineStyle);
+    }
+  }
+
+  @override
+  void onCreateTap(
+    TapUpDetails details,
+    EpochFromX epochFromX,
+    QuoteFromY quoteFromY,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    VoidCallback onDone,
+  ) {
+    if (interactableDrawing.startPoint == null) {
+      interactableDrawing.startPoint = EdgePoint(
+        epoch: epochFromX(details.localPosition.dx),
+        quote: quoteFromY(details.localPosition.dy),
+      );
+    } else {
+      interactableDrawing.endPoint ??= EdgePoint(
+        epoch: epochFromX(details.localPosition.dx),
+        quote: quoteFromY(details.localPosition.dy),
+      );
+      onDone();
+    }
+  }
+
+  @override
+  String get id => 'line-adding-preview-desktop';
+
+  @override
+  bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) => false;
 }

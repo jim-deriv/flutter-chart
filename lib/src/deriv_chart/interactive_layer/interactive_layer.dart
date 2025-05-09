@@ -40,6 +40,8 @@ class InteractiveLayer extends StatefulWidget {
     super.key,
   });
 
+  /// Interactive layer behaviour which defines how interactive layer should
+  /// behave in scenarios like adding/dragging, etc.
   final InteractiveLayerBehaviour interactiveLayerBehaviour;
 
   /// Drawing tools.

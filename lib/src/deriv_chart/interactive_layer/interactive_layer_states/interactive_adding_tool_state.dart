@@ -143,8 +143,7 @@ class InteractiveAddingToolStateMobile extends InteractiveAddingToolState {
 }
 
 /// The desktop-specific implementation of the interactive adding tool state.
-class InteractiveAddingToolStateDesktop
-    extends InteractiveAddingToolStateMobile {
+class InteractiveAddingToolStateDesktop extends InteractiveAddingToolState {
   /// Initializes the state with the interactive layer and the [addingTool].
   InteractiveAddingToolStateDesktop(
     super.addingTool, {
