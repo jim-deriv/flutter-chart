@@ -47,22 +47,22 @@ class LineAddingPreviewDesktop
     final LineStyle lineStyle = interactableDrawing.config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
 
-    if (interactableDrawing.startPoint != null) {
-      drawPoint(interactableDrawing.startPoint!, epochToX, quoteToY, canvas,
-          paintStyle, lineStyle);
+    final EdgePoint? startPoint = interactableDrawing.startPoint;
+
+    if (startPoint != null) {
+      drawPoint(startPoint, epochToX, quoteToY, canvas, paintStyle, lineStyle);
       drawPointAlignmentGuides(
-          canvas,
-          size,
-          Offset(epochToX(interactableDrawing.startPoint!.epoch),
-              quoteToY(interactableDrawing.startPoint!.quote)));
+        canvas,
+        size,
+        Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote)),
+      );
 
       if (_hoverPosition != null) {
         // endPoint doesn't exist yet and it means we're creating this line.
         // Drawing preview line from startPoint to hoverPosition.
-        final Offset startPosition = Offset(
-          epochToX(interactableDrawing.startPoint!.epoch),
-          quoteToY(interactableDrawing.startPoint!.quote),
-        );
+        final Offset startPosition =
+            Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote));
+
         canvas.drawLine(startPosition, _hoverPosition!,
             paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
         drawPointAlignmentGuides(canvas, size, _hoverPosition!);

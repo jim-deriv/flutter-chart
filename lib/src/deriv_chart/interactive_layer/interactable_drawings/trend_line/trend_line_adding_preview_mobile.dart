@@ -34,20 +34,22 @@ class LineAddingPreviewMobile
 
   @override
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
-    if (interactableDrawing.startPoint != null &&
-        interactableDrawing.endPoint == null) {
+    final EdgePoint? startPoint = interactableDrawing.startPoint;
+    final EdgePoint? endPoint = interactableDrawing.endPoint;
+
+    if (startPoint != null && endPoint == null) {
       final startOffset = Offset(
-        epochToX(interactableDrawing.startPoint!.epoch),
-        quoteToY(interactableDrawing.startPoint!.quote),
+        epochToX(startPoint.epoch),
+        quoteToY(startPoint.quote),
       );
 
       if ((offset - startOffset).distance <= hitTestMargin) {
         return true;
       }
-    } else if (interactableDrawing.endPoint != null) {
+    } else if (endPoint != null) {
       final endOffset = Offset(
-        epochToX(interactableDrawing.endPoint!.epoch),
-        quoteToY(interactableDrawing.endPoint!.quote),
+        epochToX(endPoint.epoch),
+        quoteToY(endPoint.quote),
       );
 
       if ((offset - endOffset).distance <= hitTestMargin) {
@@ -68,34 +70,27 @@ class LineAddingPreviewMobile
   ) {
     final LineStyle lineStyle = interactableDrawing.config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
-    // Check if this drawing is selected
 
-    if (interactableDrawing.startPoint != null &&
-        interactableDrawing.endPoint == null) {
-      drawPoint(interactableDrawing.startPoint!, epochToX, quoteToY, canvas,
-          paintStyle, lineStyle);
-      drawPointAlignmentGuides(
-          canvas,
-          size,
-          Offset(epochToX(interactableDrawing.startPoint!.epoch),
-              quoteToY(interactableDrawing.startPoint!.quote)));
-    } else if (interactableDrawing.startPoint != null &&
-        interactableDrawing.endPoint != null) {
-      drawPoint(interactableDrawing.endPoint!, epochToX, quoteToY, canvas,
-          paintStyle, lineStyle);
-      drawPointAlignmentGuides(
-          canvas,
-          size,
-          Offset(epochToX(interactableDrawing.endPoint!.epoch),
-              quoteToY(interactableDrawing.endPoint!.quote)));
-      final startOffset = Offset(
-        epochToX(interactableDrawing.startPoint!.epoch),
-        quoteToY(interactableDrawing.startPoint!.quote),
-      );
-      final endOffset = Offset(
-        epochToX(interactableDrawing.endPoint!.epoch),
-        quoteToY(interactableDrawing.endPoint!.quote),
-      );
+    final EdgePoint? startPoint = interactableDrawing.startPoint;
+    final EdgePoint? endPoint = interactableDrawing.endPoint;
+
+    if (startPoint != null && endPoint == null) {
+      // Start point is spawned at the chart, user can move it, we should show
+      // alignment cross-hair on start point.
+      drawPoint(startPoint, epochToX, quoteToY, canvas, paintStyle, lineStyle);
+      drawPointAlignmentGuides(canvas, size,
+          Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote)));
+    } else if (startPoint != null && endPoint != null) {
+      // End point is also spawned at the chart, user can move it, we should
+      // show alignment cross-hair on end point.
+      drawPoint(endPoint, epochToX, quoteToY, canvas, paintStyle, lineStyle);
+
+      final startOffset =
+          Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote));
+      final endOffset =
+          Offset(epochToX(endPoint.epoch), quoteToY(endPoint.quote));
+
+      drawPointAlignmentGuides(canvas, size, endOffset);
 
       // Use glowy paint style if selected, otherwise use normal paint style
       final Paint paint = drawingState.contains(DrawingToolState.selected) ||
@@ -116,16 +111,17 @@ class LineAddingPreviewMobile
     QuoteToY quoteToY,
     VoidCallback onDone,
   ) {
-    if (interactableDrawing.startPoint == null) {
+    final EdgePoint? startPoint = interactableDrawing.startPoint;
+    final EdgePoint? endPoint = interactableDrawing.endPoint;
+
+    if (startPoint == null) {
       interactableDrawing.startPoint = EdgePoint(
         epoch: epochFromX(details.localPosition.dx),
         quote: quoteFromY(details.localPosition.dy),
       );
-    } else if (interactableDrawing.startPoint != null &&
-        interactableDrawing.endPoint == null) {
-      interactableDrawing.endPoint = interactableDrawing.startPoint!.copyWith();
-    } else if (interactableDrawing.startPoint != null &&
-        interactableDrawing.endPoint != null) {
+    } else if (endPoint == null) {
+      interactableDrawing.endPoint = startPoint.copyWith();
+    } else {
       onDone();
     }
   }
@@ -138,13 +134,13 @@ class LineAddingPreviewMobile
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    if (interactableDrawing.startPoint != null &&
-        interactableDrawing.endPoint == null) {
+    final EdgePoint? startPoint = interactableDrawing.startPoint;
+    final EdgePoint? endPoint = interactableDrawing.endPoint;
+
+    if (startPoint != null && endPoint == null) {
       // If we're dragging the start point, we need to update its position
-      final Offset startOffset = Offset(
-        epochToX(interactableDrawing.startPoint!.epoch),
-        quoteToY(interactableDrawing.startPoint!.quote),
-      );
+      final Offset startOffset =
+          Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote));
 
       // Apply the delta to get the new screen position
       final Offset newOffset = startOffset + details.delta;
@@ -154,16 +150,12 @@ class LineAddingPreviewMobile
       final double newQuote = quoteFromY(newOffset.dy);
 
       // Update the start point
-      interactableDrawing.startPoint = EdgePoint(
-        epoch: newEpoch,
-        quote: newQuote,
-      );
-    } else if (interactableDrawing.endPoint != null) {
+      interactableDrawing.startPoint =
+          EdgePoint(epoch: newEpoch, quote: newQuote);
+    } else if (endPoint != null) {
       // If we're dragging the start point, we need to update its position
-      final Offset endOffset = Offset(
-        epochToX(interactableDrawing.endPoint!.epoch),
-        quoteToY(interactableDrawing.endPoint!.quote),
-      );
+      final Offset endOffset =
+          Offset(epochToX(endPoint.epoch), quoteToY(endPoint.quote));
 
       // Apply the delta to get the new screen position
       final Offset newOffset = endOffset + details.delta;
@@ -173,10 +165,8 @@ class LineAddingPreviewMobile
       final double newQuote = quoteFromY(newOffset.dy);
 
       // Update the start point
-      interactableDrawing.endPoint = EdgePoint(
-        epoch: newEpoch,
-        quote: newQuote,
-      );
+      interactableDrawing.endPoint =
+          EdgePoint(epoch: newEpoch, quote: newQuote);
     }
   }
 
