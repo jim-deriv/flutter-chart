@@ -49,6 +49,9 @@ abstract class InteractiveLayerBase {
   /// Converts quote to y.
   QuoteToY get quoteToY;
 
+  /// The size of the interactive layer.
+  Size? get layerSize;
+
   /// Clears the adding drawing.
   void clearAddingDrawing();
 

@@ -240,8 +240,6 @@ class _InteractiveLayerGestureHandlerState
     extends State<_InteractiveLayerGestureHandler>
     with SingleTickerProviderStateMixin
     implements InteractiveLayerBase {
-  // InteractableDrawing? _selectedDrawing;
-
   late AnimationController _stateChangeController;
   static const Curve _stateChangeCurve = Curves.easeInOut;
   final InteractionNotifier _interactionNotifier = InteractionNotifier();
@@ -250,9 +248,20 @@ class _InteractiveLayerGestureHandlerState
   AnimationController? get stateChangeAnimationController =>
       _stateChangeController;
 
+  final GlobalKey _layerKey = GlobalKey();
+
+  Size? _size;
+
   @override
   void initState() {
     super.initState();
+
+    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
+      setState(() {
+        _size =
+            (_layerKey.currentContext?.findRenderObject() as RenderBox?)?.size;
+      });
+    });
 
     widget.interactiveLayerBehaviour.init(
       interactiveLayer: this,
@@ -276,13 +285,6 @@ class _InteractiveLayerGestureHandlerState
         widget.addingDrawingTool != oldWidget.addingDrawingTool) {
       widget.interactiveLayerBehaviour
           .onAddDrawingTool(widget.addingDrawingTool!);
-      // updateStateTo(
-      //   InteractiveAddingToolState(
-      //     widget.addingDrawingTool!,
-      //     interactiveLayer: this,
-      //   ),
-      //   StateChangeAnimationDirection.forward,
-      // );
     }
   }
 
@@ -290,13 +292,6 @@ class _InteractiveLayerGestureHandlerState
   Future<void> animateStateChange(
       StateChangeAnimationDirection direction) async {
     await _runAnimation(direction);
-    // if (waitForAnimation) {
-    //   await _runAnimation(direction);
-    //   setState(() => _interactiveState = state);
-    // } else {
-    //   unawaited(_runAnimation(direction));
-    //   setState(() => _interactiveState = state);
-    // }
   }
 
   Future<void> _runAnimation(StateChangeAnimationDirection direction) async {
@@ -336,6 +331,7 @@ class _InteractiveLayerGestureHandlerState
         // TODO(NA): Move this part into separate widget. InteractiveLayer only cares about the interactions and selected tool movement
         // It can delegate it to an inner component as well. which we can have different interaction behaviours like per platform as well.
         child: RepaintBoundary(
+          key: _layerKey,
           child: MultipleAnimatedBuilder(
               animations: [_stateChangeController, _interactionNotifier],
               builder: (_, __) {
@@ -439,4 +435,7 @@ class _InteractiveLayerGestureHandlerState
   @override
   void onSaveDrawing(InteractableDrawing<DrawingToolConfig> drawing) =>
       widget.onSaveDrawingChange?.call(drawing);
+
+  @override
+  Size? get layerSize => _size;
 }

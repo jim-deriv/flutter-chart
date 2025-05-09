@@ -20,10 +20,15 @@ class LineAddingPreviewMobile
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
   }) {
-    // TODO(Ramin): use center of the screen which is received from interactive layer instead of hardcoded values
+    final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
+    final Size? layerSize = interactiveLayer.layerSize;
+
+    final double centerX = layerSize != null ? layerSize.width / 2 : 0;
+    final double centerY = layerSize != null ? layerSize.height / 2 : 0;
+
     interactableDrawing.startPoint = EdgePoint(
-      epoch: interactiveLayerBehaviour.interactiveLayer.epochFromX(200),
-      quote: interactiveLayerBehaviour.interactiveLayer.quoteFromY(200),
+      epoch: interactiveLayer.epochFromX(centerX),
+      quote: interactiveLayer.quoteFromY(centerY),
     );
   }
 
@@ -118,10 +123,7 @@ class LineAddingPreviewMobile
       );
     } else if (interactableDrawing.startPoint != null &&
         interactableDrawing.endPoint == null) {
-      interactableDrawing.endPoint = EdgePoint(
-        epoch: epochFromX(200),
-        quote: quoteFromY(200),
-      );
+      interactableDrawing.endPoint = interactableDrawing.startPoint!.copyWith();
     } else if (interactableDrawing.startPoint != null &&
         interactableDrawing.endPoint != null) {
       onDone();
