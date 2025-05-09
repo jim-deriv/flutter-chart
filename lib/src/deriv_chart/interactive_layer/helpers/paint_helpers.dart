@@ -29,19 +29,19 @@ void drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
   // Draw the dashed lines
   canvas
     ..drawPath(
-      _dashPath(horizontalPath,
+      dashPath(horizontalPath,
           dashArray: CircularIntervalList<double>(<double>[5, 5])),
       guidesPaint,
     )
     ..drawPath(
-      _dashPath(verticalPath,
+      dashPath(verticalPath,
           dashArray: CircularIntervalList<double>(<double>[5, 5])),
       guidesPaint,
     );
 }
 
 /// Creates a dashed path from a regular path
-Path _dashPath(
+Path dashPath(
   Path source, {
   required CircularIntervalList<double> dashArray,
 }) {
