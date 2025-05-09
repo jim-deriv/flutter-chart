@@ -1,4 +1,3 @@
-import 'dart:ui' as ui;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/line/line_drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/extensions/extensions.dart';
@@ -416,21 +415,6 @@ class LineInteractableDrawing
           );
 }
 
-/// A circular array for dash patterns
-class _CircularIntervalList<T> {
-  _CircularIntervalList(this._values);
-
-  final List<T> _values;
-  int _index = 0;
-
-  T get next {
-    if (_index >= _values.length) {
-      _index = 0;
-    }
-    return _values[_index++];
-  }
-}
-
 /// A Line interactable just for the preview of the line when we're adding the
 /// line tool on mobile.
 class LineAddingPreviewMobile
@@ -504,18 +488,18 @@ class LineAddingPreviewMobile
 
     if (interactableDrawing.startPoint != null &&
         interactableDrawing.endPoint == null) {
-      _drawPoint(interactableDrawing.startPoint!, epochToX, quoteToY, canvas,
+      drawPoint(interactableDrawing.startPoint!, epochToX, quoteToY, canvas,
           paintStyle, lineStyle);
-      _drawPointAlignmentGuides(
+      drawPointAlignmentGuides(
           canvas,
           size,
           Offset(epochToX(interactableDrawing.startPoint!.epoch),
               quoteToY(interactableDrawing.startPoint!.quote)));
     } else if (interactableDrawing.startPoint != null &&
         interactableDrawing.endPoint != null) {
-      _drawPoint(interactableDrawing.endPoint!, epochToX, quoteToY, canvas,
+      drawPoint(interactableDrawing.endPoint!, epochToX, quoteToY, canvas,
           paintStyle, lineStyle);
-      _drawPointAlignmentGuides(
+      drawPointAlignmentGuides(
           canvas,
           size,
           Offset(epochToX(interactableDrawing.endPoint!.epoch),
@@ -537,81 +521,6 @@ class LineAddingPreviewMobile
           : paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness);
       canvas.drawLine(startOffset, endOffset, paint);
     }
-  }
-
-  // TODO(NA): reuse this method from the line interactable drawing
-  void _drawPoint(
-    EdgePoint point,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-    Canvas canvas,
-    DrawingPaintStyle paintStyle,
-    LineStyle lineStyle,
-  ) {
-    canvas.drawCircle(
-      Offset(epochToX(point.epoch), quoteToY(point.quote)),
-      5,
-      paintStyle.glowyCirclePaintStyle(lineStyle.color),
-    );
-  }
-
-  // Draws alignment guides (horizontal and vertical lines) for a single point
-  void _drawPointAlignmentGuides(Canvas canvas, Size size, Offset pointOffset) {
-    // Create a dashed paint style for the alignment guides
-    final Paint guidesPaint = Paint()
-      ..color = const Color(0x80FFFFFF) // Semi-transparent white
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
-
-    // Create paths for horizontal and vertical guides
-    final Path horizontalPath = Path();
-    final Path verticalPath = Path();
-
-    // Draw horizontal and vertical guides from the point
-    horizontalPath
-      ..moveTo(0, pointOffset.dy)
-      ..lineTo(size.width, pointOffset.dy);
-
-    verticalPath
-      ..moveTo(pointOffset.dx, 0)
-      ..lineTo(pointOffset.dx, size.height);
-
-    // Draw the dashed lines
-    canvas
-      ..drawPath(
-        _dashPath(horizontalPath,
-            dashArray: _CircularIntervalList<double>(<double>[5, 5])),
-        guidesPaint,
-      )
-      ..drawPath(
-        _dashPath(verticalPath,
-            dashArray: _CircularIntervalList<double>(<double>[5, 5])),
-        guidesPaint,
-      );
-  }
-
-  /// Creates a dashed path from a regular path
-  Path _dashPath(
-    Path source, {
-    required _CircularIntervalList<double> dashArray,
-  }) {
-    final Path dest = Path();
-    for (final ui.PathMetric metric in source.computeMetrics()) {
-      double distance = 0;
-      bool draw = true;
-      while (distance < metric.length) {
-        final double len = dashArray.next;
-        if (draw) {
-          dest.addPath(
-            metric.extractPath(distance, distance + len),
-            Offset.zero,
-          );
-        }
-        distance += len;
-        draw = !draw;
-      }
-    }
-    return dest;
   }
 
   @override
