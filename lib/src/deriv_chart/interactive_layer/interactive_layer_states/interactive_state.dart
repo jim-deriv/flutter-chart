@@ -6,6 +6,7 @@ import '../enums/drawing_tool_state.dart';
 import '../interactable_drawings/drawing_v2.dart';
 import '../interactable_drawings/interactable_drawing.dart';
 import '../interactive_layer_base.dart';
+import '../interactive_layer_behaviours/interactive_layer_behaviour.dart';
 
 /// The state of the interactive layer.
 ///
@@ -51,6 +52,7 @@ abstract class InteractiveState {
   /// access layer properties and methods.
   final InteractiveLayerBehaviour interactiveLayerBehaviour;
 
+  /// The interactive layer that owns this state.
   InteractiveLayerBase get interactiveLayer =>
       interactiveLayerBehaviour.interactiveLayer;
 

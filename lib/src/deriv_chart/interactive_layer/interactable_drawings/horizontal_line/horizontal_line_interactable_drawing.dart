@@ -7,7 +7,6 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/horizontal_line/horizontal_line_adding_preview_desktop.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
@@ -15,6 +14,8 @@ import 'package:flutter/widgets.dart';
 
 import '../../enums/drawing_tool_state.dart';
 import '../../helpers/paint_helpers.dart';
+import '../../interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
+import '../../interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import '../drawing_v2.dart';
 import '../interactable_drawing.dart';
 import 'horizontal_line_adding_preview_mobile.dart';

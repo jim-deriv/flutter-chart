@@ -1,5 +1,4 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -7,6 +6,8 @@ import 'package:flutter/widgets.dart';
 import '../../chart/data_visualization/chart_data.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
 import '../enums/drawing_tool_state.dart';
+import '../interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
+import '../interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'drawing_adding_preview.dart';
 import 'drawing_v2.dart';
 
@@ -35,26 +36,6 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
   /// Returns `true` if the drawing tool is hit by the given offset.
   @override
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY);
-
-  /// The tap event that is called when the [InteractableDrawing] is in adding
-  /// state.
-  ///
-  /// the drawing can use the tap to capture and create the coordinates required
-  /// for its shape.
-  ///
-  /// [onDone] is a callback that should be called when the drawing is done
-  /// adding. each drawing tool will know when it's done adding. For example
-  /// a line tool will be done when the user taps on the second point of the
-  /// line or for horizontal line tool when the user taps one time.
-  @override
-  void onCreateTap(
-    TapUpDetails details,
-    EpochFromX epochFromX,
-    QuoteFromY quoteFromY,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-    VoidCallback onDone,
-  ) {}
 
   /// Called when the drawing tool dragging is started.
   @override

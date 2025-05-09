@@ -21,6 +21,7 @@ import 'interactable_drawing_custom_painter.dart';
 import 'interaction_notifier.dart';
 import 'interactive_layer_base.dart';
 import 'enums/state_change_direction.dart';
+import 'interactive_layer_behaviours/interactive_layer_behaviour.dart';
 
 /// Interactive layer of the chart package where elements can be drawn and can
 /// be interacted with.
