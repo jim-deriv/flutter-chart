@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -9,12 +10,18 @@ import '../enums/drawing_tool_state.dart';
 /// The margin for hit testing.
 const double hitTestMargin = 32;
 
-/// Any drawing on the chart that can be interacted with by the user.
+/// Base interface for any drawing on the [InteractiveLayer] and can be
+/// interacted with by the user.
+///
+/// This base class defines the life-cycle functionality of the drawings in
+/// [InteractiveLayer], anything from gesture handling (onTap, onDrag, etc)
+/// to painting the drawing on the chart.
 abstract class DrawingV2 {
   /// Initializes [InteractableDrawing].
   const DrawingV2();
 
-  /// The drawing tool config.
+  /// The id of the drawing which should be unique for each drawing in
+  /// [InteractiveLayer].
   String get id;
 
   /// Returns `true` if the drawing tool is hit by the given offset.
