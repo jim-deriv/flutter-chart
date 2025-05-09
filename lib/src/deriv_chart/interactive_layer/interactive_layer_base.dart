@@ -170,17 +170,6 @@ class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
 /// The Desktop-specific implementation of the interactive layer behaviour.
 class InteractiveLayerDesktopBehaviour extends InteractiveLayerBehaviour {
   @override
-  void onAddDrawingTool(DrawingToolConfig drawingTool) {
-    updateStateTo(
-      InteractiveAddingToolStateDesktop(
-        drawingTool,
-        interactiveLayerBehaviour: this,
-      ),
-      StateChangeAnimationDirection.forward,
-    );
-  }
-
-  @override
   DrawingAddingPreview getAddingDrawingPreview(
     InteractableDrawing<DrawingToolConfig> drawing,
   ) =>

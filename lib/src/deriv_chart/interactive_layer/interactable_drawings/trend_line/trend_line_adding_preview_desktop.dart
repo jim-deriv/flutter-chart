@@ -10,6 +10,7 @@ import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
 import '../drawing_adding_preview.dart';
+import 'adding_tool_alignment_cross_hair.dart';
 import 'line_interactable_drawing.dart';
 
 /// Interactable drawing for line drawing tool.
@@ -23,10 +24,15 @@ class LineAddingPreviewDesktop
 
   Offset? _hoverPosition;
 
+  final AddingToolAlignmentCrossHair _addingToolAlignmentCrossHair =
+      AddingToolAlignmentCrossHair();
+
   @override
   void onHover(PointerHoverEvent event, EpochFromX epochFromX,
       QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
     _hoverPosition = event.localPosition;
+    _addingToolAlignmentCrossHair.onHover(
+        event, epochFromX, quoteFromY, epochToX, quoteToY);
   }
 
   @override
@@ -67,6 +73,9 @@ class LineAddingPreviewDesktop
       drawPoint(interactableDrawing.endPoint!, epochToX, quoteToY, canvas,
           paintStyle, lineStyle);
     }
+
+    _addingToolAlignmentCrossHair.paint(
+        canvas, size, epochToX, quoteToY, animationInfo, drawingState);
   }
 
   @override
