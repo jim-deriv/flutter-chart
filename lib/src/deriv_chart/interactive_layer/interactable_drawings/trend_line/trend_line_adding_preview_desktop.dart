@@ -24,6 +24,7 @@ class LineAddingPreviewDesktop
 
   Offset? _hoverPosition;
 
+  /// The cross-hair that is following mouse cursor and is used for alignment.
   final AddingToolAlignmentCrossHair _crossHair =
       AddingToolAlignmentCrossHair();
 
@@ -31,6 +32,7 @@ class LineAddingPreviewDesktop
   void onHover(PointerHoverEvent event, EpochFromX epochFromX,
       QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
     _hoverPosition = event.localPosition;
+
     _crossHair.onHover(event, epochFromX, quoteFromY, epochToX, quoteToY);
   }
 

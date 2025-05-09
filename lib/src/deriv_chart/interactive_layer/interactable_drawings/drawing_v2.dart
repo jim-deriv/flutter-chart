@@ -10,7 +10,7 @@ import '../enums/drawing_tool_state.dart';
 /// The margin for hit testing.
 const double hitTestMargin = 32;
 
-/// Base interface for any drawing on the [InteractiveLayer] and can be
+/// Base interface for any drawing painted on the [InteractiveLayer] and can be
 /// interacted with by the user.
 ///
 /// This base class defines the life-cycle functionality of the drawings in
@@ -26,8 +26,6 @@ abstract class DrawingV2 {
 
   /// Returns `true` if the drawing tool is hit by the given offset.
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY);
-
-
 
   /// Called when the drawing tool dragging is started.
   void onDragStart(
