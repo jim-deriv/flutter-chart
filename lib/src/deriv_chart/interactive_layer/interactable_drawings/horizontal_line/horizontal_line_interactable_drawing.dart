@@ -6,6 +6,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/horizontal_line/horizontal_line_adding_preview_desktop.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
@@ -181,7 +182,6 @@ class HorizontalLineInteractableDrawing
       );
   }
 
-
   @override
   void onCreateTap(
     TapUpDetails details,
@@ -261,22 +261,19 @@ class HorizontalLineInteractableDrawing
   DrawingAddingPreview<InteractableDrawing<DrawingToolConfig>>
       getAddingPreviewForDesktopBehaviour(
     InteractiveLayerDesktopBehaviour layerBehaviour,
-  ) {
-    throw UnimplementedError();
-  }
+  ) =>
+          HorizontalLineAddingPreviewDesktop(
+            interactiveLayerBehaviour: layerBehaviour,
+            interactableDrawing: this,
+          );
 
   @override
   DrawingAddingPreview<InteractableDrawing<DrawingToolConfig>>
       getAddingPreviewForMobileBehaviour(
     InteractiveLayerMobileBehaviour layerBehaviour,
-  ) {
-    return HorizontalLineAddingPreviewMobile(
-      interactiveLayerBehaviour: layerBehaviour,
-      interactableDrawing: this,
-    );
-  }
+  ) =>
+          HorizontalLineAddingPreviewMobile(
+            interactiveLayerBehaviour: layerBehaviour,
+            interactableDrawing: this,
+          );
 }
-
-
-
-
