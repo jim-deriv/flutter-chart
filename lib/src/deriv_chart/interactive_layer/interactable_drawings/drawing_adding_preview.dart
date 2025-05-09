@@ -34,7 +34,16 @@ abstract class DrawingAddingPreview<
   /// that is going to be added.
   final T interactableDrawing;
 
-  @override
+  /// The tap event that is called when user taps on a position on the screen
+  /// when we're in adding state.
+  ///
+  /// the drawing can use the tap to capture and create the coordinates required
+  /// for its shape.
+  ///
+  /// [onDone] is a callback that should be called when the drawing is done
+  /// adding. each drawing tool will know when it's done adding. For example
+  /// a line tool will be done when the user taps on the second point of the
+  /// line or for horizontal line tool when the user taps one time.
   void onCreateTap(
     TapUpDetails details,
     EpochFromX epochFromX,
@@ -42,7 +51,7 @@ abstract class DrawingAddingPreview<
     EpochToX epochToX,
     QuoteToY quoteToY,
     VoidCallback onDone,
-  ) {}
+  );
 
   @override
   void onDragStart(

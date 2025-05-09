@@ -28,29 +28,6 @@ class LineAddingPreviewMobile
   }
 
   @override
-  void onDragStart(
-    DragStartDetails details,
-    EpochFromX epochFromX,
-    QuoteFromY quoteFromY,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-  ) {
-    if (interactableDrawing.startPoint != null &&
-        interactableDrawing.endPoint == null) {
-      final Offset startOffset = Offset(
-        epochToX(interactableDrawing.startPoint!.epoch),
-        quoteToY(interactableDrawing.startPoint!.quote),
-      );
-
-      // Check if the drag is starting on the start point
-      if ((details.localPosition - startOffset).distance <= hitTestMargin) {
-        // _isDraggingStartPoint = true;
-        return;
-      }
-    }
-  }
-
-  @override
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
     if (interactableDrawing.startPoint != null &&
         interactableDrawing.endPoint == null) {

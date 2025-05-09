@@ -27,24 +27,7 @@ abstract class DrawingV2 {
   /// Returns `true` if the drawing tool is hit by the given offset.
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY);
 
-  /// The tap event that is called when the [InteractableDrawing] is in adding
-  /// state.
-  ///
-  /// the drawing can use the tap to capture and create the coordinates required
-  /// for its shape.
-  ///
-  /// [onDone] is a callback that should be called when the drawing is done
-  /// adding. each drawing tool will know when it's done adding. For example
-  /// a line tool will be done when the user taps on the second point of the
-  /// line or for horizontal line tool when the user taps one time.
-  void onCreateTap(
-    TapUpDetails details,
-    EpochFromX epochFromX,
-    QuoteFromY quoteFromY,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-    VoidCallback onDone,
-  );
+
 
   /// Called when the drawing tool dragging is started.
   void onDragStart(

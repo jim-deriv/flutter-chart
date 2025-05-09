@@ -182,24 +182,6 @@ class HorizontalLineInteractableDrawing
       );
   }
 
-  @override
-  void onCreateTap(
-    TapUpDetails details,
-    EpochFromX epochFromX,
-    QuoteFromY quoteFromY,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-    VoidCallback onDone,
-  ) {
-    if (startPoint == null) {
-      final quote = quoteFromY(details.localPosition.dy);
-      startPoint = EdgePoint(
-        epoch: epochFromX(0), // Start from left edge
-        quote: quote,
-      );
-      onDone(); // Complete immediately since we don't need a second tap
-    }
-  }
 
   @override
   void onDragUpdate(

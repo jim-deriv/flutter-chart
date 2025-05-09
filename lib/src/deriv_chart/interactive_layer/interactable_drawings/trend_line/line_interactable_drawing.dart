@@ -234,29 +234,6 @@ class LineInteractableDrawing
   }
 
   @override
-  void onCreateTap(
-    TapUpDetails details,
-    EpochFromX epochFromX,
-    QuoteFromY quoteFromY,
-    EpochToX epochToX,
-    QuoteToY quoteToY,
-    VoidCallback onDone,
-  ) {
-    if (startPoint == null) {
-      startPoint = EdgePoint(
-        epoch: epochFromX(details.localPosition.dx),
-        quote: quoteFromY(details.localPosition.dy),
-      );
-    } else {
-      endPoint ??= EdgePoint(
-        epoch: epochFromX(details.localPosition.dx),
-        quote: quoteFromY(details.localPosition.dy),
-      );
-      onDone();
-    }
-  }
-
-  @override
   void onDragUpdate(
     DragUpdateDetails details,
     EpochFromX epochFromX,
