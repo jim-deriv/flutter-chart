@@ -24,15 +24,14 @@ class LineAddingPreviewDesktop
 
   Offset? _hoverPosition;
 
-  final AddingToolAlignmentCrossHair _addingToolAlignmentCrossHair =
+  final AddingToolAlignmentCrossHair _crossHair =
       AddingToolAlignmentCrossHair();
 
   @override
   void onHover(PointerHoverEvent event, EpochFromX epochFromX,
       QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
     _hoverPosition = event.localPosition;
-    _addingToolAlignmentCrossHair.onHover(
-        event, epochFromX, quoteFromY, epochToX, quoteToY);
+    _crossHair.onHover(event, epochFromX, quoteFromY, epochToX, quoteToY);
   }
 
   @override
@@ -51,11 +50,6 @@ class LineAddingPreviewDesktop
 
     if (startPoint != null) {
       drawPoint(startPoint, epochToX, quoteToY, canvas, paintStyle, lineStyle);
-      drawPointAlignmentGuides(
-        canvas,
-        size,
-        Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote)),
-      );
 
       if (_hoverPosition != null) {
         // endPoint doesn't exist yet and it means we're creating this line.
@@ -65,7 +59,6 @@ class LineAddingPreviewDesktop
 
         canvas.drawLine(startPosition, _hoverPosition!,
             paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness));
-        drawPointAlignmentGuides(canvas, size, _hoverPosition!);
       }
     }
 
@@ -74,7 +67,7 @@ class LineAddingPreviewDesktop
           paintStyle, lineStyle);
     }
 
-    _addingToolAlignmentCrossHair.paint(
+    _crossHair.paint(
         canvas, size, epochToX, quoteToY, animationInfo, drawingState);
   }
 
