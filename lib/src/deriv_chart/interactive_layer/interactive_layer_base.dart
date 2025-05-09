@@ -150,12 +150,10 @@ abstract class InteractiveLayerBehaviour {
 class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
   @override
   void onAddDrawingTool(DrawingToolConfig drawingTool) {
-    final newState = InteractiveAddingToolStateMobile(drawingTool,
-        interactiveLayerBehaviour: this)
-      ..onTap(TapUpDetails(
-        kind: PointerDeviceKind.touch,
-        localPosition: const Offset(100, 100),
-      ));
+    final newState = InteractiveAddingToolStateMobile(
+      drawingTool,
+      interactiveLayerBehaviour: this,
+    );
 
     updateStateTo(
       newState,
