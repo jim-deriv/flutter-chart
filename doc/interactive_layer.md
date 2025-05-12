@@ -111,6 +111,34 @@ Each specific drawing tool (like `LineInteractableDrawing`) extends this class t
 - Handling drag operations in a way that makes sense for its geometry
 - Painting itself with appropriate visual styles based on its state
 
+## DrawingAddingPreview
+
+The `DrawingAddingPreview` class is a specialized component that handles the preview and creation process of drawing tools. It serves as a temporary visual representation during the drawing tool creation process and is responsible for:
+
+1. Displaying a preview of the drawing being created
+2. Showing alignment guides, hints, or other visual aids
+3. Handling user interactions during the drawing creation process
+4. Coordinating with the `InteractiveLayerBehaviour` to manage platform-specific interactions
+
+The preview exists only during the drawing addition lifecycle and is removed once the drawing is fully created and added to the chart. Different drawing tools implement their own specific preview behaviors by extending this class.
+
+Key characteristics of `DrawingAddingPreview`:
+
+- It implements the `DrawingV2` interface, just like `InteractableDrawing`
+- It holds a reference to the actual `InteractableDrawing` instance being created
+- It works with `InteractiveLayerBehaviour` to handle platform-specific interactions
+- It provides the `onCreateTap` method that captures user taps to define the drawing's shape
+- Different drawing tools require different numbers of taps to complete (e.g., a horizontal line may require just one tap, while a trend line requires two taps)
+
+### Platform-Specific Behaviors
+
+The Interactive Layer supports different behaviors based on the platform (desktop or mobile) through the `InteractiveLayerBehaviour` abstract class:
+
+- **Desktop Behavior**: Optimized for mouse interactions, including hover events and precise clicking
+- **Mobile Behavior**: Optimized for touch interactions, with appropriate touch targets and gestures
+
+Each drawing tool can provide different preview implementations for desktop and mobile through the `getAddingPreviewForDesktopBehaviour` and `getAddingPreviewForMobileBehaviour` methods in `InteractableDrawing`.
+
 ## Implementation Details
 
 The Interactive Layer uses a combination of gesture detectors and custom painters to:
@@ -127,3 +155,83 @@ When a user interacts with the chart, the Interactive Layer:
 4. The drawing tools are repainted with their new states and positions
 
 This architecture provides a clean separation of concerns and makes it easy to add new interaction modes or drawing tool types.
+
+## Interactive Layer Architecture Diagram
+
+The following diagram illustrates the architecture and flow of the Interactive Layer, including the relationships between InteractiveStates, InteractiveLayerBehaviour, and DrawingAddingPreview:
+
+```
++-------------------------------------------+
+|            InteractiveLayerBase           |
+|                                           |
+|  +-----------------------------------+    |
+|  |      InteractiveLayerBehaviour    |    |
+|  |                                   |    |
+|  |  +-----------+    +------------+  |    |
+|  |  |  Desktop  |    |   Mobile   |  |    |
+|  |  | Behaviour |    | Behaviour  |  |    |
+|  |  +-----------+    +------------+  |    |
+|  +-----------------------------------+    |
+|                    |                      |
+|  +-----------------------------------+    |
+|  |         InteractiveState          |    |
+|  |                                   |    |
+|  |  +-----------+    +------------+  |    |
+|  |  |  Normal   |    |  Selected  |  |    |
+|  |  |   State   |<-->|    State   |  |    |
+|  |  +-----------+    +------------+  |    |
+|  |        ^                 ^        |    |
+|  |        |                 |        |    |
+|  |        v                 |        |    |
+|  |  +-----------+           |        |    |
+|  |  |  Adding   |           |        |    |
+|  |  |   State   |---------->+        |    |
+|  |  +-----------+                    |    |
+|  +-----------------------------------+    |
+|                    |                      |
++-------------------------------------------+
+                     |
+                     v
++-------------------------------------------+
+|           Drawing Tool Creation           |
+|                                           |
+|  +-----------------------------------+    |
+|  |       DrawingAddingPreview        |    |
+|  |                                   |    |
+|  |  +-----------+    +------------+  |    |
+|  |  |  Desktop  |    |   Mobile   |  |    |
+|  |  |  Preview  |    |  Preview   |  |    |
+|  |  +-----------+    +------------+  |    |
+|  +-----------------------------------+    |
+|                    |                      |
+|                    v                      |
+|  +-----------------------------------+    |
+|  |        InteractableDrawing        |    |
+|  |                                   |    |
+|  |  (Line, Rectangle, Horizontal...) |    |
+|  +-----------------------------------+    |
++-------------------------------------------+
+```
+
+### Flow Explanation:
+
+1. **User Interaction**: User interactions (taps, drags, hovers) are captured by the `InteractiveLayerBase`
+
+2. **Platform-Specific Handling**: The `InteractiveLayerBehaviour` determines how interactions should be handled based on the platform (Desktop or Mobile)
+
+3. **State Management**: The current `InteractiveState` processes the interaction based on the current mode:
+   - `NormalState`: Default state for selecting or adding tools
+   - `SelectedState`: When a tool is selected for manipulation
+   - `AddingState`: When a new tool is being created
+
+4. **Drawing Creation**: When adding a new drawing:
+   - The appropriate `DrawingAddingPreview` is created based on the platform
+   - The preview handles user interactions to define the drawing's shape
+   - Once complete, the final `InteractableDrawing` is added to the chart
+   - The state transitions back to `NormalState`
+
+This architecture provides a flexible framework that:
+- Separates platform-specific behavior from core functionality
+- Manages state transitions cleanly
+- Supports different drawing tools with minimal code duplication
+- Provides appropriate previews during the drawing creation process
