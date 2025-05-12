@@ -19,7 +19,7 @@ The Interactive Layer implements a state pattern to manage different interaction
 This is the default state when no drawing tools are selected or being added. In this state:
 - The user can tap on existing drawing tools to select them
 - The user can initiate adding a new drawing tool
-- All drawing tools are in the `DrawingToolState.normal` state
+- All drawing tools are in the `DrawingToolState.idle` state
 - Includes hover functionality through the `InteractiveHoverState` mixin
 
 ### InteractiveSelectedToolState
@@ -52,16 +52,14 @@ This mixin-based approach allows hover functionality to be reused across differe
 
 The Interactive Layer manages transitions between states based on user interactions:
 
-![Interactive Layer State Transitions](images/interactive_layer_2.png)
-
-The diagram above illustrates the state transitions in the Interactive Layer:
-
 1. **NormalState → SelectedToolState**: Occurs when the user taps on or starts dragging an existing drawing tool
 2. **SelectedToolState → NormalState**: Occurs when the user taps outside the selected tool
 3. **NormalState → AddingToolState**: Occurs when the user initiates adding a new drawing tool
 4. **AddingToolState → NormalState**: Occurs when the new tool creation is complete
 
-Note that both NormalState and SelectedToolState include the HoverState functionality through the mixin pattern, as shown in the nested boxes in the diagram.
+Note that both NormalState and SelectedToolState include the HoverState functionality through the mixin pattern.
+
+For a comprehensive visual representation of the architecture and state transitions, see the Interactive Layer Architecture Diagram section below.
 
 ## DrawingToolState
 
@@ -71,7 +69,7 @@ Each drawing tool on the chart has its own state, represented by the `DrawingToo
 enum DrawingToolState {
   /// Default state when the drawing tool is displayed on the chart
   /// but not being interacted with.
-  normal,
+  idle,
 
   /// The drawing tool is currently selected by the user. Selected tools
   /// typically show additional visual cues like handles or a glowy effect
@@ -92,6 +90,12 @@ enum DrawingToolState {
   /// This state is active during drag operations when the user is
   /// modifying the tool's position.
   dragging,
+  
+  /// The drawing tool is being animated.
+  /// This state can be active, for example, when we're in the animation effect
+  /// of selecting or deselecting the drawing tool and the selection animation
+  /// is playing.
+  animating,
 }
 ```
 
@@ -161,77 +165,124 @@ This architecture provides a clean separation of concerns and makes it easy to a
 The following diagram illustrates the architecture and flow of the Interactive Layer, including the relationships between InteractiveStates, InteractiveLayerBehaviour, and DrawingAddingPreview:
 
 ```
-+-------------------------------------------+
-|            InteractiveLayerBase           |
-|                                           |
-|  +-----------------------------------+    |
-|  |      InteractiveLayerBehaviour    |    |
-|  |                                   |    |
-|  |  +-----------+    +------------+  |    |
-|  |  |  Desktop  |    |   Mobile   |  |    |
-|  |  | Behaviour |    | Behaviour  |  |    |
-|  |  +-----------+    +------------+  |    |
-|  +-----------------------------------+    |
-|                    |                      |
-|  +-----------------------------------+    |
-|  |         InteractiveState          |    |
-|  |                                   |    |
-|  |  +-----------+    +------------+  |    |
-|  |  |  Normal   |    |  Selected  |  |    |
-|  |  |   State   |<-->|    State   |  |    |
-|  |  +-----------+    +------------+  |    |
-|  |        ^                 ^        |    |
-|  |        |                 |        |    |
-|  |        v                 |        |    |
-|  |  +-----------+           |        |    |
-|  |  |  Adding   |           |        |    |
-|  |  |   State   |---------->+        |    |
-|  |  +-----------+                    |    |
-|  +-----------------------------------+    |
-|                    |                      |
-+-------------------------------------------+
-                     |
-                     v
-+-------------------------------------------+
-|           Drawing Tool Creation           |
-|                                           |
-|  +-----------------------------------+    |
-|  |       DrawingAddingPreview        |    |
-|  |                                   |    |
-|  |  +-----------+    +------------+  |    |
-|  |  |  Desktop  |    |   Mobile   |  |    |
-|  |  |  Preview  |    |  Preview   |  |    |
-|  |  +-----------+    +------------+  |    |
-|  +-----------------------------------+    |
-|                    |                      |
-|                    v                      |
-|  +-----------------------------------+    |
-|  |        InteractableDrawing        |    |
-|  |                                   |    |
-|  |  (Line, Rectangle, Horizontal...) |    |
-|  +-----------------------------------+    |
-+-------------------------------------------+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           USER INTERACTIONS                              │
+│                  (Taps, Drags, Hovers, Gestures, etc.)                  │
+└───────────────────────────────────┬─────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         InteractiveLayerBase                            │
+│                                                                         │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                   InteractiveLayerBehaviour                      │   │
+│  │                                                                  │   │
+│  │  ┌────────────────────────┐         ┌────────────────────────┐  │   │
+│  │  │   Desktop Behaviour    │         │    Mobile Behaviour    │  │   │
+│  │  │                        │         │                        │  │   │
+│  │  │ • Mouse interactions   │         │ • Touch interactions   │  │   │
+│  │  │ • Hover support        │         │ • Gesture recognition  │  │   │
+│  │  │ • Precise positioning  │         │ • Larger touch targets │  │   │
+│  │  └────────────────────────┘         └────────────────────────┘  │   │
+│  │                 ▲                                 ▲              │   │
+│  │                 │                                 │              │   │
+│  │                 └────────────────┬───────────────┘              │   │
+│  │                                  │                               │   │
+│  └──────────────────────────────────┼───────────────────────────────┘   │
+│                                     │                                   │
+│  ┌──────────────────────────────────┼───────────────────────────────┐   │
+│  │                InteractiveState  │                               │   │
+│  │                                  │                               │   │
+│  │  ┌────────────────────────┐     │     ┌────────────────────────┐│   │
+│  │  │     Normal State       │◄────┼────►│    Selected State      ││   │
+│  │  │                        │     │     │                        ││   │
+│  │  │ • Default state        │     │     │ • Tool is selected     ││   │
+│  │  │ • Select tools         │     │     │ • Show control points  ││   │
+│  │  │ • Start adding tools   │     │     │ • Enable manipulation  ││   │
+│  │  └──────────┬─────────────┘     │     └─────────────▲──────────┘│   │
+│  │             │                   │                   │            │   │
+│  │             │                   │                   │            │   │
+│  │             ▼                   │                   │            │   │
+│  │  ┌────────────────────────┐     │                   │            │   │
+│  │  │     Adding State       │     │                   │            │   │
+│  │  │                        │     │                   │            │   │
+│  │  │ • Creating new tool    │─────┼───────────────────┘            │   │
+│  │  │ • Capture coordinates  │     │                                │   │
+│  │  │ • Show drawing preview │     │                                │   │
+│  │  └────────────────────────┘     │                                │   │
+│  └──────────────────────────────────┼───────────────────────────────┘   │
+└──────────────────────────────────────┼───────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         Drawing Tool Creation                           │
+│                                                                         │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                     DrawingAddingPreview                         │   │
+│  │                                                                  │   │
+│  │  ┌────────────────────────┐         ┌────────────────────────┐  │   │
+│  │  │    Desktop Preview     │         │     Mobile Preview     │  │   │
+│  │  │                        │         │                        │  │   │
+│  │  │ • Mouse-based creation │         │ • Touch-based creation │  │   │
+│  │  │ • Hover feedback       │         │ • Tap sequence handling│  │   │
+│  │  │ • Precise positioning  │         │ • Gesture recognition  │  │   │
+│  │  └────────────┬───────────┘         └──────────┬─────────────┘  │   │
+│  │               │                                │                │   │
+│  │               └────────────────┬───────────────┘                │   │
+│  │                                │                                │   │
+│  └────────────────────────────────┼────────────────────────────────┘   │
+│                                   │                                    │
+│                                   ▼                                    │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │                      InteractableDrawing                         │   │
+│  │                                                                  │   │
+│  │  ┌────────────────────────────────────────────────────────────┐ │   │
+│  │  │                   Drawing Tool States                       │ │   │
+│  │  │                                                             │ │   │
+│  │  │  See the DrawingToolState section for details on the        │ │   │
+│  │  │  different states a drawing tool can be in (idle, selected, │ │   │
+│  │  │  hovered, adding, dragging, animating)                      │ │   │
+│  │  │                                                             │ │   │
+│  │  └────────────────────────────────────────────────────────────┘ │   │
+│  │                                                                  │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Flow Explanation:
 
-1. **User Interaction**: User interactions (taps, drags, hovers) are captured by the `InteractiveLayerBase`
+1. **User Interaction**:
+   - User interactions (taps, drags, hovers) are captured by the `InteractiveLayerBase`
+   - These events are passed to the appropriate `InteractiveLayerBehaviour` implementation
 
-2. **Platform-Specific Handling**: The `InteractiveLayerBehaviour` determines how interactions should be handled based on the platform (Desktop or Mobile)
+2. **Platform-Specific Handling**:
+   - The `InteractiveLayerBehaviour` determines how interactions should be handled based on the platform:
+     - **Desktop Behaviour**: Optimized for mouse interactions, hover events, and precise positioning
+     - **Mobile Behaviour**: Optimized for touch interactions, gestures, and larger touch targets
 
-3. **State Management**: The current `InteractiveState` processes the interaction based on the current mode:
-   - `NormalState`: Default state for selecting or adding tools
-   - `SelectedState`: When a tool is selected for manipulation
-   - `AddingState`: When a new tool is being created
+3. **State Management**:
+   - The current `InteractiveState` processes the interaction based on the current mode:
+     - **NormalState**: Default state for selecting existing tools or initiating new tool creation
+     - **SelectedState**: When a tool is selected, showing control points for manipulation
+     - **AddingState**: When a new tool is being created, capturing coordinates and showing preview
 
-4. **Drawing Creation**: When adding a new drawing:
-   - The appropriate `DrawingAddingPreview` is created based on the platform
-   - The preview handles user interactions to define the drawing's shape
-   - Once complete, the final `InteractableDrawing` is added to the chart
-   - The state transitions back to `NormalState`
+4. **Drawing Creation Process**:
+   - When adding a new drawing:
+     - The appropriate `DrawingAddingPreview` is created based on the platform
+     - Desktop Preview: Handles mouse-based creation with hover feedback
+     - Mobile Preview: Handles touch-based creation with appropriate gesture recognition
+     - The preview handles user interactions to define the drawing's shape
+     - Once complete, the final `InteractableDrawing` is added to the chart
+     - The state transitions back to `NormalState`
+
+5. **Drawing Tool States**:
+   - Each drawing tool can be in one of several states as defined by the `DrawingToolState` enum
+   - These states determine how the drawing is rendered and how it responds to user interactions
+   - See the DrawingToolState section for details on each state
 
 This architecture provides a flexible framework that:
 - Separates platform-specific behavior from core functionality
 - Manages state transitions cleanly
 - Supports different drawing tools with minimal code duplication
 - Provides appropriate previews during the drawing creation process
+- Adapts to different input methods across platforms
