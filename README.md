@@ -431,6 +431,33 @@ For more detailed information, check out these documentation files:
 - [DerivChart Widget Usage](doc/deriv_chart_widget_usage.md)
 - [Contributing](doc/contribution.md)
 
+## Documentation Diagrams
+
+The project uses Mermaid diagrams for visualizing architecture and processes. These diagrams are stored as separate files and referenced in the documentation.
+
+### Updating Diagrams
+
+To update a diagram:
+
+1. Edit the Mermaid code in the corresponding file in the `doc/diagrams/` directory
+
+2. Generate SVG files from the Mermaid code:
+   - Option 1: Use the [Mermaid Live Editor](https://mermaid.live/)
+     - Copy the Mermaid code from the `.md` file
+     - Paste it into the editor
+     - Export as SVG
+     - Save the SVG file to the same location as the `.md` file with the same name but `.svg` extension
+
+   - Option 2: Use the Mermaid CLI
+     - Refer to this details: ![mermaid-cli](https://github.com/mermaid-js/mermaid-cli)
+
+3. The documentation files (like `doc/interactive_layer.md`) reference these SVG files using standard Markdown image syntax:
+   ```markdown
+   ![Diagram Title](diagrams/diagram_filename.svg)
+   ```
+
+This approach separates the diagram code from the documentation, making both easier to maintain.
+
 ## Dependencies
 
 Key dependencies include:
