@@ -164,90 +164,7 @@ This architecture provides a clean separation of concerns and makes it easy to a
 
 The following diagram illustrates the architecture and flow of the Interactive Layer, including the relationships between InteractiveStates, InteractiveLayerBehaviour, and DrawingAddingPreview:
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           USER INTERACTIONS                              │
-│                  (Taps, Drags, Hovers, Gestures, etc.)                  │
-└───────────────────────────────────┬─────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         InteractiveLayerBase                            │
-│                                                                         │
-│  ┌──────────────────────────────────────────────────────────────────┐   │
-│  │                   InteractiveLayerBehaviour                      │   │
-│  │                                                                  │   │
-│  │  ┌────────────────────────┐         ┌────────────────────────┐   │   │
-│  │  │   Desktop Behaviour    │         │    Mobile Behaviour    │   │   │
-│  │  │                        │         │                        │   │   │
-│  │  │ • Mouse interactions   │         │ • Touch interactions   │   │   │
-│  │  │ • Hover support        │         │ • Gesture recognition  │   │   │
-│  │  │ • Precise positioning  │         │ • Larger touch targets │   │   │
-│  │  └────────────────────────┘         └────────────────────────┘   │   │
-│  │                 ▲                                 ▲              │   │
-│  │                 │                                 │              │   │
-│  │                 └────────────────┬───────────────┘               │   │
-│  │                                  │                               │   │
-│  └──────────────────────────────────┼───────────────────────────────┘   │
-│                                     │                                   │
-│  ┌──────────────────────────────────┼───────────────────────────────┐   │
-│  │                InteractiveState  │                               │   │
-│  │                                  │                               │   │
-│  │  ┌────────────────────────┐     │     ┌────────────────────────┐ │   │
-│  │  │     Normal State       │◄────┼────►│    Selected State      │ │   │
-│  │  │                        │     │     │                        │ │   │
-│  │  │ • Default state        │     │     │ • Tool is selected     │ │   │
-│  │  │ • Select tools         │     │     │ • Show control points  │ │   │
-│  │  │ • Start adding tools   │     │     │ • Enable manipulation  │ │   │
-│  │  └──────────┬─────────────┘     │     └─────────────▲──────────┘ │   │
-│  │             │                   │                   │            │   │
-│  │             │                   │                   │            │   │
-│  │             ▼                   │                   │            │   │
-│  │  ┌────────────────────────┐     │                   │            │   │
-│  │  │     Adding State       │     │                   │            │   │
-│  │  │                        │     │                   │            │   │
-│  │  │ • Creating new tool    │─────┼───────────────────┘            │   │
-│  │  │ • Capture coordinates  │     │                                │   │
-│  │  │ • Show drawing preview │     │                                │   │
-│  │  └────────────────────────┘     │                                │   │
-│  └─────────────────────────────────┼────────────────────────────────┘   │
-└────────────────────────────────────┼────────────────────────────────────┘
-                                     │
-                                     ▼
-┌───────────────────────────────────────────────────────────────────────┐
-│                         Drawing Tool Creation                         │
-│                                                                       │
-│  ┌─────────────────────────────────────────────────────────────────┐  │
-│  │                     DrawingAddingPreview                        │  │
-│  │                                                                 │  │
-│  │  ┌────────────────────────┐         ┌────────────────────────┐  │  │
-│  │  │    Desktop Preview     │         │     Mobile Preview     │  │  │
-│  │  │                        │         │                        │  │  │
-│  │  │ • Mouse-based creation │         │ • Touch-based creation │  │  │
-│  │  │ • Hover feedback       │         │ • Tap sequence handling│  │  │
-│  │  │ • Precise positioning  │         │ • Gesture recognition  │  │  │
-│  │  └────────────┬───────────┘         └──────────┬─────────────┘  │  │
-│  │               │                                │                │  │
-│  │               └────────────────┬───────────────┘                │  │
-│  │                                │                                │  │
-│  └────────────────────────────────┼────────────────────────────────┘  │
-│                                   │                                   │
-│                                   ▼                                   │
-│  ┌──────────────────────────────────────────────────────────────────┐ │
-│  │                      InteractableDrawing                         │ │
-│  │                                                                  │ │
-│  │  ┌─────────────────────────────────────────────────────────────┐ │ │
-│  │  │                   Drawing Tool States                       │ │ │
-│  │  │                                                             │ │ │
-│  │  │  See the DrawingToolState section for details on the        │ │ │
-│  │  │  different states a drawing tool can be in (idle, selected, │ │ │
-│  │  │  hovered, adding, dragging, animating)                      │ │ │
-│  │  │                                                             │ │ │
-│  │  └─────────────────────────────────────────────────────────────┘ │ │
-│  │                                                                  │ │
-│  └──────────────────────────────────────────────────────────────────┘ │
-└───────────────────────────────────────────────────────────────────────┘
-```
+![Interactive Layer Architecture Diagram](diagrams/interactive_layer_architecture.svg)
 
 ### Flow Explanation:
 
@@ -286,3 +203,48 @@ This architecture provides a flexible framework that:
 - Supports different drawing tools with minimal code duplication
 - Provides appropriate previews during the drawing creation process
 - Adapts to different input methods across platforms
+
+## Example: Adding a Horizontal Line on Mobile
+
+To illustrate how the Interactive Layer components work together in practice, let's walk through the process of adding a horizontal line drawing tool on a mobile device:
+
+### Sequence Diagram
+
+![Horizontal Line Adding Sequence Diagram](diagrams/horizontal_line_sequence.svg)
+
+### Flow Explanation
+
+1. **User Initiates Drawing**: The user selects the horizontal line drawing tool from the UI.
+
+2. **Configuration Creation**: The system creates a `HorizontalDrawingToolConfig` object with the default settings for a horizontal line.
+
+3. **State Transition**: The `InteractiveLayerBase` calls `onAddDrawingTool(config)` on the `InteractiveLayerMobileBehaviour`, which transitions to the `InteractiveAddingToolStateMobile`.
+
+4. **Drawing Creation**: The `InteractiveAddingToolStateMobile` creates a new `HorizontalLineInteractableDrawing` instance with the provided configuration.
+
+5. **Preview Creation**:
+   - The `InteractiveAddingToolStateMobile` calls `getAddingPreviewForMobileBehaviour()` on the drawing to get the appropriate preview for mobile
+   - This returns a new `HorizontalLineAddingPreviewMobile` instance
+   - The preview is initialized with a reference to the `HorizontalLineInteractableDrawing` and the `InteractiveLayerMobileBehaviour`
+
+6. **Preview Display**: The preview is shown on the chart with an initial position, displaying a dashed horizontal line that follows the user's finger as they move it across the screen.
+
+7. **Positioning the Line**: After the preview is shown:
+   - The user can drag to position the horizontal line at the desired height
+   - Drag events are captured by the `InteractiveLayerBase`
+   - These events are passed to the `HorizontalLineAddingPreviewMobile.onDragUpdate()` method
+   - The preview updates the position of the line in real-time as the user drags
+
+8. **Confirming the Drawing**: When the user is satisfied with the position:
+   - The user taps outside the preview (not on the tool itself)
+   - The tap event is captured by the `InteractiveLayerBase`
+   - It's passed to the current state (`InteractiveAddingToolStateMobile`)
+   - The state forwards it to the `HorizontalLineAddingPreviewMobile.onCreateTap()` method
+   - The `onCreateTap()` method sets the `startPoint` of the `HorizontalLineInteractableDrawing`
+   - It then calls the `onDone()` callback to signal that the drawing is complete
+   - The `InteractiveAddingToolStateMobile` transitions back to `InteractiveNormalState`
+   - The horizontal line is added to the chart as a permanent drawing
+
+9. **Result**: A horizontal line is now displayed on the chart at the position where the user tapped, and the system returns to the normal state where the user can select or add other drawings.
+
+This example demonstrates how the various components of the Interactive Layer work together to provide a smooth and intuitive drawing experience, with platform-specific behavior handled through the appropriate preview classes.

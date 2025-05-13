@@ -1,0 +1,44 @@
+```mermaid
+flowchart TD
+    UserInteractions["USER INTERACTIONS\n(Taps, Drags, Hovers, Gestures, etc.)"]
+    
+    subgraph InteractiveLayerBase["InteractiveLayerBase"]
+        subgraph Behaviour["InteractiveLayerBehaviour"]
+            DesktopBehaviour["Desktop Behaviour\n• Mouse interactions\n• Hover support\n• Precise positioning"]
+            MobileBehaviour["Mobile Behaviour\n• Touch interactions\n• Gesture recognition\n• Larger touch targets"]
+            
+            DesktopBehaviour <--> MobileBehaviour
+        end
+        
+        subgraph States["InteractiveState"]
+            NormalState["Normal State\n• Default state\n• Select tools\n• Start adding tools"]
+            SelectedState["Selected State\n• Tool is selected\n• Show control points\n• Enable manipulation"]
+            AddingState["Adding State\n• Creating new tool\n• Capture coordinates\n• Show drawing preview"]
+            
+            NormalState <--> SelectedState
+            NormalState --> AddingState
+            AddingState --> SelectedState
+        end
+    end
+    
+    subgraph DrawingToolCreation["Drawing Tool Creation"]
+        subgraph Preview["DrawingAddingPreview"]
+            DesktopPreview["Desktop Preview\n• Mouse-based creation\n• Hover feedback\n• Precise positioning"]
+            MobilePreview["Mobile Preview\n• Touch-based creation\n• Tap sequence handling\n• Gesture recognition"]
+            
+            DesktopPreview <--> MobilePreview
+        end
+        
+        InteractableDrawing["InteractableDrawing"]
+        
+        subgraph ToolStates["Drawing Tool States"]
+            States["See the DrawingToolState section for details on the\ndifferent states a drawing tool can be in (idle, selected,\nhovered, adding, dragging, animating)"]
+        end
+        
+        InteractableDrawing --- ToolStates
+    end
+    
+    UserInteractions --> InteractiveLayerBase
+    InteractiveLayerBase --> DrawingToolCreation
+    Preview --> InteractableDrawing
+```
