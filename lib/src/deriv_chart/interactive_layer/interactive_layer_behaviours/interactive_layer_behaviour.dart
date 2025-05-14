@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:flutter/gestures.dart';
 
 import '../enums/drawing_tool_state.dart';
@@ -14,7 +16,16 @@ import '../interactive_layer_states/interactive_adding_tool_state.dart';
 import '../interactive_layer_states/interactive_normal_state.dart';
 import '../interactive_layer_states/interactive_state.dart';
 
-/// The base class for managing the interactive layer.
+/// The base class for managing [InteractiveLayerBase]'s behaviour according to
+/// a platform or a condition.
+/// [InteractiveLayerBase] uses this to manage gestures and the layer state in
+/// every scenarios.
+/// The way we're handling the gestures and [_interactiveState] transitions can
+/// be customized by extending this class.
+///
+/// Check out [InteractiveLayerMobileBehaviour] and
+/// [InteractiveLayerDesktopBehaviour] to see specific implementations for two
+/// different platforms.
 abstract class InteractiveLayerBehaviour {
   late InteractiveState _interactiveState;
 
@@ -69,7 +80,12 @@ abstract class InteractiveLayerBehaviour {
   Set<DrawingToolState> getToolState(DrawingV2 drawing) =>
       _interactiveState.getToolState(drawing);
 
-  /// The drawings of the interactive layer.
+  /// The extra drawings that the current interactive state can show in
+  /// [InteractiveLayerBase].
+  ///
+  /// These [previewDrawings] are usually supposed to be drawings that have
+  /// shorter lifespan just for preview or showing a temporary guids when user
+  /// is interacting with [InteractiveLayerBase].
   List<DrawingV2> get previewDrawings => _interactiveState.previewDrawings;
 
   /// Handles tap event.
