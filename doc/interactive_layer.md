@@ -6,9 +6,10 @@ The Interactive Layer is a crucial component of the Deriv Chart that handles use
 
 The Interactive Layer sits on top of the chart canvas and captures user gestures such as taps, drags, and hovers. It then interprets these gestures based on the current state and translates them into actions on drawing tools.
 
-The layer works with two key concepts:
+The layer works with three key concepts:
 1. **InteractiveState**: Defines the current mode of interaction with the chart
 2. **DrawingToolState**: Represents the state of individual drawing tools
+3. **InteractiveLayerBehaviour**: Defines platform-specific interaction handling and customizes state transitions
 
 ## Interactive States
 
@@ -48,6 +49,47 @@ This is implemented as a mixin rather than a standalone state, allowing it to be
 
 This mixin-based approach allows hover functionality to be reused across different states without code duplication, following the composition over inheritance principle.
 
+## InteractiveLayerBehaviour
+
+The `InteractiveLayerBehaviour` is an abstract class that defines how user interactions are processed and how state transitions occur within the Interactive Layer. It serves as a bridge between raw user input events and the state-based architecture of the Interactive Layer.
+
+Key responsibilities of `InteractiveLayerBehaviour`:
+
+- Processing platform-specific user interactions (mouse events on desktop, touch events on mobile)
+- Managing transitions between different `InteractiveState` instances
+- Providing appropriate drawing tool previews based on the platform
+- Coordinating with `DrawingAddingPreview` to handle the drawing creation process
+
+### Customizing State Transitions
+
+One of the most important aspects of `InteractiveLayerBehaviour` is its ability to customize how transitions between different `InteractiveState` instances occur. This allows for:
+
+- Platform-specific transition logic (e.g., different gesture recognition on mobile vs. desktop)
+- Conditional transitions based on the current context or user preferences
+- Custom animation or feedback during state changes
+- Different interaction patterns for different types of users or use cases
+
+While each `InteractiveState` implementation has its own default behavior for transitioning to other states, the `InteractiveLayerBehaviour` can override these defaults and use entirely different `InteractiveState` implementations. This creates a powerful customization mechanism where the entire interaction flow can be tailored to specific requirements without modifying the core state classes.
+
+For example, on desktop platforms, a transition from `InteractiveNormalState` to `InteractiveSelectedToolState` might occur on a single click, while on mobile platforms it might require a longer press to avoid accidental selections. Similarly, a custom implementation might use specialized state classes optimized for particular use cases or user preferences.
+`InteractiveAddingToolStateMobile` is another example which to have a bit different behaviour when adding a tool on `InteractiveLayerMobileBehaviour` is chosen as the behaviour.
+
+### Platform-Specific Implementations
+
+The Interactive Layer provides different implementations of `InteractiveLayerBehaviour` for different platforms:
+
+- **InteractiveLayerDesktopBehaviour**: Optimized for mouse and keyboard interactions, supporting hover events, precise clicking, and keyboard shortcuts
+- **InteractiveLayerMobileBehaviour**: Optimized for touch interactions, with larger touch targets, gesture recognition, and multi-touch support
+
+This separation allows the Interactive Layer to provide a consistent conceptual model across platforms while adapting the specific interaction patterns to match platform conventions and capabilities.
+
+Beyond platform-specific implementations, custom `InteractiveLayerBehaviour` implementations can be created to support:
+
+- Specialized input devices (e.g., stylus, touchpad)
+- Accessibility features for users with different needs
+- Testing or automation scenarios
+- Domain-specific interaction patterns for particular types of charts or analyses
+
 ## State Transitions
 
 The Interactive Layer manages transitions between states based on user interactions:
@@ -63,7 +105,7 @@ For a comprehensive visual representation of the architecture and state transiti
 
 ## DrawingToolState
 
-Each drawing tool on the chart has its own state, represented by the `DrawingToolState` enum:
+Each drawing tool on the chart has its own set of state, represented by the `DrawingToolState` enum:
 
 ```dart
 enum DrawingToolState {
