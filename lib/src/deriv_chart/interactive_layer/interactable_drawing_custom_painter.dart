@@ -1,6 +1,6 @@
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_v2.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_states/interactive_state.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -40,9 +40,16 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   /// Drawing to paint.
   final DrawingV2 drawing;
 
-  /// [drawing]'s state.
+  /// A callback to get the updated state of any drawing tool when calling it.
+  ///
+  /// To see where this callback is implemented check [InteractiveState]
+  /// classes.
   final GetDrawingState drawingState;
 
+  /// The current state of drawing the [drawing] when we added its painter in
+  /// the widget tree, this is used to do the comparison between between old
+  /// state and new state of repainting logic of the
+  /// [InteractableDrawingCustomPainter].
   final Set<DrawingToolState> currentDrawingState;
 
   /// The main series of the chart.

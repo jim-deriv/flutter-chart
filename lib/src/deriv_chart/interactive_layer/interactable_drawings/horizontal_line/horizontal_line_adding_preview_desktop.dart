@@ -3,10 +3,8 @@ import 'dart:ui';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_base.dart';
 import 'package:flutter/gestures.dart';
 
-import '../../enums/drawing_tool_state.dart';
 import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_adding_preview.dart';
 import 'horizontal_line_interactable_drawing.dart';

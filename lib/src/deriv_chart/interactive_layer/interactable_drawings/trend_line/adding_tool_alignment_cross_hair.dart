@@ -5,7 +5,6 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/anim
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:flutter/gestures.dart';
 
-import '../../enums/drawing_tool_state.dart';
 import '../../helpers/paint_helpers.dart';
 import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_v2.dart';

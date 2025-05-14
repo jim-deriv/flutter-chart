@@ -438,6 +438,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
         },
       );
 
+  // ignore: unused_element
   Widget _buildDrawingToolChart(DrawingTools drawingTools) =>
       MultipleAnimatedBuilder(
         animations: <Listenable>[
