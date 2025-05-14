@@ -4,7 +4,6 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_paint_style.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/drawing_tool_state.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawing_custom_painter.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
@@ -12,12 +11,12 @@ import 'package:flutter/gestures.dart';
 
 import '../drawing_adding_preview.dart';
 import 'adding_tool_alignment_cross_hair.dart';
-import 'line_interactable_drawing.dart';
+import 'trend_line_interactable_drawing.dart';
 
 /// Interactable drawing for line drawing tool.
 class TrendLineAddingPreviewDesktop
-    extends DrawingAddingPreview<LineInteractableDrawing> {
-  /// Initializes [LineInteractableDrawing].
+    extends DrawingAddingPreview<TrendLineInteractableDrawing> {
+  /// Initializes [TrendLineInteractableDrawing].
   TrendLineAddingPreviewDesktop({
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,

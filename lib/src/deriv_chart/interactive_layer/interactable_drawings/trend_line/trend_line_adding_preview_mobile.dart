@@ -10,13 +10,13 @@ import '../../helpers/paint_helpers.dart';
 import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_adding_preview.dart';
 import '../drawing_v2.dart';
-import 'line_interactable_drawing.dart';
+import 'trend_line_interactable_drawing.dart';
 
 /// A Line interactable just for the preview of the line when we're adding the
 /// line tool on mobile.
 class TrendLineAddingPreviewMobile
-    extends DrawingAddingPreview<LineInteractableDrawing> {
-  /// Initializes [LineInteractableDrawing].
+    extends DrawingAddingPreview<TrendLineInteractableDrawing> {
+  /// Initializes [TrendLineInteractableDrawing].
   TrendLineAddingPreviewMobile({
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
