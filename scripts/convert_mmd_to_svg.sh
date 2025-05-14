@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INPUT_DIR="./doc/diagrams"  # Change this to your folder path
+INPUT_DIR="./doc/diagrams"
 
 # Check if mmdc is installed
 if ! command -v mmdc &> /dev/null; then
