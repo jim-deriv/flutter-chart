@@ -437,8 +437,6 @@ The project uses Mermaid diagrams for visualizing architecture and processes. Th
 
 ### Updating Diagrams
 
-To update a diagram:
-
 1. Update diagrams and generate SVG files from the Mermaid code:
    - Update diagram code. You can use the [Mermaid Live Editor](https://mermaid.live/) or any other Mermaid-compatible editor.
    - Use the ![mermaid_script](scripts/convert_mmd_to_svg.sh) to generate SVG files 
