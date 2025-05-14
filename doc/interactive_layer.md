@@ -7,10 +7,10 @@ The Interactive Layer is a crucial component of the Deriv Chart that handles use
 The Interactive Layer sits on top of the chart canvas and captures user gestures such as taps, drags, and hovers. It then interprets these gestures based on the current state and translates them into actions on drawing tools.
 
 The layer works with several key concepts:
-1. **InteractiveState**: Defines the current mode of interaction with the chart
+1. **InteractiveState**: Different subclasses/implementations will define a state that interactive layer can be. (adding a tool, a tool being selected, etc) 
 2. **InteractiveLayerBehaviour**: Defines platform-specific interaction handling and customizes state transitions
 3. **DrawingV2**: The base interface for all drawable elements on the chart
-4. **InteractiveLayerBase**: The core component that manages states and coordinates interactions
+4. **InteractiveLayerBase**: The base class that defines the UI interface for the interactive layer, captures user gestures, and visually renders the layer state on the chart. In the package, it's implemented by a widget stacked on top of the chart.
 5. **InteractableDrawing**: Concrete implementations of drawing tools that can be interacted with
 6. **DrawingAddingPreview**: Specialized components for handling the drawing creation process
 
@@ -149,6 +149,24 @@ The state of a drawing tool affects how it's rendered on the chart and how it re
 ### Summary
 
 `DrawingV2` serves as the foundation for all drawable elements in the Interactive Layer, defining four essential responsibilities: painting visual representations on the canvas, performing precise hit testing for user interactions, calculating accurate bounding areas, and handling user interaction gestures. The `DrawingToolState` enum works in conjunction with `DrawingV2` to define the possible states a drawing can be in (idle, selected, hovered, adding, dragging, or animating), which affects both its visual appearance and interaction behavior. This design creates a flexible system where drawings can adapt their appearance and behavior based on their current state while maintaining a consistent interface for the Interactive Layer to work with.
+
+## InteractiveLayerBase
+
+The `InteractiveLayerBase` is an abstract class that defines the interface for the UI component of the Interactive Layer. It serves as the visual representation of the Interactive Layer that is shown to the user and is responsible for:
+
+1. Capturing user gestures (taps, drags, hovers) directly from the chart's UI
+2. Visually rendering the current state of the Interactive Layer on the chart
+3. Managing the collection of drawing tools and their visual representation
+4. Coordinating between user input and the appropriate `InteractiveLayerBehaviour`
+5. Displaying visual feedback based on the current `InteractiveState`
+
+In the package implementation, `InteractiveLayerBase` is implemented by a Flutter widget that is stacked on top of the chart's widget stack. This positioning allows it to:
+
+- Intercept all user gestures before they reach the underlying chart
+- Render drawings and interactive elements above the chart's data visualization
+- Provide a transparent overlay that doesn't interfere with chart visibility
+
+The `InteractiveLayerBase` acts as the bridge between the user interface and the internal state management system of the Interactive Layer. It translates raw touch/mouse events into meaningful interactions based on the current state and behavior configuration, then renders the appropriate visual representation back to the user.
 
 ## InteractableDrawing
 
