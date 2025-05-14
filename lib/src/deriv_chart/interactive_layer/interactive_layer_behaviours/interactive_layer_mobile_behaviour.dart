@@ -3,7 +3,7 @@ import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dar
 import '../enums/state_change_direction.dart';
 import '../interactable_drawings/drawing_adding_preview.dart';
 import '../interactable_drawings/interactable_drawing.dart';
-import '../interactive_layer_states/interactive_adding_tool_state.dart';
+import '../interactive_layer_states/interactive_adding_tool_state_mobile.dart';
 import 'interactive_layer_behaviour.dart';
 
 /// The mobile-specific implementation of the interactive layer behaviour.

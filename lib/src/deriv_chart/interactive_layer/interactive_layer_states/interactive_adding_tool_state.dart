@@ -49,6 +49,10 @@ class InteractiveAddingToolState extends InteractiveState
   /// to render a preview of the drawing being added.
   DrawingAddingPreview? _addingDrawing;
 
+  /// Getter to get the adding drawing preview instance.
+  DrawingAddingPreview? get addingDrawingPreview => _addingDrawing;
+
+
   @override
   List<DrawingV2> get previewDrawings =>
       [if (_addingDrawing != null) _addingDrawing!];
@@ -61,16 +65,14 @@ class InteractiveAddingToolState extends InteractiveState
             .id
         : null;
 
-    final state = drawing.id == addingDrawingId
+    final Set<DrawingToolState> states = drawing.id == addingDrawingId
         ? {
             DrawingToolState.adding,
             if (_isAddingToolBeingDragged) DrawingToolState.dragging
           }
         : {DrawingToolState.idle};
 
-    // print(
-    //     '#### State for ${drawing.runtimeType} is: $state,  $_isAddingToolBeingDragged, ${drawing.id}, $addingDrawingId');
-    return state;
+    return states;
   }
 
   @override
@@ -151,21 +153,5 @@ class InteractiveAddingToolState extends InteractiveState
         }
       }
     });
-  }
-}
-
-/// The mobile-specific implementation of the interactive adding tool state.
-class InteractiveAddingToolStateMobile extends InteractiveAddingToolState {
-  /// Adding tool state for mobile devices.
-  InteractiveAddingToolStateMobile(
-    super.addingTool, {
-    required super.interactiveLayerBehaviour,
-  });
-
-  @override
-  void onTap(TapUpDetails details) {
-    if (!_addingDrawing!.hitTest(details.localPosition, epochToX, quoteToY)) {
-      super.onTap(details);
-    }
   }
 }
