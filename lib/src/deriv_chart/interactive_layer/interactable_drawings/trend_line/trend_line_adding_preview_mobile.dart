@@ -21,16 +21,18 @@ class LineAddingPreviewMobile
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
   }) {
-    final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
-    final Size? layerSize = interactiveLayer.layerSize;
+    if (interactableDrawing.startPoint == null) {
+      final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
+      final Size? layerSize = interactiveLayer.layerSize;
 
-    final double centerX = layerSize != null ? layerSize.width / 2 : 0;
-    final double centerY = layerSize != null ? layerSize.height / 2 : 0;
+      final double centerX = layerSize != null ? layerSize.width / 2 : 0;
+      final double centerY = layerSize != null ? layerSize.height / 2 : 0;
 
-    interactableDrawing.startPoint = EdgePoint(
-      epoch: interactiveLayer.epochFromX(centerX),
-      quote: interactiveLayer.quoteFromY(centerY),
-    );
+      interactableDrawing.startPoint = EdgePoint(
+        epoch: interactiveLayer.epochFromX(centerX),
+        quote: interactiveLayer.quoteFromY(centerY),
+      );
+    }
   }
 
   @override
@@ -74,8 +76,7 @@ class LineAddingPreviewMobile
 
     final EdgePoint? startPoint = interactableDrawing.startPoint;
     final EdgePoint? endPoint = interactableDrawing.endPoint;
-    final Set<DrawingToolState> drawingState =
-        getDrawingState(this);
+    final Set<DrawingToolState> drawingState = getDrawingState(this);
 
     if (startPoint != null && endPoint == null) {
       // Start point is spawned at the chart, user can move it, we should show
