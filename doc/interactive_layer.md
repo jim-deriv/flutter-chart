@@ -6,10 +6,13 @@ The Interactive Layer is a crucial component of the Deriv Chart that handles use
 
 The Interactive Layer sits on top of the chart canvas and captures user gestures such as taps, drags, and hovers. It then interprets these gestures based on the current state and translates them into actions on drawing tools.
 
-The layer works with three key concepts:
+The layer works with several key concepts:
 1. **InteractiveState**: Defines the current mode of interaction with the chart
-2. **DrawingToolState**: Represents the state of individual drawing tools
-3. **InteractiveLayerBehaviour**: Defines platform-specific interaction handling and customizes state transitions
+2. **InteractiveLayerBehaviour**: Defines platform-specific interaction handling and customizes state transitions
+3. **DrawingV2**: The base interface for all drawable elements on the chart
+4. **InteractiveLayerBase**: The core component that manages states and coordinates interactions
+5. **InteractableDrawing**: Concrete implementations of drawing tools that can be interacted with
+6. **DrawingAddingPreview**: Specialized components for handling the drawing creation process
 
 ## Interactive States
 
@@ -72,7 +75,8 @@ One of the most important aspects of `InteractiveLayerBehaviour` is its ability 
 While each `InteractiveState` implementation has its own default behavior for transitioning to other states, the `InteractiveLayerBehaviour` can override these defaults and use entirely different `InteractiveState` implementations. This creates a powerful customization mechanism where the entire interaction flow can be tailored to specific requirements without modifying the core state classes.
 
 For example, on desktop platforms, a transition from `InteractiveNormalState` to `InteractiveSelectedToolState` might occur on a single click, while on mobile platforms it might require a longer press to avoid accidental selections. Similarly, a custom implementation might use specialized state classes optimized for particular use cases or user preferences.
-`InteractiveAddingToolStateMobile` is another example which to have a bit different behaviour when adding a tool on `InteractiveLayerMobileBehaviour` is chosen as the behaviour.
+
+Another example is `InteractiveAddingToolStateMobile`, which provides different behavior when adding a tool with `InteractiveLayerMobileBehaviour`. This specialized state implementation works specifically with the mobile behavior to provide touch-optimized drawing tool creation.
 
 ### Platform-Specific Implementations
 
@@ -90,22 +94,21 @@ Beyond platform-specific implementations, custom `InteractiveLayerBehaviour` imp
 - Testing or automation scenarios
 - Domain-specific interaction patterns for particular types of charts or analyses
 
-## State Transitions
+## DrawingV2
 
-The Interactive Layer manages transitions between states based on user interactions:
+`DrawingV2` is the base interface for all drawable elements on the chart. It defines the core functionality that any drawing must implement to be rendered and managed by the Interactive Layer:
 
-1. **NormalState → SelectedToolState**: Occurs when the user taps on or starts dragging an existing drawing tool
-2. **SelectedToolState → NormalState**: Occurs when the user taps outside the selected tool
-3. **NormalState → AddingToolState**: Occurs when the user initiates adding a new drawing tool
-4. **AddingToolState → NormalState**: Occurs when the new tool creation is complete
+1. **Painting**: Renders the drawing on the canvas with appropriate visual styles based on its current state, including colors, line styles, and interactive elements like control points when needed.
 
-Note that both NormalState and SelectedToolState include the HoverState functionality through the mixin pattern.
+2. **Hit Testing**: Determines if a user's interaction point intersects with the drawing, using geometry-specific algorithms that can distinguish between different parts of the drawing (edges, control points, etc.).
 
-For a comprehensive visual representation of the architecture and state transitions, see the Interactive Layer Architecture Diagram section below.
+3. **Bounds Calculation**: Provides the drawing's bounding rectangle and other key points, ensuring accurate layout and efficient rendering even as the drawing is modified.
 
-## DrawingToolState
+4. **Handle User Interaction Gestures**: Processes user inputs (taps, drags, hovers) and responds with appropriate state changes and visual feedback based on the current context.
 
-Each drawing tool on the chart has its own set of state, represented by the `DrawingToolState` enum:
+### DrawingToolState
+
+Each drawing tool that implements `DrawingV2` has its own state, represented by the `DrawingToolState` enum:
 
 ```dart
 enum DrawingToolState {
@@ -141,7 +144,11 @@ enum DrawingToolState {
 }
 ```
 
-The state of a drawing tool affects how it's rendered on the chart and how it responds to user interactions.
+The state of a drawing tool affects how it's rendered on the chart and how it responds to user interactions. All implementations of `DrawingV2` must manage their state and respond appropriately to state changes as part of their responsibility to handle user interaction gestures.
+
+### Summary
+
+`DrawingV2` serves as the foundation for all drawable elements in the Interactive Layer, defining four essential responsibilities: painting visual representations on the canvas, performing precise hit testing for user interactions, calculating accurate bounding areas, and handling user interaction gestures. The `DrawingToolState` enum works in conjunction with `DrawingV2` to define the possible states a drawing can be in (idle, selected, hovered, adding, dragging, or animating), which affects both its visual appearance and interaction behavior. This design creates a flexible system where drawings can adapt their appearance and behavior based on their current state while maintaining a consistent interface for the Interactive Layer to work with.
 
 ## InteractableDrawing
 
@@ -176,14 +183,14 @@ Key characteristics of `DrawingAddingPreview`:
 - It provides the `onCreateTap` method that captures user taps to define the drawing's shape
 - Different drawing tools require different numbers of taps to complete (e.g., a horizontal line may require just one tap, while a trend line requires two taps)
 
-### Platform-Specific Behaviors
+### Preview Implementations for Different Platforms
 
-The Interactive Layer supports different behaviors based on the platform (desktop or mobile) through the `InteractiveLayerBehaviour` abstract class:
+As mentioned in the InteractiveLayerBehaviour section, the system supports different behaviors based on the platform. Each drawing tool leverages this by providing specialized preview implementations:
 
-- **Desktop Behavior**: Optimized for mouse interactions, including hover events and precise clicking
-- **Mobile Behavior**: Optimized for touch interactions, with appropriate touch targets and gestures
+- Each drawing tool implements the `getAddingPreviewForDesktopBehaviour()` method to return a desktop-optimized preview
+- Each drawing tool implements the `getAddingPreviewForMobileBehaviour()` method to return a mobile-optimized preview
 
-Each drawing tool can provide different preview implementations for desktop and mobile through the `getAddingPreviewForDesktopBehaviour` and `getAddingPreviewForMobileBehaviour` methods in `InteractableDrawing`.
+These methods ensure that the drawing creation experience is tailored to the input capabilities of each platform while maintaining a consistent conceptual model.
 
 ## Implementation Details
 
@@ -290,3 +297,23 @@ To illustrate how the Interactive Layer components work together in practice, le
 9. **Result**: A horizontal line is now displayed on the chart at the position where the user tapped, and the system returns to the normal state where the user can select or add other drawings.
 
 This example demonstrates how the various components of the Interactive Layer work together to provide a smooth and intuitive drawing experience, with platform-specific behavior handled through the appropriate preview classes.
+
+## Summary
+
+The Interactive Layer is a sophisticated component of the Deriv Chart that manages user interactions with drawing tools through a state-based architecture. It consists of several key components working together:
+
+- **InteractiveState**: Defines different modes of interaction (normal, selected, adding)
+- **InteractiveLayerBehaviour**: Provides platform-specific interaction handling and customizes state transitions
+- **DrawingV2**: The base interface for all drawable elements with responsibilities for painting, hit testing, bounds calculation, and handling user interactions
+- **InteractiveLayerBase**: The core component that coordinates states and interactions
+- **InteractableDrawing**: Concrete implementations of drawing tools that users can interact with
+- **DrawingAddingPreview**: Specialized components for handling the drawing creation process
+
+The architecture follows a clean separation of concerns, with each component having well-defined responsibilities. This design enables:
+
+1. Platform-specific optimizations for both desktop and mobile experiences
+2. Flexible state transitions that can be customized based on platform or other conditions
+3. Consistent drawing tool behavior with appropriate visual feedback
+4. Extensibility for adding new drawing tools or interaction modes
+
+By leveraging this architecture, the Interactive Layer provides an intuitive and responsive drawing experience that adapts to different platforms while maintaining a consistent conceptual model.
