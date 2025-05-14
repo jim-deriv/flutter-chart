@@ -87,11 +87,7 @@ abstract class DrawingV2 {
   bool shouldRepaint(
     Set<DrawingToolState> drawingState,
     DrawingV2 oldDrawing,
-  ) {
-    return drawingState.contains(DrawingToolState.dragging) ||
-        drawingState.contains(DrawingToolState.adding) ||
-        drawingState.contains(DrawingToolState.animating);
-  }
+  );
 
   /// Whether this drawing is in epoch range.
   bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange);

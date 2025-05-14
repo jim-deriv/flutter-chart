@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/drawing_tool_state.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:flutter/gestures.dart';
 
@@ -55,4 +56,11 @@ class AddingToolAlignmentCrossHair extends DrawingV2 {
   @override
   void onDragStart(DragStartDetails details, EpochFromX epochFromX,
       QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {}
+
+  @override
+  bool shouldRepaint(
+    Set<DrawingToolState> drawingState,
+    DrawingV2 oldDrawing,
+  ) =>
+      true;
 }
