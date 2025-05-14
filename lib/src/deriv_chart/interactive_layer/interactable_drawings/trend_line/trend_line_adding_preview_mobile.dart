@@ -14,10 +14,10 @@ import 'line_interactable_drawing.dart';
 
 /// A Line interactable just for the preview of the line when we're adding the
 /// line tool on mobile.
-class LineAddingPreviewMobile
+class TrendLineAddingPreviewMobile
     extends DrawingAddingPreview<LineInteractableDrawing> {
   /// Initializes [LineInteractableDrawing].
-  LineAddingPreviewMobile({
+  TrendLineAddingPreviewMobile({
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
   }) {

@@ -15,10 +15,10 @@ import 'adding_tool_alignment_cross_hair.dart';
 import 'line_interactable_drawing.dart';
 
 /// Interactable drawing for line drawing tool.
-class LineAddingPreviewDesktop
+class TrendLineAddingPreviewDesktop
     extends DrawingAddingPreview<LineInteractableDrawing> {
   /// Initializes [LineInteractableDrawing].
-  LineAddingPreviewDesktop({
+  TrendLineAddingPreviewDesktop({
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
   });

@@ -380,7 +380,7 @@ class LineInteractableDrawing
   DrawingAddingPreview getAddingPreviewForMobileBehaviour(
     InteractiveLayerMobileBehaviour layerBehaviour,
   ) =>
-      LineAddingPreviewMobile(
+      TrendLineAddingPreviewMobile(
         interactiveLayerBehaviour: layerBehaviour,
         interactableDrawing: this,
       );
@@ -390,7 +390,7 @@ class LineInteractableDrawing
       getAddingPreviewForDesktopBehaviour(
     InteractiveLayerDesktopBehaviour layerBehaviour,
   ) =>
-          LineAddingPreviewDesktop(
+          TrendLineAddingPreviewDesktop(
             interactiveLayerBehaviour: layerBehaviour,
             interactableDrawing: this,
           );
