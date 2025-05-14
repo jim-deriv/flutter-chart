@@ -15,7 +15,7 @@ import 'enums/drawing_tool_state.dart';
 
 /// A callback which calling it should return if the [drawing] is selected.
 typedef GetDrawingState = Set<DrawingToolState> Function(
-  InteractableDrawing drawing,
+  DrawingV2 drawing,
 );
 
 /// Interactable drawing custom painter.
@@ -31,6 +31,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     required this.quoteToY,
     required this.quoteFromY,
     required this.drawingState,
+    required this.currentDrawingState,
     required this.epochRange,
     required this.quoteRange,
     this.animationInfo = const AnimationInfo(),
@@ -40,7 +41,9 @@ class InteractableDrawingCustomPainter extends CustomPainter {
   final DrawingV2 drawing;
 
   /// [drawing]'s state.
-  final Set<DrawingToolState> drawingState;
+  final GetDrawingState drawingState;
+
+  final Set<DrawingToolState> currentDrawingState;
 
   /// The main series of the chart.
   final DataSeries<Tick> series;
@@ -97,13 +100,14 @@ class InteractableDrawingCustomPainter extends CustomPainter {
     return isSeriesChanged ||
         (drawingIsInRange &&
             // Drawing state is changed
-            (!setEquals(oldDelegate.drawingState, drawingState) ||
+            (!setEquals(oldDelegate.currentDrawingState, currentDrawingState) ||
                 // Epoch range is changed
                 oldDelegate.epochRange != epochRange ||
                 // Quote range is changed
                 oldDelegate.quoteRange != quoteRange ||
                 // Drawing needs repaint
-                drawing.shouldRepaint(drawingState, oldDelegate.drawing)));
+                drawing.shouldRepaint(
+                    currentDrawingState, oldDelegate.drawing)));
   }
 
   @override

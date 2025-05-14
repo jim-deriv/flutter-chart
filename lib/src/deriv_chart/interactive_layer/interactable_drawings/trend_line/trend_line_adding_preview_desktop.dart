@@ -6,6 +6,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/drawing_tool_state.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawing_custom_painter.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
@@ -43,7 +44,7 @@ class LineAddingPreviewDesktop
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
-    Set<DrawingToolState> drawingState,
+    GetDrawingState getDrawingState,
   ) {
     final LineStyle lineStyle = interactableDrawing.config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
@@ -70,7 +71,7 @@ class LineAddingPreviewDesktop
     }
 
     _crossHair.paint(
-        canvas, size, epochToX, quoteToY, animationInfo, drawingState);
+        canvas, size, epochToX, quoteToY, animationInfo, getDrawingState);
   }
 
   @override

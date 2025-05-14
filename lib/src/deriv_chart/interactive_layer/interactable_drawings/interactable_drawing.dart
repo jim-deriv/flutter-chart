@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import '../../chart/data_visualization/chart_data.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
 import '../enums/drawing_tool_state.dart';
+import '../interactable_drawing_custom_painter.dart';
 import '../interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import '../interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'drawing_adding_preview.dart';
@@ -93,7 +94,7 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
-    Set<DrawingToolState> drawingState,
+    GetDrawingState getDrawingState,
   );
 
   @override

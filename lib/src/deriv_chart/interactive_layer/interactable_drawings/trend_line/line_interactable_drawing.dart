@@ -11,6 +11,7 @@ import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../helpers/paint_helpers.dart';
+import '../../interactable_drawing_custom_painter.dart';
 import '../../interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import '../../interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import '../drawing_adding_preview.dart';
@@ -170,12 +171,13 @@ class LineInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
-    Set<DrawingToolState> drawingState,
+    GetDrawingState getDrawingState,
   ) {
     final LineStyle lineStyle = config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
     // Check if this drawing is selected
 
+    final drawingState = getDrawingState(this);
     if (startPoint != null && endPoint != null) {
       final Offset startOffset =
           Offset(epochToX(startPoint!.epoch), quoteToY(startPoint!.quote));

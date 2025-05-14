@@ -7,6 +7,7 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_
 import 'package:flutter/gestures.dart';
 
 import '../../enums/drawing_tool_state.dart';
+import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_adding_preview.dart';
 import 'horizontal_line_interactable_drawing.dart';
 
@@ -41,7 +42,7 @@ class HorizontalLineAddingPreviewDesktop
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
-    Set<DrawingToolState> drawingState,
+    GetDrawingState drawingState,
   ) {
     if (_hoverPosition != null) {
       canvas.drawLine(

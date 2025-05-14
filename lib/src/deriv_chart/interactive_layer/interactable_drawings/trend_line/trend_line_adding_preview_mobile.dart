@@ -7,6 +7,7 @@ import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../helpers/paint_helpers.dart';
+import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_adding_preview.dart';
 import '../drawing_v2.dart';
 import 'line_interactable_drawing.dart';
@@ -66,24 +67,42 @@ class LineAddingPreviewMobile
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
-    Set<DrawingToolState> drawingState,
+    GetDrawingState getDrawingState,
   ) {
     final LineStyle lineStyle = interactableDrawing.config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
 
     final EdgePoint? startPoint = interactableDrawing.startPoint;
     final EdgePoint? endPoint = interactableDrawing.endPoint;
+    final Set<DrawingToolState> drawingState =
+        getDrawingState(this);
 
     if (startPoint != null && endPoint == null) {
       // Start point is spawned at the chart, user can move it, we should show
       // alignment cross-hair on start point.
-      drawPoint(startPoint, epochToX, quoteToY, canvas, paintStyle, lineStyle);
+      drawPoint(
+        startPoint,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        lineStyle,
+        radius: drawingState.contains(DrawingToolState.dragging) ? 8 : 5,
+      );
       drawPointAlignmentGuides(canvas, size,
           Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote)));
     } else if (startPoint != null && endPoint != null) {
       // End point is also spawned at the chart, user can move it, we should
       // show alignment cross-hair on end point.
-      drawPoint(endPoint, epochToX, quoteToY, canvas, paintStyle, lineStyle);
+      drawPoint(
+        endPoint,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        lineStyle,
+        radius: drawingState.contains(DrawingToolState.dragging) ? 8 : 5,
+      );
 
       final startOffset =
           Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote));

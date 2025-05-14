@@ -1,20 +1,8 @@
-import 'dart:ui';
-
-import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
-import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_item.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_pattern.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/drawing_data.dart';
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
-import 'package:deriv_chart/src/models/axis_range.dart';
-import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
 import '../enums/drawing_tool_state.dart';
-import '../helpers/paint_helpers.dart';
 import '../interactable_drawings/drawing_v2.dart';
 import '../enums/state_change_direction.dart';
 import 'interactive_hover_state.dart';
@@ -53,6 +41,8 @@ class InteractiveAddingToolState extends InteractiveState
   /// when the user taps on the chart.
   final DrawingToolConfig addingTool;
 
+  bool _isAddingToolBeingDragged = false;
+
   /// The drawing that is currently being created.
   ///
   /// This is initialized when the user first taps on the chart and is used
@@ -64,16 +54,54 @@ class InteractiveAddingToolState extends InteractiveState
       [if (_addingDrawing != null) _addingDrawing!];
 
   @override
-  Set<DrawingToolState> getToolState(DrawingV2 drawing) =>
-      drawing.id == addingTool.configId
-          ? {DrawingToolState.adding}
-          : {DrawingToolState.idle};
+  Set<DrawingToolState> getToolState(DrawingV2 drawing) {
+    final String? addingDrawingId = _addingDrawing != null
+        ? interactiveLayerBehaviour
+            .getAddingDrawingPreview(_addingDrawing!.interactableDrawing)
+            .id
+        : null;
+
+    final state = drawing.id == addingDrawingId
+        ? {
+            DrawingToolState.adding,
+            if (_isAddingToolBeingDragged) DrawingToolState.dragging
+          }
+        : {DrawingToolState.idle};
+
+    // print(
+    //     '#### State for ${drawing.runtimeType} is: $state,  $_isAddingToolBeingDragged, ${drawing.id}, $addingDrawingId');
+    return state;
+  }
 
   @override
-  void onPanEnd(DragEndDetails details) {}
+  void onPanEnd(DragEndDetails details) {
+    if (_isAddingToolBeingDragged) {
+      _isAddingToolBeingDragged = false;
+    }
+
+    if (_addingDrawing?.hitTest(details.localPosition, epochToX, quoteToY) ??
+        false) {
+      _addingDrawing!
+          .onDragEnd(details, epochFromX, quoteFromY, epochToX, quoteToY);
+    }
+  }
 
   @override
-  void onPanStart(DragStartDetails details) {}
+  void onPanStart(DragStartDetails details) {
+    if (_addingDrawing?.hitTest(details.localPosition, epochToX, quoteToY) ??
+        false) {
+      _isAddingToolBeingDragged = true;
+      _addingDrawing!.onDragStart(
+        details,
+        epochFromX,
+        quoteFromY,
+        epochToX,
+        quoteToY,
+      );
+    } else {
+      _isAddingToolBeingDragged = false;
+    }
+  }
 
   @override
   void onPanUpdate(DragUpdateDetails details) {

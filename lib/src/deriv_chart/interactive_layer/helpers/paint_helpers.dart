@@ -71,11 +71,12 @@ void drawPoint(
   QuoteToY quoteToY,
   Canvas canvas,
   DrawingPaintStyle paintStyle,
-  LineStyle lineStyle,
-) {
+  LineStyle lineStyle, {
+  double radius = 5,
+}) {
   canvas.drawCircle(
     Offset(epochToX(point.epoch), quoteToY(point.quote)),
-    5,
+    radius,
     paintStyle.glowyCirclePaintStyle(lineStyle.color),
   );
 }

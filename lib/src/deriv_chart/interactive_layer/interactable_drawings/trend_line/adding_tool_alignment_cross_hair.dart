@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 
 import '../../enums/drawing_tool_state.dart';
 import '../../helpers/paint_helpers.dart';
+import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_v2.dart';
 
 /// A cross-hair used for aligning the adding tool.
@@ -38,7 +39,7 @@ class AddingToolAlignmentCrossHair extends DrawingV2 {
 
   @override
   void paint(Canvas canvas, Size size, EpochToX epochToX, QuoteToY quoteToY,
-      AnimationInfo animationInfo, Set<DrawingToolState> drawingState) {
+      AnimationInfo animationInfo, GetDrawingState getDrawingState) {
     if (_currentHoverPosition == null) {
       return;
     }

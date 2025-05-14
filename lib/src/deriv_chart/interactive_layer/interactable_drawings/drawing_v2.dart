@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import '../../chart/data_visualization/chart_data.dart';
 import '../../chart/data_visualization/models/animation_info.dart';
 import '../enums/drawing_tool_state.dart';
+import '../interactable_drawing_custom_painter.dart';
 
 /// The margin for hit testing.
 const double hitTestMargin = 32;
@@ -79,7 +80,7 @@ abstract class DrawingV2 {
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
-    Set<DrawingToolState> drawingState,
+    GetDrawingState getDrawingState,
   );
 
   /// Returns true if the drawing tool should repaint.
