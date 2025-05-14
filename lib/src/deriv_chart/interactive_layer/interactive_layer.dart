@@ -346,6 +346,7 @@ class _InteractiveLayerGestureHandlerState
                       : [
                           ...widget.drawings
                               .map((e) => CustomPaint(
+                                    key: ValueKey<String>(e.id),
                                     foregroundPainter:
                                         InteractableDrawingCustomPainter(
                                       drawing: e,
@@ -375,6 +376,7 @@ class _InteractiveLayerGestureHandlerState
                               .toList(),
                           ...widget.interactiveLayerBehaviour.previewDrawings
                               .map((e) => CustomPaint(
+                                    key: ValueKey<String>(e.id),
                                     foregroundPainter:
                                         InteractableDrawingCustomPainter(
                                             drawing: e,
