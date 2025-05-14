@@ -20,7 +20,7 @@ import '../interactable_drawing.dart';
 import 'trend_line_adding_preview_desktop.dart';
 import 'trend_line_adding_preview_mobile.dart';
 
-/// Interactable drawing for line drawing tool.
+/// Interactable drawing for trend-line drawing tool.
 class TrendLineInteractableDrawing
     extends InteractableDrawing<LineDrawingToolConfig> {
   /// Initializes [TrendLineInteractableDrawing].

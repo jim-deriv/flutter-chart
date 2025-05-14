@@ -4,13 +4,15 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_adding_preview.dart';
 import 'horizontal_line_interactable_drawing.dart';
 
-/// Adding preview for horizontal line when we're adding the line tool on
+/// A class to show a preview and handle adding a
+/// [HorizontalLineInteractableDrawing] to the chart. It's for when we're on
 /// [InteractiveLayerMobileBehaviour].
 class HorizontalLineAddingPreviewMobile
     extends DrawingAddingPreview<HorizontalLineInteractableDrawing> {

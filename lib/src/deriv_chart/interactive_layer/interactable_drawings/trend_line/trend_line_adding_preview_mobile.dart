@@ -3,6 +3,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/drawing_tool_state.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/widgets.dart';
 
@@ -12,8 +13,8 @@ import '../drawing_adding_preview.dart';
 import '../drawing_v2.dart';
 import 'trend_line_interactable_drawing.dart';
 
-/// A Line interactable just for the preview of the line when we're adding the
-/// line tool on mobile.
+/// A class to show a preview and handle adding a [TrendLineInteractableDrawing]
+/// to the chart. This is for when we're on [InteractiveLayerMobileBehaviour]
 class TrendLineAddingPreviewMobile
     extends DrawingAddingPreview<TrendLineInteractableDrawing> {
   /// Initializes [TrendLineInteractableDrawing].

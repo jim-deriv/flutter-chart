@@ -6,6 +6,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawing_custom_painter.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
@@ -13,7 +14,9 @@ import '../drawing_adding_preview.dart';
 import 'adding_tool_alignment_cross_hair.dart';
 import 'trend_line_interactable_drawing.dart';
 
-/// Interactable drawing for line drawing tool.
+/// Can be used to show a preview line for a [TrendLineInteractableDrawing] when
+/// adding it to the chart. It's for when we're on
+/// [InteractiveLayerDesktopBehaviour]
 class TrendLineAddingPreviewDesktop
     extends DrawingAddingPreview<TrendLineInteractableDrawing> {
   /// Initializes [TrendLineInteractableDrawing].
