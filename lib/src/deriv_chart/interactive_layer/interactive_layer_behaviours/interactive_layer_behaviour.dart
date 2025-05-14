@@ -29,7 +29,7 @@ import '../interactive_layer_states/interactive_state.dart';
 abstract class InteractiveLayerBehaviour {
   late InteractiveState _interactiveState;
 
-  /// Initializes the interactive layer manager.
+  /// Initializes the [InteractiveLayerBehaviour].
   void init({
     required InteractiveLayerBase interactiveLayer,
     required VoidCallback onUpdate,
@@ -44,6 +44,9 @@ abstract class InteractiveLayerBehaviour {
   DrawingAddingPreview getAddingDrawingPreview(InteractableDrawing drawing);
 
   /// Updates the interactive layer state to the new state.
+  ///
+  /// Calls [onUpdate] callback to notify the interactive layer to update its
+  /// UI after the state change.
   Future<void> updateStateTo(
     InteractiveState newState,
     StateChangeAnimationDirection direction, {
@@ -83,33 +86,25 @@ abstract class InteractiveLayerBehaviour {
   /// The extra drawings that the current interactive state can show in
   /// [InteractiveLayerBase].
   ///
-  /// These [previewDrawings] are usually supposed to be drawings that have
-  /// shorter lifespan just for preview or showing a temporary guids when user
-  /// is interacting with [InteractiveLayerBase].
+  /// These [previewDrawings] are usually meant to be drawings with a shorter
+  /// lifespan, used for preview purposes or for showing temporary guides when
+  /// the user is interacting with [InteractiveLayerBase].
   List<DrawingV2> get previewDrawings => _interactiveState.previewDrawings;
 
   /// Handles tap event.
-  void onTap(TapUpDetails details) {
-    _interactiveState.onTap(details);
-  }
+  void onTap(TapUpDetails details) => _interactiveState.onTap(details);
 
   /// Handles pan update event.
-  void onPanUpdate(DragUpdateDetails details) {
-    _interactiveState.onPanUpdate(details);
-  }
+  void onPanUpdate(DragUpdateDetails details) =>
+      _interactiveState.onPanUpdate(details);
 
   /// Handles pan end event.
-  void onPanEnd(DragEndDetails details) {
-    _interactiveState.onPanEnd(details);
-  }
+  void onPanEnd(DragEndDetails details) => _interactiveState.onPanEnd(details);
 
   /// Handles pan start event.
-  void onPanStart(DragStartDetails details) {
-    _interactiveState.onPanStart(details);
-  }
+  void onPanStart(DragStartDetails details) =>
+      _interactiveState.onPanStart(details);
 
   /// Handles hover event.
-  void onHover(PointerHoverEvent event) {
-    _interactiveState.onHover(event);
-  }
+  void onHover(PointerHoverEvent event) => _interactiveState.onHover(event);
 }
