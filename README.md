@@ -439,14 +439,11 @@ The project uses Mermaid diagrams for visualizing architecture and processes. Th
 
 To update a diagram:
 
-1. Edit the Mermaid code in the corresponding file in the `doc/diagrams/` directory
+1. Update diagrams and generate SVG files from the Mermaid code:
+   - Update diagram code. You can use the [Mermaid Live Editor](https://mermaid.live/) or any other Mermaid-compatible editor.
+   - Use the ![mermaid_script](scripts/convert_mmd_to_svg.sh) to generate SVG files 
 
-2. Generate SVG files from the Mermaid code:
-   - Use the [Mermaid Live Editor](https://mermaid.live/)
-   - Use the scripts/convert_mmd_to_svg to generate SVG files 
-     - Refer to this details: ![mermaid-cli](https://github.com/mermaid-js/mermaid-cli)
-
-3. The documentation files (like `doc/interactive_layer.md`) reference these SVG files using standard Markdown image syntax:
+2. The documentation files (like `doc/interactive_layer.md`) reference these SVG files using standard Markdown image syntax:
    ```markdown
    ![Diagram Title](diagrams/diagram_filename.svg)
    ```
