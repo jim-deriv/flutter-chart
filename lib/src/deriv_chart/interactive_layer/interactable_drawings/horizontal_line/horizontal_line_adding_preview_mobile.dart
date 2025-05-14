@@ -6,7 +6,6 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/anim
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
 import 'package:flutter/gestures.dart';
 
-import '../../enums/drawing_tool_state.dart';
 import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_adding_preview.dart';
 import 'horizontal_line_interactable_drawing.dart';
@@ -20,10 +19,18 @@ class HorizontalLineAddingPreviewMobile
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
   }) {
-    interactableDrawing.startPoint = EdgePoint(
-      epoch: interactiveLayerBehaviour.interactiveLayer.epochFromX(200),
-      quote: interactiveLayerBehaviour.interactiveLayer.quoteFromY(200),
-    );
+    if (interactableDrawing.startPoint == null) {
+      final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
+      final Size? layerSize = interactiveLayer.layerSize;
+
+      final double centerX = layerSize != null ? layerSize.width / 2 : 0;
+      final double centerY = layerSize != null ? layerSize.height / 2 : 0;
+
+      interactableDrawing.startPoint = EdgePoint(
+        epoch: interactiveLayer.epochFromX(centerX),
+        quote: interactiveLayer.quoteFromY(centerY),
+      );
+    }
   }
 
   @override

@@ -244,15 +244,7 @@ class LineInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    if (startPoint != null &&
-        endPoint == null &&
-        (Offset(
-                      epochToX(startPoint!.epoch),
-                      quoteToY(startPoint!.quote),
-                    ) -
-                    details.localPosition)
-                .distance <
-            hitTestMargin) {
+    if (startPoint != null && endPoint == null) {
       // If we're dragging the start point, we need to update its position
       final Offset startOffset = Offset(
         epochToX(startPoint!.epoch),
