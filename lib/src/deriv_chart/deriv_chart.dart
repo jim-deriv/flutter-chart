@@ -65,6 +65,7 @@ class DerivChart extends StatefulWidget {
     this.showDataFitButton,
     this.showScrollToLastTickButton,
     this.loadingAnimationColor,
+    this.interactiveLayerBehaviour,
     Key? key,
   }) : super(key: key);
 
@@ -178,6 +179,16 @@ class DerivChart extends StatefulWidget {
 
   /// Drawing tools
   final DrawingTools? drawingTools;
+
+  /// Defines the behaviour that interactive layer should have.
+  ///
+  /// Interactive layer is the layer on top of the chart responsible for
+  /// handling components that user can interact with them. such as cross-hair,
+  /// drawing tools, etc.
+  ///
+  /// If not set it will be set internally to [InteractiveLayerDesktopBehaviour]
+  /// on web and [InteractiveLayerMobileBehaviour] on mobile or other platforms.
+  final InteractiveLayerBehaviour? interactiveLayerBehaviour;
 
   @override
   _DerivChartState createState() => _DerivChartState();
