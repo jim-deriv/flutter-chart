@@ -102,7 +102,8 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
     Set<DrawingToolState> drawingState,
     covariant InteractableDrawing<T> oldDrawing,
   ) {
-    return drawingState.contains(DrawingToolState.dragging) ||
+    return config != oldDrawing.config ||
+        drawingState.contains(DrawingToolState.dragging) ||
         drawingState.contains(DrawingToolState.adding) ||
         drawingState.contains(DrawingToolState.animating);
   }
