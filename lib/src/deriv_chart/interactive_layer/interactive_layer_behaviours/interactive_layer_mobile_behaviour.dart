@@ -23,7 +23,7 @@ class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
 
   @override
   DrawingAddingPreview getAddingDrawingPreview(
-      InteractableDrawing<DrawingToolConfig> drawing,
-      ) =>
+    InteractableDrawing<DrawingToolConfig> drawing,
+  ) =>
       drawing.getAddingPreviewForMobileBehaviour(this);
 }

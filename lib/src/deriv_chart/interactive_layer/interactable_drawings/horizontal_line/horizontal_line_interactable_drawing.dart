@@ -185,7 +185,6 @@ class HorizontalLineInteractableDrawing
       );
   }
 
-
   @override
   void onDragUpdate(
     DragUpdateDetails details,

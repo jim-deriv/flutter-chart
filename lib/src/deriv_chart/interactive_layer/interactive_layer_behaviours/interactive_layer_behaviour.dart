@@ -34,10 +34,10 @@ abstract class InteractiveLayerBehaviour {
 
   /// Updates the interactive layer state to the new state.
   Future<void> updateStateTo(
-      InteractiveState newState,
-      StateChangeAnimationDirection direction, {
-        bool waitForAnimation = false,
-      }) async {
+    InteractiveState newState,
+    StateChangeAnimationDirection direction, {
+    bool waitForAnimation = false,
+  }) async {
     if (waitForAnimation) {
       await interactiveLayer.animateStateChange(direction);
 
