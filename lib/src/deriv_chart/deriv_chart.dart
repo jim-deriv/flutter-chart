@@ -201,13 +201,16 @@ class _DerivChartState extends State<DerivChart> {
 
   final DrawingTools _drawingTools = DrawingTools();
 
-  final InteractiveLayerBehaviour _interactiveLayerBehaviour = kIsWeb
-      ? InteractiveLayerDesktopBehaviour()
-      : InteractiveLayerMobileBehaviour();
+  late final InteractiveLayerBehaviour _interactiveLayerBehaviour;
 
   @override
   void initState() {
     super.initState();
+
+    _interactiveLayerBehaviour = widget.interactiveLayerBehaviour ??
+        (kIsWeb
+            ? InteractiveLayerDesktopBehaviour()
+            : InteractiveLayerMobileBehaviour());
 
     _initRepos();
   }
