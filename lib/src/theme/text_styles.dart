@@ -123,4 +123,16 @@ class TextStyles {
     fontWeight: FontWeight.w600,
     height: 1.67, // lineHeight (20px) / fontSize (12px) = 1.67
   );
+
+  static const TextStyle drawingToolsContainerTextStyle = TextStyle(
+    fontFeatures: <FontFeature>[
+      FontFeature.liningFigures(),
+      FontFeature.tabularFigures(),
+    ],
+    fontFamily: fontFamilyDeriv,
+    fontSize: 12,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w400,
+    height: 1.67, // lineHeight (20px) / fontSize (12px) ~= 1.67
+  );
 }

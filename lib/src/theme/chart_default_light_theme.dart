@@ -93,6 +93,13 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
   Color get gridTextColor => LightThemeColors.gridTextColor;
 
   @override
+  Color get drawingToolsContainerColor =>
+      LightThemeColors.drawingToolsContainer;
+
+  @override
+  Color get drawingToolsBaseColor => LightThemeColors.drawingToolsBase;
+
+  @override
   GridStyle get gridStyle => GridStyle(
         gridLineColor: gridLineColor,
         xLabelStyle: textStyle(textStyle: gridTextStyle, color: gridTextColor),

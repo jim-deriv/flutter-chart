@@ -1,5 +1,7 @@
 import 'dart:ui' as ui;
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/horizontal/horizontal_drawing_tool_config.dart';
+import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -79,8 +81,12 @@ class HorizontalLineInteractableDrawing
     Size size,
     EpochToX epochToX,
     QuoteToY quoteToY,
+    QuoteFromY quoteFromY,
+    EpochFromX epochFromX,
     AnimationInfo animationInfo,
     GetDrawingState getDrawingState,
+    ChartTheme theme,
+    ChartConfig chartConfig,
   ) {
     final LineStyle lineStyle = config.lineStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
@@ -97,7 +103,7 @@ class HorizontalLineInteractableDrawing
       // Use glowy paint style if selected, otherwise use normal paint style
       final Paint paint = state.contains(DrawingToolState.selected) ||
               state.contains(DrawingToolState.dragging)
-          ? paintStyle.linePaintStyle(
+          ? paintStyle.glowyLinePaintStyle(
               lineStyle.color, 1 + 1 * animationInfo.stateChangePercent)
           : paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness);
 

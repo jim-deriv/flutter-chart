@@ -1,3 +1,4 @@
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -121,12 +122,46 @@ abstract class InteractableDrawing<T extends DrawingToolConfig> {
   ) {}
 
   /// Paints the drawing tool on the chart.
+  /// This method should be used for elements that should NOT be clipped by the Y-axis.
   void paint(
     Canvas canvas,
     Size size,
     EpochToX epochToX,
     QuoteToY quoteToY,
+    QuoteFromY quoteFromY,
+    EpochFromX epochFromX,
     AnimationInfo animationInfo,
     GetDrawingState getDrawingState,
+    ChartTheme theme,
+    ChartConfig chartConfig,
   );
+
+  /// Paints the drawing tool on the chart with Y-axis clipping.
+  /// This method should be used for elements that should be clipped by the Y-axis.
+  void paintWithClipping(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    QuoteFromY quoteFromY,
+    EpochFromX epochFromX,
+    AnimationInfo animationInfo,
+    GetDrawingState getDrawingState,
+    ChartTheme theme,
+    ChartConfig chartConfig,
+  ) {
+    // Default implementation just calls paint
+    paint(
+      canvas,
+      size,
+      epochToX,
+      quoteToY,
+      quoteFromY,
+      epochFromX,
+      animationInfo,
+      getDrawingState,
+      theme,
+      chartConfig,
+    );
+  }
 }

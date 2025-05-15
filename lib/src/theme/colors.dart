@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:deriv_chart/src/theme/design_tokens/component_design_tokens.dart';
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:deriv_chart/src/theme/design_tokens/dark_theme_design_tokens.dart';
 import 'package:deriv_chart/src/theme/design_tokens/light_theme_design_tokens.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +105,11 @@ class LightThemeColors {
   static final Color crosshairInformationBoxContainerGlassColor =
       LightThemeDesignTokens
           .semanticColorMonochromeSurfaceNormalLowest; // Hex: #000000 with 4% opacity
+
+  static const Color drawingToolsContainer = LightThemeDesignTokens
+      .semanticColorSlateSolidSurfaceFrameLow; // Hex: #FFFFFF
+
+  static const Color drawingToolsBase = CoreDesignTokens.coreColorSolidBlue700;
 }
 
 /// Default colors for dark theme.
@@ -162,6 +168,11 @@ class DarkThemeColors {
   static final Color crosshairInformationBoxContainerGlassColor =
       DarkThemeDesignTokens
           .semanticColorMonochromeSurfaceNormalLowest; // Hex: #000000 with 4% opacity
+
+  static const Color drawingToolsContainer = DarkThemeDesignTokens
+      .semanticColorSlateSolidSurfaceFrameLow; // Hex: #181C25
+
+  static const Color drawingToolsBase = CoreDesignTokens.coreColorSolidBlue700;
 }
 
 /// Candle Bullish colors for light, dark

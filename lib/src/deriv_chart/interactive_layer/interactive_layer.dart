@@ -293,6 +293,7 @@ class _InteractiveLayerGestureHandlerState
 
                 return Stack(
                   fit: StackFit.expand,
+                  clipBehavior: Clip.none,
                   children: [
                     ...widget.drawings
                         .map((e) => CustomPaint(

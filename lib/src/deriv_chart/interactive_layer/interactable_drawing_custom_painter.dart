@@ -62,14 +62,39 @@ class InteractableDrawingCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // First paint the elements that should be clipped by the Y-axis
+    paintWithClipping(canvas, size);
+
+    // Then paint the elements that should NOT be clipped (like axis labels)
+    drawing.paint(
+      canvas,
+      size,
+      epochToX,
+      quoteToY,
+      quoteFromY,
+      epochFromX,
+      animationInfo,
+      getDrawingState,
+      theme,
+      chartConfig,
+    );
+  }
+
+  /// Paints the drawing tool on the chart with Y-axis clipping.
+  /// This method should be used for elements that should be clipped by the Y-axis.
+  void paintWithClipping(Canvas canvas, Size size) {
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
-      drawing.paint(
+      drawing.paintWithClipping(
         canvas,
         size,
         epochToX,
         quoteToY,
+        quoteFromY,
+        epochFromX,
         animationInfo,
         getDrawingState,
+        theme,
+        chartConfig,
       );
     });
   }

@@ -84,6 +84,12 @@ abstract class ChartTheme {
 
   double get crosshairInformationBoxContainerGlassBackgroundBlur;
 
+  Color get drawingToolsContainerColor;
+
+  Color get drawingToolsBaseColor;
+
+  TextStyle get drawingToolsContainerTextStyle;
+
   /// The style of the current tick indicator.
   HorizontalBarrierStyle get currentSpotStyle;
 

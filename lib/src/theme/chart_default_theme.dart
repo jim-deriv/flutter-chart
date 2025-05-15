@@ -123,6 +123,10 @@ abstract class ChartDefaultTheme implements ChartTheme {
   @override
   LineStyle get lineStyle => const LineStyle();
 
+  @override
+  TextStyle get drawingToolsContainerTextStyle =>
+      TextStyles.drawingToolsContainerTextStyle;
+
   // TODO(Ramin): Use the values from the chart theme itself. so if later the
   // theme changes the default styles also get updated accordingly.
   @override

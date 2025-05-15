@@ -3,6 +3,8 @@ import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_item.dart'
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/trend/trend_drawing_tool_item.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_pattern.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/trend_interactable_drawing.dart';
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -19,8 +21,11 @@ class TrendDrawingToolConfig extends DrawingToolConfig {
     DrawingData? drawingData,
     List<EdgePoint> edgePoints = const <EdgePoint>[],
     this.fillStyle = const LineStyle(thickness: 0.9, color: Colors.blue),
-    this.lineStyle = const LineStyle(thickness: 0.9, color: Colors.white),
+    this.lineStyle = const LineStyle(
+        thickness: 0.9, color: CoreDesignTokens.coreColorSolidBlue700),
     this.pattern = DrawingPatterns.solid,
+    this.extendLeft = false,
+    this.extendRight = false,
     super.number,
   }) : super(
           configId: configId,
@@ -48,6 +53,12 @@ class TrendDrawingToolConfig extends DrawingToolConfig {
   /// Drawing tool line pattern: 'solid', 'dotted', 'dashed'
   final DrawingPatterns pattern;
 
+  /// Whether to extend the trend line to the left
+  final bool extendLeft;
+
+  /// Whether to extend the trend line to the right
+  final bool extendRight;
+
   @override
   DrawingToolItem getItem(
     UpdateDrawingTool updateDrawingTool,
@@ -68,6 +79,8 @@ class TrendDrawingToolConfig extends DrawingToolConfig {
     DrawingPatterns? pattern,
     List<EdgePoint>? edgePoints,
     bool? enableLabel,
+    bool? extendLeft,
+    bool? extendRight,
     int? number,
   }) =>
       TrendDrawingToolConfig(
@@ -77,5 +90,20 @@ class TrendDrawingToolConfig extends DrawingToolConfig {
           lineStyle: lineStyle ?? this.lineStyle,
           pattern: pattern ?? this.pattern,
           edgePoints: edgePoints ?? this.edgePoints,
+          extendLeft: extendLeft ?? this.extendLeft,
+          extendRight: extendRight ?? this.extendRight,
           number: number ?? this.number);
+
+  @override
+  TrendInteractableDrawing getInteractableDrawing() {
+    final EdgePoint? startPoint =
+        edgePoints.isNotEmpty ? edgePoints.first : null;
+    final EdgePoint? endPoint = edgePoints.length > 1 ? edgePoints[1] : null;
+
+    return TrendInteractableDrawing(
+      config: this,
+      startPoint: startPoint,
+      endPoint: endPoint,
+    );
+  }
 }
