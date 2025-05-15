@@ -13,8 +13,10 @@ class CandleChartScreen extends BaseChartScreen {
 }
 
 class _CandleChartScreenState extends BaseChartScreenState<CandleChartScreen> {
-  Color _positiveColor = Colors.green;
-  Color _negativeColor = Colors.red;
+  Color _bullishBodyColor = CandleBullishThemeColors.candleBullishBodyDefault;
+  Color _bearishBodyColor = CandleBearishThemeColors.candleBearishBodyDefault;
+  Color _bullishWickColor = CandleBullishThemeColors.candleBullishWickDefault;
+  Color _bearishWickColor = CandleBearishThemeColors.candleBearishWickDefault;
 
   @override
   String getTitle() => 'Candle Chart';
@@ -33,8 +35,10 @@ class _CandleChartScreenState extends BaseChartScreenState<CandleChartScreen> {
       mainSeries: CandleSeries(
         candles,
         style: CandleStyle(
-          positiveColor: _positiveColor,
-          negativeColor: _negativeColor,
+          candleBullishBodyColor: _bullishBodyColor,
+          candleBearishBodyColor: _bearishBodyColor,
+          candleBullishWickColor: _bullishWickColor,
+          candleBearishWickColor: _bearishWickColor,
         ),
       ),
       controller: controller,
@@ -55,38 +59,74 @@ class _CandleChartScreenState extends BaseChartScreenState<CandleChartScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             DerivColorPicker(
-              label: 'Positive Color:',
-              selectedColor: _positiveColor,
+              label: 'Bullish Body:',
+              selectedColor: _bullishBodyColor,
               onColorChanged: (color) {
                 setState(() {
-                  _positiveColor = color;
+                  _bullishBodyColor = color;
                 });
               },
               presetColors: const [
+                CandleBullishThemeColors.candleBullishBodyDefault,
+                CandleBullishThemeColors.candleBullishBodyActive,
                 Colors.green,
                 Colors.blue,
-                Colors.purple,
                 Colors.teal,
-                Colors.lightGreen,
                 Colors.cyan
               ],
             ),
             const SizedBox(height: 12),
             DerivColorPicker(
-              label: 'Negative Color:',
-              selectedColor: _negativeColor,
+              label: 'Bearish Body:',
+              selectedColor: _bearishBodyColor,
               onColorChanged: (color) {
                 setState(() {
-                  _negativeColor = color;
+                  _bearishBodyColor = color;
                 });
               },
               presetColors: const [
+                CandleBearishThemeColors.candleBearishBodyDefault,
+                CandleBearishThemeColors.candleBearishBodyActive,
                 Colors.red,
                 Colors.orange,
                 Colors.pink,
-                Colors.brown,
-                Colors.deepOrange,
-                Colors.redAccent
+                Colors.brown
+              ],
+            ),
+            const SizedBox(height: 20),
+            DerivColorPicker(
+              label: 'Bullish Wick:',
+              selectedColor: _bullishWickColor,
+              onColorChanged: (color) {
+                setState(() {
+                  _bullishWickColor = color;
+                });
+              },
+              presetColors: const [
+                CandleBullishThemeColors.candleBullishWickDefault,
+                CandleBullishThemeColors.candleBullishWickActive,
+                Colors.green,
+                Colors.blue,
+                Colors.teal,
+                Colors.cyan
+              ],
+            ),
+            const SizedBox(height: 12),
+            DerivColorPicker(
+              label: 'Bearish Wick:',
+              selectedColor: _bearishWickColor,
+              onColorChanged: (color) {
+                setState(() {
+                  _bearishWickColor = color;
+                });
+              },
+              presetColors: const [
+                CandleBearishThemeColors.candleBearishWickDefault,
+                CandleBearishThemeColors.candleBearishWickActive,
+                Colors.red,
+                Colors.orange,
+                Colors.pink,
+                Colors.brown
               ],
             ),
           ],

@@ -2,6 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'base_chart_screen.dart';
 
+/// Enum to identify which color is being modified
+enum ColorType {
+  /// Color for the body of bullish candles
+  bullishBody,
+
+  /// Color for the body of bearish candles
+  bearishBody,
+
+  /// Color for the wick of bullish candles
+  bullishWick,
+
+  /// Color for the wick of bearish candles
+  bearishWick
+}
+
 /// Screen that displays a candle chart with a bottom indicator.
 class CandleChartWithIndicatorScreen extends BaseChartScreen {
   /// Initialize the candle chart with indicator screen.
@@ -14,8 +29,10 @@ class CandleChartWithIndicatorScreen extends BaseChartScreen {
 
 class _CandleChartWithIndicatorScreenState
     extends BaseChartScreenState<CandleChartWithIndicatorScreen> {
-  Color _positiveColor = Colors.green;
-  Color _negativeColor = Colors.red;
+  Color _bullishBodyColor = CandleBullishThemeColors.candleBullishBodyDefault;
+  Color _bearishBodyColor = CandleBearishThemeColors.candleBearishBodyDefault;
+  Color _bullishWickColor = CandleBullishThemeColors.candleBullishWickDefault;
+  Color _bearishWickColor = CandleBearishThemeColors.candleBearishWickDefault;
   bool _showRSI = true;
   int _rsiPeriod = 14;
 
@@ -67,8 +84,10 @@ class _CandleChartWithIndicatorScreenState
       mainSeries: CandleSeries(
         candles,
         style: CandleStyle(
-          positiveColor: _positiveColor,
-          negativeColor: _negativeColor,
+          candleBullishBodyColor: _bullishBodyColor,
+          candleBearishBodyColor: _bearishBodyColor,
+          candleBullishWickColor: _bullishWickColor,
+          candleBearishWickColor: _bearishWickColor,
         ),
       ),
       controller: controller,
@@ -127,15 +146,47 @@ class _CandleChartWithIndicatorScreenState
           const SizedBox(height: 16),
           // Candle chart controls
           _buildColorRow(
-            label: 'Positive Color:',
-            colors: [Colors.green, Colors.blue, Colors.purple, Colors.teal],
-            isPositive: true,
+            label: 'Bullish Body:',
+            colors: [
+              CandleBullishThemeColors.candleBullishBodyDefault,
+              CandleBullishThemeColors.candleBullishBodyActive,
+              Colors.green,
+              Colors.blue,
+            ],
+            colorType: ColorType.bullishBody,
           ),
           const SizedBox(height: 12),
           _buildColorRow(
-            label: 'Negative Color:',
-            colors: [Colors.red, Colors.orange, Colors.pink, Colors.brown],
-            isPositive: false,
+            label: 'Bearish Body:',
+            colors: [
+              CandleBearishThemeColors.candleBearishBodyDefault,
+              CandleBearishThemeColors.candleBearishBodyActive,
+              Colors.red,
+              Colors.orange,
+            ],
+            colorType: ColorType.bearishBody,
+          ),
+          const SizedBox(height: 20),
+          _buildColorRow(
+            label: 'Bullish Wick:',
+            colors: [
+              CandleBullishThemeColors.candleBullishWickDefault,
+              CandleBullishThemeColors.candleBullishWickActive,
+              Colors.green,
+              Colors.blue,
+            ],
+            colorType: ColorType.bullishWick,
+          ),
+          const SizedBox(height: 12),
+          _buildColorRow(
+            label: 'Bearish Wick:',
+            colors: [
+              CandleBearishThemeColors.candleBearishWickDefault,
+              CandleBearishThemeColors.candleBearishWickActive,
+              Colors.red,
+              Colors.orange,
+            ],
+            colorType: ColorType.bearishWick,
           ),
         ],
       ),
@@ -145,7 +196,7 @@ class _CandleChartWithIndicatorScreenState
   Widget _buildColorRow({
     required String label,
     required List<Color> colors,
-    required bool isPositive,
+    required ColorType colorType,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -155,23 +206,47 @@ class _CandleChartWithIndicatorScreenState
           child: Text(label),
         ),
         ...colors
-            .map((color) => _buildColorButton(color, isPositive: isPositive)),
+            .map((color) => _buildColorButton(color, colorType: colorType)),
       ],
     );
   }
 
-  Widget _buildColorButton(Color color, {required bool isPositive}) {
-    final currentColor = isPositive ? _positiveColor : _negativeColor;
+  Widget _buildColorButton(Color color, {required ColorType colorType}) {
+    late Color currentColor;
+
+    switch (colorType) {
+      case ColorType.bullishBody:
+        currentColor = _bullishBodyColor;
+        break;
+      case ColorType.bearishBody:
+        currentColor = _bearishBodyColor;
+        break;
+      case ColorType.bullishWick:
+        currentColor = _bullishWickColor;
+        break;
+      case ColorType.bearishWick:
+        currentColor = _bearishWickColor;
+        break;
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: InkWell(
         onTap: () {
           setState(() {
-            if (isPositive) {
-              _positiveColor = color;
-            } else {
-              _negativeColor = color;
+            switch (colorType) {
+              case ColorType.bullishBody:
+                _bullishBodyColor = color;
+                break;
+              case ColorType.bearishBody:
+                _bearishBodyColor = color;
+                break;
+              case ColorType.bullishWick:
+                _bullishWickColor = color;
+                break;
+              case ColorType.bearishWick:
+                _bearishWickColor = color;
+                break;
             }
           });
         },
