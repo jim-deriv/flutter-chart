@@ -33,14 +33,9 @@ flowchart TD
         end
         
         InteractableDrawing["InteractableDrawing"]
-        
-        subgraph ToolStates["Drawing Tool States"]
-            States["See the DrawingToolState section for details on the\ndifferent states a drawing tool can be in (idle, selected,\nhovered, adding, dragging, animating)"]
-        end
-        
-        InteractableDrawing --- ToolStates
     end
     
+    
     UserInteractions --> InteractiveLayerBase
-    InteractiveLayerBase --> DrawingToolCreation
+    AddingState --> DrawingToolCreation
     Preview --> InteractableDrawing
