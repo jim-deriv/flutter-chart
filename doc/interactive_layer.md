@@ -23,7 +23,7 @@ The Interactive Layer implements a state pattern to manage different interaction
 This is the default state when no drawing tools are selected or being added. In this state:
 - The user can tap on existing drawing tools to select them
 - The user can initiate adding a new drawing tool
-- All drawing tools are in the `DrawingToolState.idle` state
+- All drawing tools are in the `DrawingToolState.normal` state
 - Includes hover functionality through the `InteractiveHoverState` mixin
 
 ### InteractiveSelectedToolState
@@ -114,7 +114,7 @@ Each drawing tool that implements `DrawingV2` has its own state, represented by 
 enum DrawingToolState {
   /// Default state when the drawing tool is displayed on the chart
   /// but not being interacted with.
-  idle,
+  normal,
 
   /// The drawing tool is currently selected by the user. Selected tools
   /// typically show additional visual cues like handles or a glowy effect
@@ -148,7 +148,7 @@ The state of a drawing tool affects how it's rendered on the chart and how it re
 
 ### Summary
 
-`DrawingV2` serves as the foundation for all drawable elements in the Interactive Layer, defining four essential responsibilities: painting visual representations on the canvas, performing precise hit testing for user interactions, calculating accurate bounding areas, and handling user interaction gestures. The `DrawingToolState` enum works in conjunction with `DrawingV2` to define the possible states a drawing can be in (idle, selected, hovered, adding, dragging, or animating), which affects both its visual appearance and interaction behavior. This design creates a flexible system where drawings can adapt their appearance and behavior based on their current state while maintaining a consistent interface for the Interactive Layer to work with.
+`DrawingV2` serves as the foundation for all drawable elements in the Interactive Layer, defining four essential responsibilities: painting visual representations on the canvas, performing precise hit testing for user interactions, calculating accurate bounding areas, and handling user interaction gestures. The `DrawingToolState` enum works in conjunction with `DrawingV2` to define the possible states a drawing can be in (normal, selected, hovered, adding, dragging, or animating), which affects both its visual appearance and interaction behavior. This design creates a flexible system where drawings can adapt their appearance and behavior based on their current state while maintaining a consistent interface for the Interactive Layer to work with.
 
 ## InteractiveLayerBase
 
