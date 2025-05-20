@@ -24,16 +24,23 @@ class TrendLineAddingPreviewMobile
   }) {
     if (interactableDrawing.startPoint == null) {
       final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
-      final Size? layerSize = interactiveLayer.layerSize;
-
-      final double centerX = layerSize != null ? layerSize.width / 2 : 0;
-      final double centerY = layerSize != null ? layerSize.height / 2 : 0;
+      final Offset centerOffset = _getCenterOfScreen();
 
       interactableDrawing.startPoint = EdgePoint(
-        epoch: interactiveLayer.epochFromX(centerX),
-        quote: interactiveLayer.quoteFromY(centerY),
+        epoch: interactiveLayer.epochFromX(centerOffset.dx),
+        quote: interactiveLayer.quoteFromY(centerOffset.dy),
       );
     }
+  }
+
+  Offset _getCenterOfScreen() {
+    final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
+    final Size? layerSize = interactiveLayer.layerSize;
+
+    final double centerX = layerSize != null ? layerSize.width / 2 : 0;
+    final double centerY = layerSize != null ? layerSize.height / 2 : 0;
+
+    return Offset(centerX, centerY);
   }
 
   @override
@@ -141,7 +148,12 @@ class TrendLineAddingPreviewMobile
         quote: quoteFromY(details.localPosition.dy),
       );
     } else if (endPoint == null) {
-      interactableDrawing.endPoint = startPoint.copyWith();
+      final Offset centerOffset = _getCenterOfScreen();
+
+      interactableDrawing.endPoint = EdgePoint(
+        epoch: epochFromX(centerOffset.dx),
+        quote: quoteFromY(centerOffset.dy),
+      );
     } else {
       onDone();
     }

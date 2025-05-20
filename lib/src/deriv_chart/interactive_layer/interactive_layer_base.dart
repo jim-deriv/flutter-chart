@@ -47,8 +47,7 @@ abstract class InteractiveLayerBase {
   void clearAddingDrawing();
 
   /// Adds the [drawing] to the interactive layer.
-  DrawingToolConfig addDrawing(
-      InteractableDrawing<DrawingToolConfig> drawing);
+  DrawingToolConfig addDrawing(InteractableDrawing<DrawingToolConfig> drawing);
 
   /// Save the drawings with the latest changes (positions or anything) to the
   /// repository.
