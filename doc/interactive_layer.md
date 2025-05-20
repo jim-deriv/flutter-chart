@@ -146,10 +146,6 @@ enum DrawingToolState {
 
 The state of a drawing tool affects how it's rendered on the chart and how it responds to user interactions. All implementations of `DrawingV2` must manage their state and respond appropriately to state changes as part of their responsibility to handle user interaction gestures.
 
-### Summary
-
-`DrawingV2` serves as the foundation for all drawable elements in the Interactive Layer, defining four essential responsibilities: painting visual representations on the canvas, performing precise hit testing for user interactions, calculating accurate bounding areas, and handling user interaction gestures. The `DrawingToolState` enum works in conjunction with `DrawingV2` to define the possible states a drawing can be in (normal, selected, hovered, adding, dragging, or animating), which affects both its visual appearance and interaction behavior. This design creates a flexible system where drawings can adapt their appearance and behavior based on their current state while maintaining a consistent interface for the Interactive Layer to work with.
-
 ## InteractiveLayerBase
 
 The `InteractiveLayerBase` is an abstract class that defines the interface for the UI component of the Interactive Layer. It serves as the visual representation of the Interactive Layer that is shown to the user and is responsible for:
