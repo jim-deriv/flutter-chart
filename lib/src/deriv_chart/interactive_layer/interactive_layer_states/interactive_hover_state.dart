@@ -17,7 +17,7 @@ mixin InteractiveHoverState on InteractiveState {
   Set<DrawingToolState> getToolState(DrawingV2 drawing) =>
       drawing == _hoveredTool
           ? {DrawingToolState.hovered}
-          : {DrawingToolState.idle};
+          : {DrawingToolState.normal};
 
   @override
   void onHover(PointerHoverEvent event) {

@@ -69,7 +69,7 @@ class InteractiveAddingToolState extends InteractiveState
             DrawingToolState.adding,
             if (_isAddingToolBeingDragged) DrawingToolState.dragging
           }
-        : {DrawingToolState.idle};
+        : {DrawingToolState.normal};
 
     return states;
   }
