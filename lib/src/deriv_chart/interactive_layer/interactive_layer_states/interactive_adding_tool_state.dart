@@ -80,6 +80,8 @@ class InteractiveAddingToolState extends InteractiveState
       _isAddingToolBeingDragged = false;
     }
 
+    // To trigger the animation of the interactive layer, so the adding preview
+    // can perform its revers dragging effect animation.
     interactiveLayerBehaviour.updateStateTo(
       this,
       StateChangeAnimationDirection.backward,
@@ -96,6 +98,8 @@ class InteractiveAddingToolState extends InteractiveState
   void onPanStart(DragStartDetails details) {
     if (_drawingPreview?.hitTest(details.localPosition, epochToX, quoteToY) ??
         false) {
+      // To trigger the animation of the interactive layer, so the adding
+      // preview can perform its forward dragging effect animation.
       interactiveLayerBehaviour.updateStateTo(
         this,
         StateChangeAnimationDirection.forward,
