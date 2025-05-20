@@ -89,7 +89,7 @@ class TrendLineAddingPreviewMobile
         canvas,
         paintStyle,
         lineStyle,
-        radius: drawingState.contains(DrawingToolState.dragging) ? 8 : 5,
+        radius: 5 + animationInfo.stateChangePercent * 3,
       );
       drawPointAlignmentGuides(canvas, size,
           Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote)));
@@ -103,7 +103,7 @@ class TrendLineAddingPreviewMobile
         canvas,
         paintStyle,
         lineStyle,
-        radius: drawingState.contains(DrawingToolState.dragging) ? 8 : 5,
+        radius: 5 + animationInfo.stateChangePercent * 3,
       );
 
       final startOffset =

@@ -80,6 +80,11 @@ class InteractiveAddingToolState extends InteractiveState
       _isAddingToolBeingDragged = false;
     }
 
+    interactiveLayerBehaviour.updateStateTo(
+      this,
+      StateChangeAnimationDirection.backward,
+    );
+
     if (_drawingPreview?.hitTest(details.localPosition, epochToX, quoteToY) ??
         false) {
       _drawingPreview!
@@ -91,6 +96,11 @@ class InteractiveAddingToolState extends InteractiveState
   void onPanStart(DragStartDetails details) {
     if (_drawingPreview?.hitTest(details.localPosition, epochToX, quoteToY) ??
         false) {
+      interactiveLayerBehaviour.updateStateTo(
+        this,
+        StateChangeAnimationDirection.forward,
+      );
+
       _isAddingToolBeingDragged = true;
       _drawingPreview!.onDragStart(
         details,
