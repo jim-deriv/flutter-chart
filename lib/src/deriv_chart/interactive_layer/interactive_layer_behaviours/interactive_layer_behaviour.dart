@@ -29,11 +29,24 @@ import '../interactive_layer_states/interactive_state.dart';
 abstract class InteractiveLayerBehaviour {
   late InteractiveState _interactiveState;
 
+  bool _initialized = false;
+
+  /// The interactive layer that this manager is managing.
+  late final InteractiveLayerBase interactiveLayer;
+
+  /// The callback that is called when the interactive layer needs to be
+  late final VoidCallback onUpdate;
+
   /// Initializes the [InteractiveLayerBehaviour].
   void init({
     required InteractiveLayerBase interactiveLayer,
     required VoidCallback onUpdate,
   }) {
+    if (_initialized) {
+      return;
+    }
+
+    _initialized = true;
     this.interactiveLayer = interactiveLayer;
     this.onUpdate = onUpdate;
     _interactiveState = InteractiveNormalState(interactiveLayerBehaviour: this);
@@ -72,12 +85,6 @@ abstract class InteractiveLayerBehaviour {
       StateChangeAnimationDirection.forward,
     );
   }
-
-  /// The interactive layer that this manager is managing.
-  late final InteractiveLayerBase interactiveLayer;
-
-  /// The callback that is called when the interactive layer needs to be
-  late final VoidCallback onUpdate;
 
   /// The drawings of the interactive layer.
   Set<DrawingToolState> getToolState(DrawingV2 drawing) =>
