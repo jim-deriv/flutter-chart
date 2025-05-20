@@ -34,7 +34,7 @@ abstract class InteractiveLayerBehaviour {
   /// The interactive layer that this manager is managing.
   late final InteractiveLayerBase interactiveLayer;
 
-  /// The callback that is called when the interactive layer needs to be
+  /// The callback that is called when the interactive layer needs to be updated.
   late final VoidCallback onUpdate;
 
   /// Initializes the [InteractiveLayerBehaviour].
