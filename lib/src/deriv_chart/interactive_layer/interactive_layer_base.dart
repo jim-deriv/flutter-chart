@@ -17,11 +17,8 @@ abstract class InteractiveLayerBase {
   /// change. for example from [InteractiveNormalState] to
   /// [InteractiveSelectedToolState] can be forward
   /// and from [InteractiveSelectedToolState] to [InteractiveNormalState] can be
-  /// backward. so the [InteractiveLayerBase] can animate the transition accordingly.
-  ///
-  /// The [waitForAnimation] defines if interactive layer should wait for the
-  /// animation to finish before changing to the new state or should change
-  /// to the new state right away.
+  /// backward. so the [InteractiveLayerBase] can animate the transition
+  /// accordingly.
   Future<void> animateStateChange(StateChangeAnimationDirection direction);
 
   /// The drawings of the interactive layer.
