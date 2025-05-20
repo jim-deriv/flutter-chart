@@ -433,12 +433,12 @@ class _InteractiveLayerGestureHandlerState
   void clearAddingDrawing() => widget.onClearAddingDrawingTool.call();
 
   @override
-  DrawingToolConfig onAddDrawing(
+  DrawingToolConfig addDrawing(
           InteractableDrawing<DrawingToolConfig> drawing) =>
       widget.onAddDrawing.call(drawing);
 
   @override
-  void onSaveDrawing(InteractableDrawing<DrawingToolConfig> drawing) =>
+  void saveDrawing(InteractableDrawing<DrawingToolConfig> drawing) =>
       widget.onSaveDrawingChange?.call(drawing);
 
   @override

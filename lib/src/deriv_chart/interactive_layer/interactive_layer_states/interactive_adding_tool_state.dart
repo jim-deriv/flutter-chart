@@ -137,7 +137,7 @@ class InteractiveAddingToolState extends InteractiveState
       interactiveLayer.clearAddingDrawing();
 
       final DrawingToolConfig addedConfig =
-          interactiveLayer.onAddDrawing(_drawingPreview!.interactableDrawing);
+          interactiveLayer.addDrawing(_drawingPreview!.interactableDrawing);
 
       for (final drawing in interactiveLayer.drawings) {
         if (drawing.config.configId == addedConfig.configId) {

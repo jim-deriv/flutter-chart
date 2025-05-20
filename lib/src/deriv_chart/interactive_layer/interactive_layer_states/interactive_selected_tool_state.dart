@@ -66,7 +66,7 @@ class InteractiveSelectedToolState extends InteractiveState
   void onPanEnd(DragEndDetails details) {
     selected.onDragEnd(details, epochFromX, quoteFromY, epochToX, quoteToY);
     _draggingStartedOnTool = false;
-    interactiveLayer.onSaveDrawing(selected);
+    interactiveLayer.saveDrawing(selected);
   }
 
   @override
@@ -103,7 +103,7 @@ class InteractiveSelectedToolState extends InteractiveState
         quoteToY,
       );
 
-      interactiveLayer.onSaveDrawing(selected);
+      interactiveLayer.saveDrawing(selected);
     }
   }
 
