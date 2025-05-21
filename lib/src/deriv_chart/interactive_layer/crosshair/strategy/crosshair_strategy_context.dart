@@ -13,7 +13,6 @@ import 'package:deriv_chart/src/models/tick.dart';
 /// - [T]: The specific type of Tick data that the crosshair behavior will work with.
 ///   This is typically a concrete implementation like Tick or Candle.
 class CrosshairStrategyContext<T extends Tick> {
-
   /// Creates a new CrosshairStrategyContext.
   ///
   /// Parameters:
@@ -26,6 +25,7 @@ class CrosshairStrategyContext<T extends Tick> {
     required CrosshairBehaviour<T> Function() largeScreenBehaviourBuilder,
   })  : _smallScreenBehaviourBuilder = smallScreenBehaviourBuilder,
         _largeScreenBehaviourBuilder = largeScreenBehaviourBuilder;
+
   /// Builder function for the small screen behavior strategy.
   final CrosshairBehaviour<T> Function() _smallScreenBehaviourBuilder;
 
