@@ -2,7 +2,7 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshai
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/line_series_crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_line_highlight_painter.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/factory/crosshair_behaviour_factory.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/strategy/crosshair_strategy_context.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/barrier_style.dart';
@@ -57,11 +57,10 @@ class LineSeries extends DataSeries<Tick> {
   double minValueOf(Tick t) => t.quote;
 
   @override
-  CrosshairBehaviourFactory<CrosshairBehaviour<Tick>>
-      getCrosshairBehaviourFactory() {
-    return CrosshairBehaviourFactory(
-      smallScreenBehaviourBuilder: () => LineSeriesSmallScreenBehaviour(),
-      largeScreenBehaviourBuilder: () => LineSeriesLargeScreenBehaviour(),
+  CrosshairStrategyContext<Tick> getCrosshairStrategyContext() {
+    return CrosshairStrategyContext<Tick>(
+      smallScreenBehaviourBuilder: () => LineSeriesSmallScreenBehaviour<Tick>(),
+      largeScreenBehaviourBuilder: () => LineSeriesLargeScreenBehaviour<Tick>(),
     );
   }
 

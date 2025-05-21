@@ -2,7 +2,7 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshai
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/ohlc_series_crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_ohlc_highlight_painter.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/factory/crosshair_behaviour_factory.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/strategy/crosshair_strategy_context.dart';
 import 'package:deriv_chart/src/models/candle.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/barrier_style.dart';
@@ -55,11 +55,12 @@ class OhlcCandleSeries extends OHLCTypeSeries {
   }
 
   @override
-  CrosshairBehaviourFactory<CrosshairBehaviour<Candle>>
-      getCrosshairBehaviourFactory() {
-    return CrosshairBehaviourFactory(
-      smallScreenBehaviourBuilder: () => OHLCSeriesSmallScreenBehaviour(),
-      largeScreenBehaviourBuilder: () => OHLCSeriesLargeScreenBehaviour(),
+  CrosshairStrategyContext<Candle> getCrosshairStrategyContext() {
+    return CrosshairStrategyContext<Candle>(
+      smallScreenBehaviourBuilder: () =>
+          OHLCSeriesSmallScreenBehaviour<Candle>(),
+      largeScreenBehaviourBuilder: () =>
+          OHLCSeriesLargeScreenBehaviour<Candle>(),
     );
   }
 }

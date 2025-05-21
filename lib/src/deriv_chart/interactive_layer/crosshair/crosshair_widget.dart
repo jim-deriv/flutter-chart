@@ -2,6 +2,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_serie
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_area.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/strategy/crosshair_strategy_context.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:flutter/material.dart';
 import 'crosshair_controller.dart';
@@ -59,9 +60,7 @@ class CrosshairWidget extends StatelessWidget {
       return const SizedBox.shrink();
     }
     final _crosshairBehaviour = crosshairBehaviour ??
-        mainSeries.getCrosshairBehaviourFactory().create(
-              crosshairVariant: crosshairVariant,
-            );
+        mainSeries.getCrosshairStrategyContext().getBehaviour(crosshairVariant);
 
     return ValueListenableBuilder<CrosshairState>(
       valueListenable: crosshairController,

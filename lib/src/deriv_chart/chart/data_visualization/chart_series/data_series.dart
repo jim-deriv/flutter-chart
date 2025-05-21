@@ -4,7 +4,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/char
 import 'package:deriv_chart/src/deriv_chart/chart/y_axis/y_axis_config.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/factory/crosshair_behaviour_factory.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/strategy/crosshair_strategy_context.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -393,13 +393,12 @@ abstract class DataSeries<T extends Tick> extends Series {
     ChartTheme theme,
   );
 
-  /// Returns a factory for creating crosshair behaviors appropriate for this series type.
+  /// Returns a context for managing crosshair behaviors appropriate for this series type.
   ///
-  /// This method should return a CrosshairBehaviourFactory that can create the
+  /// This method should return a CrosshairStrategyContext that manages the
   /// appropriate CrosshairBehaviour implementations for both small and large screens
   /// based on the specific requirements of this chart series type.
   ///
-  /// Returns a CrosshairBehaviourFactory instance.
-  CrosshairBehaviourFactory<CrosshairBehaviour<T>>
-      getCrosshairBehaviourFactory();
+  /// Returns a CrosshairStrategyContext instance.
+  CrosshairStrategyContext<T> getCrosshairStrategyContext();
 }

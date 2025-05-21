@@ -1,6 +1,6 @@
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/factory/crosshair_behaviour_factory.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/strategy/crosshair_strategy_context.dart';
 import 'package:deriv_chart/src/models/indicator_input.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -184,9 +184,8 @@ abstract class AbstractSingleIndicatorSeries extends DataSeries<Tick> {
   }
 
   @override
-  CrosshairBehaviourFactory<CrosshairBehaviour<Tick>>
-      getCrosshairBehaviourFactory() {
-    // TODO(Jim): implement getCrosshairBehaviourFactory when needed
+  CrosshairStrategyContext<Tick> getCrosshairStrategyContext() {
+    // TODO(Jim): implement getCrosshairStrategyContext when needed
     throw UnimplementedError();
   }
 
