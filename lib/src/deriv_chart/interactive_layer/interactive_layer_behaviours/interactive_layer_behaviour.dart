@@ -29,6 +29,9 @@ import '../interactive_layer_states/interactive_state.dart';
 abstract class InteractiveLayerBehaviour {
   late InteractiveState _interactiveState;
 
+  /// Current state of the interactive layer.
+  InteractiveState get currentState => _interactiveState;
+
   bool _initialized = false;
 
   /// The interactive layer that this manager is managing.

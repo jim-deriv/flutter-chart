@@ -64,7 +64,7 @@ Path dashPath(
   return dest;
 }
 
-/// Draws a point for an anchor point of a drawing tool.
+/// Draws a point for a given [EdgePoint].
 void drawPoint(
   EdgePoint point,
   EpochToX epochToX,
@@ -76,6 +76,23 @@ void drawPoint(
 }) {
   canvas.drawCircle(
     Offset(epochToX(point.epoch), quoteToY(point.quote)),
+    radius,
+    paintStyle.glowyCirclePaintStyle(lineStyle.color),
+  );
+}
+
+/// Draws a point for a given [Offset].
+void drawPointOffset(
+  Offset point,
+  EpochToX epochToX,
+  QuoteToY quoteToY,
+  Canvas canvas,
+  DrawingPaintStyle paintStyle,
+  LineStyle lineStyle, {
+  double radius = 5,
+}) {
+  canvas.drawCircle(
+    point,
     radius,
     paintStyle.glowyCirclePaintStyle(lineStyle.color),
   );

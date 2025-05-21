@@ -238,7 +238,7 @@ class _InteractiveLayerGestureHandlerState
     with SingleTickerProviderStateMixin
     implements InteractiveLayerBase {
   late AnimationController _stateChangeController;
-  static const Curve _stateChangeCurve = Curves.easeInOut;
+  static const Curve _stateChangeCurve = Curves.easeOut;
   final InteractionNotifier _interactionNotifier = InteractionNotifier();
 
   @override
@@ -267,7 +267,7 @@ class _InteractiveLayerGestureHandlerState
 
     _stateChangeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 240),
     );
 
     // register the callback

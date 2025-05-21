@@ -3,6 +3,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/drawing_tool_state.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/state_change_direction.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/widgets.dart';
@@ -32,6 +33,11 @@ class TrendLineAddingPreviewMobile
       );
     }
   }
+
+  /// If `true` it indicates that the position of the first point is confirmed
+  /// by the user and the second point should be spawned and animated to the
+  /// center of the screen. Once the animation is done, it will become `false`.
+  bool _animatingSecondPoint = false;
 
   Offset _getCenterOfScreen() {
     final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
@@ -103,8 +109,26 @@ class TrendLineAddingPreviewMobile
     } else if (startPoint != null && endPoint != null) {
       // End point is also spawned at the chart, user can move it, we should
       // show alignment cross-hair on end point.
-      drawPoint(
-        endPoint,
+
+      final startOffset =
+          Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote));
+      final targetEndOffset =
+          Offset(epochToX(endPoint.epoch), quoteToY(endPoint.quote));
+
+      late final Offset endOffset;
+
+      if (_animatingSecondPoint) {
+        endOffset = Offset.lerp(
+          startOffset,
+          targetEndOffset,
+          animationInfo.stateChangePercent,
+        )!;
+      } else {
+        endOffset = targetEndOffset;
+      }
+
+      drawPointOffset(
+        endOffset,
         epochToX,
         quoteToY,
         canvas,
@@ -112,11 +136,6 @@ class TrendLineAddingPreviewMobile
         lineStyle,
         radius: 5 + animationInfo.stateChangePercent * 3,
       );
-
-      final startOffset =
-          Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote));
-      final endOffset =
-          Offset(epochToX(endPoint.epoch), quoteToY(endPoint.quote));
 
       drawPointAlignmentGuides(canvas, size, endOffset);
 
@@ -148,6 +167,17 @@ class TrendLineAddingPreviewMobile
         quote: quoteFromY(details.localPosition.dy),
       );
     } else if (endPoint == null) {
+      _animatingSecondPoint = true;
+      interactiveLayerBehaviour
+          .updateStateTo(
+            interactiveLayerBehaviour.currentState,
+            StateChangeAnimationDirection.forward,
+            waitForAnimation: true,
+          )
+          .then(
+            (_) => _animatingSecondPoint = false,
+          );
+
       final Offset centerOffset = _getCenterOfScreen();
 
       interactableDrawing.endPoint = EdgePoint(
