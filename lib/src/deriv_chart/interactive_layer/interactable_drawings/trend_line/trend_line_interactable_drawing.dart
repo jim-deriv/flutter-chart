@@ -30,6 +30,7 @@ class TrendLineInteractableDrawing
     required this.endPoint,
   }) : super(config: config);
 
+  // TODO(Ramin): make it non-nullable.
   /// Start point of the line.
   EdgePoint? startPoint;
 
@@ -50,31 +51,24 @@ class TrendLineInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    if (startPoint != null && endPoint == null) {
-      final Offset startOffset = Offset(
-        epochToX(startPoint!.epoch),
-        quoteToY(startPoint!.quote),
-      );
-
-      // Check if the drag is starting on the start point
-      if ((details.localPosition - startOffset).distance <= hitTestMargin) {
-        _isDraggingStartPoint = true;
-        return;
-      }
+    if (startPoint == null || endPoint == null) {
+      return;
     }
 
-    if (startPoint == null || endPoint == null) {
+    final Offset startOffset = Offset(
+      epochToX(startPoint!.epoch),
+      quoteToY(startPoint!.quote),
+    );
+
+    // Check if the drag is starting on the start point
+    if ((details.localPosition - startOffset).distance <= hitTestMargin) {
+      _isDraggingStartPoint = true;
       return;
     }
 
     // Reset the dragging flag
     _isDraggingStartPoint = null;
 
-    // Convert start and end points from epoch/quote to screen coordinates
-    final Offset startOffset = Offset(
-      epochToX(startPoint!.epoch),
-      quoteToY(startPoint!.quote),
-    );
     final Offset endOffset = Offset(
       epochToX(endPoint!.epoch),
       quoteToY(endPoint!.quote),
@@ -194,7 +188,8 @@ class TrendLineInteractableDrawing
       canvas.drawLine(startOffset, endOffset, paint);
 
       // Draw endpoints with glowy effect if selected
-      if (drawingState.contains(DrawingToolState.selected) ||
+      if ((drawingState.contains(DrawingToolState.selected) &&
+              !drawingState.contains(DrawingToolState.hovered)) ||
           drawingState.contains(DrawingToolState.dragging)) {
         drawPointsFocusedCircle(
           paintStyle,
@@ -213,17 +208,6 @@ class TrendLineInteractableDrawing
       // Draw alignment guides when dragging
       if (drawingState.contains(DrawingToolState.dragging)) {
         _drawAlignmentGuides(canvas, size, startOffset, endOffset, paintStyle);
-      }
-    } else if (drawingState.contains(DrawingToolState.adding)) {
-      if (startPoint != null) {
-        drawPoint(
-            startPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
-        drawPointAlignmentGuides(canvas, size,
-            Offset(epochToX(startPoint!.epoch), quoteToY(startPoint!.quote)));
-      }
-
-      if (endPoint != null) {
-        drawPoint(endPoint!, epochToX, quoteToY, canvas, paintStyle, lineStyle);
       }
     }
   }
@@ -244,26 +228,6 @@ class TrendLineInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    if (startPoint != null && endPoint == null) {
-      // If we're dragging the start point, we need to update its position
-      final Offset startOffset = Offset(
-        epochToX(startPoint!.epoch),
-        quoteToY(startPoint!.quote),
-      );
-
-      // Apply the delta to get the new screen position
-      final Offset newOffset = startOffset + details.delta;
-
-      // Convert back to epoch and quote coordinates
-      final int newEpoch = epochFromX(newOffset.dx);
-      final double newQuote = quoteFromY(newOffset.dy);
-
-      // Update the start point
-      startPoint = EdgePoint(
-        epoch: newEpoch,
-        quote: newQuote,
-      );
-    }
     if (startPoint == null || endPoint == null) {
       return;
     }

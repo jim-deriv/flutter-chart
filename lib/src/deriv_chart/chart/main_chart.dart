@@ -191,6 +191,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
   void initState() {
     super.initState();
 
+    // TODO(Ramin): mention in the document to customize or go with default.
     _interactiveLayerBehaviour =
         widget.interactiveLayerBehaviour ?? InteractiveLayerDesktopBehaviour();
 

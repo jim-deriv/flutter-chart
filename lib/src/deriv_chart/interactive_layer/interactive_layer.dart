@@ -5,6 +5,7 @@ import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/multiple_animated_builder.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_states/interactive_selected_tool_state.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -77,7 +78,8 @@ class InteractiveLayer extends StatefulWidget {
 }
 
 class _InteractiveLayerState extends State<InteractiveLayer> {
-  final List<InteractableDrawing> _interactableDrawings = [];
+  final Map<String, InteractableDrawing> _interactableDrawings =
+      <String, InteractableDrawing>{};
 
   /// Timers for debouncing repository updates
   ///
@@ -94,15 +96,30 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   void initState() {
     super.initState();
 
-    widget.drawingToolsRepo.addListener(_setDrawingsFromConfigs);
+    widget.drawingToolsRepo.addListener(syncDrawingsWithConfigs);
   }
 
-  void _setDrawingsFromConfigs() {
-    _interactableDrawings.clear();
+  void syncDrawingsWithConfigs() {
+    final configListIds =
+        widget.drawingToolsRepo.items.map((c) => c.configId).toSet();
 
     for (final config in widget.drawingToolsRepo.items) {
-      _interactableDrawings.add(config.getInteractableDrawing());
+      if (!_interactableDrawings.containsKey(config.configId)) {
+        // Add new drawing if it doesn't exist
+        final drawing = config.getInteractableDrawing();
+        _interactableDrawings[config.configId!] = drawing;
+        widget.interactiveLayerBehaviour.updateStateTo(
+          InteractiveSelectedToolState(
+            selected: drawing,
+            interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
+          ),
+          StateChangeAnimationDirection.forward,
+        );
+      }
     }
+
+    // Remove drawings that are not in the config list
+    _interactableDrawings.removeWhere((id, _) => !configListIds.contains(id));
 
     setState(() {});
   }
@@ -162,14 +179,14 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
     }
     _debounceTimers.clear();
 
-    widget.drawingToolsRepo.removeListener(_setDrawingsFromConfigs);
+    widget.drawingToolsRepo.removeListener(syncDrawingsWithConfigs);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return _InteractiveLayerGestureHandler(
-      drawings: _interactableDrawings,
+      drawings: _interactableDrawings.values.toList(),
       epochFromX: widget.epochFromCanvasX,
       quoteFromY: widget.quoteFromCanvasY,
       epochToX: widget.epochToCanvasX,
