@@ -1,5 +1,5 @@
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/behaviour/crosshair_behaviour.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/core/crosshair_variant.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 
 /// A context class that manages crosshair behavior strategies.

@@ -1,5 +1,5 @@
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/find.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/core/crosshair_variant.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/utils/find.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
 import 'package:deriv_chart/src/models/tick.dart';

@@ -1,5 +1,5 @@
 import 'dart:ui' as ui;
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_line_painter.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/painters/line/crosshair_line_painter.dart';
 import 'package:flutter/material.dart';
 
 /// A custom painter to paint the crosshair `line`.

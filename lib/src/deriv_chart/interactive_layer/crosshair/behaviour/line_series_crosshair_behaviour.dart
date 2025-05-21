@@ -1,6 +1,6 @@
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/large_screen_crosshair_behaviour.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/small_screen_crosshair_behaviour.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_dot_painter.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/behaviour/large_screen_crosshair_behaviour.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/behaviour/small_screen_crosshair_behaviour.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/painters/crosshair_dot_painter.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:flutter/material.dart';
 

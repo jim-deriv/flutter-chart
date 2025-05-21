@@ -1,7 +1,7 @@
 import 'dart:ui';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/find.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/index_base_cross_hair.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/core/crosshair_variant.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/utils/find.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/legacy/index_base_cross_hair.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/functions/conversion.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/functions/helper_functions.dart';
