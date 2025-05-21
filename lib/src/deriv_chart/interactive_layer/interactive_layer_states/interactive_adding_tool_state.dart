@@ -120,16 +120,14 @@ class InteractiveAddingToolState extends InteractiveState
 
   @override
   void onPanUpdate(DragUpdateDetails details) {
-    if (_drawingPreview != null) {
-      if (_drawingPreview!.hitTest(details.localPosition, epochToX, quoteToY)) {
-        _drawingPreview!.onDragUpdate(
-          details,
-          epochFromX,
-          quoteFromY,
-          epochToX,
-          quoteToY,
-        );
-      }
+    if (_isAddingToolBeingDragged) {
+      _drawingPreview?.onDragUpdate(
+        details,
+        epochFromX,
+        quoteFromY,
+        epochToX,
+        quoteToY,
+      );
     }
   }
 
