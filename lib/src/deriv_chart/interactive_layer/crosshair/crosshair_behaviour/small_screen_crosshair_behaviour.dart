@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 
 abstract class SmallScreenCrosshairBehaviour<T extends Tick>
     implements CrosshairBehaviour<T> {
+  @override
   double get detailsBoxHeight => 0;
 
+  @override
   double get detailsBoxWidth => 0;
 
   @override
