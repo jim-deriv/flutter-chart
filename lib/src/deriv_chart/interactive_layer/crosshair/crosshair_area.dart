@@ -1,20 +1,13 @@
-import 'dart:math';
-
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_series/data_series.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/chart_date_utils.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/large_screen_crosshair_line_painter.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/small_screen_crosshair_line_painter.dart';
-import 'package:deriv_chart/src/models/candle.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/find.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'crosshair_details.dart';
-import 'crosshair_dot_painter.dart';
 
 /// A widget that displays crosshair details on a chart.
 ///
@@ -29,7 +22,7 @@ class CrosshairArea extends StatelessWidget {
     required this.crosshairTick,
     required this.cursorPosition,
     required this.animationDuration,
-    required this.crosshairVariant,
+    required this.crosshairBehaviour,
     this.pipSize = 4,
     Key? key,
   }) : super(key: key);
@@ -52,45 +45,7 @@ class CrosshairArea extends StatelessWidget {
   /// The duration for animations.
   final Duration animationDuration;
 
-  /// The variant of the crosshair to be used.
-  /// This is used to determine the type of crosshair to display.
-  /// The default is [CrosshairVariant.smallScreen].
-  /// [CrosshairVariant.largeScreen] is mostly for web.
-  final CrosshairVariant crosshairVariant;
-
-  /// Calculates the optimal vertical position for the crosshair details box.
-  ///
-  /// In Flutter canvas, the coordinate system has (0,0) at the top-left corner,
-  /// with y-values increasing downward. This method calculates a position that
-  /// places the details box above the cursor with appropriate spacing.
-  ///
-  /// The calculation works as follows:
-  /// 1. Start with the cursor's Y position
-  /// 2. Subtract the height of the details box (100px) to position it above the cursor
-  /// 3. Subtract an additional gap (120px) to create space between the cursor and the box
-  /// 4. Ensure the box doesn't go too close to the top edge by using max(10, result)
-  ///
-  /// This ensures the details box is visible and well-positioned relative to the cursor,
-  /// while preventing it from being rendered partially off-screen at the top.
-  ///
-  /// Parameters:
-  /// - [cursorY]: The Y-coordinate of the cursor on the canvas
-  ///
-  /// Returns:
-  /// The Y-coordinate (top position) where the details box should be rendered.
-  /// The value is guaranteed to be at least 10 pixels from the top of the canvas.
-  double _calculateDetailsPosition({required double cursorY}) {
-    // Height of the details information box in pixels
-    const double detailsBoxHeight = 100;
-
-    // Additional vertical gap between the cursor and the details box
-    // This ensures the box doesn't overlap with or crowd the cursor
-    const double gap = 120;
-
-    // Calculate position and ensure it's at least 10px from the top edge
-    // This prevents the box from being rendered partially off-screen
-    return max(10, cursorY - detailsBoxHeight - gap);
-  }
+  final CrosshairBehaviour crosshairBehaviour;
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +76,7 @@ class CrosshairArea extends StatelessWidget {
     final ChartTheme theme = context.read<ChartTheme>();
     final Color dotColor = theme.currentSpotDotColor;
     final Color dotEffect = theme.currentSpotDotEffect;
+
     return Stack(
       clipBehavior: Clip.none,
       children: <Widget>[
@@ -129,14 +85,8 @@ class CrosshairArea extends StatelessWidget {
           left: xAxis.xFromEpoch(crosshairTick!.epoch),
           child: CustomPaint(
             size: Size(constraints.maxWidth, constraints.maxHeight),
-            painter: crosshairVariant == CrosshairVariant.smallScreen
-                ? SmallScreenCrosshairLinePainter(
-                    theme: theme,
-                  )
-                : LargeScreenCrosshairLinePainter(
-                    theme: theme,
-                    cursorY: cursorPosition.dy,
-                  ),
+            painter: crosshairBehaviour.createLinePainter(
+                theme: theme, cursorY: cursorPosition.dy),
           ),
         ),
         AnimatedPositioned(
@@ -145,89 +95,108 @@ class CrosshairArea extends StatelessWidget {
           duration: animationDuration,
           child: CustomPaint(
             size: Size(1, constraints.maxHeight),
-            painter: crosshairVariant == CrosshairVariant.smallScreen &&
-                    crosshairTick is! Candle
-                ? CrosshairDotPainter(
-                    dotColor: dotColor, dotBorderColor: dotEffect)
-                : null,
+            painter: crosshairBehaviour.createDotPainter(
+                dotColor: dotColor, dotBorderColor: dotEffect),
           ),
         ),
-        _highlightTick(constraints: constraints, xAxis: xAxis, theme: theme),
+        _buildCrosshairTickHightlight(
+            constraints: constraints, xAxis: xAxis, theme: theme),
         // Add crosshair quote label at the right side of the chart
-        if (crosshairVariant != CrosshairVariant.smallScreen &&
-            cursorPosition.dy > 0)
-          Positioned(
-            top: cursorPosition.dy,
-            right: 0,
-            child: FractionalTranslation(
-              translation: const Offset(0, -0.5), // Center the label vertically
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: theme.crosshairInformationBoxContainerNormalColor,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  crosshairTick!.quote.toStringAsFixed(pipSize),
-                  style: theme.crosshairAxisLabelStyle.copyWith(
-                    color: theme.crosshairInformationBoxTextDefault,
-                  ),
-                ),
-              ),
-            ),
-          ),
+        crosshairBehaviour.createCrosshairLabel(
+            content: Text(crosshairTick!.quote.toStringAsFixed(pipSize),
+                style: theme.crosshairAxisLabelStyle.copyWith(
+                  color: theme.crosshairInformationBoxTextDefault,
+                )),
+            translationOffset:
+                const Offset(0, -0.5), // Center the label vertically
+            topOffset: cursorPosition.dy,
+            rightOffset: 0,
+            decoration: BoxDecoration(
+              color: theme.crosshairInformationBoxContainerNormalColor,
+              borderRadius: BorderRadius.circular(4),
+            )),
         // Add vertical date label at the bottom of the chart
-        if (crosshairVariant != CrosshairVariant.smallScreen &&
-            crosshairTick != null)
-          Positioned(
-            bottom: 0,
-            left: xAxis.xFromEpoch(crosshairTick!.epoch),
-            child: FractionalTranslation(
-              translation:
-                  const Offset(-0.5, 0.85), // Center the label horizontally
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: theme.crosshairInformationBoxContainerNormalColor,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  ChartDateUtils.formatDateTimeWithSeconds(
-                      crosshairTick!.epoch),
-                  style: theme.crosshairAxisLabelStyle.copyWith(
-                    color: theme.crosshairInformationBoxTextDefault,
-                  ),
-                ),
+        crosshairBehaviour.createCrosshairLabel(
+            content: Text(
+              ChartDateUtils.formatDateTimeWithSeconds(
+                  crosshairTick?.epoch ?? 0),
+              style: theme.crosshairAxisLabelStyle.copyWith(
+                color: theme.crosshairInformationBoxTextDefault,
               ),
             ),
-          ),
-        AnimatedPositioned(
-          duration: animationDuration,
-          // Position the details above the cursor with a gap
-          // Use cursorY which is the cursor's Y position
-          // Subtract the height of the details box plus a gap
-          top: crosshairVariant == CrosshairVariant.smallScreen
-              ? 0
-              : _calculateDetailsPosition(cursorY: cursorPosition.dy),
-          bottom: 0,
-          width: constraints.maxWidth,
-          left:
+            translationOffset:
+                const Offset(-0.5, 0.85), // Center the label horizontally
+            leftOffset: xAxis.xFromEpoch(crosshairTick!.epoch),
+            bottomOffset: 0,
+            decoration: BoxDecoration(
+              color: theme.crosshairInformationBoxContainerNormalColor,
+              borderRadius: BorderRadius.circular(4),
+            )),
+        crosshairBehaviour.createCrosshairDetails(
+          crosshairHeader: _buildCrosshairHeader(theme: theme),
+          theme: theme,
+          mainSeries: mainSeries,
+          animationDuration: animationDuration,
+          crosshairTick: crosshairTick!,
+          pipSize: pipSize,
+          cursorY: cursorPosition.dy,
+          leftOffset:
               xAxis.xFromEpoch(crosshairTick!.epoch) - constraints.maxWidth / 2,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: CrosshairDetails(
-              mainSeries: mainSeries,
-              crosshairTick: crosshairTick!,
-              pipSize: pipSize,
-              crosshairVariant: crosshairVariant,
-            ),
-          ),
+          width: constraints.maxWidth,
         ),
       ],
     );
   }
 
-  Widget _highlightTick(
+  Widget _buildCrosshairHeader({required ChartTheme theme}) {
+    if (crosshairTick == null) {
+      return const SizedBox.shrink();
+    }
+    final previousTick = findClosestPreviousTick(
+        crosshairTick!, mainSeries.visibleEntries.entries);
+
+    final double percentageChange = getPercentageChange(
+        crosshairTick: crosshairTick!, previousTick: previousTick);
+    final String percentChangeLabel =
+        '${percentageChange.toStringAsFixed(pipSize)}%';
+
+    final Color color = percentageChange >= 0
+        ? theme.crosshairInformationBoxTextProfit
+        : theme.crosshairInformationBoxTextLoss;
+    return Container(
+      width: double.infinity,
+      color: color,
+      alignment: Alignment.center,
+      child: Text(
+        '$percentChangeLabel',
+        style: theme.crosshairInformationBoxTitleStyle.copyWith(
+          color: theme.crosshairInformationBoxTextStatic,
+        ),
+      ),
+    );
+  }
+
+  /// Calculates the percentage change between the current tick and the previous tick.
+  ///
+  /// Returns 0 if there's no previous tick or if the previous tick's close value is 0.
+  /// Uses the closest previous tick found by the findClosestPreviousTick function
+  /// if no previousTick is explicitly provided.
+  double getPercentageChange(
+      {required Tick crosshairTick, required Tick? previousTick}) {
+    final double prevClose = previousTick?.close ?? 0;
+    // If there's no previous tick or its close value is 0, return 0 to avoid division by zero
+    // and to indicate no change.
+    // The previous tick can legitimately be null in cases such as when the crosshair is on the first tick
+    // or when there are no previous ticks available in the data series.
+    if (prevClose == 0) {
+      return 0;
+    }
+
+    final double change = crosshairTick.close - prevClose;
+    return (change / prevClose) * 100;
+  }
+
+  Widget _buildCrosshairTickHightlight(
       {required BoxConstraints constraints,
       required XAxisModel xAxis,
       required ChartTheme theme}) {
@@ -236,7 +205,7 @@ class CrosshairArea extends StatelessWidget {
     }
 
     // Get the appropriate highlight painter for the current tick based on the series type
-    final CrosshairHighlightPainter? highlightPainter =
+    final CrosshairHighlightPainter highlightPainter =
         mainSeries.getCrosshairHighlightPainter(
       crosshairTick!,
       quoteToCanvasY,
@@ -245,10 +214,6 @@ class CrosshairArea extends StatelessWidget {
       (xAxis.xFromEpoch(xAxis.granularity) - xAxis.xFromEpoch(0)) * 0.6,
       theme,
     );
-
-    if (highlightPainter == null) {
-      return const SizedBox.shrink();
-    }
 
     return AnimatedPositioned(
       duration: animationDuration,

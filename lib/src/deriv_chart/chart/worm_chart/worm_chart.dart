@@ -224,7 +224,6 @@ class _WormChartState extends State<WormChart>
                         ),
                       ),
                     ),
-                    // TODO(Jim): Test this.
                     IndexBaseCrossHair(
                       indexToX: _indexToX,
                       quoteToY: _quoteToY,
@@ -233,7 +232,7 @@ class _WormChartState extends State<WormChart>
                       enabled: widget.crossHairEnabled,
                       pipSize: widget.pipSize,
                       onTap: widget.onTap,
-                      crosshairVariant: widget.crosshairVariant,
+                      // crosshairVariant: widget.crosshairVariant,
                     ),
                   ],
                 ),

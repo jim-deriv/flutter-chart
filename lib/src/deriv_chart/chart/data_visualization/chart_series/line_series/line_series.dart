@@ -1,4 +1,8 @@
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/line_series_crosshair_behaviour.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_line_highlight_painter.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/factory/crosshair_behaviour_factory.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/barrier_style.dart';
@@ -30,8 +34,7 @@ class LineSeries extends DataSeries<Tick> {
       );
 
   @override
-  Widget getCrossHairInfo(Tick crossHairTick, int pipSize, ChartTheme theme,
-          CrosshairVariant crosshairVariant) =>
+  Widget getCrossHairInfo(Tick crossHairTick, int pipSize, ChartTheme theme) =>
       Text(
         '${crossHairTick.quote.toStringAsFixed(pipSize)}',
         style: theme.crosshairInformationBoxQuoteStyle.copyWith(
@@ -40,8 +43,43 @@ class LineSeries extends DataSeries<Tick> {
       );
 
   @override
+  Widget getDetailedCrossHairInfo({
+    required Tick crosshairTick,
+    required int pipSize,
+    required ChartTheme theme,
+  }) =>
+      getCrossHairInfo(crosshairTick, pipSize, theme);
+
+  @override
   double maxValueOf(Tick t) => t.quote;
 
   @override
   double minValueOf(Tick t) => t.quote;
+
+  @override
+  CrosshairBehaviourFactory<CrosshairBehaviour<Tick>>
+      getCrosshairBehaviourFactory() {
+    return CrosshairBehaviourFactory(
+      smallScreenBehaviourBuilder: () => LineSeriesSmallScreenBehaviour(),
+      largeScreenBehaviourBuilder: () => LineSeriesLargeScreenBehaviour(),
+    );
+  }
+
+  @override
+  CrosshairHighlightPainter getCrosshairHighlightPainter(
+      Tick crosshairTick,
+      double Function(double p1) quoteToY,
+      double xCenter,
+      double elementWidth,
+      ChartTheme theme) {
+    // Return a CrosshairLineHighlightPainter with transparent colors
+    // This effectively creates a "no-op" painter that doesn't paint anything visible
+    return CrosshairLineHighlightPainter(
+      tick: crosshairTick,
+      quoteToY: quoteToY,
+      xCenter: xCenter,
+      pointColor: Colors.transparent,
+      pointSize: 0,
+    );
+  }
 }

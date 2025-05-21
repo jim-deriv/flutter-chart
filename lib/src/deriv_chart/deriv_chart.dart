@@ -12,6 +12,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_serie
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/markers/marker_series.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_object.dart';
 import 'package:deriv_chart/src/deriv_chart/drawing_tool_chart/drawing_tools.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
 import 'package:deriv_chart/src/misc/callbacks.dart';
 import 'package:deriv_chart/src/misc/chart_controller.dart';
@@ -62,6 +63,7 @@ class DerivChart extends StatefulWidget {
     this.showScrollToLastTickButton,
     this.loadingAnimationColor,
     this.crosshairVariant = CrosshairVariant.smallScreen,
+    this.crosshairBehaviour,
     Key? key,
   }) : super(key: key);
 
@@ -181,6 +183,8 @@ class DerivChart extends StatefulWidget {
   /// The default is [CrosshairVariant.smallScreen].
   /// [CrosshairVariant.largeScreen] is mostly for web.
   final CrosshairVariant crosshairVariant;
+
+  final CrosshairBehaviour? crosshairBehaviour;
 
   @override
   _DerivChartState createState() => _DerivChartState();

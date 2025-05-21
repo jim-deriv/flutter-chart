@@ -2,15 +2,10 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshai
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/find.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/large_screen_crosshair_line_painter.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/small_screen_crosshair_line_painter.dart';
 import 'package:deriv_chart/src/models/tick.dart';
-import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'crosshair_dot_painter.dart';
 
 /// A Cross-hair widget to work with index of data rather than epoch.
 class IndexBaseCrossHair extends StatefulWidget {
@@ -20,7 +15,7 @@ class IndexBaseCrossHair extends StatefulWidget {
     required this.indexToX,
     required this.xToIndex,
     required this.ticks,
-    required this.crosshairVariant,
+    // required this.crosshairVariant,
     this.enabled = false,
     this.pipSize = 4,
     this.crossHairContentPadding = 4,
@@ -67,7 +62,7 @@ class IndexBaseCrossHair extends StatefulWidget {
   /// This is used to determine the type of crosshair to display.
   /// The default is [CrosshairVariant.smallScreen].
   /// [CrosshairVariant.largeScreen] is mostly for web.
-  final CrosshairVariant crosshairVariant;
+  // final CrosshairVariant crosshairVariant;
 
   @override
   _IndexBaseCrossHairState createState() => _IndexBaseCrossHairState();
@@ -135,9 +130,9 @@ class _IndexBaseCrossHairState extends State<IndexBaseCrossHair>
   @override
   Widget build(BuildContext context) => LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          final ChartTheme theme = context.read<ChartTheme>();
-          final Color dotColor = theme.currentSpotDotColor;
-          final Color dotEffect = theme.currentSpotDotEffect;
+          // final ChartTheme theme = context.read<ChartTheme>();
+          // final Color dotColor = theme.currentSpotDotColor;
+          // final Color dotEffect = theme.currentSpotDotEffect;
 
           if (_crossHairIndex == null) {
             return const SizedBox.shrink();
@@ -148,19 +143,19 @@ class _IndexBaseCrossHairState extends State<IndexBaseCrossHair>
             child: Stack(
               fit: StackFit.expand,
               children: <Widget>[
-                AnimatedPositioned(
-                  duration: widget.crossHairTransitionAnimationDuration,
-                  top: widget.quoteToY(widget.ticks[_crossHairIndex!].quote),
-                  left: widget.indexToX(_crossHairIndex!),
-                  child: CustomPaint(
-                    size: Size(1, constraints.maxHeight),
-                    painter:
-                        widget.crosshairVariant == CrosshairVariant.smallScreen
-                            ? CrosshairDotPainter(
-                                dotColor: dotColor, dotBorderColor: dotEffect)
-                            : null,
-                  ),
-                ),
+                // AnimatedPositioned(
+                //   duration: widget.crossHairTransitionAnimationDuration,
+                //   top: widget.quoteToY(widget.ticks[_crossHairIndex!].quote),
+                //   left: widget.indexToX(_crossHairIndex!),
+                //   child: CustomPaint(
+                //     size: Size(1, constraints.maxHeight),
+                //     painter:
+                //         widget.crosshairVariant == CrosshairVariant.smallScreen
+                //             ? CrosshairDotPainter(
+                //                 dotColor: dotColor, dotBorderColor: dotEffect)
+                //             : null,
+                //   ),
+                // ),
                 if (_crossHairDetailSize != null) ...<Widget>[
                   AnimatedPositioned(
                     left: _getCrossHairDetailCardLeftPosition(
@@ -171,25 +166,19 @@ class _IndexBaseCrossHairState extends State<IndexBaseCrossHair>
                     duration: widget.crossHairTransitionAnimationDuration,
                     child: _buildCrossHairDetail(),
                   ),
-                  AnimatedPositioned(
-                    left: widget.indexToX(_crossHairIndex!),
-                    top: _crossHairDetailSize!.height,
-                    duration: widget.crossHairTransitionAnimationDuration,
-                    child: CustomPaint(
-                      size: Size(
-                        1,
-                        constraints.maxHeight - _crossHairDetailSize!.height,
-                      ),
-                      painter: widget.crosshairVariant ==
-                              CrosshairVariant.smallScreen
-                          ? SmallScreenCrosshairLinePainter(
-                              theme: theme,
-                            )
-                          : LargeScreenCrosshairLinePainter(
-                              theme: theme,
-                            ),
-                    ),
-                  )
+                  // AnimatedPositioned(
+                  //   left: widget.indexToX(_crossHairIndex!),
+                  //   top: _crossHairDetailSize!.height,
+                  //   duration: widget.crossHairTransitionAnimationDuration,
+                  //   child: CustomPaint(
+                  //     size: Size(
+                  //       1,
+                  //       constraints.maxHeight - _crossHairDetailSize!.height,
+                  //     ),
+                  //     painter: widget.crosshairBehaviour
+                  //         ?.createLinePainter(theme: theme),
+                  //   ),
+                  // )
                 ]
               ],
             ),

@@ -1,4 +1,6 @@
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/factory/crosshair_behaviour_factory.dart';
 import 'package:deriv_chart/src/models/indicator_input.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -167,12 +169,37 @@ abstract class AbstractSingleIndicatorSeries extends DataSeries<Tick> {
   }
 
   @override
-  Widget getCrossHairInfo(Tick crossHairTick, int pipSize, ChartTheme theme,
-          CrosshairVariant crosshairVariant) =>
+  Widget getCrossHairInfo(Tick crossHairTick, int pipSize, ChartTheme theme) =>
       Text(
         '${crossHairTick.quote.toStringAsFixed(pipSize)}',
         style: const TextStyle(fontSize: 16),
       );
+
+  @override
+  Widget getDetailedCrossHairInfo(
+      {required Tick crosshairTick,
+      required int pipSize,
+      required ChartTheme theme}) {
+    return getCrossHairInfo(crosshairTick, pipSize, theme);
+  }
+
+  @override
+  CrosshairBehaviourFactory<CrosshairBehaviour<Tick>>
+      getCrosshairBehaviourFactory() {
+    // TODO(Jim): implement getCrosshairBehaviourFactory when needed
+    throw UnimplementedError();
+  }
+
+  @override
+  CrosshairHighlightPainter getCrosshairHighlightPainter(
+      Tick crosshairTick,
+      double Function(double p1) quoteToY,
+      double xCenter,
+      double elementWidth,
+      ChartTheme theme) {
+    // TODO(Jim): implement getCrosshairHighlightPainter when needed
+    throw UnimplementedError();
+  }
 
   @override
   double maxValueOf(Tick t) => t.quote;

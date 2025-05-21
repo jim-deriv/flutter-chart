@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_scale_model.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/mobile_chart_frame_dividers.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
 import 'package:deriv_chart/src/theme/dimens.dart';
 import 'package:flutter/foundation.dart';
@@ -76,6 +77,7 @@ class Chart extends StatefulWidget {
     this.showDataFitButton,
     this.showScrollToLastTickButton,
     this.loadingAnimationColor,
+    this.crosshairBehaviour,
     Key? key,
   }) : super(key: key);
 
@@ -192,6 +194,8 @@ class Chart extends StatefulWidget {
   /// The default is [CrosshairVariant.smallScreen].
   /// [CrosshairVariant.largeScreen] is mostly for web.
   final CrosshairVariant crosshairVariant;
+
+  final CrosshairBehaviour? crosshairBehaviour;
 
   @override
   State<StatefulWidget> createState() =>

@@ -155,3 +155,6 @@ export 'src/deriv_chart/chart/data_visualization/markers/marker_props.dart';
 export 'src/theme/colors.dart';
 export 'src/add_ons/drawing_tools_ui/drawing_tools_dialog.dart';
 export 'src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
+export 'src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
+export 'src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/line_series_crosshair_behaviour.dart';
+export 'src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/ohlc_series_crosshair_behaviour.dart';

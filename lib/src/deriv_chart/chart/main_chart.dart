@@ -2,6 +2,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_scale_model.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_behaviour/crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_controller.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
 import 'package:deriv_chart/src/misc/chart_controller.dart';
@@ -62,6 +63,7 @@ class MainChart extends BasicChart {
     double opacity = 1,
     ChartAxisConfig? chartAxisConfig,
     VisibleQuoteAreaChangedCallback? onQuoteAreaChanged,
+    this.crosshairBehaviour,
   })  : _mainSeries = mainSeries,
         chartDataList = <ChartData>[
           mainSeries,
@@ -136,6 +138,8 @@ class MainChart extends BasicChart {
   /// The default is [CrosshairVariant.smallScreen].
   /// [CrosshairVariant.largeScreen] is mostly for web.
   final CrosshairVariant crosshairVariant;
+
+  final CrosshairBehaviour? crosshairBehaviour;
 
   @override
   _ChartImplementationState createState() => _ChartImplementationState();
