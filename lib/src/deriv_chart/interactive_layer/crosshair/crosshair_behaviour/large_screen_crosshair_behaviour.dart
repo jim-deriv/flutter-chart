@@ -9,7 +9,18 @@ import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
 
-abstract class LargeScreenCrosshairBehavior<T extends Tick>
+/// An abstract implementation of CrosshairBehaviour optimized for large screens.
+///
+/// This class provides an enhanced crosshair behaviour suitable for desktop, web,
+/// and other large screen devices. It extends the CrosshairBehaviour class with
+/// adaptations that take advantage of the additional screen real estate.
+///
+/// Key characteristics of the large screen behaviour:
+/// - More detailed information displays
+/// - Enhanced visual elements for better readability
+/// - Optimized positioning for mouse interactions
+/// - Richer crosshair experience with additional visual cues
+abstract class LargeScreenCrosshairBehaviour<T extends Tick>
     extends CrosshairBehaviour<T> {
   @override
   Widget getCrossHairInfo(

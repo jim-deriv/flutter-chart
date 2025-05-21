@@ -42,6 +42,11 @@ class CrosshairWidget extends StatelessWidget {
   /// [CrosshairVariant.largeScreen] is mostly for web.
   final CrosshairVariant crosshairVariant;
 
+  /// The behaviour implementation that defines how the crosshair should be displayed.
+  ///
+  /// If not provided, a default behaviour will be created based on the chart's main series
+  /// and the specified crosshair variant. This allows for customization of the crosshair
+  /// appearance and behaviour when needed.
   final CrosshairBehaviour? crosshairBehaviour;
 
   /// Whether to show the crosshair or not.

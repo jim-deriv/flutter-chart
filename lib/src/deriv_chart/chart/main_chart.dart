@@ -139,6 +139,11 @@ class MainChart extends BasicChart {
   /// [CrosshairVariant.largeScreen] is mostly for web.
   final CrosshairVariant crosshairVariant;
 
+  /// The behavior implementation that defines how the crosshair should be displayed.
+  ///
+  /// If provided, this behavior will be used instead of the default behavior created
+  /// based on the chart's main series and the specified crosshair variant. This allows
+  /// for customization of the crosshair appearance and behavior.
   final CrosshairBehaviour? crosshairBehaviour;
 
   @override

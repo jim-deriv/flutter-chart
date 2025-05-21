@@ -184,6 +184,11 @@ class DerivChart extends StatefulWidget {
   /// [CrosshairVariant.largeScreen] is mostly for web.
   final CrosshairVariant crosshairVariant;
 
+  /// The behaviour implementation that defines how the crosshair should be displayed.
+  ///
+  /// If provided, this behaviour will be used instead of the default behaviour created
+  /// based on the chart's main series and the specified crosshair variant. This allows
+  /// for customization of the crosshair appearance and behaviour.
   final CrosshairBehaviour? crosshairBehaviour;
 
   @override

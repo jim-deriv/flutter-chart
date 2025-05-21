@@ -7,11 +7,29 @@ import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
 
+/// An abstract implementation of CrosshairBehaviour optimized for small screens.
+///
+/// This class provides a simplified crosshair behaviour suitable for mobile devices
+/// and other small screens. It implements the CrosshairBehaviour interface with
+/// adaptations that work better on limited screen real estate.
+///
+/// Key characteristics of the small screen behaviour:
+/// - Minimalist visual elements to avoid cluttering the small screen
+/// - Simplified positioning of information elements
+/// - Optimized touch interactions for smaller displays
 abstract class SmallScreenCrosshairBehaviour<T extends Tick>
     implements CrosshairBehaviour<T> {
+  /// The height of the crosshair details box in logical pixels.
+  ///
+  /// For small screens, this is set to 0 as the details are typically
+  /// displayed in a more compact format or integrated with other UI elements.
   @override
   double get detailsBoxHeight => 0;
 
+  /// The width of the crosshair details box in logical pixels.
+  ///
+  /// For small screens, this is set to 0 as the details are typically
+  /// displayed in a more compact format or integrated with other UI elements.
   @override
   double get detailsBoxWidth => 0;
 

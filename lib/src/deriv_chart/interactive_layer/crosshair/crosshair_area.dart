@@ -45,6 +45,10 @@ class CrosshairArea extends StatelessWidget {
   /// The duration for animations.
   final Duration animationDuration;
 
+  /// The behaviour implementation that defines how the crosshair should be displayed.
+  ///
+  /// This determines the visual appearance and interaction behaviour of the crosshair
+  /// based on the chart type (line, OHLC) and screen size (small, large).
   final CrosshairBehaviour crosshairBehaviour;
 
   @override

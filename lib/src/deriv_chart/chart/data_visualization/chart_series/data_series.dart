@@ -338,10 +338,33 @@ abstract class DataSeries<T extends Tick> extends Series {
   /// [prevLastEntry] to `null`.
   void resetLastEntryAnimation() => prevLastEntry = null;
 
-  /// Each sub-class should implement and return appropriate cross-hair text
-  /// based on its own requirements.
+  /// Returns a widget displaying basic information for the crosshair tooltip.
+  ///
+  /// Each chart series type (line, candlestick, etc.) should implement this method
+  /// to return appropriate information based on its data structure. For example,
+  /// a line chart might show just the price, while a candlestick chart would show
+  /// open, high, low, and close values.
+  ///
+  /// Parameters:
+  /// - [crossHairTick]: The tick data at the crosshair position
+  /// - [pipSize]: Number of decimal places to display in price values
+  /// - [theme]: The chart theme containing styling information
+  ///
+  /// Returns a widget that displays the crosshair information.
   Widget getCrossHairInfo(T crossHairTick, int pipSize, ChartTheme theme);
 
+  /// Returns a widget displaying detailed information for the crosshair tooltip.
+  ///
+  /// This method provides more comprehensive information than getCrossHairInfo,
+  /// typically used for larger screen displays where more space is available.
+  /// The implementation should be tailored to the specific chart series type.
+  ///
+  /// Parameters:
+  /// - [crosshairTick]: The tick data at the crosshair position
+  /// - [pipSize]: Number of decimal places to display in price values
+  /// - [theme]: The chart theme containing styling information
+  ///
+  /// Returns a widget that displays detailed crosshair information.
   Widget getDetailedCrossHairInfo({
     required T crosshairTick,
     required int pipSize,
@@ -349,12 +372,19 @@ abstract class DataSeries<T extends Tick> extends Series {
   });
 
   /// Returns a CrosshairHighlightPainter for highlighting the element at the crosshair position.
-  /// Each series type should implement this to return the appropriate highlight painter.
   ///
-  /// [crosshairTick] The tick to highlight.
-  /// [quoteToY] Function to convert quote to Y coordinate.
-  /// [xCenter] The X center position of the element.
-  /// [theme] The chart theme.
+  /// Each series type should implement this to return the appropriate highlight painter.
+  /// For example, a line chart might highlight a dot on the line, while a candlestick
+  /// chart might highlight the entire candlestick.
+  ///
+  /// Parameters:
+  /// - [crosshairTick]: The tick to highlight
+  /// - [quoteToY]: Function to convert quote to Y coordinate
+  /// - [xCenter]: The X center position of the element
+  /// - [elementWidth]: The width of the element to highlight
+  /// - [theme]: The chart theme containing styling information
+  ///
+  /// Returns a CustomPainter for drawing the highlight.
   CrosshairHighlightPainter getCrosshairHighlightPainter(
     T crosshairTick,
     double Function(double) quoteToY,
@@ -363,6 +393,13 @@ abstract class DataSeries<T extends Tick> extends Series {
     ChartTheme theme,
   );
 
+  /// Returns a factory for creating crosshair behaviors appropriate for this series type.
+  ///
+  /// This method should return a CrosshairBehaviourFactory that can create the
+  /// appropriate CrosshairBehaviour implementations for both small and large screens
+  /// based on the specific requirements of this chart series type.
+  ///
+  /// Returns a CrosshairBehaviourFactory instance.
   CrosshairBehaviourFactory<CrosshairBehaviour<T>>
       getCrosshairBehaviourFactory();
 }
