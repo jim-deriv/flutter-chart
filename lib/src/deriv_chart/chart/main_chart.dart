@@ -66,6 +66,7 @@ class MainChart extends BasicChart {
     VisibleQuoteAreaChangedCallback? onQuoteAreaChanged,
     this.interactiveLayerBehaviour,
     this.showCrosshair = false,
+    this.useDrawingToolsV2 = false,
   })  : _mainSeries = mainSeries,
         chartDataList = <ChartData>[
           mainSeries,
@@ -80,6 +81,9 @@ class MainChart extends BasicChart {
           chartAxisConfig: chartAxisConfig,
           onQuoteAreaChanged: onQuoteAreaChanged,
         );
+
+  /// Whether to use the new drawing tools v2 or not.
+  final bool useDrawingToolsV2;
 
   /// The indicator series that are displayed on the main chart.
   final List<Series>? overlaySeries;
@@ -381,15 +385,16 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
                     _buildSeries(widget.overlaySeries!),
                   _buildAnnotations(),
                   if (widget.markerSeries != null) _buildMarkerArea(),
-                  // if (widget.drawingTools != null)
-                  //   _buildDrawingToolChart(widget.drawingTools!),
+                  if (widget.drawingTools != null && widget.useDrawingToolsV2)
+                    _buildInteractiveLayer(context, xAxis)
+                  else if (widget.drawingTools != null)
+                    _buildDrawingToolChart(widget.drawingTools!),
                   if (widget.drawingTools != null)
-                    _buildInteractiveLayer(context, xAxis),
-                  // TODO(Ramin): move and handle cross-hair inside the InteractiveLayer
-                  // if (kIsWeb) _buildCrosshairAreaWeb(),
-                  // if (!kIsWeb &&
-                  //     !(widget.drawingTools?.isDrawingMoving ?? false))
-                  //   _buildCrosshairArea(),
+                    // TODO(Ramin): move and handle cross-hair inside the InteractiveLayer
+                    if (kIsWeb) _buildCrosshairAreaWeb(),
+                  if (!kIsWeb &&
+                      !(widget.drawingTools?.isDrawingMoving ?? false))
+                    _buildCrosshairArea(),
                   if (widget.showScrollToLastTickButton &&
                       _isScrollToLastTickAvailable)
                     Positioned(

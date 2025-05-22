@@ -66,8 +66,12 @@ class DerivChart extends StatefulWidget {
     this.showScrollToLastTickButton,
     this.loadingAnimationColor,
     this.interactiveLayerBehaviour,
+    this.useDrawingToolsV2 = false,
     Key? key,
   }) : super(key: key);
+
+  /// Whether to use the new drawing tools v2 or not.
+  final bool useDrawingToolsV2;
 
   /// Chart's main data series
   final DataSeries<Tick> mainSeries;
@@ -284,11 +288,13 @@ class _DerivChartState extends State<DerivChart> {
 
   void showDrawingToolsDialog() {
     setState(() {
-      // _drawingTools
-      //   ..init()
-      //   ..drawingToolsRepo = _drawingToolsRepo;
-      // Comment above statement and uncomment below line, when using [InteractiveLayer]
-      _drawingTools.drawingToolsRepo = _drawingToolsRepo;
+      if (widget.useDrawingToolsV2) {
+        _drawingTools.drawingToolsRepo = _drawingToolsRepo;
+      } else {
+        _drawingTools
+          ..init()
+          ..drawingToolsRepo = _drawingToolsRepo;
+      }
     });
     showDialog<void>(
       context: context,
@@ -379,6 +385,7 @@ class _DerivChartState extends State<DerivChart> {
                 loadingAnimationColor: widget.loadingAnimationColor,
                 chartAxisConfig: widget.chartAxisConfig,
                 interactiveLayerBehaviour: _interactiveLayerBehaviour,
+                useDrawingToolsV2: widget.useDrawingToolsV2,
               ),
               if (widget.indicatorsRepo == null) _buildIndicatorsIcon(),
               if (widget.drawingToolsRepo == null) _buildDrawingToolsIcon(),

@@ -76,8 +76,12 @@ class Chart extends StatefulWidget {
     this.showDataFitButton,
     this.showScrollToLastTickButton,
     this.loadingAnimationColor,
+    this.useDrawingToolsV2 = false,
     Key? key,
   }) : super(key: key);
+
+  /// Whether to use new drawing tools or not.
+  final bool useDrawingToolsV2;
 
   /// Chart's main data series.
   final DataSeries<Tick> mainSeries;
