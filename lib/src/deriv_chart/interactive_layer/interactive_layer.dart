@@ -262,20 +262,11 @@ class _InteractiveLayerGestureHandlerState
   AnimationController? get stateChangeAnimationController =>
       _stateChangeController;
 
-  final GlobalKey _layerKey = GlobalKey();
-
   Size? _size;
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
-      setState(() {
-        _size =
-            (_layerKey.currentContext?.findRenderObject() as RenderBox?)?.size;
-      });
-    });
 
     widget.interactiveLayerBehaviour.init(
       interactiveLayer: this,
@@ -320,110 +311,115 @@ class _InteractiveLayerGestureHandlerState
   @override
   Widget build(BuildContext context) {
     final XAxisModel xAxis = context.watch<XAxisModel>();
-    return MouseRegion(
-      onHover: (event) {
-        widget.interactiveLayerBehaviour.onHover(event);
-        _interactionNotifier.notify();
-      },
-      child: GestureDetector(
-        onTapUp: (details) {
-          widget.interactiveLayerBehaviour.onTap(details);
-          _interactionNotifier.notify();
-        },
-        onPanStart: (details) {
-          widget.interactiveLayerBehaviour.onPanStart(details);
-          _interactionNotifier.notify();
-        },
-        onPanUpdate: (details) {
-          widget.interactiveLayerBehaviour.onPanUpdate(details);
-          _interactionNotifier.notify();
-        },
-        onPanEnd: (details) {
-          widget.interactiveLayerBehaviour.onPanEnd(details);
-          _interactionNotifier.notify();
-        },
-        // TODO(NA): Move this part into separate widget. InteractiveLayer only cares about the interactions and selected tool movement
-        // It can delegate it to an inner component as well. which we can have different interaction behaviours like per platform as well.
-        child: RepaintBoundary(
-          key: _layerKey,
-          child: MultipleAnimatedBuilder(
-              animations: [_stateChangeController, _interactionNotifier],
-              builder: (_, __) {
-                final double animationValue =
-                    _stateChangeCurve.transform(_stateChangeController.value);
+    return LayoutBuilder(builder: (_, BoxConstraints constraints) {
+      _size = Size(constraints.maxWidth, constraints.maxHeight);
 
-                return Stack(
-                  fit: StackFit.expand,
-                  children: widget.series.input.isEmpty
-                      ? []
-                      : [
-                          ...widget.drawings
-                              .map((e) => CustomPaint(
-                                    key: ValueKey<String>(e.id),
-                                    foregroundPainter:
-                                        InteractableDrawingCustomPainter(
-                                      drawing: e,
-                                      currentDrawingState: widget
-                                          .interactiveLayerBehaviour
-                                          .getToolState(e),
-                                      drawingState: widget
-                                          .interactiveLayerBehaviour
-                                          .getToolState,
-                                      series: widget.series,
-                                      theme: context.watch<ChartTheme>(),
-                                      chartConfig: widget.chartConfig,
-                                      epochFromX: xAxis.epochFromX,
-                                      epochToX: xAxis.xFromEpoch,
-                                      quoteToY: widget.quoteToY,
-                                      quoteFromY: widget.quoteFromY,
-                                      epochRange: EpochRange(
-                                        rightEpoch: xAxis.rightBoundEpoch,
-                                        leftEpoch: xAxis.leftBoundEpoch,
+      return MouseRegion(
+        onHover: (event) {
+          widget.interactiveLayerBehaviour.onHover(event);
+          _interactionNotifier.notify();
+        },
+        child: GestureDetector(
+          onTapUp: (details) {
+            widget.interactiveLayerBehaviour.onTap(details);
+            _interactionNotifier.notify();
+          },
+          onPanStart: (details) {
+            widget.interactiveLayerBehaviour.onPanStart(details);
+            _interactionNotifier.notify();
+          },
+          onPanUpdate: (details) {
+            widget.interactiveLayerBehaviour.onPanUpdate(details);
+            _interactionNotifier.notify();
+          },
+          onPanEnd: (details) {
+            widget.interactiveLayerBehaviour.onPanEnd(details);
+            _interactionNotifier.notify();
+          },
+          // TODO(NA): Move this part into separate widget. InteractiveLayer only cares about the interactions and selected tool movement
+          // It can delegate it to an inner component as well. which we can have different interaction behaviours like per platform as well.
+          child: RepaintBoundary(
+            child: MultipleAnimatedBuilder(
+                animations: [_stateChangeController, _interactionNotifier],
+                builder: (_, __) {
+                  final double animationValue =
+                      _stateChangeCurve.transform(_stateChangeController.value);
+
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: widget.series.input.isEmpty
+                        ? []
+                        : [
+                            ...widget.drawings
+                                .map((e) => CustomPaint(
+                                      key: ValueKey<String>(e.id),
+                                      foregroundPainter:
+                                          InteractableDrawingCustomPainter(
+                                        drawing: e,
+                                        currentDrawingState: widget
+                                            .interactiveLayerBehaviour
+                                            .getToolState(e),
+                                        drawingState: widget
+                                            .interactiveLayerBehaviour
+                                            .getToolState,
+                                        series: widget.series,
+                                        theme: context.watch<ChartTheme>(),
+                                        chartConfig: widget.chartConfig,
+                                        epochFromX: xAxis.epochFromX,
+                                        epochToX: xAxis.xFromEpoch,
+                                        quoteToY: widget.quoteToY,
+                                        quoteFromY: widget.quoteFromY,
+                                        epochRange: EpochRange(
+                                          rightEpoch: xAxis.rightBoundEpoch,
+                                          leftEpoch: xAxis.leftBoundEpoch,
+                                        ),
+                                        quoteRange: widget.quoteRange,
+                                        animationInfo: AnimationInfo(
+                                          stateChangePercent: animationValue,
+                                        ),
                                       ),
-                                      quoteRange: widget.quoteRange,
-                                      animationInfo: AnimationInfo(
-                                        stateChangePercent: animationValue,
-                                      ),
-                                    ),
-                                  ))
-                              .toList(),
-                          ...widget.interactiveLayerBehaviour.previewDrawings
-                              .map((e) => CustomPaint(
-                                    key: ValueKey<String>(e.id),
-                                    foregroundPainter:
-                                        InteractableDrawingCustomPainter(
-                                            drawing: e,
-                                            series: widget.series,
-                                            currentDrawingState: widget
-                                                .interactiveLayerBehaviour
-                                                .getToolState(e),
-                                            drawingState: widget
-                                                .interactiveLayerBehaviour
-                                                .getToolState,
-                                            theme: context.watch<ChartTheme>(),
-                                            chartConfig: widget.chartConfig,
-                                            epochFromX: xAxis.epochFromX,
-                                            epochToX: xAxis.xFromEpoch,
-                                            quoteToY: widget.quoteToY,
-                                            quoteFromY: widget.quoteFromY,
-                                            epochRange: EpochRange(
-                                              rightEpoch: xAxis.rightBoundEpoch,
-                                              leftEpoch: xAxis.leftBoundEpoch,
-                                            ),
-                                            quoteRange: widget.quoteRange,
-                                            animationInfo: AnimationInfo(
-                                                stateChangePercent:
-                                                    animationValue)
-                                            // onDrawingToolClicked: () => _selectedDrawing = e,
-                                            ),
-                                  ))
-                              .toList(),
-                        ],
-                );
-              }),
+                                    ))
+                                .toList(),
+                            ...widget.interactiveLayerBehaviour.previewDrawings
+                                .map((e) => CustomPaint(
+                                      key: ValueKey<String>(e.id),
+                                      foregroundPainter:
+                                          InteractableDrawingCustomPainter(
+                                              drawing: e,
+                                              series: widget.series,
+                                              currentDrawingState: widget
+                                                  .interactiveLayerBehaviour
+                                                  .getToolState(e),
+                                              drawingState: widget
+                                                  .interactiveLayerBehaviour
+                                                  .getToolState,
+                                              theme:
+                                                  context.watch<ChartTheme>(),
+                                              chartConfig: widget.chartConfig,
+                                              epochFromX: xAxis.epochFromX,
+                                              epochToX: xAxis.xFromEpoch,
+                                              quoteToY: widget.quoteToY,
+                                              quoteFromY: widget.quoteFromY,
+                                              epochRange: EpochRange(
+                                                rightEpoch:
+                                                    xAxis.rightBoundEpoch,
+                                                leftEpoch: xAxis.leftBoundEpoch,
+                                              ),
+                                              quoteRange: widget.quoteRange,
+                                              animationInfo: AnimationInfo(
+                                                  stateChangePercent:
+                                                      animationValue)
+                                              // onDrawingToolClicked: () => _selectedDrawing = e,
+                                              ),
+                                    ))
+                                .toList(),
+                          ],
+                  );
+                }),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void onTap(TapUpDetails details) {
