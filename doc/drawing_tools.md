@@ -30,21 +30,12 @@ For both implementations, you'll need to import the appropriate packages:
 import 'package:deriv_chart/deriv_chart.dart';
 ```
 
-For the V2 implementation, you'll also need to import the interactive layer behaviors:
-
-```dart
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_behaviour.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
-```
-
 #### Legacy Drawing Tools Setup
 
 To use the original drawing tools implementation:
 
 ```dart
 import 'package:deriv_chart/deriv_chart.dart';
-import 'package:deriv_chart/src/deriv_chart/drawing_tool_chart/drawing_tools.dart';
 
 // In your widget build method
 Chart(
@@ -62,7 +53,6 @@ The new implementation provides improved behavior, more control over platform-sp
 
 ```dart
 import 'package:deriv_chart/deriv_chart.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 
 // In your widget build method
 Chart(
@@ -78,7 +68,6 @@ For mobile applications:
 
 ```dart
 import 'package:deriv_chart/deriv_chart.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 
 // In your widget build method
 Chart(
