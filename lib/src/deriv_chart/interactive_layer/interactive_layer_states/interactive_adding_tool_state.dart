@@ -76,6 +76,9 @@ class InteractiveAddingToolState extends InteractiveState
   @override
   void onPanEnd(DragEndDetails details) {
     if (_isAddingToolBeingDragged) {
+      _drawingPreview?.onDragEnd(
+          details, epochFromX, quoteFromY, epochToX, quoteToY);
+
       _isAddingToolBeingDragged = false;
     }
 
@@ -85,12 +88,6 @@ class InteractiveAddingToolState extends InteractiveState
       this,
       StateChangeAnimationDirection.backward,
     );
-
-    if (_drawingPreview?.hitTest(details.localPosition, epochToX, quoteToY) ??
-        false) {
-      _drawingPreview!
-          .onDragEnd(details, epochFromX, quoteFromY, epochToX, quoteToY);
-    }
   }
 
   @override
