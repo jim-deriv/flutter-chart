@@ -88,9 +88,6 @@ You can create custom implementations of `InteractiveLayerBehaviour` to tailor t
 
 ```dart
 import 'package:deriv_chart/deriv_chart.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_behaviour.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_states/interactive_state.dart';
-import 'package:flutter/material.dart';
 
 class CustomInteractiveLayerBehaviour extends InteractiveLayerBehaviour {
   // Override to customize behavior
