@@ -389,10 +389,10 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
                     _buildInteractiveLayer(context, xAxis)
                   else if (widget.drawingTools != null)
                     _buildDrawingToolChart(widget.drawingTools!),
-                  if (kIsWeb) _buildCrosshairAreaWeb(),
-                  if (!kIsWeb &&
-                      !(widget.drawingTools?.isDrawingMoving ?? false))
-                    _buildCrosshairArea(),
+                  // if (kIsWeb) _buildCrosshairAreaWeb(),
+                  // if (!kIsWeb &&
+                  //     !(widget.drawingTools?.isDrawingMoving ?? false))
+                  //   _buildCrosshairArea(),
                   if (widget.showScrollToLastTickButton &&
                       _isScrollToLastTickAvailable)
                     Positioned(

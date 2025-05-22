@@ -41,7 +41,7 @@ class TrendLineInteractableDrawing
   // null: dragging the whole line
   // true: dragging the start point
   // false: dragging the end point
-  bool? _isDraggingStartPoint;
+  bool? isDraggingStartPoint;
 
   @override
   void onDragStart(
@@ -62,12 +62,12 @@ class TrendLineInteractableDrawing
 
     // Check if the drag is starting on the start point
     if ((details.localPosition - startOffset).distance <= hitTestMargin) {
-      _isDraggingStartPoint = true;
+      isDraggingStartPoint = true;
       return;
     }
 
     // Reset the dragging flag
-    _isDraggingStartPoint = null;
+    isDraggingStartPoint = null;
 
     final Offset endOffset = Offset(
       epochToX(endPoint!.epoch),
@@ -80,13 +80,13 @@ class TrendLineInteractableDrawing
 
     // If the drag is starting on the start point
     if (startDistance <= hitTestMargin) {
-      _isDraggingStartPoint = true;
+      isDraggingStartPoint = true;
       return;
     }
 
     // If the drag is starting on the end point
     if (endDistance <= hitTestMargin) {
-      _isDraggingStartPoint = false;
+      isDraggingStartPoint = false;
       return;
     }
 
@@ -206,18 +206,15 @@ class TrendLineInteractableDrawing
       }
 
       // Draw alignment guides when dragging
-      if (drawingState.contains(DrawingToolState.dragging)) {
-        _drawAlignmentGuides(canvas, size, startOffset, endOffset, paintStyle);
+      if (drawingState.contains(DrawingToolState.dragging) &&
+          isDraggingStartPoint != null) {
+        if (isDraggingStartPoint!) {
+          drawPointAlignmentGuides(canvas, size, startOffset);
+        } else {
+          drawPointAlignmentGuides(canvas, size, endOffset);
+        }
       }
     }
-  }
-
-  /// Draws alignment guides (horizontal and vertical lines) from the points
-  void _drawAlignmentGuides(Canvas canvas, Size size, Offset startOffset,
-      Offset endOffset, DrawingPaintStyle paintStyle) {
-    // Draw alignment guides for both start and end points
-    drawPointAlignmentGuides(canvas, size, startOffset);
-    drawPointAlignmentGuides(canvas, size, endOffset);
   }
 
   @override
@@ -236,10 +233,10 @@ class TrendLineInteractableDrawing
     final Offset delta = details.delta;
 
     // If we're dragging a specific point (start or end point)
-    if (_isDraggingStartPoint != null) {
+    if (isDraggingStartPoint != null) {
       // Get the current point being dragged
       final EdgePoint pointBeingDragged =
-          _isDraggingStartPoint! ? startPoint! : endPoint!;
+          isDraggingStartPoint! ? startPoint! : endPoint!;
 
       // Get the current screen position of the point
       final Offset currentOffset = Offset(
@@ -261,7 +258,7 @@ class TrendLineInteractableDrawing
       );
 
       // Update the appropriate point
-      if (_isDraggingStartPoint!) {
+      if (isDraggingStartPoint!) {
         startPoint = updatedPoint;
       } else {
         endPoint = updatedPoint;
@@ -309,7 +306,7 @@ class TrendLineInteractableDrawing
     QuoteToY quoteToY,
   ) {
     // Reset the dragging flag when drag is complete
-    _isDraggingStartPoint = null;
+    isDraggingStartPoint = null;
   }
 
   @override

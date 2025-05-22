@@ -99,38 +99,44 @@ void drawPointOffset(
 }
 
 /// Draws a point for an anchor point of a drawing tool with a glowy effect.
-void drawPointsFocusedCircle(
-    DrawingPaintStyle paintStyle,
-    LineStyle lineStyle,
-    Canvas canvas,
-    Offset startOffset,
-    double outerCircleRadius,
-    double innerCircleRadius,
-    Offset endOffset) {
+void drawFocusedCircle(
+  DrawingPaintStyle paintStyle,
+  LineStyle lineStyle,
+  Canvas canvas,
+  Offset offset,
+  double outerCircleRadius,
+  double innerCircleRadius,
+) {
   final normalPaintStyle = paintStyle.glowyCirclePaintStyle(lineStyle.color);
   final glowyPaintStyle =
       paintStyle.glowyCirclePaintStyle(lineStyle.color.withOpacity(0.3));
   canvas
     ..drawCircle(
-      startOffset,
+      offset,
       outerCircleRadius,
       glowyPaintStyle,
     )
     ..drawCircle(
-      startOffset,
-      innerCircleRadius,
-      normalPaintStyle,
-    )
-    ..drawCircle(
-      endOffset,
-      outerCircleRadius,
-      glowyPaintStyle,
-    )
-    ..drawCircle(
-      endOffset,
+      offset,
       innerCircleRadius,
       normalPaintStyle,
     );
+}
+
+/// Draws a point for an anchor point of a drawing tool with a glowy effect.
+void drawPointsFocusedCircle(
+  DrawingPaintStyle paintStyle,
+  LineStyle lineStyle,
+  Canvas canvas,
+  Offset startOffset,
+  double outerCircleRadius,
+  double innerCircleRadius,
+  Offset endOffset,
+) {
+  drawFocusedCircle(paintStyle, lineStyle, canvas, startOffset,
+      outerCircleRadius, innerCircleRadius);
+  drawFocusedCircle(paintStyle, lineStyle, canvas, endOffset, outerCircleRadius,
+      innerCircleRadius);
 }
 
 /// A circular array for dash patterns
