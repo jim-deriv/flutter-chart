@@ -79,7 +79,7 @@ Chart(
 )
 ```
 
-If you don't specify an `interactiveLayerBehaviour`, the chart will use `InteractiveLayerDesktopBehaviour` by default.
+If you don't specify an `interactiveLayerBehaviour`, the chart will use `InteractiveLayerDesktopBehaviour` on web and `InteractiveLayerMobileBehaviour` on other platforms.
 
 
 #### Custom Interactive Layer Behavior
