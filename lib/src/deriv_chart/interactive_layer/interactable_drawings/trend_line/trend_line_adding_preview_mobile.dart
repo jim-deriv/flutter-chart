@@ -43,11 +43,6 @@ class TrendLineAddingPreviewMobile
     }
   }
 
-  /// If `true` it indicates that the position of the first point is confirmed
-  /// by the user and the second point should be spawned and animated to the
-  /// center of the screen. Once the animation is done, it will become `false`.
-  bool _animating = false;
-
   @override
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) =>
       interactableDrawing.hitTest(offset, epochToX, quoteToY);
@@ -80,8 +75,6 @@ class TrendLineAddingPreviewMobile
       late final Offset endOffset;
 
       endOffset = targetEndOffset;
-
-      print(5 + 8 * animationInfo.stateChangePercent);
 
       drawPointOffset(
         startOffset,
@@ -142,54 +135,24 @@ class TrendLineAddingPreviewMobile
     QuoteToY quoteToY,
     VoidCallback onDone,
   ) {
-    final EdgePoint? startPoint = interactableDrawing.startPoint;
-    final EdgePoint? endPoint = interactableDrawing.endPoint;
-
     if (!interactableDrawing.hitTest(
-        details.localPosition, epochToX, quoteToY)) {
+      details.localPosition,
+      epochToX,
+      quoteToY,
+    )) {
+      // Tap is outside the drawing preview. means adding is confirmed.
       onDone();
     }
-
-    // if (startPoint == null) {
-    //   interactableDrawing.startPoint = EdgePoint(
-    //     epoch: epochFromX(details.localPosition.dx),
-    //     quote: quoteFromY(details.localPosition.dy),
-    //   );
-    // } else if (endPoint == null) {
-    //   _animatingSecondPoint = true;
-    //   interactiveLayerBehaviour
-    //       .updateStateTo(
-    //         interactiveLayerBehaviour.currentState,
-    //         StateChangeAnimationDirection.forward,
-    //         waitForAnimation: true,
-    //       )
-    //       .then(
-    //         (_) => _animatingSecondPoint = false,
-    //       );
-    //
-    //   final Offset centerOffset = _getCenterOfScreen();
-    //
-    //   interactableDrawing.endPoint = EdgePoint(
-    //     epoch: epochFromX(centerOffset.dx),
-    //     quote: quoteFromY(centerOffset.dy),
-    //   );
-    // } else {
-    //   onDone();
-    // }
   }
 
   @override
   void onDragStart(DragStartDetails details, EpochFromX epochFromX,
       QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
-    interactiveLayerBehaviour
-        .updateStateTo(
-          interactiveLayerBehaviour.currentState,
-          StateChangeAnimationDirection.forward,
-          waitForAnimation: true,
-        )
-        .then(
-          (_) => _animating = false,
-        );
+    interactiveLayerBehaviour.updateStateTo(
+      interactiveLayerBehaviour.currentState,
+      StateChangeAnimationDirection.forward,
+      waitForAnimation: true,
+    );
 
     interactableDrawing.onDragStart(
         details, epochFromX, quoteFromY, epochToX, quoteToY);
@@ -198,17 +161,19 @@ class TrendLineAddingPreviewMobile
   @override
   void onDragEnd(DragEndDetails details, EpochFromX epochFromX,
       QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
-    interactiveLayerBehaviour
-        .updateStateTo(
-          interactiveLayerBehaviour.currentState,
-          StateChangeAnimationDirection.backward,
-          waitForAnimation: true,
-        )
-        .then(
-          (_) => _animating = false,
-        );
+    interactiveLayerBehaviour.updateStateTo(
+      interactiveLayerBehaviour.currentState,
+      StateChangeAnimationDirection.backward,
+      waitForAnimation: true,
+    );
+
     interactableDrawing.onDragEnd(
-        details, epochFromX, quoteFromY, epochToX, quoteToY);
+      details,
+      epochFromX,
+      quoteFromY,
+      epochToX,
+      quoteToY,
+    );
   }
 
   @override
@@ -218,44 +183,14 @@ class TrendLineAddingPreviewMobile
     QuoteFromY quoteFromY,
     EpochToX epochToX,
     QuoteToY quoteToY,
-  ) {
-    interactableDrawing.onDragUpdate(
-        details, epochFromX, quoteFromY, epochToX, quoteToY);
-    // final EdgePoint? startPoint = interactableDrawing.startPoint;
-    // final EdgePoint? endPoint = interactableDrawing.endPoint;
-    //
-    // if (startPoint != null && endPoint == null) {
-    //   // If we're dragging the start point, we need to update its position
-    //   final Offset startOffset =
-    //       Offset(epochToX(startPoint.epoch), quoteToY(startPoint.quote));
-    //
-    //   // Apply the delta to get the new screen position
-    //   final Offset newOffset = startOffset + details.delta;
-    //
-    //   // Convert back to epoch and quote coordinates
-    //   final int newEpoch = epochFromX(newOffset.dx);
-    //   final double newQuote = quoteFromY(newOffset.dy);
-    //
-    //   // Update the start point
-    //   interactableDrawing.startPoint =
-    //       EdgePoint(epoch: newEpoch, quote: newQuote);
-    // } else if (endPoint != null) {
-    //   // If we're dragging the start point, we need to update its position
-    //   final Offset endOffset =
-    //       Offset(epochToX(endPoint.epoch), quoteToY(endPoint.quote));
-    //
-    //   // Apply the delta to get the new screen position
-    //   final Offset newOffset = endOffset + details.delta;
-    //
-    //   // Convert back to epoch and quote coordinates
-    //   final int newEpoch = epochFromX(newOffset.dx);
-    //   final double newQuote = quoteFromY(newOffset.dy);
-    //
-    //   // Update the start point
-    //   interactableDrawing.endPoint =
-    //       EdgePoint(epoch: newEpoch, quote: newQuote);
-    // }
-  }
+  ) =>
+      interactableDrawing.onDragUpdate(
+        details,
+        epochFromX,
+        quoteFromY,
+        epochToX,
+        quoteToY,
+      );
 
   @override
   bool shouldRepaint(Set<DrawingToolState> drawingState, DrawingV2 oldDrawing) {
