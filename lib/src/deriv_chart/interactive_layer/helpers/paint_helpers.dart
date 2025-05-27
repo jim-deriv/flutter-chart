@@ -187,8 +187,8 @@ void drawValueLabel({
   final TextPainter textPainter = TextPainter(
     text: TextSpan(
       text: formattedValue,
-      style: const TextStyle(
-        color: Color(0xFF2196F3),
+      style: TextStyle(
+        color: color,
         fontSize: 14,
         fontWeight: FontWeight.normal,
       ),
@@ -201,9 +201,7 @@ void drawValueLabel({
   final double rectWidth = textPainter.width + 24;
   const double rectHeight = 30; // Fixed height to match the image
 
-  // Position the rectangle at the right edge of the screen with some padding
-  const double rightPadding = 8;
-  final double rectRight = size.width - rightPadding;
+  final double rectRight = size.width;
   final double rectLeft = rectRight - rectWidth;
 
   final Rect rect = Rect.fromLTRB(
