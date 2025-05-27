@@ -1,6 +1,7 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
+import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
@@ -96,6 +97,7 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
+    ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   );
 
@@ -118,6 +120,7 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
+    ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   ) {}
 

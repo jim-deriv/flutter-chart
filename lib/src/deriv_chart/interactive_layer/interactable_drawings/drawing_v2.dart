@@ -1,3 +1,4 @@
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
@@ -82,6 +83,7 @@ abstract class DrawingV2 {
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
+    ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   );
 
@@ -93,6 +95,7 @@ abstract class DrawingV2 {
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
+      ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   );
 

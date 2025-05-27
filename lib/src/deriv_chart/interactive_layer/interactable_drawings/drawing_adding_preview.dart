@@ -146,6 +146,7 @@ abstract class DrawingAddingPreview<
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
+    ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   ) {}
 

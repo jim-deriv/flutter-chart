@@ -72,6 +72,7 @@ class HorizontalLineAddingPreviewMobile
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
+    ChartTheme chartTheme,
     GetDrawingState drawingState,
   ) {
     if (interactableDrawing.startPoint != null) {
@@ -99,15 +100,17 @@ class HorizontalLineAddingPreviewMobile
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
+    ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   ) {
     drawValueLabel(
-      canvas:  canvas,
+      canvas: canvas,
       quoteToY: quoteToY,
       value: interactableDrawing.startPoint!.quote,
       pipSize: chartConfig.pipSize,
       size: size,
       color: interactableDrawing.config.lineStyle.color,
+      backgroundColor: chartTheme.backgroundColor,
     );
   }
 

@@ -92,6 +92,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
         quoteToY,
         animationInfo,
         chartConfig,
+        theme,
         drawingState,
       );
     });
@@ -103,6 +104,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
       quoteToY,
       animationInfo,
       chartConfig,
+      theme,
       drawingState,
     );
   }
