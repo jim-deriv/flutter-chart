@@ -115,26 +115,14 @@ class HorizontalLineInteractableDrawing
 
       canvas.drawLine(startOffset, endOffset, paint);
 
-      // Draw endpoints with glowy effect if selected
-      if (drawingState.contains(DrawingToolState.selected) ||
-          drawingState.contains(DrawingToolState.dragging)) {
-        _drawPointsFocusedCircle(
-          paintStyle,
-          lineStyle,
-          canvas,
-          startOffset,
-          10 * animationInfo.stateChangePercent,
-          3 * animationInfo.stateChangePercent,
-          endOffset,
-        );
-      } else if (drawingState.contains(DrawingToolState.hovered)) {
-        _drawPointsFocusedCircle(
-            paintStyle, lineStyle, canvas, startOffset, 10, 3, endOffset);
-      }
-
-      // Draw alignment guides when dragging
-      if (drawingState.contains(DrawingToolState.dragging)) {
-        drawPointAlignmentGuides(canvas, size, startOffset);
+      if (drawingState.contains(DrawingToolState.selected)) {
+        final neonPain = Paint()
+          ..color = config.lineStyle.color.withOpacity(0.4)
+          ..strokeWidth = 8 * animationInfo.stateChangePercent
+          ..strokeCap = StrokeCap.round
+          ..style = PaintingStyle.stroke
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
+        canvas.drawLine(startOffset, endOffset, neonPain);
       }
     } else {
       if (startPoint == null && _hoverPosition != null) {
@@ -153,40 +141,6 @@ class HorizontalLineInteractableDrawing
         drawPointAlignmentGuides(canvas, size, startPosition);
       }
     }
-  }
-
-  void _drawPointsFocusedCircle(
-      DrawingPaintStyle paintStyle,
-      LineStyle lineStyle,
-      ui.Canvas canvas,
-      ui.Offset startOffset,
-      double outerCircleRadius,
-      double innerCircleRadius,
-      ui.Offset endOffset) {
-    final normalPaintStyle = paintStyle.glowyCirclePaintStyle(lineStyle.color);
-    final glowyPaintStyle =
-        paintStyle.glowyCirclePaintStyle(lineStyle.color.withOpacity(0.3));
-    canvas
-      ..drawCircle(
-        startOffset,
-        outerCircleRadius,
-        glowyPaintStyle,
-      )
-      ..drawCircle(
-        startOffset,
-        innerCircleRadius,
-        normalPaintStyle,
-      )
-      ..drawCircle(
-        endOffset,
-        outerCircleRadius,
-        glowyPaintStyle,
-      )
-      ..drawCircle(
-        endOffset,
-        innerCircleRadius,
-        normalPaintStyle,
-      );
   }
 
   @override
