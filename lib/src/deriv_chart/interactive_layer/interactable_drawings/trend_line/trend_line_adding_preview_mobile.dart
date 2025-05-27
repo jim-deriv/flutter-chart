@@ -122,9 +122,22 @@ class TrendLineAddingPreviewMobile
           ? paintStyle.linePaintStyle(
               lineStyle.color, 1 + 1 * animationInfo.stateChangePercent)
           : paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness);
-      canvas.drawLine(startOffset, endOffset, paint);
+
+      final Path linePath = _createLinePath(startOffset, endOffset);
+
+      canvas.drawPath(
+        dashPath(linePath, dashArray: CircularIntervalList([4, 4])),
+        Paint()
+          ..color = paint.color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = paint.strokeWidth,
+      );
     }
   }
+
+  Path _createLinePath(Offset start, Offset end) => Path()
+    ..moveTo(start.dx, start.dy)
+    ..lineTo(end.dx, end.dy);
 
   @override
   void onCreateTap(
