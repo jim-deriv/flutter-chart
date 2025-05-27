@@ -85,6 +85,17 @@ abstract class DrawingV2 {
     GetDrawingState getDrawingState,
   );
 
+  /// Paints the drawing tool on the chart.
+  void paintOverYAxis(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    ChartConfig chartConfig,
+    GetDrawingState getDrawingState,
+  );
+
   /// Returns true if the drawing tool should repaint.
   bool shouldRepaint(
     Set<DrawingToolState> drawingState,

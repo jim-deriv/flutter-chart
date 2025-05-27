@@ -111,6 +111,17 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
   }
 
   @override
+  void paintOverYAxis(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    ChartConfig chartConfig,
+    GetDrawingState getDrawingState,
+  ) {}
+
+  @override
   bool isInViewPort(EpochRange epochRange, QuoteRange quoteRange);
 
   /// Returns back the [InteractableDrawing] which is used for showing the

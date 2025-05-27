@@ -91,6 +91,25 @@ class HorizontalLineAddingPreviewMobile
   }
 
   @override
+  void paintOverYAxis(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    ChartConfig chartConfig,
+    GetDrawingState getDrawingState,
+  ) {
+    drawValueLabel(
+      canvas,
+      quoteToY,
+      interactableDrawing.startPoint!.quote,
+      chartConfig.pipSize,
+      size,
+    );
+  }
+
+  @override
   void onCreateTap(
     TapUpDetails details,
     EpochFromX epochFromX,

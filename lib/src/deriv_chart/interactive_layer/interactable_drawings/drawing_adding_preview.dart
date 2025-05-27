@@ -5,8 +5,10 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 
 import '../enums/drawing_tool_state.dart';
+import '../interactable_drawing_custom_painter.dart';
 import '../interactive_layer_behaviours/interactive_layer_behaviour.dart';
 
 /// A preview of a drawing that is being added to the [InteractiveLayer].
@@ -134,6 +136,17 @@ abstract class DrawingAddingPreview<
     QuoteFromY quoteFromY,
     EpochToX epochToX,
     QuoteToY quoteToY,
+  ) {}
+
+  @override
+  void paintOverYAxis(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    ChartConfig chartConfig,
+    GetDrawingState getDrawingState,
   ) {}
 
   /// Determines if the drawing preview is within the current chart viewport.

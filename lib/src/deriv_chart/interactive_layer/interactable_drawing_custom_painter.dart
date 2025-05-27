@@ -95,6 +95,16 @@ class InteractableDrawingCustomPainter extends CustomPainter {
         drawingState,
       );
     });
+
+    drawing.paintOverYAxis(
+      canvas,
+      size,
+      epochToX,
+      quoteToY,
+      animationInfo,
+      chartConfig,
+      drawingState,
+    );
   }
 
   @override

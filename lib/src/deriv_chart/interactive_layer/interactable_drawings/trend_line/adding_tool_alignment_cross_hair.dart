@@ -70,4 +70,15 @@ class AddingToolAlignmentCrossHair extends DrawingV2 {
     DrawingV2 oldDrawing,
   ) =>
       true;
+
+  @override
+  void paintOverYAxis(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    ChartConfig chartConfig,
+    GetDrawingState getDrawingState,
+  ) {}
 }
