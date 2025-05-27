@@ -161,26 +161,28 @@ class CircularIntervalList<T> {
 ///
 /// This draws a rounded rectangle with the formatted value inside it.
 /// The value is formatted according to the provided pip size.
-void drawValueLabel(
-  Canvas canvas,
-  QuoteToY quoteToY,
-  double value,
-  int pipSize,
-  Size size,
-) {
+void drawValueLabel({
+  required Canvas canvas,
+  required QuoteToY quoteToY,
+  required double value,
+  required int pipSize,
+  required Size size,
+  Color color = Colors.white,
+  Color backgroundColor = Colors.transparent,
+}) {
   // Calculate Y position based on the value
   final double yPosition = quoteToY(value);
-  
+
   // Format the value according to pip size
   // Format with proper decimal places and ensure leading zeros for decimal part
   String formattedValue = value.toStringAsFixed(pipSize);
-  
+
   // Split the value into integer and decimal parts to format with proper separator
   final parts = formattedValue.split('.');
   if (parts.length > 1) {
     formattedValue = '${parts[0]}.${parts[1]}';
   }
-  
+
   // Create text painter to measure text dimensions
   final TextPainter textPainter = TextPainter(
     text: TextSpan(
@@ -193,40 +195,41 @@ void drawValueLabel(
     ),
     textDirection: TextDirection.ltr,
     textAlign: TextAlign.center,
-  );
-  textPainter.layout();
-  
+  )..layout();
+
   // Create rectangle with padding around the text
   final double rectWidth = textPainter.width + 24;
-  final double rectHeight = 30; // Fixed height to match the image
-  
+  const double rectHeight = 30; // Fixed height to match the image
+
   // Position the rectangle at the right edge of the screen with some padding
-  const double rightPadding = 8.0;
+  const double rightPadding = 8;
   final double rectRight = size.width - rightPadding;
   final double rectLeft = rectRight - rectWidth;
-  
+
   final Rect rect = Rect.fromLTRB(
     rectLeft,
     yPosition - rectHeight / 2,
     rectRight,
     yPosition + rectHeight / 2,
   );
-  
+
   // Draw rounded rectangle
   final Paint rectPaint = Paint()
-    ..color = Colors.white
+    ..color = backgroundColor
     ..style = PaintingStyle.fill;
-  
+
   final Paint borderPaint = Paint()
-    ..color = const Color(0xFF2196F3)
+    ..color = color
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1.0;
-  
+
   // Draw the background and border
-  final RRect roundedRect = RRect.fromRectAndRadius(rect, const Radius.circular(16.0));
-  canvas.drawRRect(roundedRect, rectPaint);
-  canvas.drawRRect(roundedRect, borderPaint);
-  
+  final RRect roundedRect =
+      RRect.fromRectAndRadius(rect, const Radius.circular(4));
+  canvas
+    ..drawRRect(roundedRect, rectPaint)
+    ..drawRRect(roundedRect, borderPaint);
+
   // Draw the text centered in the rectangle
   textPainter.paint(
     canvas,

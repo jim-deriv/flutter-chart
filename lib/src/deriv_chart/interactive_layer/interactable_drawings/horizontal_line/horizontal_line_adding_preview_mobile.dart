@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
@@ -101,11 +102,12 @@ class HorizontalLineAddingPreviewMobile
     GetDrawingState getDrawingState,
   ) {
     drawValueLabel(
-      canvas,
-      quoteToY,
-      interactableDrawing.startPoint!.quote,
-      chartConfig.pipSize,
-      size,
+      canvas:  canvas,
+      quoteToY: quoteToY,
+      value: interactableDrawing.startPoint!.quote,
+      pipSize: chartConfig.pipSize,
+      size: size,
+      color: interactableDrawing.config.lineStyle.color,
     );
   }
 
