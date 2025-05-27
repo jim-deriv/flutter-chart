@@ -190,6 +190,32 @@ class HorizontalLineInteractableDrawing
   }
 
   @override
+  void paintOverYAxis(
+    ui.Canvas canvas,
+    ui.Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    ChartConfig chartConfig,
+    ChartTheme chartTheme,
+    GetDrawingState getDrawingState,
+  ) {
+    if (getDrawingState(this).contains(DrawingToolState.selected)) {
+      drawValueLabel(
+        canvas: canvas,
+        quoteToY: quoteToY,
+        value: startPoint!.quote,
+        pipSize: chartConfig.pipSize,
+        size: size,
+        color: config.lineStyle.color
+            .withOpacity(animationInfo.stateChangePercent),
+        backgroundColor: chartTheme.backgroundColor
+            .withOpacity(animationInfo.stateChangePercent),
+      );
+    }
+  }
+
+  @override
   void onDragUpdate(
     DragUpdateDetails details,
     EpochFromX epochFromX,

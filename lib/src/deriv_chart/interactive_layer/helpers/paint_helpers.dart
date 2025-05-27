@@ -173,29 +173,12 @@ void drawValueLabel({
   // Calculate Y position based on the value
   final double yPosition = quoteToY(value);
 
-  // Format the value according to pip size
-  // Format with proper decimal places and ensure leading zeros for decimal part
-  String formattedValue = value.toStringAsFixed(pipSize);
-
-  // Split the value into integer and decimal parts to format with proper separator
-  final parts = formattedValue.split('.');
-  if (parts.length > 1) {
-    formattedValue = '${parts[0]}.${parts[1]}';
-  }
+  // Format the value according to pip size with proper decimal places
+  final String formattedValue = value.toStringAsFixed(pipSize);
 
   // Create text painter to measure text dimensions
-  final TextPainter textPainter = TextPainter(
-    text: TextSpan(
-      text: formattedValue,
-      style: TextStyle(
-        color: color,
-        fontSize: 14,
-        fontWeight: FontWeight.normal,
-      ),
-    ),
-    textDirection: TextDirection.ltr,
-    textAlign: TextAlign.center,
-  )..layout();
+  final TextPainter textPainter = _getTextPainter(formattedValue, color)
+    ..layout();
 
   // Create rectangle with padding around the text
   final double rectWidth = textPainter.width + 24;
@@ -236,4 +219,21 @@ void drawValueLabel({
       rect.top + (rectHeight - textPainter.height) / 2,
     ),
   );
+}
+
+/// Returns a [TextPainter] for the given formatted value and color.
+TextPainter _getTextPainter(String formattedValue, Color color) {
+  final TextPainter textPainter = TextPainter(
+    text: TextSpan(
+      text: formattedValue,
+      style: TextStyle(
+        color: color,
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+      ),
+    ),
+    textDirection: TextDirection.ltr,
+    textAlign: TextAlign.center,
+  );
+  return textPainter;
 }
