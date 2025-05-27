@@ -91,6 +91,7 @@ class InteractableDrawingCustomPainter extends CustomPainter {
         epochToX,
         quoteToY,
         animationInfo,
+        chartConfig,
         drawingState,
       );
     });

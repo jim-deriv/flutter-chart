@@ -4,6 +4,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/drawing_tool_state.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
+import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../helpers/paint_helpers.dart';
@@ -38,8 +39,14 @@ class AddingToolAlignmentCrossHair extends DrawingV2 {
   }
 
   @override
-  void paint(Canvas canvas, Size size, EpochToX epochToX, QuoteToY quoteToY,
-      AnimationInfo animationInfo, GetDrawingState getDrawingState) {
+  void paint(
+      Canvas canvas,
+      Size size,
+      EpochToX epochToX,
+      QuoteToY quoteToY,
+      AnimationInfo animationInfo,
+      ChartConfig chartConfig,
+      GetDrawingState getDrawingState) {
     if (_currentHoverPosition == null) {
       return;
     }

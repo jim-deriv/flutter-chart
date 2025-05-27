@@ -7,6 +7,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/extensions/
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/drawing_tool_state.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
+import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/widgets.dart';
 
@@ -37,10 +38,10 @@ class TrendLineInteractableDrawing
   /// End point of the line.
   EdgePoint? endPoint;
 
-  // Tracks which point is being dragged, if any
-  // null: dragging the whole line
-  // true: dragging the start point
-  // false: dragging the end point
+  /// Tracks which point is being dragged, if any
+  /// null: dragging the whole line
+  /// true: dragging the start point
+  /// false: dragging the end point
   bool? isDraggingStartPoint;
 
   @override
@@ -165,6 +166,7 @@ class TrendLineInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
+    ChartConfig chartConfig,
     GetDrawingState getDrawingState,
   ) {
     final LineStyle lineStyle = config.lineStyle;
