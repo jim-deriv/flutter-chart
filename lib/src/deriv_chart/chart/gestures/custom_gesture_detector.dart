@@ -13,6 +13,10 @@ const Duration longPressHoldDuration = Duration(milliseconds: 500);
 /// long press is cancelled.
 const int longPressHoldRadius = 5;
 
+/// If contact point is moved by more than [tapRadius] from its original place,
+/// tap is cancelled.
+const double tapRadius = 5;
+
 /// Widget to track pan and scale gestures on one area.
 ///
 /// GestureDetector doesn't allow to track both Pan and Scale gestures
@@ -152,7 +156,7 @@ class _CustomGestureDetectorState extends State<CustomGestureDetector> {
         final double distance = (_localStartPoint - _localLastPoint).distance;
 
         // Only trigger tap if the distance is within the threshold
-        if (distance <= longPressHoldRadius) {
+        if (distance <= tapRadius) {
           widget.onTapUp?.call(TapUpDetails(
             globalPosition: _localStartPoint,
             localPosition: _localLastPoint,
