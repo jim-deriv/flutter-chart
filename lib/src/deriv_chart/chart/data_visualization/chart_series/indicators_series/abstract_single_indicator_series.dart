@@ -1,4 +1,5 @@
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/painters/highlight/crosshair_highlight_painter.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/painters/highlight/crosshair_line_highlight_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/strategy/crosshair_strategy_context.dart';
 import 'package:deriv_chart/src/models/indicator_input.dart';
 import 'package:deriv_chart/src/models/tick.dart';
@@ -195,8 +196,15 @@ abstract class AbstractSingleIndicatorSeries extends DataSeries<Tick> {
       double xCenter,
       double elementWidth,
       ChartTheme theme) {
-    // TODO(Jim): implement getCrosshairHighlightPainter when needed
-    throw UnimplementedError();
+    // Return a CrosshairLineHighlightPainter with transparent colors
+    // This effectively creates a "no-op" painter that doesn't paint anything visible
+    return CrosshairLineHighlightPainter(
+      tick: crosshairTick,
+      quoteToY: quoteToY,
+      xCenter: xCenter,
+      pointColor: Colors.transparent,
+      pointSize: 0,
+    );
   }
 
   @override
