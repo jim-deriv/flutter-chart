@@ -199,14 +199,8 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
     if (widget.verticalPaddingFraction != null) {
       verticalPaddingFraction = widget.verticalPaddingFraction!;
     }
-    crosshairController = CrosshairController(
-      xAxisModel: xAxis,
-      series: widget.mainSeries as DataSeries<Tick>,
-      onCrosshairAppeared: widget.onCrosshairAppeared,
-      onCrosshairDisappeared: widget.onCrosshairDisappeared,
-      showCrosshair: widget.showCrosshair,
-    );
     _setupController();
+    _setupCrosshairController();
   }
 
   @override
@@ -224,23 +218,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
     // Update the crosshair controller when showCrosshair changes
     if (widget.showCrosshair != oldChart.showCrosshair) {
       // Create a new controller with the updated showCrosshair value
-      crosshairController = CrosshairController(
-        xAxisModel: xAxis,
-        series: widget.mainSeries as DataSeries<Tick>,
-        onCrosshairAppeared: () {
-          if (widget.crosshairVariant == CrosshairVariant.smallScreen) {
-            crosshairZoomOutAnimationController.forward();
-          }
-          widget.onCrosshairAppeared?.call();
-        },
-        onCrosshairDisappeared: () {
-          if (widget.crosshairVariant == CrosshairVariant.smallScreen) {
-            crosshairZoomOutAnimationController.reverse();
-          }
-          widget.onCrosshairDisappeared?.call();
-        },
-        showCrosshair: widget.showCrosshair,
-      );
+      _setupCrosshairController();
     }
 
     xAxis.update(
@@ -338,6 +316,26 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
     crosshairZoomOutAnimation = CurvedAnimation(
       parent: crosshairZoomOutAnimationController,
       curve: Curves.easeInOut,
+    );
+  }
+
+  void _setupCrosshairController() {
+    crosshairController = CrosshairController(
+      xAxisModel: xAxis,
+      series: widget.mainSeries as DataSeries<Tick>,
+      onCrosshairAppeared: () {
+        if (widget.crosshairVariant == CrosshairVariant.smallScreen) {
+          crosshairZoomOutAnimationController.forward();
+        }
+        widget.onCrosshairAppeared?.call();
+      },
+      onCrosshairDisappeared: () {
+        if (widget.crosshairVariant == CrosshairVariant.smallScreen) {
+          crosshairZoomOutAnimationController.reverse();
+        }
+        widget.onCrosshairDisappeared?.call();
+      },
+      showCrosshair: widget.showCrosshair,
     );
   }
 
@@ -460,6 +458,7 @@ class _ChartImplementationState extends BasicChartState<MainChart> {
             crosshairController: crosshairController,
             crosshairVariant: widget.crosshairVariant,
             crosshairZoomOutAnimation: crosshairZoomOutAnimation,
+            pipSize: widget.pipSize,
           );
         },
       );
