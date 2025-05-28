@@ -94,6 +94,7 @@ class CustomGestureDetector extends StatefulWidget {
 class _CustomGestureDetectorState extends State<CustomGestureDetector> {
   int get pointersDown => _pointersDown;
   int _pointersDown = 0;
+
   set pointersDown(int value) {
     _onPointersDownWillChange(value);
     _pointersDown = value;
@@ -110,7 +111,11 @@ class _CustomGestureDetectorState extends State<CustomGestureDetector> {
   Widget build(BuildContext context) => Listener(
         onPointerDown: (PointerDownEvent event) => pointersDown += 1,
         onPointerCancel: (PointerCancelEvent event) => pointersDown -= 1,
-        onPointerUp: (PointerUpEvent event) => pointersDown -= 1,
+        onPointerUp: (PointerUpEvent event) {
+          // Update the last point with the current position when pointer is lifted
+          _localLastPoint = event.localPosition;
+          pointersDown -= 1;
+        },
         child: GestureDetector(
           onScaleStart: _onScaleStart,
           onScaleUpdate: _onScaleUpdate,
@@ -144,11 +149,16 @@ class _CustomGestureDetectorState extends State<CustomGestureDetector> {
       if (_longPressed) {
         _onLongPressEnd();
       } else if (_tap) {
-        widget.onTapUp?.call(TapUpDetails(
-          globalPosition: _localStartPoint,
-          localPosition: _localLastPoint,
-          kind: PointerDeviceKind.touch,
-        ));
+        final double distance = (_localStartPoint - _localLastPoint).distance;
+
+        // Only trigger tap if the distance is within the threshold
+        if (distance <= longPressHoldRadius) {
+          widget.onTapUp?.call(TapUpDetails(
+            globalPosition: _localStartPoint,
+            localPosition: _localLastPoint,
+            kind: PointerDeviceKind.touch,
+          ));
+        }
       }
     }
   }
