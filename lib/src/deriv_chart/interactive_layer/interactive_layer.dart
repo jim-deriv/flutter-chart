@@ -81,6 +81,8 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   final Map<String, InteractableDrawing> _interactableDrawings =
       <String, InteractableDrawing>{};
 
+  bool _drawingsInitialized = false;
+
   /// Timers for debouncing repository updates
   ///
   /// We use a map to have one timer per each drawing tool config. This is
@@ -108,14 +110,19 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
         // Add new drawing if it doesn't exist
         final drawing = config.getInteractableDrawing();
         _interactableDrawings[config.configId!] = drawing;
-        widget.interactiveLayerBehaviour.updateStateTo(
-          InteractiveSelectedToolState(
-            selected: drawing,
-            interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
-            source: '5'
-          ),
-          StateChangeAnimationDirection.forward,
-        );
+
+        if (_drawingsInitialized) {
+          widget.interactiveLayerBehaviour.updateStateTo(
+            InteractiveSelectedToolState(
+              selected: drawing,
+              interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
+              source: '5',
+            ),
+            StateChangeAnimationDirection.forward,
+          );
+        } else {
+          _drawingsInitialized = true;
+        }
       }
     }
 
