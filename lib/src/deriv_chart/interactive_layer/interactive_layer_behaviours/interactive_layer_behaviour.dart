@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:flutter/gestures.dart';
@@ -27,6 +28,12 @@ import '../interactive_layer_states/interactive_state.dart';
 /// [InteractiveLayerDesktopBehaviour] to see specific implementations for two
 /// different platforms.
 abstract class InteractiveLayerBehaviour {
+  /// Creates an instance of [InteractiveLayerBehaviour].
+  InteractiveLayerBehaviour({this.controller});
+
+  /// Optional controller for the interactive layer.
+  final InteractiveLayerController? controller;
+
   late InteractiveState _interactiveState;
 
   /// Current state of the interactive layer.

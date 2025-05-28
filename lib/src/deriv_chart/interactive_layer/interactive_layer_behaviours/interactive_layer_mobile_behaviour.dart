@@ -8,6 +8,9 @@ import 'interactive_layer_behaviour.dart';
 
 /// The mobile-specific implementation of the interactive layer behaviour.
 class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
+  /// Creates an instance of [InteractiveLayerMobileBehaviour].
+  InteractiveLayerMobileBehaviour({super.controller});
+
   @override
   void onAddDrawingTool(DrawingToolConfig drawingTool) {
     final newState = InteractiveAddingToolStateMobile(

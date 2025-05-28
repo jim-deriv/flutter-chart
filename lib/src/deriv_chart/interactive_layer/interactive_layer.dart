@@ -112,6 +112,7 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
           InteractiveSelectedToolState(
             selected: drawing,
             interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
+            source: '5'
           ),
           StateChangeAnimationDirection.forward,
         );
@@ -413,6 +414,21 @@ class _InteractiveLayerGestureHandlerState
                                               ),
                                     ))
                                 .toList(),
+                            if (widget.interactiveLayerBehaviour.controller !=
+                                    null &&
+                                widget.interactiveLayerBehaviour.controller!
+                                        .selectedDrawing !=
+                                    null)
+                              ListenableBuilder(
+                                listenable: widget
+                                    .interactiveLayerBehaviour.controller!,
+                                builder: (_, __) {
+                                  return SelectedDrawingFloatingMenu(
+                                    drawing: widget.interactiveLayerBehaviour
+                                        .controller!.selectedDrawing!,
+                                  );
+                                },
+                              )
                           ],
                   );
                 }),
@@ -423,6 +439,7 @@ class _InteractiveLayerGestureHandlerState
   }
 
   void onTap(TapUpDetails details) {
+    print('### Layer onTap ${DateTime.now()}');
     widget.interactiveLayerBehaviour.onTap(details);
     _interactionNotifier.notify();
   }
@@ -456,4 +473,81 @@ class _InteractiveLayerGestureHandlerState
 
   @override
   Size? get layerSize => _size;
+}
+
+/// A controller similar to [ListView.scrollController] to control interactive
+/// layer from outside in addition to get some information from internal
+/// states of layer to outside.
+///
+/// This controller acts as the bridge between outside of the chart component
+/// and interactive layer.
+class InteractiveLayerController extends ChangeNotifier {
+  InteractableDrawing<DrawingToolConfig>? _selectedDrawing;
+
+  /// The current selected drawing of the [InteractiveLayer].
+  InteractableDrawing<DrawingToolConfig>? get selectedDrawing =>
+      _selectedDrawing;
+
+  /// Sets the selected drawing of the [InteractiveLayer].
+  set selectedDrawing(
+    InteractableDrawing<DrawingToolConfig>? drawing,
+  ) {
+    _selectedDrawing = drawing;
+    notifyListeners();
+  }
+}
+
+class SelectedDrawingFloatingMenu extends StatefulWidget {
+  const SelectedDrawingFloatingMenu({
+    required this.drawing,
+    super.key,
+  });
+
+  final InteractableDrawing<DrawingToolConfig> drawing;
+
+  @override
+  State<SelectedDrawingFloatingMenu> createState() =>
+      _SelectedDrawingFloatingMenuState();
+}
+
+class _SelectedDrawingFloatingMenuState
+    extends State<SelectedDrawingFloatingMenu> {
+  Offset _floatingMenuPosition = Offset.zero;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: _floatingMenuPosition.dx,
+      top: _floatingMenuPosition.dy,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onPanUpdate: (details) {
+          print('### SlectedDrawingFloatingMenu onTap ${DateTime.now()}');
+
+          _floatingMenuPosition += details.delta;
+          setState(() => {});
+        },
+        onLongPress: () {},
+        onTapUp: (_) =>
+            print('### SlectedDrawingFloatingMenu onTap ${DateTime.now()}'),
+        onTap: () {
+          print('### SelectedDrawingFloatingMenu onTap ${DateTime.now()}');
+        },
+        onPanStart: (_) {},
+        onPanEnd: (_) {},
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.drag_handle, color: Colors.white),
+              Text(widget.drawing.runtimeType.toString())
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

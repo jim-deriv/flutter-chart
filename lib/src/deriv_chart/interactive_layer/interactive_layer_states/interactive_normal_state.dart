@@ -39,6 +39,7 @@ class InteractiveNormalState extends InteractiveState
     final InteractiveState newState = InteractiveSelectedToolState(
       selected: hitDrawing,
       interactiveLayerBehaviour: interactiveLayerBehaviour,
+      source: '3'
     );
 
     interactiveLayerBehaviour.updateStateTo(
@@ -66,6 +67,7 @@ class InteractiveNormalState extends InteractiveState
       InteractiveSelectedToolState(
         selected: hitDrawing,
         interactiveLayerBehaviour: interactiveLayerBehaviour,
+        source: '4'
       ),
       StateChangeAnimationDirection.forward,
     );

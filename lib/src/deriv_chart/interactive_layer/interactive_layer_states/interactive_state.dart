@@ -27,7 +27,9 @@ abstract class InteractiveState {
   /// The [interactiveLayer] parameter provides a reference to the layer that owns
   /// this state, allowing the state to call methods on the layer such as updating
   /// to a new state or adding/saving drawings.
-  InteractiveState({required this.interactiveLayerBehaviour});
+  InteractiveState({required this.interactiveLayerBehaviour}) {
+    interactiveLayerBehaviour.controller?.selectedDrawing = null;
+  }
 
   /// Returns the state of the drawing tool.
   ///

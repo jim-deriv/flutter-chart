@@ -1,5 +1,5 @@
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../enums/drawing_tool_state.dart';
@@ -30,7 +30,11 @@ class InteractiveSelectedToolState extends InteractiveState
   InteractiveSelectedToolState({
     required this.selected,
     required super.interactiveLayerBehaviour,
-  });
+    required String source,
+  }) {
+    interactiveLayerBehaviour.controller?.selectedDrawing = selected;
+    print('###### Transition to SELECTED from $source ${DateTime.now()}');
+  }
 
   /// The selected tool.
   ///
@@ -39,6 +43,9 @@ class InteractiveSelectedToolState extends InteractiveState
   final InteractableDrawing selected;
 
   bool _draggingStartedOnTool = false;
+
+
+
 
   @override
   Set<DrawingToolState> getToolState(DrawingV2 drawing) {
@@ -86,6 +93,7 @@ class InteractiveSelectedToolState extends InteractiveState
           InteractiveSelectedToolState(
             selected: hitDrawing,
             interactiveLayerBehaviour: interactiveLayerBehaviour,
+            source: '1'
           )..onPanStart(details),
           StateChangeAnimationDirection.forward,
         );
@@ -118,6 +126,7 @@ class InteractiveSelectedToolState extends InteractiveState
         InteractiveSelectedToolState(
           selected: hitDrawing,
           interactiveLayerBehaviour: interactiveLayerBehaviour,
+          source: '2'
         ),
         StateChangeAnimationDirection.forward,
       );
