@@ -77,11 +77,10 @@ abstract class CrosshairBehaviour<T extends Tick> {
   /// - [dotBorderColor]: The border color of the dot (default: Color(0xFF85ACB0))
   ///
   /// Returns a CustomPainter for drawing the dot, or null if no dot should be drawn.
-  CustomPainter? createDotPainter({
+  CustomPainter createDotPainter({
     dotColor = const Color(0xFF85ACB0),
     dotBorderColor = const Color(0xFF85ACB0),
-  }) =>
-      null;
+  });
 
   /// Creates a label widget that appears along the crosshair lines.
   ///
@@ -164,10 +163,4 @@ abstract class CrosshairBehaviour<T extends Tick> {
   /// This property defines how tall the details box should be, which affects
   /// positioning calculations to ensure the box fits within the chart area.
   double get detailsBoxHeight;
-
-  /// The width of the crosshair details box in logical pixels.
-  ///
-  /// This property defines how wide the details box should be, which affects
-  /// positioning calculations to ensure the box fits within the chart area.
-  double get detailsBoxWidth;
 }
