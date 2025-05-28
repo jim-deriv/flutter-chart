@@ -19,14 +19,6 @@ class LineSeriesLargeScreenBehaviour<T extends Tick>
   @override
   double get detailsBoxHeight => 50;
 
-  /// The width of the crosshair details box in logical pixels.
-  ///
-  /// For line series on large screens, this is set to 127 pixels, which provides
-  /// enough space to display the price and time information clearly without
-  /// being excessively wide.
-  @override
-  double get detailsBoxWidth => 127;
-
   @override
   CustomPainter createDotPainter({
     dotColor = const Color(0xFF85ACB0),
