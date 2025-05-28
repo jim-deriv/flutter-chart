@@ -1,5 +1,6 @@
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/behaviour/large_screen_crosshair_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/behaviour/small_screen_crosshair_behaviour.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/painters/crosshair_dot_painter.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +18,16 @@ class OHLCSeriesLargeScreenBehaviour<T extends Tick>
   @override
   double get detailsBoxHeight => 100;
 
-  /// The width of the crosshair details box in logical pixels.
-  ///
-  /// For OHLC series on large screens, this is set to 127 pixels, which provides
-  /// enough space to display the open, high, low, close values clearly without
-  /// being excessively wide.
   @override
-  double get detailsBoxWidth => 127;
+  CustomPainter createDotPainter({
+    dotColor = const Color(0xFF85ACB0),
+    dotBorderColor = const Color(0xFF85ACB0),
+  }) {
+    return const CrosshairDotPainter(
+      dotColor: Colors.transparent,
+      dotBorderColor: Colors.transparent,
+    );
+  }
 }
 
 /// A concrete implementation of CrosshairBehaviour for OHLC series charts on small screens.
@@ -34,22 +38,20 @@ class OHLCSeriesLargeScreenBehaviour<T extends Tick>
 /// crosshair position since the candlestick or bar itself serves as a visual indicator.
 class OHLCSeriesSmallScreenBehaviour<T extends Tick>
     extends SmallScreenCrosshairBehaviour<T> {
-  /// Creates a custom painter for rendering a dot at the crosshair position.
+  /// The height of the crosshair details box in logical pixels.
   ///
-  /// For OHLC series charts on small screens, this method returns null, meaning
-  /// no dot is drawn at the crosshair position. This is because OHLC charts (candlesticks
-  /// or bars) already have a clear visual representation of the data point, making
-  /// an additional dot unnecessary or potentially confusing.
-  ///
-  /// Parameters:
-  /// - [dotColor]: The fill color of the dot (unused)
-  /// - [dotBorderColor]: The border color of the dot (unused)
-  ///
-  /// Returns null, indicating no dot should be drawn.
+  /// For OHLC series on large screens, this is set to 100 pixels, and is used to calculate the position of the information box from the crosshair lines.
   @override
-  CustomPainter? createDotPainter(
-      {dotColor = const Color(0xFF85ACB0),
-      dotBorderColor = const Color(0xFF85ACB0)}) {
-    return null;
+  double get detailsBoxHeight => 100;
+
+  @override
+  CustomPainter createDotPainter({
+    dotColor = const Color(0xFF85ACB0),
+    dotBorderColor = const Color(0xFF85ACB0),
+  }) {
+    return const CrosshairDotPainter(
+      dotColor: Colors.transparent,
+      dotBorderColor: Colors.transparent,
+    );
   }
 }

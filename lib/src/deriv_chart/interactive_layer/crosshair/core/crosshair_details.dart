@@ -16,7 +16,6 @@ class CrosshairDetails extends StatelessWidget {
     required this.crosshairHeader,
     required this.crosshairInfo,
     required this.crosshairTimeLabel,
-    required this.detailsBoxWidth,
     this.pipSize = 4,
     Key? key,
   }) : super(key: key);
@@ -53,42 +52,38 @@ class CrosshairDetails extends StatelessWidget {
   /// This typically shows the date and time of the tick at the crosshair position.
   final Widget crosshairTimeLabel;
 
-  /// The width of the details box in logical pixels.
-  ///
-  /// This determines how wide the crosshair details box will be rendered.
-  final double detailsBoxWidth;
-
   @override
   Widget build(BuildContext context) {
-    final ChartTheme theme = context.read<ChartTheme>();
+    final ChartTheme theme = context.watch<ChartTheme>();
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: BackdropFilter(
         filter: ImageFilter.blur(
             sigmaX: theme.crosshairInformationBoxContainerGlassBackgroundBlur,
             sigmaY: theme.crosshairInformationBoxContainerGlassBackgroundBlur),
-        child: Container(
-          width: detailsBoxWidth,
-          decoration: BoxDecoration(
-            color: theme.crosshairInformationBoxContainerGlassColor,
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              crosshairHeader,
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Dimens.margin08, vertical: Dimens.margin04),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    crosshairInfo,
-                    crosshairTimeLabel,
-                  ],
-                ),
-              )
-            ],
+        child: IntrinsicWidth(
+          child: Container(
+            decoration: BoxDecoration(
+              color: theme.crosshairInformationBoxContainerGlassColor,
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                crosshairHeader,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Dimens.margin08, vertical: Dimens.margin04),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      crosshairInfo,
+                      crosshairTimeLabel,
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

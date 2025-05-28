@@ -26,6 +26,17 @@ class LineSeriesLargeScreenBehaviour<T extends Tick>
   /// being excessively wide.
   @override
   double get detailsBoxWidth => 127;
+
+  @override
+  CustomPainter createDotPainter({
+    dotColor = const Color(0xFF85ACB0),
+    dotBorderColor = const Color(0xFF85ACB0),
+  }) {
+    return const CrosshairDotPainter(
+      dotColor: Colors.transparent,
+      dotBorderColor: Colors.transparent,
+    );
+  }
 }
 
 /// A concrete implementation of CrosshairBehaviour for line series charts on small screens.

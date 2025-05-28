@@ -158,7 +158,6 @@ abstract class LargeScreenCrosshairBehaviour<T extends Tick>
             style: style,
             timeText: ChartDateUtils.formatTimeWithSeconds(crosshairTick.epoch),
           ),
-          detailsBoxWidth: detailsBoxWidth,
         ),
       ),
     );

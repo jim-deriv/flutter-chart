@@ -338,6 +338,9 @@ class _InteractiveLayerGestureHandlerState
   // Use an enum instead of a boolean flag
   InteractionMode _currentInteractionMode = InteractionMode.none;
 
+  // Mouse cursor for the interactive layer
+  MouseCursor _mouseCursor = SystemMouseCursors.basic;
+
   // Custom gesture recognizer for drawing tools
   late DrawingToolGestureRecognizer _drawingToolGestureRecognizer;
 
@@ -367,6 +370,7 @@ class _InteractiveLayerGestureHandlerState
   @override
   void dispose() {
     _drawingToolGestureRecognizer.dispose();
+    _stateChangeController.dispose();
     super.dispose();
   }
 
@@ -445,6 +449,8 @@ class _InteractiveLayerGestureHandlerState
     // Just delegate to the interactive state and update the mode
     _interactiveState.onPanStart(details);
     _updateInteractionMode(InteractionMode.drawingTool);
+    // Hide the crosshair when starting to drag a drawing tool
+    widget.crosshairController.onExit(const PointerExitEvent());
     _interactionNotifier.notify();
   }
 
@@ -454,6 +460,10 @@ class _InteractiveLayerGestureHandlerState
 
     if (affectingDrawing) {
       _updateInteractionMode(InteractionMode.drawingTool);
+      // Ensure crosshair remains hidden during drawing tool drag
+      if (widget.crosshairController.value.isVisible) {
+        widget.crosshairController.onExit(const PointerExitEvent());
+      }
     }
     _interactionNotifier.notify();
   }
@@ -470,7 +480,13 @@ class _InteractiveLayerGestureHandlerState
     _updateInteractionMode(InteractionMode.none);
   }
 
-  void _handleHover(PointerHoverEvent event) {
+  void _handleHover(PointerHoverEvent event, XAxisModel xAxis) {
+    final newMouseCursor = _getMouseCursor(event.localPosition, xAxis);
+    if (_mouseCursor != newMouseCursor) {
+      setState(() {
+        _mouseCursor = newMouseCursor;
+      });
+    }
     final bool hitDrawing = _interactiveState.onHover(event);
     _interactionNotifier.notify();
 
@@ -482,13 +498,6 @@ class _InteractiveLayerGestureHandlerState
 
     // For small screen variant, we don't show the crosshair on hover
     if (widget.crosshairVariant == CrosshairVariant.smallScreen) {
-      return;
-    }
-
-    // Handle crosshair visibility based on the interaction mode
-    if (_currentInteractionMode == InteractionMode.drawingTool) {
-      // If we're in drawing tool mode, hide the crosshair
-      widget.crosshairController.onExit(const PointerExitEvent());
       return;
     }
 
@@ -535,11 +544,36 @@ class _InteractiveLayerGestureHandlerState
     }
   }
 
+    /// Determines the appropriate cursor based on the mouse position and interaction mode
+  MouseCursor _getMouseCursor(Offset localPosition, XAxisModel xAxis) {
+    // If we're interacting with a drawing tool, use the default cursor
+    if (_currentInteractionMode == InteractionMode.drawingTool) {
+      return SystemMouseCursors.click;
+    }
+
+    // Check if we're over a drawing (clickable element)
+    if (_hitTestDrawings(localPosition)) {
+      return SystemMouseCursors.click;
+    }
+
+    if (localPosition.dx > (xAxis.graphAreaWidth ?? 0)) {
+      return SystemMouseCursors.resizeUpDown;
+    }
+
+    if (_currentInteractionMode == InteractionMode.crosshair ||
+        (widget.crosshairVariant != CrosshairVariant.smallScreen)) {
+      return SystemMouseCursors.precise; // Use precise cursor for crosshair
+    }
+
+    // Default cursor
+    return MouseCursor.defer;
+  }
+
   @override
   Widget build(BuildContext context) {
     final XAxisModel xAxis = context.watch<XAxisModel>();
     // Reconfigure the drawing tool gesture recognizer instead of creating a new one
-    _drawingToolGestureRecognizer.reset(
+    _drawingToolGestureRecognizer.updateCallbacks(
       onDrawingToolPanStart: _handleDrawingToolPanStart,
       onDrawingToolPanUpdate: _handleDrawingToolPanUpdate,
       onDrawingToolPanEnd: _handleDrawingToolPanEnd,
@@ -548,8 +582,9 @@ class _InteractiveLayerGestureHandlerState
       onCrosshairCancel: _cancelCrosshair,
     );
     return MouseRegion(
-      onHover: _handleHover,
+      onHover: (event) => _handleHover(event, xAxis),
       onExit: _handleExit,
+      cursor: _mouseCursor,
       child: RawGestureDetector(
         gestures: <Type, GestureRecognizerFactory>{
           // Configure tap recognizer

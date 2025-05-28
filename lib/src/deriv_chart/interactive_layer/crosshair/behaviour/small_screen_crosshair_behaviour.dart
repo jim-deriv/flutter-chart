@@ -21,17 +21,9 @@ abstract class SmallScreenCrosshairBehaviour<T extends Tick>
     implements CrosshairBehaviour<T> {
   /// The height of the crosshair details box in logical pixels.
   ///
-  /// For small screens, this is set to 0 as the details are typically
-  /// displayed in a more compact format or integrated with other UI elements.
+  /// For OHLC series on large screens, this is set to 100 pixels, and is used to calculate the position of the information box from the crosshair lines.
   @override
-  double get detailsBoxHeight => 0;
-
-  /// The width of the crosshair details box in logical pixels.
-  ///
-  /// For small screens, this is set to 0 as the details are typically
-  /// displayed in a more compact format or integrated with other UI elements.
-  @override
-  double get detailsBoxWidth => 0;
+  double get detailsBoxHeight => 50;
 
   @override
   Widget getCrossHairInfo(
@@ -80,7 +72,7 @@ abstract class SmallScreenCrosshairBehaviour<T extends Tick>
 
   @override
   double calculateDetailsPosition({required double cursorY}) {
-    return 0;
+    return 8;
   }
 
   @override
@@ -91,7 +83,7 @@ abstract class SmallScreenCrosshairBehaviour<T extends Tick>
       required ChartTheme theme,
       required Widget crosshairHeader,
       double? width,
-      double? topOffset = 0,
+      double? topOffset,
       double? rightOffset,
       double? bottomOffset,
       double? leftOffset,
@@ -124,7 +116,6 @@ abstract class SmallScreenCrosshairBehaviour<T extends Tick>
             style: style,
             timeText: ChartDateUtils.formatTimeWithSeconds(crosshairTick.epoch),
           ),
-          detailsBoxWidth: detailsBoxWidth,
         ),
       ),
     );
