@@ -543,7 +543,7 @@ class _InteractiveLayerGestureHandlerState
     }
   }
 
-    /// Determines the appropriate cursor based on the mouse position and interaction mode
+  /// Determines the appropriate cursor based on the mouse position and interaction mode
   MouseCursor _getMouseCursor(Offset localPosition, XAxisModel xAxis) {
     // If we're interacting with a drawing tool, use the default cursor
     if (_currentInteractionMode == InteractionMode.drawingTool) {
