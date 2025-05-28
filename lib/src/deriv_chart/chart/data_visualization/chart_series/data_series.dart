@@ -370,26 +370,35 @@ abstract class DataSeries<T extends Tick> extends Series {
     required ChartTheme theme,
   });
 
-  /// Returns a CrosshairHighlightPainter for highlighting the element at the crosshair position.
+  /// This method is responsible for creating a painter that will visually highlight
+  /// the data element (tick, candle, etc.) at the crosshair position. Different chart
+  /// types (line, candle, OHLC) will implement this differently to provide appropriate
+  /// visual feedback to the user about which data point they are examining.
   ///
-  /// Each series type should implement this to return the appropriate highlight painter.
-  /// For example, a line chart might highlight a dot on the line, while a candlestick
-  /// chart might highlight the entire candlestick.
+  /// For candle-based charts, this typically involves drawing a highlighted version
+  /// of the candle with different colors or effects. For line charts, it might involve
+  /// drawing a dot or circle at the point.
   ///
   /// Parameters:
-  /// - [crosshairTick]: The tick to highlight
-  /// - [quoteToY]: Function to convert quote to Y coordinate
-  /// - [xCenter]: The X center position of the element
-  /// - [elementWidth]: The width of the element to highlight
-  /// - [theme]: The chart theme containing styling information
+  /// * [crosshairTick] - The tick data to highlight at the crosshair position.
+  /// * [quoteToY] - Function that converts a price quote to a Y-coordinate on the canvas.
+  /// * [xCenter] - The X-coordinate center position where the highlight should be drawn.
+  /// * [granularity] - The time granularity of the chart in seconds (e.g., 60 for 1-minute candles).
+  ///   This is used to calculate appropriate widths for elements like candles.
+  /// * [xFromEpoch] - Function that converts a timestamp (epoch) to an X-coordinate on the canvas.
+  ///   This is used in conjunction with granularity to determine element widths.
+  /// * [theme] - The chart theme containing colors and styles for the highlight.
   ///
-  /// Returns a CustomPainter for drawing the highlight.
+  /// Returns:
+  /// A CrosshairHighlightPainter that will paint the highlighted element, or null if
+  /// no highlighting is needed for this series type.
   CrosshairHighlightPainter getCrosshairHighlightPainter(
     T crosshairTick,
     double Function(double) quoteToY,
     double xCenter,
-    double elementWidth,
+    int granularity,
     ChartTheme theme,
+    double Function(int) xFromEpoch,
   );
 
   /// Returns a context for managing crosshair behaviors appropriate for this series type.

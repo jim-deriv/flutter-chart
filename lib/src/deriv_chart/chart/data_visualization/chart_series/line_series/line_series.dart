@@ -68,8 +68,9 @@ class LineSeries extends DataSeries<Tick> {
       Tick crosshairTick,
       double Function(double p1) quoteToY,
       double xCenter,
-      double elementWidth,
-      ChartTheme theme) {
+      int granularity,
+      ChartTheme theme,
+      double Function(int) xFromEpoch) {
     // Return a CrosshairLineHighlightPainter with transparent colors
     // This effectively creates a "no-op" painter that doesn't paint anything visible
     return CrosshairLineHighlightPainter(
