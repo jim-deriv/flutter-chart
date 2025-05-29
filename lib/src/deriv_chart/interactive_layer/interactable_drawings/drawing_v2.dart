@@ -1,7 +1,7 @@
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
+import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 

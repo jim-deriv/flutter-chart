@@ -1,9 +1,12 @@
-import 'package:deriv_chart/deriv_chart.dart';
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_v2.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
-import 'package:flutter/foundation.dart';
+import 'package:deriv_chart/src/models/chart_config.dart';
+import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 
