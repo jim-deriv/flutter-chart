@@ -30,10 +30,8 @@ class InteractiveSelectedToolState extends InteractiveState
   InteractiveSelectedToolState({
     required this.selected,
     required super.interactiveLayerBehaviour,
-    required String source,
   }) {
     interactiveLayerBehaviour.controller?.selectedDrawing = selected;
-    print('###### Transition to SELECTED from $source ${DateTime.now()}');
   }
 
   /// The selected tool.
@@ -93,7 +91,6 @@ class InteractiveSelectedToolState extends InteractiveState
           InteractiveSelectedToolState(
             selected: hitDrawing,
             interactiveLayerBehaviour: interactiveLayerBehaviour,
-            source: '1'
           )..onPanStart(details),
           StateChangeAnimationDirection.forward,
         );
@@ -126,7 +123,6 @@ class InteractiveSelectedToolState extends InteractiveState
         InteractiveSelectedToolState(
           selected: hitDrawing,
           interactiveLayerBehaviour: interactiveLayerBehaviour,
-          source: '2'
         ),
         StateChangeAnimationDirection.forward,
       );

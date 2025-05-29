@@ -116,7 +116,6 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
             InteractiveSelectedToolState(
               selected: drawing,
               interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
-              source: '5',
             ),
             StateChangeAnimationDirection.forward,
           );
@@ -446,7 +445,6 @@ class _InteractiveLayerGestureHandlerState
   }
 
   void onTap(TapUpDetails details) {
-    print('### Layer onTap ${DateTime.now()}');
     widget.interactiveLayerBehaviour.onTap(details);
     _interactionNotifier.notify();
   }
@@ -529,19 +527,9 @@ class _SelectedDrawingFloatingMenuState
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onPanUpdate: (details) {
-          print('### SlectedDrawingFloatingMenu onTap ${DateTime.now()}');
-
           _floatingMenuPosition += details.delta;
           setState(() => {});
         },
-        onLongPress: () {},
-        onTapUp: (_) =>
-            print('### SlectedDrawingFloatingMenu onTap ${DateTime.now()}'),
-        onTap: () {
-          print('### SelectedDrawingFloatingMenu onTap ${DateTime.now()}');
-        },
-        onPanStart: (_) {},
-        onPanEnd: (_) {},
         child: Container(
           decoration: BoxDecoration(
             color: Colors.red,
