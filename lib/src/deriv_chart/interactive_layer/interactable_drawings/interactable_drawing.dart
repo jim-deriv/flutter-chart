@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
@@ -25,16 +26,31 @@ import 'drawing_v2.dart';
 abstract class InteractableDrawing<T extends DrawingToolConfig>
     implements DrawingV2 {
   /// Initializes [InteractableDrawing].
-  InteractableDrawing({required this.config});
+  InteractableDrawing({required T drawingConfig}) {
+    config = drawingConfig.copyWith() as T;
+  }
 
   @override
   String get id => config.configId ?? '';
 
   /// The drawing tool config.
-  final T config;
+  late T config;
 
   /// Returns the updated config.
   T getUpdatedConfig();
+
+  /// Returns the widget for the toolbar menu of the drawing tool.
+  /// [config] is the current configuration of the drawing tool.
+  Widget getToolBarMenu(UpdateDrawingTool onUpdate) {
+    final toolBar = buildToolBarMenu((config) {
+      this.config = config as T;
+      onUpdate(config);
+    });
+
+    return toolBar;
+  }
+
+  Widget buildToolBarMenu(UpdateDrawingTool onUpdate);
 
   /// Returns `true` if the drawing tool is hit by the given offset.
   @override

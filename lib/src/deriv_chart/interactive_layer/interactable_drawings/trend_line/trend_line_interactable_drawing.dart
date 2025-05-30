@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/line/line_drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
@@ -30,7 +31,7 @@ class TrendLineInteractableDrawing
     required LineDrawingToolConfig config,
     required this.startPoint,
     required this.endPoint,
-  }) : super(config: config);
+  }) : super(drawingConfig: config);
 
   // TODO(Ramin): make it non-nullable.
   /// Start point of the line.
@@ -351,4 +352,9 @@ class TrendLineInteractableDrawing
             interactiveLayerBehaviour: layerBehaviour,
             interactableDrawing: this,
           );
+
+  @override
+  Widget buildToolBarMenu(UpdateDrawingTool onUpdate) {
+    throw UnimplementedError();
+  }
 }

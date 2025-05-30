@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/horizontal/horizontal_drawing_tool_config.dart';
+import 'package:deriv_chart/src/add_ons/indicators_ui/widgets/color_selector.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_paint_style.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
@@ -13,6 +15,7 @@ import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../enums/drawing_tool_state.dart';
@@ -30,7 +33,7 @@ class HorizontalLineInteractableDrawing
   HorizontalLineInteractableDrawing({
     required HorizontalDrawingToolConfig config,
     required this.startPoint,
-  }) : super(config: config);
+  }) : super(drawingConfig: config);
 
   /// Start point of the line.
   EdgePoint? startPoint;
@@ -244,4 +247,13 @@ class HorizontalLineInteractableDrawing
             interactiveLayerBehaviour: layerBehaviour,
             interactableDrawing: this,
           );
+
+  @override
+  Widget buildToolBarMenu(UpdateDrawingTool onUpdate) => ColorSelector(
+        currentColor: config.lineStyle.color,
+        onColorChanged: (newcolor) {
+          onUpdate(config.copyWith(
+              lineStyle: config.lineStyle.copyWith(color: newcolor)));
+        },
+      );
 }

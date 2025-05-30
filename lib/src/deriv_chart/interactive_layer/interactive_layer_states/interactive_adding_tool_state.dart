@@ -151,7 +151,7 @@ class InteractiveAddingToolState extends InteractiveState
 
       interactiveLayer
         ..clearAddingDrawing()
-        ..addDrawing(_drawingPreview!.interactableDrawing);
+        ..addDrawing(_drawingPreview!.interactableDrawing.getUpdatedConfig());
     });
   }
 }

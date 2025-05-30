@@ -134,10 +134,8 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   }
 
   /// Updates the config in the repository with debouncing
-  void _updateConfigInRepository(
-    InteractableDrawing<DrawingToolConfig> drawing,
-  ) {
-    final String? configId = drawing.config.configId;
+  void _updateConfigInRepository(DrawingToolConfig drawing) {
+    final String? configId = drawing.configId;
 
     if (configId == null) {
       return;
@@ -158,22 +156,21 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
 
       // Find the index of the config in the repository
       final int index = repo.items
-          .indexWhere((config) => config.configId == drawing.config.configId);
+          .indexWhere((config) => config.configId == drawing.configId);
 
       if (index == -1) {
         return; // Config not found
       }
 
       // Update the config in the repository
-      repo.updateAt(index, drawing.getUpdatedConfig());
+      repo.updateAt(index, drawing);
     });
   }
 
-  DrawingToolConfig _addDrawingToRepo(
-      InteractableDrawing<DrawingToolConfig> drawing) {
-    final config = drawing
-        .getUpdatedConfig()
-        .copyWith(configId: DateTime.now().millisecondsSinceEpoch.toString());
+  DrawingToolConfig _addDrawingToRepo(DrawingToolConfig drawing) {
+    final config = drawing.copyWith(
+      configId: DateTime.now().millisecondsSinceEpoch.toString(),
+    );
 
     widget.drawingToolsRepo.add(config);
 
@@ -233,9 +230,8 @@ class _InteractiveLayerGestureHandler extends StatefulWidget {
 
   final InteractiveLayerBehaviour interactiveLayerBehaviour;
 
-  final Function(InteractableDrawing<DrawingToolConfig>)? onSaveDrawingChange;
-  final DrawingToolConfig Function(InteractableDrawing<DrawingToolConfig>)
-      onAddDrawing;
+  final Function(DrawingToolConfig)? onSaveDrawingChange;
+  final DrawingToolConfig Function(DrawingToolConfig) onAddDrawing;
 
   final DrawingToolConfig? addingDrawingTool;
 
@@ -428,7 +424,8 @@ class _InteractiveLayerGestureHandlerState
           return controller.selectedDrawing != null
               ? SelectedDrawingFloatingMenu(
                   drawing: controller.selectedDrawing!,
-                  controller: widget.interactiveLayerBehaviour.controller,
+                  interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
+                  onUpdateDrawing: saveDrawing,
                 )
               : const SizedBox.shrink();
         },
@@ -458,12 +455,11 @@ class _InteractiveLayerGestureHandlerState
   void clearAddingDrawing() => widget.onClearAddingDrawingTool.call();
 
   @override
-  DrawingToolConfig addDrawing(
-          InteractableDrawing<DrawingToolConfig> drawing) =>
+  DrawingToolConfig addDrawing(DrawingToolConfig drawing) =>
       widget.onAddDrawing.call(drawing);
 
   @override
-  void saveDrawing(InteractableDrawing<DrawingToolConfig> drawing) =>
+  void saveDrawing(DrawingToolConfig drawing) =>
       widget.onSaveDrawingChange?.call(drawing);
 
   @override

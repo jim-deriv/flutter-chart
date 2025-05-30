@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_item.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../interactive_layer_behaviours/interactive_layer_behaviour.dart';
 import '../interactive_layer_controller.dart';
 
 /// A floating menu that appears when a drawing is selected.
@@ -13,7 +15,8 @@ class SelectedDrawingFloatingMenu extends StatefulWidget {
   /// Creates a floating menu for the selected drawing.
   const SelectedDrawingFloatingMenu({
     required this.drawing,
-    required this.controller,
+    required this.interactiveLayerBehaviour,
+    required this.onUpdateDrawing,
     super.key,
   });
 
@@ -21,7 +24,9 @@ class SelectedDrawingFloatingMenu extends StatefulWidget {
   final InteractableDrawing<DrawingToolConfig> drawing;
 
   /// The controller for the interactive layer.
-  final InteractiveLayerController controller;
+  final InteractiveLayerBehaviour interactiveLayerBehaviour;
+
+  final UpdateDrawingTool onUpdateDrawing;
 
   @override
   State<SelectedDrawingFloatingMenu> createState() =>
@@ -33,9 +38,13 @@ class _SelectedDrawingFloatingMenuState
   // Store the menu size
   Size _menuSize = Size.zero;
 
+  late final InteractiveLayerController _controller;
+
   @override
   void initState() {
     super.initState();
+    _controller = widget.interactiveLayerBehaviour.controller;
+
     // Schedule a post-frame callback to get the menu size
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateMenuSize();
@@ -58,14 +67,13 @@ class _SelectedDrawingFloatingMenuState
     final screenSize = MediaQuery.of(context).size;
 
     return Positioned(
-      left: widget.controller.floatingMenuPosition.dx,
-      top: widget.controller.floatingMenuPosition.dy,
+      left: _controller.floatingMenuPosition.dx,
+      top: _controller.floatingMenuPosition.dy,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onPanUpdate: (details) {
           // Calculate new position
-          final newPosition =
-              widget.controller.floatingMenuPosition + details.delta;
+          final newPosition = _controller.floatingMenuPosition + details.delta;
 
           // Update menu size if not already set
           if (_menuSize == Size.zero) {
@@ -83,8 +91,7 @@ class _SelectedDrawingFloatingMenuState
           final constrainedY =
               newPosition.dy.clamp(0.0, parentSize.height - _menuSize.height);
 
-          widget.controller.floatingMenuPosition =
-              Offset(constrainedX, constrainedY);
+          _controller.floatingMenuPosition = Offset(constrainedX, constrainedY);
           setState(() {});
         },
         child: Container(
@@ -96,7 +103,8 @@ class _SelectedDrawingFloatingMenuState
             children: [
               Icon(Icons.delete_outline,
                   color: context.watch<ChartTheme>().gridTextColor),
-              Text(widget.drawing.runtimeType.toString())
+              Text(widget.drawing.runtimeType.toString()),
+              widget.drawing.getToolBarMenu(widget.onUpdateDrawing)
             ],
           ),
         ),
