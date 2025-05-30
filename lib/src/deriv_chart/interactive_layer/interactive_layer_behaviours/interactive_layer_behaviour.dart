@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:flutter/gestures.dart';
@@ -13,6 +12,7 @@ import '../interactable_drawings/drawing_adding_preview.dart';
 import '../interactable_drawings/drawing_v2.dart';
 import '../interactable_drawings/interactable_drawing.dart';
 import '../interactive_layer_base.dart';
+import '../interactive_layer_controller.dart';
 import '../interactive_layer_states/interactive_adding_tool_state.dart';
 import '../interactive_layer_states/interactive_normal_state.dart';
 import '../interactive_layer_states/interactive_state.dart';

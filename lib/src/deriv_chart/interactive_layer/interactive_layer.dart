@@ -23,7 +23,7 @@ import 'interaction_notifier.dart';
 import 'interactive_layer_base.dart';
 import 'enums/state_change_direction.dart';
 import 'interactive_layer_behaviours/interactive_layer_behaviour.dart';
-import 'interactive_layer_states/interactive_state.dart';
+import 'widgets/selected_drawing_floating_menu.dart';
 
 /// Interactive layer of the chart package where elements can be drawn and can
 /// be interacted with.
@@ -439,6 +439,7 @@ class _InteractiveLayerGestureHandlerState
           return controller.selectedDrawing != null
               ? SelectedDrawingFloatingMenu(
                   drawing: controller.selectedDrawing!,
+                  controller: widget.interactiveLayerBehaviour.controller,
                 )
               : const SizedBox.shrink();
         },
@@ -478,83 +479,4 @@ class _InteractiveLayerGestureHandlerState
 
   @override
   Size? get layerSize => _size;
-}
-
-/// A controller similar to [ListView.scrollController] to control interactive
-/// layer from outside in addition to get some information from internal
-/// states of layer to outside.
-///
-/// This controller acts as the bridge between outside of the chart component
-/// and interactive layer.
-class InteractiveLayerController extends ChangeNotifier {
-  /// The current state of the interactive layer.
-  late InteractiveState _currentState;
-
-  /// Current state of the interactive layer.
-  InteractiveState get currentState => _currentState;
-
-  ///
-  set currentState(InteractiveState state) {
-    _currentState = state;
-    notifyListeners();
-  }
-
-  InteractableDrawing<DrawingToolConfig>? _selectedDrawing;
-
-  /// The current selected drawing of the [InteractiveLayer].
-  InteractableDrawing<DrawingToolConfig>? get selectedDrawing =>
-      _selectedDrawing;
-
-  /// Sets the selected drawing of the [InteractiveLayer].
-  set selectedDrawing(
-    InteractableDrawing<DrawingToolConfig>? drawing,
-  ) {
-    _selectedDrawing = drawing;
-    notifyListeners();
-  }
-}
-
-class SelectedDrawingFloatingMenu extends StatefulWidget {
-  const SelectedDrawingFloatingMenu({
-    required this.drawing,
-    super.key,
-  });
-
-  final InteractableDrawing<DrawingToolConfig> drawing;
-
-  @override
-  State<SelectedDrawingFloatingMenu> createState() =>
-      _SelectedDrawingFloatingMenuState();
-}
-
-class _SelectedDrawingFloatingMenuState
-    extends State<SelectedDrawingFloatingMenu> {
-  Offset _floatingMenuPosition = Offset.zero;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: _floatingMenuPosition.dx,
-      top: _floatingMenuPosition.dy,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onPanUpdate: (details) {
-          _floatingMenuPosition += details.delta;
-          setState(() => {});
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              const Icon(Icons.drag_handle, color: Colors.white),
-              Text(widget.drawing.runtimeType.toString())
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

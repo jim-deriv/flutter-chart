@@ -28,7 +28,7 @@ abstract class InteractiveState {
   /// this state, allowing the state to call methods on the layer such as updating
   /// to a new state or adding/saving drawings.
   InteractiveState({required this.interactiveLayerBehaviour}) {
-    interactiveLayerBehaviour.controller?.selectedDrawing = null;
+    interactiveLayerBehaviour.controller.selectedDrawing = null;
   }
 
   /// Returns the state of the drawing tool.

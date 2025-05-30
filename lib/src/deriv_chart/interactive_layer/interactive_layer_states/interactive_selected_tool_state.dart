@@ -1,5 +1,5 @@
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -32,7 +32,7 @@ class InteractiveSelectedToolState extends InteractiveState
     required this.selected,
     required super.interactiveLayerBehaviour,
   }) {
-    interactiveLayerBehaviour.controller?.selectedDrawing = selected;
+    interactiveLayerBehaviour.controller.selectedDrawing = selected;
   }
 
   /// The selected tool.
@@ -42,9 +42,6 @@ class InteractiveSelectedToolState extends InteractiveState
   final InteractableDrawing selected;
 
   bool _draggingStartedOnTool = false;
-
-
-
 
   @override
   Set<DrawingToolState> getToolState(DrawingV2 drawing) {
