@@ -23,6 +23,7 @@ import 'interaction_notifier.dart';
 import 'interactive_layer_base.dart';
 import 'enums/state_change_direction.dart';
 import 'interactive_layer_behaviours/interactive_layer_behaviour.dart';
+import 'interactive_layer_states/interactive_state.dart';
 
 /// Interactive layer of the chart package where elements can be drawn and can
 /// be interacted with.
@@ -420,21 +421,7 @@ class _InteractiveLayerGestureHandlerState
                                               ),
                                     ))
                                 .toList(),
-                            if (widget.interactiveLayerBehaviour.controller !=
-                                    null &&
-                                widget.interactiveLayerBehaviour.controller!
-                                        .selectedDrawing !=
-                                    null)
-                              ListenableBuilder(
-                                listenable: widget
-                                    .interactiveLayerBehaviour.controller!,
-                                builder: (_, __) {
-                                  return SelectedDrawingFloatingMenu(
-                                    drawing: widget.interactiveLayerBehaviour
-                                        .controller!.selectedDrawing!,
-                                  );
-                                },
-                              )
+                            _buildSelectedDrawingFloatingMenu()
                           ],
                   );
                 }),
@@ -443,6 +430,19 @@ class _InteractiveLayerGestureHandlerState
       );
     });
   }
+
+  Widget _buildSelectedDrawingFloatingMenu() => ListenableBuilder(
+        listenable: widget.interactiveLayerBehaviour.controller,
+        builder: (_, __) {
+          final controller = widget.interactiveLayerBehaviour.controller;
+
+          return controller.selectedDrawing != null
+              ? SelectedDrawingFloatingMenu(
+                  drawing: controller.selectedDrawing!,
+                )
+              : const SizedBox.shrink();
+        },
+      );
 
   void onTap(TapUpDetails details) {
     widget.interactiveLayerBehaviour.onTap(details);
@@ -487,6 +487,18 @@ class _InteractiveLayerGestureHandlerState
 /// This controller acts as the bridge between outside of the chart component
 /// and interactive layer.
 class InteractiveLayerController extends ChangeNotifier {
+  /// The current state of the interactive layer.
+  late InteractiveState _currentState;
+
+  /// Current state of the interactive layer.
+  InteractiveState get currentState => _currentState;
+
+  ///
+  set currentState(InteractiveState state) {
+    _currentState = state;
+    notifyListeners();
+  }
+
   InteractableDrawing<DrawingToolConfig>? _selectedDrawing;
 
   /// The current selected drawing of the [InteractiveLayer].

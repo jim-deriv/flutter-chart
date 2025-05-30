@@ -21,7 +21,7 @@ import '../interactive_layer_states/interactive_state.dart';
 /// a platform or a condition.
 /// [InteractiveLayerBase] uses this to manage gestures and the layer state in
 /// every scenarios.
-/// The way we're handling the gestures and [_interactiveState] transitions can
+/// The way we're handling the gestures and [currentState] transitions can
 /// be customized by extending this class.
 ///
 /// Check out [InteractiveLayerMobileBehaviour] and
@@ -29,15 +29,17 @@ import '../interactive_layer_states/interactive_state.dart';
 /// different platforms.
 abstract class InteractiveLayerBehaviour {
   /// Creates an instance of [InteractiveLayerBehaviour].
-  InteractiveLayerBehaviour({this.controller});
+  InteractiveLayerBehaviour({
+    InteractiveLayerController? controller,
+  }) : _controller = controller ?? InteractiveLayerController();
 
-  /// Optional controller for the interactive layer.
-  final InteractiveLayerController? controller;
+  late final InteractiveLayerController _controller;
 
-  late InteractiveState _interactiveState;
+  /// The controller for the interactive layer.
+  InteractiveLayerController get controller => _controller;
 
   /// Current state of the interactive layer.
-  InteractiveState get currentState => _interactiveState;
+  InteractiveState get currentState => controller.currentState;
 
   bool _initialized = false;
 
@@ -59,7 +61,8 @@ abstract class InteractiveLayerBehaviour {
     _initialized = true;
     this.interactiveLayer = interactiveLayer;
     this.onUpdate = onUpdate;
-    _interactiveState = InteractiveNormalState(interactiveLayerBehaviour: this);
+    _controller.currentState =
+        InteractiveNormalState(interactiveLayerBehaviour: this);
   }
 
   /// Return the adding preview of the [drawing] we're currently adding for this
@@ -78,12 +81,12 @@ abstract class InteractiveLayerBehaviour {
     if (waitForAnimation) {
       await interactiveLayer.animateStateChange(direction);
 
-      _interactiveState = newState;
+      _controller.currentState = newState;
       onUpdate();
     } else {
       unawaited(interactiveLayer.animateStateChange(direction));
 
-      _interactiveState = newState;
+      _controller.currentState = newState;
       onUpdate();
     }
   }
@@ -98,7 +101,7 @@ abstract class InteractiveLayerBehaviour {
 
   /// The drawings of the interactive layer.
   Set<DrawingToolState> getToolState(DrawingV2 drawing) =>
-      _interactiveState.getToolState(drawing);
+      currentState.getToolState(drawing);
 
   /// The extra drawings that the current interactive state can show in
   /// [InteractiveLayerBase].
@@ -106,22 +109,21 @@ abstract class InteractiveLayerBehaviour {
   /// These [previewDrawings] are usually meant to be drawings with a shorter
   /// lifespan, used for preview purposes or for showing temporary guides when
   /// the user is interacting with [InteractiveLayerBase].
-  List<DrawingV2> get previewDrawings => _interactiveState.previewDrawings;
+  List<DrawingV2> get previewDrawings => currentState.previewDrawings;
 
   /// Handles tap event.
-  void onTap(TapUpDetails details) => _interactiveState.onTap(details);
+  void onTap(TapUpDetails details) => currentState.onTap(details);
 
   /// Handles pan update event.
   void onPanUpdate(DragUpdateDetails details) =>
-      _interactiveState.onPanUpdate(details);
+      currentState.onPanUpdate(details);
 
   /// Handles pan end event.
-  void onPanEnd(DragEndDetails details) => _interactiveState.onPanEnd(details);
+  void onPanEnd(DragEndDetails details) => currentState.onPanEnd(details);
 
   /// Handles pan start event.
-  void onPanStart(DragStartDetails details) =>
-      _interactiveState.onPanStart(details);
+  void onPanStart(DragStartDetails details) => currentState.onPanStart(details);
 
   /// Handles hover event.
-  void onHover(PointerHoverEvent event) => _interactiveState.onHover(event);
+  void onHover(PointerHoverEvent event) => currentState.onHover(event);
 }
