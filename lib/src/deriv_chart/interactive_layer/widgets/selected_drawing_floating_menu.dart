@@ -104,7 +104,11 @@ class _SelectedDrawingFloatingMenuState
               Icon(Icons.delete_outline,
                   color: context.watch<ChartTheme>().gridTextColor),
               Text(widget.drawing.runtimeType.toString()),
-              widget.drawing.getToolBarMenu(widget.onUpdateDrawing)
+              widget.drawing.getToolBarMenu((newConfig) {
+                widget.onUpdateDrawing(newConfig);
+                widget.interactiveLayerBehaviour.controller.selectedDrawing =
+                    widget.drawing;
+              })
             ],
           ),
         ),

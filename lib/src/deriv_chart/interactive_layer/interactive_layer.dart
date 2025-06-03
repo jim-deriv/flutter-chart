@@ -355,7 +355,11 @@ class _InteractiveLayerGestureHandlerState
   Widget _buildDrawingsLayer(BuildContext context, XAxisModel xAxis) =>
       RepaintBoundary(
         child: MultipleAnimatedBuilder(
-            animations: [_stateChangeController, _interactionNotifier],
+            animations: [
+              _stateChangeController,
+              _interactionNotifier,
+              widget.interactiveLayerBehaviour.controller
+            ],
             builder: (_, __) {
               final double animationValue =
                   _stateChangeCurve.transform(_stateChangeController.value);

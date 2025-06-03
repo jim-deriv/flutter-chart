@@ -28,6 +28,7 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
   /// Initializes [InteractableDrawing].
   InteractableDrawing({required T drawingConfig}) {
     config = drawingConfig.copyWith() as T;
+    prevConfig = config.copyWith() as T;
   }
 
   @override
@@ -35,6 +36,7 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
 
   /// The drawing tool config.
   late T config;
+  late T prevConfig;
 
   /// Returns the updated config.
   T getUpdatedConfig();
@@ -43,7 +45,9 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
   /// [config] is the current configuration of the drawing tool.
   Widget getToolBarMenu(UpdateDrawingTool onUpdate) {
     final toolBar = buildToolBarMenu((config) {
+      prevConfig = this.config;
       this.config = config as T;
+
       onUpdate(config);
     });
 
@@ -122,7 +126,10 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
     Set<DrawingToolState> drawingState,
     covariant InteractableDrawing<T> oldDrawing,
   ) {
-    return config != oldDrawing.config ||
+    final configChanged = config != prevConfig;
+    prevConfig = config;
+
+    return configChanged ||
         drawingState.contains(DrawingToolState.dragging) ||
         drawingState.contains(DrawingToolState.adding) ||
         drawingState.contains(DrawingToolState.animating);
