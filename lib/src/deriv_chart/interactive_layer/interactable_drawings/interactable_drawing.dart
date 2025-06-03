@@ -28,7 +28,7 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
   /// Initializes [InteractableDrawing].
   InteractableDrawing({required T drawingConfig}) {
     config = drawingConfig.copyWith() as T;
-    prevConfig = config.copyWith() as T;
+    _prevConfig = config.copyWith() as T;
   }
 
   @override
@@ -36,7 +36,13 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
 
   /// The drawing tool config.
   late T config;
-  late T prevConfig;
+
+  /// The previous drawing tool config.
+  ///
+  /// Whenever there is a change in the internal [config] this will be hold the
+  /// previous state of the config before change. so it can be used in the
+  /// config comparisons.
+  late T _prevConfig;
 
   /// Returns the updated config.
   T getUpdatedConfig();
@@ -45,7 +51,7 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
   /// [config] is the current configuration of the drawing tool.
   Widget getToolBarMenu(UpdateDrawingTool onUpdate) {
     final toolBar = buildToolBarMenu((config) {
-      prevConfig = this.config;
+      _prevConfig = this.config;
       this.config = config as T;
 
       onUpdate(config);
@@ -54,6 +60,7 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
     return toolBar;
   }
 
+  /// Builds the toolbar menu for the drawing tool.
   Widget buildToolBarMenu(UpdateDrawingTool onUpdate);
 
   /// Returns `true` if the drawing tool is hit by the given offset.
@@ -126,8 +133,8 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
     Set<DrawingToolState> drawingState,
     covariant InteractableDrawing<T> oldDrawing,
   ) {
-    final configChanged = config != prevConfig;
-    prevConfig = config;
+    final configChanged = config != _prevConfig;
+    _prevConfig = config;
 
     return configChanged ||
         drawingState.contains(DrawingToolState.dragging) ||
