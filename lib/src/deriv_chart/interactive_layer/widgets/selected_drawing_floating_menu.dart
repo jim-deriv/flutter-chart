@@ -1,10 +1,10 @@
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
-import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_item.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/state_change_direction.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../interactive_layer_behaviours/interactive_layer_behaviour.dart';
@@ -17,6 +17,7 @@ class SelectedDrawingFloatingMenu extends StatefulWidget {
     required this.drawing,
     required this.interactiveLayerBehaviour,
     required this.onUpdateDrawing,
+    required this.onRemoveDrawing,
     super.key,
   });
 
@@ -26,7 +27,11 @@ class SelectedDrawingFloatingMenu extends StatefulWidget {
   /// The controller for the interactive layer.
   final InteractiveLayerBehaviour interactiveLayerBehaviour;
 
+  /// Callback to update the drawing.
   final UpdateDrawingTool onUpdateDrawing;
+
+  /// Callback to remove the drawing.
+  final UpdateDrawingTool onRemoveDrawing;
 
   @override
   State<SelectedDrawingFloatingMenu> createState() =>
@@ -101,14 +106,28 @@ class _SelectedDrawingFloatingMenuState
           ),
           child: Row(
             children: [
-              Icon(Icons.delete_outline,
-                  color: context.watch<ChartTheme>().gridTextColor),
+              IconButton(
+                icon: const Icon(Icons.delete_outline),
+                color: context.watch<ChartTheme>().gridTextColor,
+                onPressed: () {
+                  widget.onRemoveDrawing(widget.drawing.config);
+                  widget.interactiveLayerBehaviour.updateStateTo(
+                    InteractiveNormalState(
+                      interactiveLayerBehaviour:
+                          widget.interactiveLayerBehaviour,
+                    ),
+                    StateChangeAnimationDirection.backward,
+                  );
+                },
+              ),
               Text(widget.drawing.runtimeType.toString()),
-              widget.drawing.getToolBarMenu((newConfig) {
-                widget.onUpdateDrawing(newConfig);
-                widget.interactiveLayerBehaviour.controller.selectedDrawing =
-                    widget.drawing;
-              })
+              widget.drawing.getToolBarMenu(
+                onUpdate: (config) {
+                  widget.onUpdateDrawing(config);
+                  widget.interactiveLayerBehaviour.controller.selectedDrawing =
+                      widget.drawing;
+                },
+              ),
             ],
           ),
         ),

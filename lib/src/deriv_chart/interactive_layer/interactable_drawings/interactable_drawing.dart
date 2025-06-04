@@ -49,8 +49,10 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
 
   /// Returns the widget for the toolbar menu of the drawing tool.
   /// [config] is the current configuration of the drawing tool.
-  Widget getToolBarMenu(UpdateDrawingTool onUpdate) {
-    final toolBar = buildToolBarMenu((config) {
+  Widget getToolBarMenu({
+    required UpdateDrawingTool onUpdate,
+  }) {
+    final toolBar = buildDrawingToolBarMenu((config) {
       _prevConfig = this.config;
       this.config = config as T;
 
@@ -61,7 +63,8 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
   }
 
   /// Builds the toolbar menu for the drawing tool.
-  Widget buildToolBarMenu(UpdateDrawingTool onUpdate);
+  @protected
+  Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate);
 
   /// Returns `true` if the drawing tool is hit by the given offset.
   @override

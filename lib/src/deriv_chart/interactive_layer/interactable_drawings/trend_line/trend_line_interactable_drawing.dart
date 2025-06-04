@@ -357,7 +357,7 @@ class TrendLineInteractableDrawing
           );
 
   @override
-  Widget buildToolBarMenu(UpdateDrawingTool onUpdate) {
+  Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate) {
     throw UnimplementedError();
   }
 }

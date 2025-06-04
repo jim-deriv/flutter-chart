@@ -52,4 +52,7 @@ abstract class InteractiveLayerBase {
   /// Save the drawings with the latest changes (positions or anything) to the
   /// repository.
   void saveDrawing(DrawingToolConfig drawing);
+
+  /// Removes the [drawing] from the interactive layer and the chart.
+  void removeDrawing(DrawingToolConfig drawing);
 }

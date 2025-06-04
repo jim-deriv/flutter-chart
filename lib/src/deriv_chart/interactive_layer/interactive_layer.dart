@@ -205,6 +205,7 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
       onClearAddingDrawingTool: widget.drawingTools.clearDrawingToolSelection,
       onSaveDrawingChange: _updateConfigInRepository,
       onAddDrawing: _addDrawingToRepo,
+      onRemoveDrawing: widget.drawingToolsRepo.remove,
     );
   }
 }
@@ -224,6 +225,7 @@ class _InteractiveLayerGestureHandler extends StatefulWidget {
     required this.interactiveLayerBehaviour,
     this.addingDrawingTool,
     this.onSaveDrawingChange,
+    this.onRemoveDrawing,
   });
 
   final List<InteractableDrawing> drawings;
@@ -231,6 +233,8 @@ class _InteractiveLayerGestureHandler extends StatefulWidget {
   final InteractiveLayerBehaviour interactiveLayerBehaviour;
 
   final Function(DrawingToolConfig)? onSaveDrawingChange;
+  final Function(DrawingToolConfig)? onRemoveDrawing;
+
   final DrawingToolConfig Function(DrawingToolConfig) onAddDrawing;
 
   final DrawingToolConfig? addingDrawingTool;
@@ -430,6 +434,7 @@ class _InteractiveLayerGestureHandlerState
                   drawing: controller.selectedDrawing!,
                   interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
                   onUpdateDrawing: saveDrawing,
+                  onRemoveDrawing: removeDrawing,
                 )
               : const SizedBox.shrink();
         },
@@ -465,6 +470,10 @@ class _InteractiveLayerGestureHandlerState
   @override
   void saveDrawing(DrawingToolConfig drawing) =>
       widget.onSaveDrawingChange?.call(drawing);
+
+  @override
+  void removeDrawing(DrawingToolConfig drawing) =>
+      widget.onRemoveDrawing?.call(drawing);
 
   @override
   Size? get layerSize => _size;
