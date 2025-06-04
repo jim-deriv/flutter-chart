@@ -147,6 +147,7 @@ class InteractiveSelectedToolState extends InteractiveState
           interactiveLayerBehaviour.updateStateTo(
             this,
             StateChangeAnimationDirection.forward,
+            animate: false,
           );
         },
         onRemoveDrawing: (config) {
@@ -157,6 +158,7 @@ class InteractiveSelectedToolState extends InteractiveState
               interactiveLayerBehaviour: interactiveLayerBehaviour,
             ),
             StateChangeAnimationDirection.backward,
+            waitForAnimation: false,
           );
         },
       );

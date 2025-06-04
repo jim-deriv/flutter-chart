@@ -74,22 +74,27 @@ abstract class InteractiveLayerBehaviour {
   ///
   /// Calls [onUpdate] callback to notify the interactive layer to update its
   /// UI after the state change.
+  ///
+  /// [waitForAnimation]
+  /// If set to `true`, the method will wait for the state change animation.
+  /// If set to `false`, it will not wait for the animation to complete.
+  /// If `null` will not play animation for state change.
   Future<void> updateStateTo(
     InteractiveState newState,
     StateChangeAnimationDirection direction, {
-    bool waitForAnimation = false,
+    bool waitForAnimation = true,
+    bool animate = true,
   }) async {
-    if (waitForAnimation) {
-      await interactiveLayer.animateStateChange(direction);
-
-      _controller.currentState = newState;
-      onUpdate();
-    } else {
-      unawaited(interactiveLayer.animateStateChange(direction));
-
-      _controller.currentState = newState;
-      onUpdate();
+    if (animate) {
+      if (waitForAnimation) {
+        await interactiveLayer.animateStateChange(direction);
+      } else {
+        unawaited(interactiveLayer.animateStateChange(direction));
+      }
     }
+
+    _controller.currentState = newState;
+    onUpdate();
   }
 
   /// Handles the addition of a drawing tool.
