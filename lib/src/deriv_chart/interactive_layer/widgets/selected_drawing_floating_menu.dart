@@ -1,4 +1,3 @@
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/enums/state_change_direction.dart';
@@ -9,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../interactive_layer_behaviours/interactive_layer_behaviour.dart';
 import '../interactive_layer_controller.dart';
+import '../interactive_layer_states/interactive_normal_state.dart';
 
 /// A floating menu that appears when a drawing is selected.
 class SelectedDrawingFloatingMenu extends StatefulWidget {
@@ -105,33 +105,38 @@ class _SelectedDrawingFloatingMenuState
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.delete_outline),
-                color: context.watch<ChartTheme>().gridTextColor,
-                onPressed: () {
-                  widget.onRemoveDrawing(widget.drawing.config);
-                  widget.interactiveLayerBehaviour.updateStateTo(
-                    InteractiveNormalState(
-                      interactiveLayerBehaviour:
-                          widget.interactiveLayerBehaviour,
-                    ),
-                    StateChangeAnimationDirection.backward,
-                  );
-                },
-              ),
-              Text(widget.drawing.runtimeType.toString()),
-              widget.drawing.getToolBarMenu(
-                onUpdate: (config) {
-                  widget.onUpdateDrawing(config);
-                  widget.interactiveLayerBehaviour.controller.selectedDrawing =
-                      widget.drawing;
-                },
-              ),
+            children: <Widget>[
+              _buildRemoveButton(context),
+              _buildTitle(),
+              _buildDrawingMenuOptions(),
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget _buildDrawingMenuOptions() => widget.drawing.getToolBarMenu(
+        onUpdate: (config) {
+          widget.onUpdateDrawing(config);
+          widget.interactiveLayerBehaviour.controller.selectedDrawing =
+              widget.drawing;
+        },
+      );
+
+  Widget _buildTitle() => Text(widget.drawing.runtimeType.toString());
+
+  Widget _buildRemoveButton(BuildContext context) => IconButton(
+        icon: const Icon(Icons.delete_outline),
+        color: context.watch<ChartTheme>().gridTextColor,
+        onPressed: () {
+          widget.onRemoveDrawing(widget.drawing.config);
+          widget.interactiveLayerBehaviour.updateStateTo(
+            InteractiveNormalState(
+              interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
+            ),
+            StateChangeAnimationDirection.backward,
+          );
+        },
+      );
 }
