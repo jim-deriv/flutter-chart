@@ -24,7 +24,6 @@ import 'interaction_notifier.dart';
 import 'interactive_layer_base.dart';
 import 'enums/state_change_direction.dart';
 import 'interactive_layer_behaviours/interactive_layer_behaviour.dart';
-import 'widgets/selected_drawing_floating_menu.dart';
 
 /// Interactive layer of the chart package where elements can be drawn and can
 /// be interacted with.
@@ -94,7 +93,7 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   final Map<String, Timer> _debounceTimers = <String, Timer>{};
 
   /// Duration for debouncing repository updates (1-sec is a good balance)
-  static const Duration _debounceDuration = Duration(seconds: 1);
+  static const Duration _debounceDuration = Duration(milliseconds: 500);
 
   @override
   void initState() {
@@ -348,7 +347,6 @@ class _InteractiveLayerGestureHandlerState
           child: Stack(
             children: [
               _buildDrawingsLayer(context, xAxis),
-              _buildSelectedDrawingFloatingMenu(),
             ],
           ),
         ),
@@ -389,6 +387,7 @@ class _InteractiveLayerGestureHandlerState
                                   animationValue,
                                 ))
                             .toList(),
+                        ...widget.interactiveLayerBehaviour.previewWidgets
                       ],
               );
             }),
@@ -422,22 +421,6 @@ class _InteractiveLayerGestureHandlerState
             stateChangePercent: animationValue,
           ),
         ),
-      );
-
-  Widget _buildSelectedDrawingFloatingMenu() => ListenableBuilder(
-        listenable: widget.interactiveLayerBehaviour.controller,
-        builder: (_, __) {
-          final controller = widget.interactiveLayerBehaviour.controller;
-
-          return controller.selectedDrawing != null
-              ? SelectedDrawingFloatingMenu(
-                  drawing: controller.selectedDrawing!,
-                  interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
-                  onUpdateDrawing: saveDrawing,
-                  onRemoveDrawing: removeDrawing,
-                )
-              : const SizedBox.shrink();
-        },
       );
 
   void onTap(TapUpDetails details) {

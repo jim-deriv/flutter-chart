@@ -5,6 +5,7 @@ import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dar
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/widgets.dart';
 
 import '../enums/drawing_tool_state.dart';
 import '../enums/state_change_direction.dart';
@@ -110,6 +111,10 @@ abstract class InteractiveLayerBehaviour {
   /// lifespan, used for preview purposes or for showing temporary guides when
   /// the user is interacting with [InteractiveLayerBase].
   List<DrawingV2> get previewDrawings => currentState.previewDrawings;
+
+  /// The extra widgets that the current interactive state can show on top of
+  /// interactive layer.
+  List<Widget> get previewWidgets => currentState.previewWidgets;
 
   /// Handles tap event.
   void onTap(TapUpDetails details) => currentState.onTap(details);

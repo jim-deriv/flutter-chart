@@ -251,9 +251,10 @@ class HorizontalLineInteractableDrawing
   @override
   Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate) => ColorSelector(
         currentColor: config.lineStyle.color,
-        onColorChanged: (newcolor) {
-          onUpdate(config.copyWith(
-              lineStyle: config.lineStyle.copyWith(color: newcolor)));
-        },
+        onColorChanged: (Color newColor) => onUpdate(
+          config.copyWith(
+            lineStyle: config.lineStyle.copyWith(color: newColor),
+          ),
+        ),
       );
 }

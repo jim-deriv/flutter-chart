@@ -8,6 +8,7 @@ import '../interactable_drawings/interactable_drawing.dart';
 import '../interactive_layer_states/interactive_state.dart';
 import '../enums/drawing_tool_state.dart';
 import '../enums/state_change_direction.dart';
+import '../widgets/selected_drawing_floating_menu.dart';
 import 'interactive_hover_state.dart';
 import 'interactive_normal_state.dart';
 
@@ -134,4 +135,32 @@ class InteractiveSelectedToolState extends InteractiveState
       );
     }
   }
+
+  @override
+  List<Widget> get previewWidgets => [_buildSelectedDrawingFloatingMenu()];
+
+  Widget _buildSelectedDrawingFloatingMenu() => ListenableBuilder(
+        listenable: interactiveLayerBehaviour.controller,
+        builder: (_, __) => SelectedDrawingFloatingMenu(
+          drawing: selected,
+          interactiveLayerBehaviour: interactiveLayerBehaviour,
+          onUpdateDrawing: (config) {
+            interactiveLayer.saveDrawing(config);
+            interactiveLayerBehaviour.updateStateTo(
+              this,
+              StateChangeAnimationDirection.forward,
+            );
+          },
+          onRemoveDrawing: (config) {
+            interactiveLayer.removeDrawing(config);
+
+            interactiveLayerBehaviour.updateStateTo(
+              InteractiveNormalState(
+                interactiveLayerBehaviour: interactiveLayerBehaviour,
+              ),
+              StateChangeAnimationDirection.backward,
+            );
+          },
+        ),
+      );
 }
