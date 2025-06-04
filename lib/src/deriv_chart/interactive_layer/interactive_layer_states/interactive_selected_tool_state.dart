@@ -3,13 +3,13 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer.
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../enums/drawing_tool_state.dart';
 import '../interactable_drawings/drawing_v2.dart';
 import '../interactable_drawings/interactable_drawing.dart';
+import '../interactive_layer_states/interactive_state.dart';
+import '../enums/drawing_tool_state.dart';
 import '../enums/state_change_direction.dart';
 import 'interactive_hover_state.dart';
 import 'interactive_normal_state.dart';
-import 'interactive_state.dart';
 
 /// The state of the interactive layer when a tool is selected.
 ///

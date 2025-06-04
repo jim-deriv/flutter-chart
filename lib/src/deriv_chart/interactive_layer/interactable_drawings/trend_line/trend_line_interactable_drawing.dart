@@ -41,9 +41,12 @@ class TrendLineInteractableDrawing
   EdgePoint? endPoint;
 
   /// Tracks which point is being dragged, if any
-  /// null: dragging the whole line
-  /// true: dragging the start point
-  /// false: dragging the end point
+  ///
+  /// [null]: dragging the whole line.
+  ///
+  /// [true]: dragging the start point.
+  ///
+  /// [false]: dragging the end point.
   bool? isDraggingStartPoint;
 
   @override
