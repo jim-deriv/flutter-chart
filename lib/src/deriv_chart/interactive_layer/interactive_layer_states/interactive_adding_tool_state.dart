@@ -1,3 +1,4 @@
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
 import 'package:flutter/gestures.dart';
@@ -143,7 +144,8 @@ class InteractiveAddingToolState extends InteractiveState
     _drawingPreview!
         .onCreateTap(details, epochFromX, quoteFromY, epochToX, quoteToY, () {
       interactiveLayerBehaviour.updateStateTo(
-        InteractiveNormalState(
+        InteractiveSelectedToolState(
+          selected: _drawingPreview!.interactableDrawing,
           interactiveLayerBehaviour: interactiveLayerBehaviour,
         ),
         StateChangeAnimationDirection.forward,
