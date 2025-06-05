@@ -164,6 +164,7 @@ class HorizontalLineInteractableDrawing
         value: startPoint!.quote,
         pipSize: chartConfig.pipSize,
         size: size,
+        textStyle: config.labelStyle,
         color: config.lineStyle.color
             .withOpacity(animationInfo.stateChangePercent),
         backgroundColor: chartTheme.backgroundColor

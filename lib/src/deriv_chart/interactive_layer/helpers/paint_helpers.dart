@@ -167,6 +167,7 @@ void drawValueLabel({
   required double value,
   required int pipSize,
   required Size size,
+  required TextStyle textStyle,
   Color color = Colors.white,
   Color backgroundColor = Colors.transparent,
 }) {
@@ -177,8 +178,8 @@ void drawValueLabel({
   final String formattedValue = value.toStringAsFixed(pipSize);
 
   // Create text painter to measure text dimensions
-  final TextPainter textPainter = _getTextPainter(formattedValue, color)
-    ..layout();
+  final TextPainter textPainter =
+      _getTextPainter(formattedValue, color, textStyle: textStyle)..layout();
 
   // Create rectangle with padding around the text
   final double rectWidth = textPainter.width + 24;

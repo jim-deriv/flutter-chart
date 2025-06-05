@@ -87,6 +87,7 @@ class HorizontalLineAddingPreviewDesktop
         size: size,
         color: interactableDrawing.config.lineStyle.color,
         backgroundColor: chartTheme.backgroundColor,
+        textStyle: interactableDrawing.config.labelStyle,
       );
     }
   }

@@ -108,6 +108,7 @@ class HorizontalLineAddingPreviewMobile
       value: interactableDrawing.startPoint!.quote,
       pipSize: chartConfig.pipSize,
       size: size,
+      textStyle: interactableDrawing.config.labelStyle,
       color: interactableDrawing.config.lineStyle.color,
       backgroundColor: chartTheme.backgroundColor,
     );
