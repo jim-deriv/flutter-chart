@@ -7,7 +7,6 @@ import '../interactable_drawings/drawing_v2.dart';
 import '../enums/state_change_direction.dart';
 import 'interactive_hover_state.dart';
 import 'interactive_normal_state.dart';
-import 'interactive_selected_tool_state.dart';
 import 'interactive_state.dart';
 
 /// The state of the interactive layer when a tool is being added.
@@ -143,13 +142,12 @@ class InteractiveAddingToolState extends InteractiveState
   void onTap(TapUpDetails details) {
     _drawingPreview!
         .onCreateTap(details, epochFromX, quoteFromY, epochToX, quoteToY, () {
-      interactiveLayer.clearAddingDrawing();
-      final DrawingToolConfig config = interactiveLayer
-          .addDrawing(_drawingPreview!.interactableDrawing.getUpdatedConfig());
+      interactiveLayer
+        ..clearAddingDrawing()
+        ..addDrawing(_drawingPreview!.interactableDrawing.getUpdatedConfig());
 
       interactiveLayerBehaviour.updateStateTo(
-        InteractiveSelectedToolState(
-          selected: config.getInteractableDrawing(),
+        InteractiveNormalState(
           interactiveLayerBehaviour: interactiveLayerBehaviour,
         ),
         StateChangeAnimationDirection.forward,

@@ -93,7 +93,7 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   final Map<String, Timer> _debounceTimers = <String, Timer>{};
 
   /// Duration for debouncing repository updates (1-sec is a good balance)
-  static const Duration _debounceDuration = Duration(milliseconds: 500);
+  static const Duration _debounceDuration = Duration(milliseconds: 300);
 
   @override
   void initState() {
@@ -266,6 +266,8 @@ class _InteractiveLayerGestureHandlerState
   static const Curve _stateChangeCurve = Curves.easeOut;
   final InteractionNotifier _interactionNotifier = InteractionNotifier();
 
+  String? _addedDrawing;
+
   @override
   AnimationController? get stateChangeAnimationController =>
       _stateChangeController;
@@ -294,11 +296,39 @@ class _InteractiveLayerGestureHandlerState
   void didUpdateWidget(covariant _InteractiveLayerGestureHandler oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    _checkAddingToolToLayer(oldWidget);
+  }
+
+  void _checkAddingToolToLayer(_InteractiveLayerGestureHandler oldWidget) {
+    _checkNeedStartAdding(oldWidget);
+    _checkIsAToolAdded();
+  }
+
+  /// Checks if user want to add a new drawing tool and starts adding it if so
+  void _checkNeedStartAdding(_InteractiveLayerGestureHandler oldWidget) {
     if (widget.addingDrawingTool != null &&
         widget.addingDrawingTool != oldWidget.addingDrawingTool) {
       widget.interactiveLayerBehaviour
-          .onAddDrawingTool(widget.addingDrawingTool!);
+          .startAddingTool(widget.addingDrawingTool!);
     }
+  }
+
+  /// Checks if a tool has been added to the layer and updates the state to
+  /// [InteractiveSelectedToolState] if it has.
+  void _checkIsAToolAdded() {
+    for (final drawing in widget.drawings) {
+      if (drawing.id == _addedDrawing) {
+        widget.interactiveLayerBehaviour.updateStateTo(
+          InteractiveSelectedToolState(
+              selected: drawing,
+              interactiveLayerBehaviour: widget.interactiveLayerBehaviour),
+          StateChangeAnimationDirection.forward,
+        );
+        break;
+      }
+    }
+
+    _addedDrawing = null;
   }
 
   @override
@@ -447,8 +477,11 @@ class _InteractiveLayerGestureHandlerState
   void clearAddingDrawing() => widget.onClearAddingDrawingTool.call();
 
   @override
-  DrawingToolConfig addDrawing(DrawingToolConfig drawing) =>
-      widget.onAddDrawing.call(drawing);
+  DrawingToolConfig addDrawing(DrawingToolConfig drawing) {
+    final config = widget.onAddDrawing.call(drawing);
+    _addedDrawing = config.configId;
+    return config;
+  }
 
   @override
   void saveDrawing(DrawingToolConfig drawing) =>

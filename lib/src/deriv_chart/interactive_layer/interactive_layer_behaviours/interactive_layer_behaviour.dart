@@ -97,7 +97,7 @@ abstract class InteractiveLayerBehaviour {
   }
 
   /// Handles the addition of a drawing tool.
-  void onAddDrawingTool(DrawingToolConfig drawingTool) {
+  void startAddingTool(DrawingToolConfig drawingTool) {
     updateStateTo(
       InteractiveAddingToolState(drawingTool, interactiveLayerBehaviour: this),
       StateChangeAnimationDirection.forward,

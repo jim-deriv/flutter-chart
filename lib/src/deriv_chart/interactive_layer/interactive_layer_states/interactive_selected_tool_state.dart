@@ -131,7 +131,6 @@ class InteractiveSelectedToolState extends InteractiveState
         InteractiveNormalState(
             interactiveLayerBehaviour: interactiveLayerBehaviour),
         StateChangeAnimationDirection.backward,
-        waitForAnimation: true,
       );
     }
   }
