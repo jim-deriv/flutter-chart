@@ -1,14 +1,13 @@
 import 'dart:ui';
 
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
+import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/gestures.dart';
-
 import '../../interactable_drawing_custom_painter.dart';
 import '../drawing_adding_preview.dart';
 import 'horizontal_line_interactable_drawing.dart';
@@ -84,7 +83,7 @@ class HorizontalLineAddingPreviewMobile
 
       canvas.drawPath(
         dashPath(horizontalPath,
-            dashArray: CircularIntervalList<double>(<double>[5, 5])),
+            dashArray: CircularIntervalList<double>(<double>[2, 2])),
         Paint()
           ..color = interactableDrawing.config.lineStyle.color
           ..style = PaintingStyle.stroke,
