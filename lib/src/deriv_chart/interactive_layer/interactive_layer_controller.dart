@@ -24,7 +24,6 @@ class InteractiveLayerController extends ChangeNotifier {
 
   /// The current state of the interactive layer.
   set currentState(InteractiveState state) {
-    print('@@@@ State changed to ${state.runtimeType}');
     _currentState = state;
     notifyListeners();
   }
