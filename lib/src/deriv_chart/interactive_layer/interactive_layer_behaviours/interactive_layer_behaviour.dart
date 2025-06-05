@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
@@ -97,12 +98,25 @@ abstract class InteractiveLayerBehaviour {
   }
 
   /// Handles the addition of a drawing tool.
+  /// Will be called when we want to add [drawingTool] to the layer.
   void startAddingTool(DrawingToolConfig drawingTool) {
     updateStateTo(
       InteractiveAddingToolState(drawingTool, interactiveLayerBehaviour: this),
       StateChangeAnimationDirection.forward,
     );
   }
+
+  /// Will be called right after the process of [startAddingTool] is completed
+  /// without cancellation.
+  ///
+  /// It can be used to perform any additional actions after a new tool is added
+  void aNewToolsIsAdded(InteractableDrawing drawing) => updateStateTo(
+        InteractiveSelectedToolState(
+          selected: drawing,
+          interactiveLayerBehaviour: this,
+        ),
+        StateChangeAnimationDirection.forward,
+      );
 
   /// The drawings of the interactive layer.
   Set<DrawingToolState> getToolState(DrawingV2 drawing) =>

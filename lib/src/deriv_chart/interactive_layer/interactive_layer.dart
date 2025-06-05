@@ -318,12 +318,7 @@ class _InteractiveLayerGestureHandlerState
   void _checkIsAToolAdded() {
     for (final drawing in widget.drawings) {
       if (drawing.id == _addedDrawing) {
-        widget.interactiveLayerBehaviour.updateStateTo(
-          InteractiveSelectedToolState(
-              selected: drawing,
-              interactiveLayerBehaviour: widget.interactiveLayerBehaviour),
-          StateChangeAnimationDirection.forward,
-        );
+        widget.interactiveLayerBehaviour.aNewToolsIsAdded(drawing);
         break;
       }
     }
