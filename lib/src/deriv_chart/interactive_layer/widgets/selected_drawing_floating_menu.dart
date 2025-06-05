@@ -1,9 +1,8 @@
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/interactable_drawing.dart';
-import 'package:deriv_chart/src/theme/chart_theme.dart';
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../interactive_layer_behaviours/interactive_layer_behaviour.dart';
 import '../interactive_layer_controller.dart';
@@ -99,14 +98,18 @@ class _SelectedDrawingFloatingMenuState
         },
         child: Container(
           decoration: BoxDecoration(
-            color: context.watch<ChartTheme>().backgroundColor,
+            // TODO(NA): use a color from theme when the theme specification in
+            // design documents has included the color for this menu.
+            color: CoreDesignTokens.coreColorSolidSlate1100,
             borderRadius: BorderRadius.circular(8),
           ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: <Widget>[
-              _buildRemoveButton(context),
-              _buildTitle(),
+              const Icon(Icons.drag_indicator),
+              const SizedBox(width: 8),
               _buildDrawingMenuOptions(),
+              _buildRemoveButton(context),
             ],
           ),
         ),
@@ -118,11 +121,9 @@ class _SelectedDrawingFloatingMenuState
         onUpdate: widget.onUpdateDrawing,
       );
 
-  Widget _buildTitle() => Text(widget.drawing.runtimeType.toString());
-
   Widget _buildRemoveButton(BuildContext context) => IconButton(
         icon: const Icon(Icons.delete_outline),
-        color: context.watch<ChartTheme>().gridTextColor,
+        color: Colors.red,
         onPressed: () => widget.onRemoveDrawing(widget.drawing.config),
       );
 }

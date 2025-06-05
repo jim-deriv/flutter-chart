@@ -25,6 +25,7 @@ class HorizontalDrawingToolConfig extends DrawingToolConfig {
     List<EdgePoint> edgePoints = const <EdgePoint>[],
     this.lineStyle = const LineStyle(thickness: 0.9, color: Colors.white),
     this.labelStyle = const TextStyle(
+      color: Colors.white,
       fontSize: 12,
       fontStyle: FontStyle.normal,
       fontWeight: FontWeight.w600,
