@@ -95,7 +95,7 @@ abstract class DrawingV2 {
     QuoteToY quoteToY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
-      ChartTheme chartTheme,
+    ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   );
 
