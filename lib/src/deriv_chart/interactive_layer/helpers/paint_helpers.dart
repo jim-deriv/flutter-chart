@@ -222,15 +222,19 @@ void drawValueLabel({
 }
 
 /// Returns a [TextPainter] for the given formatted value and color.
-TextPainter _getTextPainter(String formattedValue, Color color) {
+TextPainter _getTextPainter(
+  String formattedValue,
+  Color color, {
+  TextStyle textStyle = const TextStyle(
+    color: Colors.white38,
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
+  ),
+}) {
   final TextPainter textPainter = TextPainter(
     text: TextSpan(
       text: formattedValue,
-      style: TextStyle(
-        color: color,
-        fontSize: 14,
-        fontWeight: FontWeight.normal,
-      ),
+      style: textStyle,
     ),
     textDirection: TextDirection.ltr,
     textAlign: TextAlign.center,
