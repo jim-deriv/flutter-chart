@@ -110,6 +110,9 @@ abstract class InteractiveLayerBehaviour {
   /// without cancellation.
   ///
   /// It can be used to perform any additional actions after a new tool is added
+  ///
+  /// By default, it will update the state to [InteractiveSelectedToolState]
+  /// with the newly added drawing.
   void aNewToolsIsAdded(InteractableDrawing drawing) => updateStateTo(
         InteractiveSelectedToolState(
           selected: drawing,

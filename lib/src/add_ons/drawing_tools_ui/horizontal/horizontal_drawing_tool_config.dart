@@ -24,7 +24,12 @@ class HorizontalDrawingToolConfig extends DrawingToolConfig {
     DrawingData? drawingData,
     List<EdgePoint> edgePoints = const <EdgePoint>[],
     this.lineStyle = const LineStyle(thickness: 0.9, color: Colors.white),
-    this.labelStyle = TextStyles.currentSpotTextStyle,
+    this.labelStyle = const TextStyle(
+      fontSize: 12,
+      fontStyle: FontStyle.normal,
+      fontWeight: FontWeight.w600,
+      height: 1.67, // lineHeight (20px) / fontSize (12px) = 1.67
+    ),
     this.pattern = DrawingPatterns.solid,
     this.enableLabel = true,
     super.number,
