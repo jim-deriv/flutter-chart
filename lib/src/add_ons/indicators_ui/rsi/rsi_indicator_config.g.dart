@@ -8,7 +8,7 @@ part of 'rsi_indicator_config.dart';
 
 RSIIndicatorConfig _$RSIIndicatorConfigFromJson(Map<String, dynamic> json) =>
     RSIIndicatorConfig(
-      period: (json['period'] as num?)?.toInt() ?? 14,
+      period: json['period'] as int? ?? 14,
       fieldType: json['fieldType'] as String? ?? 'close',
       oscillatorLinesConfig: json['oscillatorLinesConfig'] == null
           ? const OscillatorLinesConfig(overboughtValue: 80, oversoldValue: 20)
@@ -19,15 +19,16 @@ RSIIndicatorConfig _$RSIIndicatorConfigFromJson(Map<String, dynamic> json) =>
           : LineStyle.fromJson(json['lineStyle'] as Map<String, dynamic>),
       pinLabels: json['pinLabels'] as bool? ?? false,
       showZones: json['showZones'] as bool? ?? true,
-      pipSize: (json['pipSize'] as num?)?.toInt() ?? 4,
+      pipSize: json['pipSize'] as int? ?? 4,
       showLastIndicator: json['showLastIndicator'] as bool? ?? false,
       title: json['title'] as String?,
-      number: (json['number'] as num?)?.toInt() ?? 0,
+      number: json['number'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$RSIIndicatorConfigToJson(RSIIndicatorConfig instance) =>
     <String, dynamic>{
       'number': instance.number,
+      'title': instance.title,
       'showLastIndicator': instance.showLastIndicator,
       'pipSize': instance.pipSize,
       'period': instance.period,
@@ -36,5 +37,4 @@ Map<String, dynamic> _$RSIIndicatorConfigToJson(RSIIndicatorConfig instance) =>
       'pinLabels': instance.pinLabels,
       'oscillatorLinesConfig': instance.oscillatorLinesConfig,
       'showZones': instance.showZones,
-      'title': instance.title,
     };
