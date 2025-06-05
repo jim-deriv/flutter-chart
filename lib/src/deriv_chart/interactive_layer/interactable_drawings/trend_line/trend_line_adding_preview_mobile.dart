@@ -168,7 +168,6 @@ class TrendLineAddingPreviewMobile
     interactiveLayerBehaviour.updateStateTo(
       interactiveLayerBehaviour.currentState,
       StateChangeAnimationDirection.forward,
-      waitForAnimation: true,
     );
 
     interactableDrawing.onDragStart(
@@ -181,7 +180,6 @@ class TrendLineAddingPreviewMobile
     interactiveLayerBehaviour.updateStateTo(
       interactiveLayerBehaviour.currentState,
       StateChangeAnimationDirection.backward,
-      waitForAnimation: true,
     );
 
     interactableDrawing.onDragEnd(

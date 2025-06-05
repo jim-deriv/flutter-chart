@@ -12,7 +12,7 @@ class InteractiveLayerMobileBehaviour extends InteractiveLayerBehaviour {
   InteractiveLayerMobileBehaviour({super.controller});
 
   @override
-  void onAddDrawingTool(DrawingToolConfig drawingTool) {
+  void startAddingTool(DrawingToolConfig drawingTool) {
     final newState = InteractiveAddingToolStateMobile(
       drawingTool,
       interactiveLayerBehaviour: this,
