@@ -107,7 +107,6 @@ class _SelectedDrawingFloatingMenuState
           child: Row(
             children: <Widget>[
               const Icon(Icons.drag_indicator),
-              const SizedBox(width: 8),
               _buildDrawingMenuOptions(),
               _buildRemoveButton(context),
             ],

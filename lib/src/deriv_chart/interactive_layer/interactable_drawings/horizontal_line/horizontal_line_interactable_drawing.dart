@@ -13,10 +13,10 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawi
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../enums/drawing_tool_state.dart';
 import '../../helpers/paint_helpers.dart';
@@ -250,19 +250,33 @@ class HorizontalLineInteractableDrawing
           );
 
   @override
-  Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate) => SizedBox(
-        width: 16,
-        height: 16,
-        child: ColorSelector(
-          currentColor: config.lineStyle.color,
-          onColorChanged: (Color newColor) => onUpdate(
-            config.copyWith(
-              lineStyle: config.lineStyle.copyWith(color: newColor),
-              labelStyle: config.labelStyle.copyWith(
-                color: newColor,
+  Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate) => Row(
+        children: <Widget>[
+          TextButton(
+            onPressed: () {
+              // update line thickness
+            },
+            child: Text(
+              '${config.lineStyle.thickness}px',
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: ColorSelector(
+              currentColor: config.lineStyle.color,
+              onColorChanged: (Color newColor) => onUpdate(
+                config.copyWith(
+                  lineStyle: config.lineStyle.copyWith(color: newColor),
+                  labelStyle: config.labelStyle.copyWith(
+                    color: newColor,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       );
 }
