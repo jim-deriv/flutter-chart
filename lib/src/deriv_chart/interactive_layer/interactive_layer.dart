@@ -282,16 +282,16 @@ class _InteractiveLayerGestureHandlerState
   void initState() {
     super.initState();
 
-    widget.interactiveLayerBehaviour.init(
-      interactiveLayer: this,
-      onUpdate: () => setState(() {}),
-    );
-
     _stateChangeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 240),
     );
 
+    widget.interactiveLayerBehaviour.init(
+      interactiveLayer: this,
+      onUpdate: () => setState(() {}),
+      stateChangeController: _stateChangeController,
+    );
     // register the callback
     context.read<GestureManagerState>().registerCallback(onTap);
   }

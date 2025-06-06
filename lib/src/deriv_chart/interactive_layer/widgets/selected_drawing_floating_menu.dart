@@ -41,11 +41,23 @@ class _SelectedDrawingFloatingMenuState
   Size _menuSize = Size.zero;
 
   late final InteractiveLayerController _controller;
+  late final Animation<double> _scaleAnimation;
+  late final Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.interactiveLayerBehaviour.controller;
+    _scaleAnimation = CurvedAnimation(
+      parent: Tween<double>(begin: 0.8, end: 1)
+          .animate(widget.interactiveLayerBehaviour.stateChangeController),
+      curve: Curves.easeOut,
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: widget.interactiveLayerBehaviour.stateChangeController,
+      curve: Curves.easeOut,
+    );
 
     // Schedule a post-frame callback to get the menu size
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -96,24 +108,35 @@ class _SelectedDrawingFloatingMenuState
           _controller.floatingMenuPosition = Offset(constrainedX, constrainedY);
           setState(() {});
         },
-        child: Container(
-          decoration: BoxDecoration(
-            // TODO(NA): use a color from theme when the theme specification in
-            // design documents has included the color for this menu.
-            color: CoreDesignTokens.coreColorSolidSlate1100,
-            borderRadius: BorderRadius.circular(8),
+        child: AnimatedBuilder(
+          animation: widget.interactiveLayerBehaviour.stateChangeController,
+          builder: (_, child) => FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              alignment: Alignment.topCenter,
+              child: child,
+            ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Row(
-            children: <Widget>[
-              const Icon(
-                Icons.drag_indicator,
-                color: Colors.white38,
-              ),
-              _buildDrawingMenuOptions(),
-              const SizedBox(width: 4),
-              _buildRemoveButton(context),
-            ],
+          child: Container(
+            decoration: BoxDecoration(
+              // TODO(NA): use a color from theme when the theme specification in
+              // design documents has included the color for this menu.
+              color: CoreDesignTokens.coreColorSolidSlate1100,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              children: <Widget>[
+                const Icon(
+                  Icons.drag_indicator,
+                  color: Colors.white38,
+                ),
+                _buildDrawingMenuOptions(),
+                const SizedBox(width: 4),
+                _buildRemoveButton(context),
+              ],
+            ),
           ),
         ),
       ),

@@ -36,6 +36,9 @@ abstract class InteractiveLayerBehaviour {
 
   late final InteractiveLayerController _controller;
 
+  /// The controller for state changes in the interactive layer.
+  late final AnimationController stateChangeController;
+
   /// The controller for the interactive layer.
   InteractiveLayerController get controller => _controller;
 
@@ -54,10 +57,13 @@ abstract class InteractiveLayerBehaviour {
   void init({
     required InteractiveLayerBase interactiveLayer,
     required VoidCallback onUpdate,
+    required AnimationController stateChangeController,
   }) {
     if (_initialized) {
       return;
     }
+
+    this.stateChangeController = stateChangeController;
 
     _initialized = true;
     this.interactiveLayer = interactiveLayer;
