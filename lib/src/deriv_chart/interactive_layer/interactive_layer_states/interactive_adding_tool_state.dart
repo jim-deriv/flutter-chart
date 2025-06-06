@@ -146,6 +146,8 @@ class InteractiveAddingToolState extends InteractiveState
         ..clearAddingDrawing()
         ..addDrawing(_drawingPreview!.interactableDrawing.getUpdatedConfig());
 
+      _drawingPreview = null;
+
       interactiveLayerBehaviour.updateStateTo(
         InteractiveNormalState(
           interactiveLayerBehaviour: interactiveLayerBehaviour,
