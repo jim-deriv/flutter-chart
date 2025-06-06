@@ -162,12 +162,11 @@ class HorizontalLineInteractableDrawing
         quoteToY: quoteToY,
         value: startPoint!.quote,
         pipSize: chartConfig.pipSize,
+        animationProgress: animationInfo.stateChangePercent,
         size: size,
         textStyle: config.labelStyle,
-        color: config.lineStyle.color
-            .withOpacity(animationInfo.stateChangePercent),
-        backgroundColor: chartTheme.backgroundColor
-            .withOpacity(animationInfo.stateChangePercent),
+        color: config.lineStyle.color,
+        backgroundColor: chartTheme.backgroundColor,
       );
     }
   }

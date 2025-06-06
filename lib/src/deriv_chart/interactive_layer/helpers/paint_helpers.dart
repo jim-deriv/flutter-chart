@@ -168,6 +168,7 @@ void drawValueLabel({
   required int pipSize,
   required Size size,
   required TextStyle textStyle,
+  double animationProgress = 1,
   Color color = Colors.white,
   Color backgroundColor = Colors.transparent,
 }) {
@@ -178,8 +179,12 @@ void drawValueLabel({
   final String formattedValue = value.toStringAsFixed(pipSize);
 
   // Create text painter to measure text dimensions
-  final TextPainter textPainter =
-      _getTextPainter(formattedValue, color, textStyle: textStyle)..layout();
+  final TextPainter textPainter = _getTextPainter(
+    formattedValue,
+    textStyle: textStyle.copyWith(
+      color: textStyle.color?.withOpacity(animationProgress),
+    ),
+  )..layout();
 
   // Create rectangle with padding around the text
   final double rectWidth = textPainter.width + 24;
@@ -197,11 +202,11 @@ void drawValueLabel({
 
   // Draw rounded rectangle
   final Paint rectPaint = Paint()
-    ..color = backgroundColor
+    ..color = backgroundColor.withOpacity(animationProgress)
     ..style = PaintingStyle.fill;
 
   final Paint borderPaint = Paint()
-    ..color = color
+    ..color = color.withOpacity(animationProgress)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1.0;
 
@@ -227,8 +232,7 @@ void drawValueLabel({
 
 /// Returns a [TextPainter] for the given formatted value and color.
 TextPainter _getTextPainter(
-  String formattedValue,
-  Color color, {
+  String formattedValue, {
   TextStyle textStyle = const TextStyle(
     color: Colors.white38,
     fontSize: 14,
