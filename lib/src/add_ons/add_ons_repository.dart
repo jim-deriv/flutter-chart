@@ -119,7 +119,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
 
   @override
   void remove(T config) {
-    final index = items.indexOf(config);
+    final index = items.indexWhere((item) => item.configId == config.configId);
     if (index != -1) {
       removeAt(index);
     }
