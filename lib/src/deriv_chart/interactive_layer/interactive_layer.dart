@@ -24,6 +24,7 @@ import 'interaction_notifier.dart';
 import 'interactive_layer_base.dart';
 import 'enums/state_change_direction.dart';
 import 'interactive_layer_behaviours/interactive_layer_behaviour.dart';
+import 'interactive_layer_states/interactive_normal_state.dart';
 
 /// Interactive layer of the chart package where elements can be drawn and can
 /// be interacted with.
@@ -112,8 +113,25 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
       }
     }
 
+    bool anyToolRemoved = false;
+
     // Remove drawings that are not in the config list
-    _interactableDrawings.removeWhere((id, _) => !configListIds.contains(id));
+    _interactableDrawings.removeWhere((id, _) {
+      if (!configListIds.contains(id)) {
+        anyToolRemoved = true;
+        return true;
+      }
+      return false;
+    });
+
+    if (anyToolRemoved) {
+      widget.interactiveLayerBehaviour.updateStateTo(
+        InteractiveNormalState(
+          interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
+        ),
+        StateChangeAnimationDirection.forward,
+      );
+    }
 
     setState(() {});
   }
