@@ -120,9 +120,19 @@ class _SelectedDrawingFloatingMenuState
         onUpdate: widget.onUpdateDrawing,
       );
 
-  Widget _buildRemoveButton(BuildContext context) => IconButton(
-        icon: const Icon(Icons.delete_outline),
-        color: Colors.red,
-        onPressed: () => widget.onRemoveDrawing(widget.drawing.config),
-      );
+  Widget _buildRemoveButton(BuildContext context) => SizedBox(
+    width: 32,
+    height: 32,
+    child: TextButton(
+          child: const Icon(Icons.delete_outline),
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white38,
+            padding: const EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          onPressed: () => widget.onRemoveDrawing(widget.drawing.config),
+        ),
+  );
 }

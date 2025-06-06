@@ -220,6 +220,9 @@ void drawValueLabel({
       rect.top + (rectHeight - textPainter.height) / 2,
     ),
   );
+
+  // hover for buttons
+  // change cursor stle when hover over grab
 }
 
 /// Returns a [TextPainter] for the given formatted value and color.
