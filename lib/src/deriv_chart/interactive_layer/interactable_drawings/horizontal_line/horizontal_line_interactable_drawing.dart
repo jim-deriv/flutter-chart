@@ -2,7 +2,6 @@ import 'dart:ui' as ui;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/horizontal/horizontal_drawing_tool_config.dart';
-import 'package:deriv_chart/src/add_ons/indicators_ui/widgets/color_selector.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_paint_style.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
@@ -10,6 +9,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/anim
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawing_custom_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/horizontal_line/horizontal_line_adding_preview_desktop.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/widgets/color_picker.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -251,31 +251,44 @@ class HorizontalLineInteractableDrawing
   @override
   Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate) => Row(
         children: <Widget>[
-          TextButton(
-            onPressed: () {
-              // update line thickness
-            },
-            child: Text(
-              '${config.lineStyle.thickness}px',
-              style: const TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 16,
-            height: 16,
-            child: ColorSelector(
-              currentColor: config.lineStyle.color,
-              onColorChanged: (Color newColor) => onUpdate(
-                config.copyWith(
-                  lineStyle: config.lineStyle.copyWith(color: newColor),
-                  labelStyle: config.labelStyle.copyWith(
-                    color: newColor,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _buildLineThicknessIcon(),
+          const SizedBox(width: 4),
+          _buildColorPickerIcon(onUpdate)
         ],
+      );
+
+  Widget _buildColorPickerIcon(UpdateDrawingTool onUpdate) => SizedBox(
+        width: 44,
+        height: 44,
+        child: ColorPicker(
+          currentColor: config.lineStyle.color,
+          onColorChanged: (newColor) => onUpdate(config.copyWith(
+            lineStyle: config.lineStyle.copyWith(color: newColor),
+            labelStyle: config.labelStyle.copyWith(color: newColor),
+          )),
+        ),
+      );
+
+  Widget _buildLineThicknessIcon() => SizedBox(
+        width: 44,
+        height: 44,
+        child: TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white38,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          onPressed: () {
+            // update line thickness
+          },
+          child: Text(
+            '${config.lineStyle.thickness.toInt()}px',
+            style: const TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+        ),
       );
 }

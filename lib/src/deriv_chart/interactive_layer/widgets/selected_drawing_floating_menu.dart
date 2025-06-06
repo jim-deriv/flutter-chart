@@ -106,8 +106,12 @@ class _SelectedDrawingFloatingMenuState
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: <Widget>[
-              const Icon(Icons.drag_indicator),
+              const Icon(
+                Icons.drag_indicator,
+                color: Colors.white38,
+              ),
               _buildDrawingMenuOptions(),
+              const SizedBox(width: 4),
               _buildRemoveButton(context),
             ],
           ),
@@ -121,18 +125,18 @@ class _SelectedDrawingFloatingMenuState
       );
 
   Widget _buildRemoveButton(BuildContext context) => SizedBox(
-    width: 32,
-    height: 32,
-    child: TextButton(
-          child: const Icon(Icons.delete_outline),
+        width: 44,
+        height: 44,
+        child: TextButton(
+          child: const Icon(Icons.delete_outline, size: 24),
           style: TextButton.styleFrom(
-            foregroundColor: Colors.white38,
-            padding: const EdgeInsets.all(8),
+            foregroundColor: Colors.red,
+            alignment: Alignment.center,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
             ),
           ),
           onPressed: () => widget.onRemoveDrawing(widget.drawing.config),
         ),
-  );
+      );
 }
