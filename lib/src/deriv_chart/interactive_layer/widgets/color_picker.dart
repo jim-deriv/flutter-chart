@@ -52,6 +52,7 @@ class _ColorPickerIcon extends StatelessWidget {
         onPressed: onTap,
         style: TextButton.styleFrom(
           foregroundColor: Colors.white38,
+          padding: const EdgeInsets.all(0),
           alignment: Alignment.center,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
@@ -67,8 +68,8 @@ class _ColorPickerIcon extends StatelessWidget {
       );
 
   Container _buildColorBox() => Container(
-        width: 16,
-        height: 16,
+        width: 14,
+        height: 14,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(4),

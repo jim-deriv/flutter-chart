@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../interactive_layer_behaviours/interactive_layer_behaviour.dart';
 import '../interactive_layer_controller.dart';
 
+// TODO(NA): get the colors and dimensions from the [ChartTheme].
 /// A floating menu that appears when a drawing is selected.
 class SelectedDrawingFloatingMenu extends StatefulWidget {
   /// Creates a floating menu for the selected drawing.
@@ -128,10 +129,7 @@ class _SelectedDrawingFloatingMenuState
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Row(
               children: <Widget>[
-                const Icon(
-                  Icons.drag_indicator,
-                  color: Colors.white38,
-                ),
+                _buildDragIcon(),
                 _buildDrawingMenuOptions(),
                 const SizedBox(width: 4),
                 _buildRemoveButton(context),
@@ -143,18 +141,29 @@ class _SelectedDrawingFloatingMenuState
     );
   }
 
+  Widget _buildDragIcon() => SizedBox(
+        width: 32,
+        height: 32,
+        child: Icon(
+          Icons.drag_indicator,
+          size: 18,
+          color: CoreDesignTokens.coreColorSolidSlate50.withOpacity(0.4),
+        ),
+      );
+
   Widget _buildDrawingMenuOptions() => widget.drawing.getToolBarMenu(
         onUpdate: widget.onUpdateDrawing,
       );
 
   Widget _buildRemoveButton(BuildContext context) => SizedBox(
-        width: 44,
-        height: 44,
+        width: 32,
+        height: 32,
         child: TextButton(
-          child: const Icon(Icons.delete_outline, size: 24),
+          child: const Icon(Icons.delete_outline, size: 18),
           style: TextButton.styleFrom(
             foregroundColor: Colors.red,
             alignment: Alignment.center,
+            padding: const EdgeInsets.all(0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
             ),

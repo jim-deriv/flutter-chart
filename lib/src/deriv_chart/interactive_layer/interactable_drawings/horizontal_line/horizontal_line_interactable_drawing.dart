@@ -13,6 +13,7 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/widgets/color_pick
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -254,8 +255,8 @@ class HorizontalLineInteractableDrawing
       );
 
   Widget _buildColorPickerIcon(UpdateDrawingTool onUpdate) => SizedBox(
-        width: 44,
-        height: 44,
+        width: 32,
+        height: 32,
         child: ColorPicker(
           currentColor: config.lineStyle.color,
           onColorChanged: (newColor) => onUpdate(config.copyWith(
@@ -266,8 +267,8 @@ class HorizontalLineInteractableDrawing
       );
 
   Widget _buildLineThicknessIcon() => SizedBox(
-        width: 44,
-        height: 44,
+        width: 32,
+        height: 32,
         child: TextButton(
           style: TextButton.styleFrom(
             foregroundColor: Colors.white38,
@@ -282,7 +283,12 @@ class HorizontalLineInteractableDrawing
           },
           child: Text(
             '${config.lineStyle.thickness.toInt()}px',
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(
+              fontSize: 14,
+              color: CoreDesignTokens.coreColorSolidSlate50,
+              fontWeight: FontWeight.normal,
+              height: 2,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
