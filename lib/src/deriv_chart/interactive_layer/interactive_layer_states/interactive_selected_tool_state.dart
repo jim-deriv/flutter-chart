@@ -116,6 +116,11 @@ class InteractiveSelectedToolState extends InteractiveState
     final InteractableDrawing<DrawingToolConfig>? hitDrawing =
         anyDrawingHit(details.localPosition);
 
+    if (hitDrawing?.id == selected.id) {
+      // If the tapped drawing is the same as the selected one, do nothing.
+      return;
+    }
+
     if (hitDrawing != null) {
       // when a tool is tap/hit, keep selected state. it might be the same
       // tool or a different tool.
