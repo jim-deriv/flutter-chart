@@ -155,8 +155,6 @@ class InteractiveSelectedToolState extends InteractiveState
             return;
           }
 
-          interactiveLayer.removeDrawing(config);
-
           interactiveLayerBehaviour.updateStateTo(
             InteractiveNormalState(
               interactiveLayerBehaviour: interactiveLayerBehaviour,
@@ -164,6 +162,8 @@ class InteractiveSelectedToolState extends InteractiveState
             StateChangeAnimationDirection.backward,
             waitForAnimation: false,
           );
+
+          interactiveLayer.removeDrawing(config);
         },
       );
 }
