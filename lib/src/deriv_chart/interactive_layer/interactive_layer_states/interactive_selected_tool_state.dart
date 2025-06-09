@@ -92,6 +92,7 @@ class InteractiveSelectedToolState extends InteractiveState
             interactiveLayerBehaviour: interactiveLayerBehaviour,
           )..onPanStart(details),
           StateChangeAnimationDirection.forward,
+          waitForAnimation: false,
         );
       }
     }
