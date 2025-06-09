@@ -49,9 +49,10 @@ abstract class InteractableDrawing<T extends DrawingToolConfig>
 
   /// Returns the widget for the toolbar menu of the drawing tool.
   /// [config] is the current configuration of the drawing tool.
-  Widget getToolBarMenu({
-    required UpdateDrawingTool onUpdate,
-  }) {
+  ///
+  /// The [onUpdate] callback is called when the user updates the drawing tool
+  /// configuration through the toolbar menu.
+  Widget getToolBarMenu({required UpdateDrawingTool onUpdate}) {
     final toolBar = buildDrawingToolBarMenu((config) {
       _prevConfig = this.config;
       this.config = config as T;
