@@ -91,12 +91,11 @@ abstract class InteractiveLayerBehaviour {
     bool waitForAnimation = true,
     bool animate = true,
   }) async {
-    if (animate) {
-      if (waitForAnimation) {
-        await interactiveLayer.animateStateChange(direction);
-      } else {
-        unawaited(interactiveLayer.animateStateChange(direction));
-      }
+    if (waitForAnimation) {
+      await interactiveLayer.animateStateChange(direction, animate: animate);
+    } else {
+      unawaited(
+          interactiveLayer.animateStateChange(direction, animate: animate));
     }
 
     _controller.currentState = newState;
@@ -125,6 +124,7 @@ abstract class InteractiveLayerBehaviour {
           interactiveLayerBehaviour: this,
         ),
         StateChangeAnimationDirection.forward,
+        animate: false,
       );
 
   /// The drawings of the interactive layer.

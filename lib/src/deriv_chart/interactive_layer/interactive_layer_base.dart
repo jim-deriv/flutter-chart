@@ -19,7 +19,10 @@ abstract class InteractiveLayerBase {
   /// and from [InteractiveSelectedToolState] to [InteractiveNormalState] can be
   /// backward. so the [InteractiveLayerBase] can animate the transition
   /// accordingly.
-  Future<void> animateStateChange(StateChangeAnimationDirection direction);
+  Future<void> animateStateChange(
+    StateChangeAnimationDirection direction, {
+    bool animate = true,
+  });
 
   /// The drawings of the interactive layer.
   List<InteractableDrawing<DrawingToolConfig>> get drawings;

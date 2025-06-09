@@ -332,16 +332,29 @@ class _InteractiveLayerGestureHandlerState
 
   @override
   Future<void> animateStateChange(
-      StateChangeAnimationDirection direction) async {
-    await _runAnimation(direction);
+    StateChangeAnimationDirection direction, {
+    bool animate = true,
+  }) async {
+    await _runAnimation(direction, animate);
   }
 
-  Future<void> _runAnimation(StateChangeAnimationDirection direction) async {
+  Future<void> _runAnimation(
+    StateChangeAnimationDirection direction,
+    bool animate,
+  ) async {
     if (direction == StateChangeAnimationDirection.forward) {
       _stateChangeController.reset();
-      await _stateChangeController.forward();
+      if (animate) {
+        await _stateChangeController.forward();
+      } else {
+        _stateChangeController.value = 1.0;
+      }
     } else {
-      await _stateChangeController.reverse(from: 1);
+      if (animate) {
+        await _stateChangeController.reverse(from: 1);
+      } else {
+        _stateChangeController.value = 0.0;
+      }
     }
   }
 
