@@ -505,4 +505,11 @@ class _InteractiveLayerGestureHandlerState
 
   @override
   Size? get layerSize => _size;
+
+  @override
+  void dispose() {
+    _interactionNotifier.dispose();
+    _stateChangeController.dispose();
+    super.dispose();
+  }
 }
