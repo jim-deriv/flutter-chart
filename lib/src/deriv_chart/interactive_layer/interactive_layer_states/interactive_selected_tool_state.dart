@@ -130,6 +130,7 @@ class InteractiveSelectedToolState extends InteractiveState
           interactiveLayerBehaviour: interactiveLayerBehaviour,
         ),
         StateChangeAnimationDirection.forward,
+        waitForAnimation: false,
       );
     } else {
       // If tap is on empty space, return to normal state.
