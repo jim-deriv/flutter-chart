@@ -357,7 +357,6 @@ class TrendLineInteractableDrawing
           );
 
   @override
-  Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate) {
-    throw UnimplementedError();
-  }
+  Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate) =>
+      const Text('[Trend Line Options]');
 }

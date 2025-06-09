@@ -159,8 +159,8 @@ class InteractiveAddingToolState extends InteractiveState
         ),
         StateChangeAnimationDirection.forward,
       );
-    });
 
-    _drawingPreview = null;
+      _drawingPreview = null;
+    });
   }
 }

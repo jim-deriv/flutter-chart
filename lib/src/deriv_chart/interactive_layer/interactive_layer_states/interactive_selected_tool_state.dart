@@ -150,6 +150,10 @@ class InteractiveSelectedToolState extends InteractiveState
           );
         },
         onRemoveDrawing: (config) {
+          if (selected.id != config.configId) {
+            return;
+          }
+
           interactiveLayer.removeDrawing(config);
 
           interactiveLayerBehaviour.updateStateTo(
