@@ -6,6 +6,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/drawing_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/text_style_json_converter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/horizontal_line/horizontal_line_interactable_drawing.dart';
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:deriv_chart/src/theme/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +24,11 @@ class HorizontalDrawingToolConfig extends DrawingToolConfig {
     String? configId,
     DrawingData? drawingData,
     List<EdgePoint> edgePoints = const <EdgePoint>[],
-    this.lineStyle = const LineStyle(color: Colors.white),
+    this.lineStyle =
+        const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700),
     this.labelStyle = const TextStyle(
-      color: Colors.white,
+      color: CoreDesignTokens.coreColorSolidBlue700,
       fontSize: 12,
-      fontStyle: FontStyle.normal,
-      fontWeight: FontWeight.w600,
-      height: 1.67, // lineHeight (20px) / fontSize (12px) = 1.67
     ),
     this.pattern = DrawingPatterns.solid,
     this.enableLabel = true,

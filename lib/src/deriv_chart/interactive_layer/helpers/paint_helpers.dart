@@ -188,7 +188,7 @@ void drawValueLabel({
 
   // Create rectangle with padding around the text
   final double rectWidth = textPainter.width + 24;
-  const double rectHeight = 30; // Fixed height to match the image
+  const double rectHeight = 24; // Fixed height to match the image
 
   final double rectRight = size.width;
   final double rectLeft = rectRight - rectWidth;

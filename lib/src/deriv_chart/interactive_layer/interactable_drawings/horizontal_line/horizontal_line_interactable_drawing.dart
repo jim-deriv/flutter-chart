@@ -109,11 +109,8 @@ class HorizontalLineInteractableDrawing
           Offset(size.width, quoteToY(startPoint!.quote)); // End at right edge
 
       // Use glowy paint style if selected, otherwise use normal paint style
-      final Paint paint = drawingState.contains(DrawingToolState.selected) ||
-              drawingState.contains(DrawingToolState.dragging)
-          ? paintStyle.linePaintStyle(
-              lineStyle.color, 1 + 1 * animationInfo.stateChangePercent)
-          : paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness);
+      final Paint paint =
+          paintStyle.linePaintStyle(lineStyle.color, lineStyle.thickness);
 
       canvas.drawLine(startOffset, endOffset, paint);
 
