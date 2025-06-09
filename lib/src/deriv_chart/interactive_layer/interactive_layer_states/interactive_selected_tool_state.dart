@@ -131,6 +131,7 @@ class InteractiveSelectedToolState extends InteractiveState
         ),
         StateChangeAnimationDirection.forward,
         waitForAnimation: false,
+        animate: false,
       );
     } else {
       // If tap is on empty space, return to normal state.
