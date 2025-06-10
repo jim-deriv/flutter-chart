@@ -2,6 +2,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/functions/m
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_scale_model.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/y_axis/y_axis_config.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_dot_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
@@ -373,6 +374,28 @@ abstract class DataSeries<T extends Tick> extends Series {
     double xCenter,
     int granularity,
     double Function(int) xFromEpoch,
+    ChartTheme theme,
+  );
+
+  /// Returns a CrosshairDotPainter for painting a dot at the crosshair position.
+  /// Each series type should implement this to return the appropriate dot painter.
+  ///
+  /// This method is responsible for creating a painter that will draw a dot
+  /// at the crosshair position for chart types that support dot visualization.
+  /// Different chart types will implement this differently - some may return
+  /// a dot painter with visible colors, while others may return a dot painter
+  /// with transparent colors for no-op behavior.
+  ///
+  /// For line charts and similar types, this typically involves drawing a dot
+  /// at the crosshair position. For candle-based charts, this returns a
+  /// CrosshairDotPainter with transparent colors since they don't show dots.
+  ///
+  /// Parameters:
+  /// * [theme] - The chart theme containing colors and styling information.
+  ///
+  /// Returns:
+  /// A CrosshairDotPainter that will paint the dot (or transparent for no-op).
+  CrosshairDotPainter getCrosshairDotPainter(
     ChartTheme theme,
   );
 }

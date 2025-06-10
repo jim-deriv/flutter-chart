@@ -157,3 +157,4 @@ export 'src/theme/colors.dart';
 export 'src/add_ons/drawing_tools_ui/drawing_tools_dialog.dart';
 export 'src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
 export 'src/deriv_chart/interactive_layer/crosshair/crosshair_candle_highlight_painter.dart';
+export 'src/deriv_chart/interactive_layer/crosshair/crosshair_dot_painter.dart';

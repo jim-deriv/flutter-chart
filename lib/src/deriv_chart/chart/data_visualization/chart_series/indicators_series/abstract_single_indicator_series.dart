@@ -1,3 +1,4 @@
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_dot_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_line_highlight_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
@@ -198,6 +199,18 @@ abstract class AbstractSingleIndicatorSeries extends DataSeries<Tick> {
       xCenter: xCenter,
       pointColor: Colors.transparent,
       pointSize: 0,
+    );
+  }
+
+  @override
+  CrosshairDotPainter getCrosshairDotPainter(
+    ChartTheme theme,
+  ) {
+    // Indicator series support dots, so return a CrosshairDotPainter
+    // with colors from the theme
+    return CrosshairDotPainter(
+      dotColor: theme.currentSpotDotColor,
+      dotBorderColor: theme.currentSpotDotEffect,
     );
   }
 }

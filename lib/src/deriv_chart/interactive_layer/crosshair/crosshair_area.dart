@@ -146,8 +146,6 @@ class CrosshairArea extends StatelessWidget {
 
     final XAxisModel xAxis = context.watch<XAxisModel>();
     final ChartTheme theme = context.read<ChartTheme>();
-    final Color dotColor = theme.currentSpotDotColor;
-    final Color dotEffect = theme.currentSpotDotEffect;
     return Stack(
       clipBehavior: Clip.none,
       children: <Widget>[
@@ -172,10 +170,8 @@ class CrosshairArea extends StatelessWidget {
           duration: animationDuration,
           child: CustomPaint(
             size: Size(1, constraints.maxHeight),
-            painter: crosshairVariant == CrosshairVariant.smallScreen &&
-                    tick is! Candle
-                ? CrosshairDotPainter(
-                    dotColor: dotColor, dotBorderColor: dotEffect)
+            painter: crosshairVariant == CrosshairVariant.smallScreen
+                ? mainSeries.getCrosshairDotPainter(theme)
                 : null,
           ),
         ),

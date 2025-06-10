@@ -1,9 +1,11 @@
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_candle_highlight_painter.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_dot_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_highlight_painter.dart';
 import 'package:deriv_chart/src/models/candle.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/barrier_style.dart';
 import 'package:deriv_chart/src/theme/painting_styles/candle_style.dart';
+import 'package:flutter/material.dart';
 
 import '../../data_series.dart';
 import '../../series_painter.dart';
@@ -86,6 +88,18 @@ class CandleSeries extends OHLCTypeSeries {
       wickHighlightColor: isBullishCandle
           ? theme.candleBullishWickActive
           : theme.candleBearishWickActive,
+    );
+  }
+
+  @override
+  CrosshairDotPainter getCrosshairDotPainter(
+    ChartTheme theme,
+  ) {
+    // Candle series doesn't support dots, so return a CrosshairDotPainter
+    // with transparent colors for no-op behavior
+    return const CrosshairDotPainter(
+      dotColor: Colors.transparent,
+      dotBorderColor: Colors.transparent,
     );
   }
 }
