@@ -340,25 +340,9 @@ class CrosshairController extends ValueNotifier<CrosshairState> {
       return _findClosestTick(epoch);
     } else {
       // Outside data range: create virtual tick using cursor's Y position for quote
-      final Tick latestTick = entries.last;
-
       final double quote = quoteFromCanvasY!(y);
 
-      if (latestTick is Candle) {
-        return Candle(
-          epoch: epoch,
-          open: quote,
-          close: quote,
-          high: quote,
-          low: quote,
-          currentEpoch: epoch,
-        );
-      } else {
-        return Tick(
-          epoch: epoch,
-          quote: quote,
-        );
-      }
+      return series.createVirtualTick(epoch, quote);
     }
   }
 

@@ -7,14 +7,12 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshai
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/crosshair_variant.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/large_screen_crosshair_line_painter.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/crosshair/small_screen_crosshair_line_painter.dart';
-import 'package:deriv_chart/src/models/candle.dart';
 import 'package:deriv_chart/src/models/tick.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'crosshair_details.dart';
-import 'crosshair_dot_painter.dart';
 
 /// A widget that displays crosshair details on a chart.
 ///
@@ -102,7 +100,7 @@ class CrosshairArea extends StatelessWidget {
   double _calculateDetailsPosition(
       {required double cursorY, required Tick tick}) {
     // Height of the details information box in pixels
-    final double detailsBoxHeight = tick is Candle ? 100 : 50;
+    final double detailsBoxHeight = mainSeries.getCrosshairDetailsBoxHeight();
 
     // Additional vertical gap between the cursor and the details box
     // This ensures the box doesn't overlap with or crowd the cursor

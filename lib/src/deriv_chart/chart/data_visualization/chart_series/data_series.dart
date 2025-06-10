@@ -398,4 +398,34 @@ abstract class DataSeries<T extends Tick> extends Series {
   CrosshairDotPainter getCrosshairDotPainter(
     ChartTheme theme,
   );
+
+  /// Returns the height of the crosshair details box for this series type.
+  /// Each series type should implement this to return the appropriate height.
+  ///
+  /// This method is responsible for providing the height in pixels that the
+  /// crosshair details information box should have for this specific series type.
+  /// Different chart types require different amounts of space to display their
+  /// information - candle charts typically need more space to show OHLC data,
+  /// while line charts need less space for just price information.
+  ///
+  /// Returns:
+  /// The height in pixels for the crosshair details box.
+  double getCrosshairDetailsBoxHeight();
+
+  /// Creates a virtual tick for crosshair display when cursor is outside data range.
+  /// Each series type should implement this to return the appropriate tick type.
+  ///
+  /// This method is responsible for creating a virtual data point that represents
+  /// the cursor position when it's outside the actual data range. Different chart
+  /// types will create different types of ticks - line charts create simple Tick
+  /// objects, while candle charts create Candle objects with all OHLC values
+  /// set to the same quote value.
+  ///
+  /// Parameters:
+  /// * [epoch] - The timestamp for the virtual tick.
+  /// * [quote] - The price/quote value for the virtual tick.
+  ///
+  /// Returns:
+  /// A virtual tick of the appropriate type for this series.
+  T createVirtualTick(int epoch, double quote);
 }

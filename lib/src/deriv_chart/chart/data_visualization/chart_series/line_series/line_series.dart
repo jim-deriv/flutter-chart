@@ -78,4 +78,17 @@ class LineSeries extends DataSeries<Tick> {
       dotBorderColor: theme.currentSpotDotEffect,
     );
   }
+
+  @override
+  double getCrosshairDetailsBoxHeight() {
+    return 50;
+  }
+
+  @override
+  Tick createVirtualTick(int epoch, double quote) {
+    return Tick(
+      epoch: epoch,
+      quote: quote,
+    );
+  }
 }

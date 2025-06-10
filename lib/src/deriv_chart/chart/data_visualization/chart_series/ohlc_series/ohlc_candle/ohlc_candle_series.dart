@@ -100,4 +100,21 @@ class OhlcCandleSeries extends OHLCTypeSeries {
       dotBorderColor: Colors.transparent,
     );
   }
+
+  @override
+  double getCrosshairDetailsBoxHeight() {
+    return 100;
+  }
+
+  @override
+  Candle createVirtualTick(int epoch, double quote) {
+    return Candle(
+      epoch: epoch,
+      open: quote,
+      close: quote,
+      high: quote,
+      low: quote,
+      currentEpoch: epoch,
+    );
+  }
 }
