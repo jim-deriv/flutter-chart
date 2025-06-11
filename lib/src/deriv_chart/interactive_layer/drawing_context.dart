@@ -7,10 +7,7 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_
 /// layer.
 class DrawingContext {
   /// Initializes the [DrawingContext].
-  DrawingContext({
-    required this.fullSize,
-    required this.contentSize,
-  });
+  DrawingContext({required this.fullSize, required this.contentSize});
 
   /// The full size of the chart layer that [InteractiveLayerBase] can show
   /// drawings on it.

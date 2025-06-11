@@ -79,6 +79,13 @@ class HorizontalLineInteractableDrawing
       return false;
     }
 
+    final isNotSelected = !state.contains(DrawingToolState.selected);
+    final isOutsideContent = offset.dx > drawingContext.contentSize.width;
+
+    if (isNotSelected && isOutsideContent) {
+      return false;
+    }
+
     // Convert start and end points from epoch/quote to screen coordinates
     final Offset startOffset = Offset(
       epochToX(startPoint!.epoch),

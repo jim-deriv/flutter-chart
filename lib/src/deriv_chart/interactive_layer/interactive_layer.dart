@@ -5,6 +5,7 @@ import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/multiple_animated_builder.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/y_axis/y_axis_config.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/drawing_context.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_states/interactive_selected_tool_state.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
@@ -369,9 +370,14 @@ class _InteractiveLayerGestureHandlerState
   Widget build(BuildContext context) {
     final XAxisModel xAxis = context.watch<XAxisModel>();
     return LayoutBuilder(builder: (_, BoxConstraints constraints) {
+      final YAxisConfig yAxisConfig = YAxisConfig.instance;
+
       _drawingContext = DrawingContext(
         fullSize: Size(constraints.maxWidth, constraints.maxHeight),
-        contentSize: Size(constraints.maxWidth, constraints.maxHeight),
+        contentSize: Size(
+          constraints.maxWidth - yAxisConfig.cachedLabelWidth!,
+          constraints.maxHeight,
+        ),
       );
 
       return MouseRegion(
