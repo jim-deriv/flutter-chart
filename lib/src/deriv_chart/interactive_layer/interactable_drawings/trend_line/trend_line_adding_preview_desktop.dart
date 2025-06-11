@@ -12,6 +12,7 @@ import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
+import '../../helpers/types.dart';
 import '../drawing_adding_preview.dart';
 import 'adding_tool_alignment_cross_hair.dart';
 import 'trend_line_interactable_drawing.dart';

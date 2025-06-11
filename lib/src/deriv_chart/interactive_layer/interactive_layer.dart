@@ -5,6 +5,7 @@ import 'package:deriv_chart/src/add_ons/repository.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/gestures/gesture_manager.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/multiple_animated_builder.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/x_axis_model.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/drawing_context.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_states/interactive_selected_tool_state.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
@@ -108,7 +109,10 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
     for (final config in widget.drawingToolsRepo.items) {
       if (!_interactableDrawings.containsKey(config.configId)) {
         // Add new drawing if it doesn't exist
-        final drawing = config.getInteractableDrawing();
+        final drawing = config.getInteractableDrawing(
+          widget.interactiveLayerBehaviour.interactiveLayer.drawingContext,
+          widget.interactiveLayerBehaviour.getToolState,
+        );
         _interactableDrawings[config.configId!] = drawing;
       }
     }
@@ -276,7 +280,10 @@ class _InteractiveLayerGestureHandlerState
   AnimationController? get stateChangeAnimationController =>
       _stateChangeController;
 
-  Size? _size;
+  DrawingContext _drawingContext = DrawingContext(
+    fullSize: Size.zero,
+    contentSize: Size.zero,
+  );
 
   @override
   void initState() {
@@ -362,7 +369,10 @@ class _InteractiveLayerGestureHandlerState
   Widget build(BuildContext context) {
     final XAxisModel xAxis = context.watch<XAxisModel>();
     return LayoutBuilder(builder: (_, BoxConstraints constraints) {
-      _size = Size(constraints.maxWidth, constraints.maxHeight);
+      _drawingContext = DrawingContext(
+        fullSize: Size(constraints.maxWidth, constraints.maxHeight),
+        contentSize: Size(constraints.maxWidth, constraints.maxHeight),
+      );
 
       return MouseRegion(
         onHover: (event) {
@@ -504,12 +514,12 @@ class _InteractiveLayerGestureHandlerState
       widget.onRemoveDrawing?.call(drawing);
 
   @override
-  Size? get layerSize => _size;
-
-  @override
   void dispose() {
     _interactionNotifier.dispose();
     _stateChangeController.dispose();
     super.dispose();
   }
+
+  @override
+  DrawingContext get drawingContext => _drawingContext;
 }
