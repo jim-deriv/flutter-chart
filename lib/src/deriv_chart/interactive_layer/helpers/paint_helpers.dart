@@ -161,6 +161,7 @@ class CircularIntervalList<T> {
 ///
 /// This draws a rounded rectangle with the formatted value inside it.
 /// The value is formatted according to the provided pip size.
+/// If [addNeonEffect] is true, it will add a neon glow effect around the label.
 void drawValueLabel({
   required Canvas canvas,
   required QuoteToY quoteToY,
@@ -171,6 +172,10 @@ void drawValueLabel({
   double animationProgress = 1,
   Color color = Colors.white,
   Color backgroundColor = Colors.transparent,
+  bool addNeonEffect = false,
+  double neonOpacity = 0.4,
+  double neonStrokeWidth = 8,
+  double neonBlurRadius = 6,
 }) {
   // Calculate Y position based on the value
   final double yPosition = quoteToY(value);
@@ -200,6 +205,20 @@ void drawValueLabel({
     yPosition + rectHeight / 2,
   );
 
+  final RRect roundedRect =
+      RRect.fromRectAndRadius(rect, const Radius.circular(4));
+
+  // Draw neon effect if requested
+  if (addNeonEffect) {
+    final Paint neonPaint = Paint()
+      ..color = color.withOpacity(neonOpacity)
+      ..strokeWidth = neonStrokeWidth * animationProgress
+      ..style = PaintingStyle.stroke
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, neonBlurRadius);
+
+    canvas.drawRRect(roundedRect, neonPaint);
+  }
+
   // Draw rounded rectangle
   final Paint rectPaint = Paint()
     ..color = backgroundColor.withOpacity(animationProgress)
@@ -211,8 +230,6 @@ void drawValueLabel({
     ..strokeWidth = 1.0;
 
   // Draw the background and border
-  final RRect roundedRect =
-      RRect.fromRectAndRadius(rect, const Radius.circular(4));
   canvas
     ..drawRRect(roundedRect, rectPaint)
     ..drawRRect(roundedRect, borderPaint);
@@ -225,9 +242,6 @@ void drawValueLabel({
       rect.top + (rectHeight - textPainter.height) / 2,
     ),
   );
-
-  // hover for buttons
-  // change cursor stle when hover over grab
 }
 
 /// Returns a [TextPainter] for the given formatted value and color.

@@ -165,6 +165,7 @@ class HorizontalLineInteractableDrawing
         textStyle: config.labelStyle,
         color: config.lineStyle.color,
         backgroundColor: chartTheme.backgroundColor,
+        addNeonEffect: true,
       );
     }
   }
