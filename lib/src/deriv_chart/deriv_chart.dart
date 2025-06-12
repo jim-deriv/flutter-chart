@@ -27,7 +27,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'interactive_layer/interactive_layer_behaviours/interactive_layer_behaviour.dart';
 import 'interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import 'interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
-import 'interactive_layer/interactive_layer_controller.dart';
 
 /// A wrapper around the [Chart] which handles adding indicators to the chart.
 class DerivChart extends StatefulWidget {
