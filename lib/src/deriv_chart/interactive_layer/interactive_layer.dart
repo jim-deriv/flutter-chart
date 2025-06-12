@@ -85,17 +85,6 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
   final Map<String, InteractableDrawing> _interactableDrawings =
       <String, InteractableDrawing>{};
 
-  /// Timers for debouncing repository updates
-  ///
-  /// We use a map to have one timer per each drawing tool config. This is
-  /// because the request to update the config of different tools can come at
-  /// the same time. If we use only one timer a new request from a different
-  /// tool will cancel the previous one.
-  final Map<String, Timer> _debounceTimers = <String, Timer>{};
-
-  /// Duration for debouncing repository updates (1-sec is a good balance)
-  static const Duration _debounceDuration = Duration(milliseconds: 300);
-
   @override
   void initState() {
     super.initState();
@@ -149,30 +138,23 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
       return;
     }
 
-    // Cancel any existing timer
-    _debounceTimers[configId]?.cancel();
+    if (!mounted) {
+      return;
+    }
 
-    // Create a new timer
-    _debounceTimers[configId] = Timer(_debounceDuration, () {
-      // Only proceed if the widget is still mounted
-      if (!mounted) {
-        return;
-      }
+    final Repository<DrawingToolConfig> repo =
+        context.read<Repository<DrawingToolConfig>>();
 
-      final Repository<DrawingToolConfig> repo =
-          context.read<Repository<DrawingToolConfig>>();
+    // Find the index of the config in the repository
+    final int index =
+        repo.items.indexWhere((config) => config.configId == drawing.configId);
 
-      // Find the index of the config in the repository
-      final int index = repo.items
-          .indexWhere((config) => config.configId == drawing.configId);
+    if (index == -1) {
+      return; // Config not found
+    }
 
-      if (index == -1) {
-        return; // Config not found
-      }
-
-      // Update the config in the repository
-      repo.updateAt(index, drawing);
-    });
+    // Update the config in the repository
+    repo.updateAt(index, drawing);
   }
 
   DrawingToolConfig _addDrawingToRepo(DrawingToolConfig drawing) {
@@ -187,11 +169,6 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
 
   @override
   void dispose() {
-    // Cancel the debounce timers when the widget is disposed
-    for (final Timer timer in _debounceTimers.values) {
-      timer.cancel();
-    }
-    _debounceTimers.clear();
 
     widget.drawingToolsRepo.removeListener(syncDrawingsWithConfigs);
     super.dispose();
