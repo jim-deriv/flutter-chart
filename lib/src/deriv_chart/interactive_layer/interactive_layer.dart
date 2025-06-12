@@ -169,7 +169,6 @@ class _InteractiveLayerState extends State<InteractiveLayer> {
 
   @override
   void dispose() {
-
     widget.drawingToolsRepo.removeListener(syncDrawingsWithConfigs);
     super.dispose();
   }
