@@ -214,10 +214,8 @@ class _DerivChartState extends State<DerivChart> {
 
     _interactiveLayerBehaviour = widget.interactiveLayerBehaviour ??
         (kIsWeb
-            ? InteractiveLayerDesktopBehaviour(
-                controller: InteractiveLayerController())
-            : InteractiveLayerMobileBehaviour(
-                controller: InteractiveLayerController()));
+            ? InteractiveLayerDesktopBehaviour()
+            : InteractiveLayerMobileBehaviour());
 
     _initRepos();
   }
