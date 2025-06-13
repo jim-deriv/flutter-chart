@@ -935,30 +935,6 @@ class ComponentDesignTokens {
   static const componentButtonIconFailTertiary =
       CoreDesignTokens.coreColorSolidRed700;
 
-  /// componentButtonIconGooglePrimary with value: {core.color.solid.slate.1400}
-  static const componentButtonIconGooglePrimary =
-      CoreDesignTokens.coreColorSolidSlate1400;
-
-  /// componentButtonIconGoogleSecondary with value: {core.color.solid.slate.1400}
-  static const componentButtonIconGoogleSecondary =
-      CoreDesignTokens.coreColorSolidSlate1400;
-
-  /// componentButtonIconFacebookPrimary with value: {core.color.solid.slate.50}
-  static const componentButtonIconFacebookPrimary =
-      CoreDesignTokens.coreColorSolidSlate50;
-
-  /// componentButtonIconFacebookSecondary with value: {core.color.solid.slate.1400}
-  static const componentButtonIconFacebookSecondary =
-      CoreDesignTokens.coreColorSolidSlate1400;
-
-  /// componentButtonIconApplePrimary with value: {core.color.solid.slate.50}
-  static const componentButtonIconApplePrimary =
-      CoreDesignTokens.coreColorSolidSlate50;
-
-  /// componentButtonIconAppleSecondary with value: {core.color.solid.slate.1400}
-  static const componentButtonIconAppleSecondary =
-      CoreDesignTokens.coreColorSolidSlate1400;
-
   /// componentButtonLabelTypographyPrimarySmFontFamily with value: {core.fontFamily.inter}
   static const componentButtonLabelTypographyPrimarySmFontFamily =
       CoreDesignTokens.coreFontFamilyInter;
@@ -1139,6 +1115,10 @@ class ComponentDesignTokens {
   static const componentButtonLabelTypographyTertiarySmParagraphSpacing =
       CoreDesignTokens.coreParagraphSpacing50;
 
+  /// componentButtonLabelTypographyTertiarySmTextDecoration with value: {core.fontDecoration.underline}
+  static const componentButtonLabelTypographyTertiarySmTextDecoration =
+      CoreDesignTokens.coreFontDecorationUnderline;
+
   /// componentButtonLabelTypographyTertiaryMdFontFamily with value: {core.fontFamily.inter}
   static const componentButtonLabelTypographyTertiaryMdFontFamily =
       CoreDesignTokens.coreFontFamilyInter;
@@ -1158,6 +1138,10 @@ class ComponentDesignTokens {
   /// componentButtonLabelTypographyTertiaryMdParagraphSpacing with value: {core.paragraphSpacing.75}
   static const componentButtonLabelTypographyTertiaryMdParagraphSpacing =
       CoreDesignTokens.coreParagraphSpacing75;
+
+  /// componentButtonLabelTypographyTertiaryMdTextDecoration with value: {core.fontDecoration.underline}
+  static const componentButtonLabelTypographyTertiaryMdTextDecoration =
+      CoreDesignTokens.coreFontDecorationUnderline;
 
   /// componentButtonLabelTypographyTertiaryLgFontFamily with value: {core.fontFamily.inter}
   static const componentButtonLabelTypographyTertiaryLgFontFamily =
@@ -1179,6 +1163,10 @@ class ComponentDesignTokens {
   static const componentButtonLabelTypographyTertiaryLgParagraphSpacing =
       CoreDesignTokens.coreParagraphSpacing100;
 
+  /// componentButtonLabelTypographyTertiaryLgTextDecoration with value: {core.fontDecoration.underline}
+  static const componentButtonLabelTypographyTertiaryLgTextDecoration =
+      CoreDesignTokens.coreFontDecorationUnderline;
+
   /// componentButtonLabelTypographyTertiaryXlFontFamily with value: {core.fontFamily.inter}
   static const componentButtonLabelTypographyTertiaryXlFontFamily =
       CoreDesignTokens.coreFontFamilyInter;
@@ -1198,6 +1186,10 @@ class ComponentDesignTokens {
   /// componentButtonLabelTypographyTertiaryXlParagraphSpacing with value: {core.paragraphSpacing.200}
   static const componentButtonLabelTypographyTertiaryXlParagraphSpacing =
       CoreDesignTokens.coreParagraphSpacing200;
+
+  /// componentButtonLabelTypographyTertiaryXlTextDecoration with value: {core.fontDecoration.underline}
+  static const componentButtonLabelTypographyTertiaryXlTextDecoration =
+      CoreDesignTokens.coreFontDecorationUnderline;
 
   /// componentButtonLabelColorCoralPrimary with value: {core.color.solid.slate.50}
   static const componentButtonLabelColorCoralPrimary =
@@ -2519,6 +2511,10 @@ class ComponentDesignTokens {
   static const componentActionSheetSpacingGapMd =
       CoreDesignTokens.coreSpacing600;
 
+  /// componentActionSheetHeightHeaderTitle with value: {core.spacing.2400}
+  static const componentActionSheetHeightHeaderTitle =
+      CoreDesignTokens.coreSpacing2400;
+
   /// componentSnackbarBgNeutral with value: {semantic.color.slate.solid.surface.inverse.lowest}
   static const componentSnackbarBgNeutralLight =
       LightThemeDesignTokens.semanticColorSlateSolidSurfaceInverseLowest;
@@ -3113,6 +3109,10 @@ class ComponentDesignTokens {
   static const componentNotificationSpacingGapMd =
       CoreDesignTokens.coreSpacing1600;
 
+  /// componentNotificationSizingItemHeight with value: {core.size.4800}
+  static const componentNotificationSizingItemHeight =
+      CoreDesignTokens.coreSize4800;
+
   /// componentNotificationElevationShadow with value: {core.elevation.shadow.330}
   static final componentNotificationElevationShadow =
       CoreDesignTokens.coreElevationShadow330;
@@ -3268,12 +3268,28 @@ class ComponentDesignTokens {
   static const componentSectionMessageBorderRadius =
       CoreDesignTokens.coreBorderRadius800;
 
+  /// componentSectionMessageSpacing2xs with value: {core.spacing.100}
+  static const componentSectionMessageSpacing2xs =
+      CoreDesignTokens.coreSpacing100;
+
+  /// componentSectionMessageSpacingXs with value: {core.spacing.300}
+  static const componentSectionMessageSpacingXs =
+      CoreDesignTokens.coreSpacing300;
+
   /// componentSectionMessageSpacingSm with value: {core.spacing.400}
   static const componentSectionMessageSpacingSm =
       CoreDesignTokens.coreSpacing400;
 
-  /// componentSectionMessageSpacingMd with value: {core.spacing.800}
+  /// componentSectionMessageSpacingMd with value: {core.spacing.600}
   static const componentSectionMessageSpacingMd =
+      CoreDesignTokens.coreSpacing600;
+
+  /// componentSectionMessageSpacingLg with value: {core.spacing.700}
+  static const componentSectionMessageSpacingLg =
+      CoreDesignTokens.coreSpacing700;
+
+  /// componentSectionMessageSpacingXl with value: {core.spacing.800}
+  static const componentSectionMessageSpacingXl =
       CoreDesignTokens.coreSpacing800;
 
   /// componentNavigationBarBgItemHover with value: {semantic.color.monochrome.surface.normal.low}
