@@ -128,6 +128,7 @@ class TextStyles {
     fontFeatures: <FontFeature>[
       FontFeature.liningFigures(),
       FontFeature.tabularFigures(),
+      FontFeature.proportionalFigures(),
     ],
 
     fontFamily: fontFamilyDeriv,
@@ -145,6 +146,7 @@ class TextStyles {
     fontFeatures: <FontFeature>[
       FontFeature.liningFigures(),
       FontFeature.tabularFigures(),
+      FontFeature.proportionalFigures(),
     ],
 
     fontFamily: fontFamilyDeriv,
@@ -162,6 +164,7 @@ class TextStyles {
     fontFeatures: <FontFeature>[
       FontFeature.liningFigures(),
       FontFeature.tabularFigures(),
+      FontFeature.proportionalFigures(),
     ],
 
     fontFamily: fontFamilyDeriv,
@@ -179,6 +182,7 @@ class TextStyles {
     fontFeatures: <FontFeature>[
       FontFeature.liningFigures(),
       FontFeature.tabularFigures(),
+      FontFeature.proportionalFigures(),
     ],
 
     fontFamily: fontFamilyDeriv,
