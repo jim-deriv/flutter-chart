@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_paint_style.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
@@ -61,8 +63,8 @@ class FibfanAddingPreviewMobile
         );
       } else {
         // Fallback with minimal offset if size is not available
-        final double fallbackX = 50;
-        final double fallbackY = 25;
+        const double fallbackX = 50;
+        const double fallbackY = 25;
 
         interactableDrawing.endPoint = EdgePoint(
           epoch: interactiveLayer.epochFromX(fallbackX),
@@ -138,6 +140,27 @@ class FibfanAddingPreviewMobile
         // Draw preview fan lines with dashed style
         _drawPreviewFanLines(canvas, startOffset, deltaX, deltaY, size);
       }
+
+      // Draw edge points for the preview
+      final DrawingPaintStyle paintStyle = DrawingPaintStyle();
+      drawPointOffset(
+        startOffset,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        interactableDrawing.config.lineStyle,
+        radius: 4,
+      );
+      drawPointOffset(
+        endOffset,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        interactableDrawing.config.lineStyle,
+        radius: 4,
+      );
     }
   }
 
