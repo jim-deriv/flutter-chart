@@ -55,7 +55,7 @@ class FibfanAddingPreviewMobile
         // Position end point slightly offset from start to create a compact fan
         // This keeps the fan within the chart data area
         final double endX = layerSize.width * 0.65;
-        final double endY = layerSize.height * 0.4;
+        final double endY = layerSize.height * 0.3;
 
         interactableDrawing.endPoint = EdgePoint(
           epoch: interactiveLayer.epochFromX(endX),
