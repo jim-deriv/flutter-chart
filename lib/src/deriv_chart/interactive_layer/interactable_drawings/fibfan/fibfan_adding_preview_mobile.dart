@@ -9,6 +9,7 @@ import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../helpers/types.dart';
+import '../fibfan/helpers.dart';
 import '../drawing_adding_preview.dart';
 import 'fibfan_interactable_drawing.dart';
 
@@ -132,10 +133,7 @@ class FibfanAddingPreviewMobile
       ..style = PaintingStyle.stroke
       ..strokeWidth = interactableDrawing.config.lineStyle.thickness;
 
-    // Fibonacci ratios for the fan lines
-    const List<double> fibRatios = [0.0, 0.382, 0.5, 0.618, 1.0];
-
-    for (final double ratio in fibRatios) {
+    for (final double ratio in FibonacciFanHelpers.fibRatios) {
       final Offset fanPoint = Offset(
         startOffset.dx + deltaX,
         startOffset.dy + deltaY * ratio,
