@@ -26,7 +26,8 @@ class FibfanDrawingToolConfig extends DrawingToolConfig {
     String? configId,
     DrawingData? drawingData,
     List<EdgePoint> edgePoints = const <EdgePoint>[],
-    this.fillStyle = const LineStyle(thickness: 0.9, color: CoreDesignTokens.coreColorSolidBlue700),
+    this.fillStyle = const LineStyle(
+        thickness: 0.9, color: CoreDesignTokens.coreColorSolidBlue700),
     this.lineStyle = const LineStyle(
         thickness: 0.9, color: CoreDesignTokens.coreColorSolidBlue700),
     this.fibonacciLevelColors = const <String, Color>{

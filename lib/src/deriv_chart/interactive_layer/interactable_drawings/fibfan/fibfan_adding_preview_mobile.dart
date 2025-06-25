@@ -27,27 +27,48 @@ class FibfanAddingPreviewMobile
       final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
       final Size? layerSize = interactiveLayer.drawingContext.fullSize;
 
-      final double centerX = layerSize != null ? layerSize.width / 2 : 0;
-      final double centerY = layerSize != null ? layerSize.height / 2 : 0;
+      if (layerSize != null) {
+        // Position start point around the chart data area (middle-right region)
+        final double startX = layerSize.width * 0.06;
+        final double startY = layerSize.height * 0.5;
 
-      interactableDrawing.startPoint = EdgePoint(
-        epoch: interactiveLayer.epochFromX(centerX),
-        quote: interactiveLayer.quoteFromY(centerY),
-      );
+        interactableDrawing.startPoint = EdgePoint(
+          epoch: interactiveLayer.epochFromX(startX),
+          quote: interactiveLayer.quoteFromY(startY),
+        );
+      } else {
+        // Fallback to center if size is not available
+        interactableDrawing.startPoint = EdgePoint(
+          epoch: interactiveLayer.epochFromX(0),
+          quote: interactiveLayer.quoteFromY(0),
+        );
+      }
     }
 
     if (interactableDrawing.endPoint == null) {
       final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
       final Size? layerSize = interactiveLayer.drawingContext.fullSize;
 
-      final double centerX = layerSize != null ? layerSize.width / 2 : 0;
-      final double centerY = layerSize != null ? layerSize.height / 2 : 0;
+      if (layerSize != null) {
+        // Position end point slightly offset from start to create a compact fan
+        // This keeps the fan within the chart data area
+        final double endX = layerSize.width * 0.65;
+        final double endY = layerSize.height * 0.4;
 
-      // Set end point slightly offset from start point to show initial fan
-      interactableDrawing.endPoint = EdgePoint(
-        epoch: interactiveLayer.epochFromX(centerX + 100),
-        quote: interactiveLayer.quoteFromY(centerY + 50),
-      );
+        interactableDrawing.endPoint = EdgePoint(
+          epoch: interactiveLayer.epochFromX(endX),
+          quote: interactiveLayer.quoteFromY(endY),
+        );
+      } else {
+        // Fallback with minimal offset if size is not available
+        final double fallbackX = 50;
+        final double fallbackY = 25;
+
+        interactableDrawing.endPoint = EdgePoint(
+          epoch: interactiveLayer.epochFromX(fallbackX),
+          quote: interactiveLayer.quoteFromY(fallbackY),
+        );
+      }
     }
   }
 
