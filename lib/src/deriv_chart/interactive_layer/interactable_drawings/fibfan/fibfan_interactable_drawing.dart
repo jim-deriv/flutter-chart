@@ -178,7 +178,7 @@ class FibfanInteractableDrawing
 
       // Calculate perpendicular distance from point to line
       final double lineLength = (extendedEndPoint - startOffset).distance;
-      if (lineLength < 1) {
+      if (lineLength < FibfanConstants.minLineLength) {
         continue;
       }
 
@@ -260,13 +260,21 @@ class FibfanInteractableDrawing
           lineStyle,
           canvas,
           startOffset,
-          10 * animationInfo.stateChangePercent,
-          3 * animationInfo.stateChangePercent,
+          FibfanConstants.focusedCircleRadius *
+              animationInfo.stateChangePercent,
+          FibfanConstants.focusedCircleStroke *
+              animationInfo.stateChangePercent,
           endOffset,
         );
       } else if (drawingState.contains(DrawingToolState.hovered)) {
         drawPointsFocusedCircle(
-            paintStyle, lineStyle, canvas, startOffset, 10, 3, endOffset);
+            paintStyle,
+            lineStyle,
+            canvas,
+            startOffset,
+            FibfanConstants.focusedCircleRadius,
+            FibfanConstants.focusedCircleStroke,
+            endOffset);
       }
 
       // Draw alignment guides when dragging
@@ -540,14 +548,14 @@ class FibfanInteractableDrawing
   Widget buildDrawingToolBarMenu(UpdateDrawingTool onUpdate) => Row(
         children: <Widget>[
           _buildLineThicknessIcon(),
-          const SizedBox(width: 4),
+          const SizedBox(width: FibfanConstants.toolbarSpacing),
           _buildColorPickerIcon(onUpdate)
         ],
       );
 
   Widget _buildColorPickerIcon(UpdateDrawingTool onUpdate) => SizedBox(
-        width: 32,
-        height: 32,
+        width: FibfanConstants.toolbarIconSize,
+        height: FibfanConstants.toolbarIconSize,
         child: ColorPicker(
           currentColor: config.lineStyle.color,
           onColorChanged: (newColor) => onUpdate(config.copyWith(
@@ -558,15 +566,16 @@ class FibfanInteractableDrawing
       );
 
   Widget _buildLineThicknessIcon() => SizedBox(
-        width: 32,
-        height: 32,
+        width: FibfanConstants.toolbarIconSize,
+        height: FibfanConstants.toolbarIconSize,
         child: TextButton(
           style: TextButton.styleFrom(
             foregroundColor: Colors.white38,
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius:
+                  BorderRadius.circular(FibfanConstants.toolbarBorderRadius),
             ),
           ),
           onPressed: () {
@@ -575,10 +584,10 @@ class FibfanInteractableDrawing
           child: Text(
             '${config.lineStyle.thickness.toInt()}px',
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: FibfanConstants.toolbarFontSize,
               color: CoreDesignTokens.coreColorSolidSlate50,
               fontWeight: FontWeight.normal,
-              height: 2,
+              height: FibfanConstants.toolbarTextHeight,
             ),
             textAlign: TextAlign.center,
           ),

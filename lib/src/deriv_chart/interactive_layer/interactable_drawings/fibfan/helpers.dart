@@ -4,6 +4,49 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/material.dart';
 
+/// Constants for Fibonacci Fan drawing operations
+class FibfanConstants {
+  // Validation thresholds
+  static const double defaultDeltaThreshold = 1.0;
+  static const double verticalLineThreshold = 0.001;
+  static const double minLineLength = 1.0;
+
+  // Mobile positioning constants
+  static const double mobileStartXRatio = 0.06;
+  static const double mobileStartYRatio = 0.5;
+  static const double mobileEndXRatio = 0.65;
+  static const double mobileEndYRatio = 0.3;
+  static const double mobileFallbackX = 50.0;
+  static const double mobileFallbackY = -50.0;
+
+  // Drawing constants
+  static const double dashWidth = 5.0;
+  static const double dashSpace = 3.0;
+  static const double dashOpacity = 0.7;
+  static const double pointRadius = 4.0;
+
+  // Visual effect constants
+  static const double focusedCircleRadius = 10.0;
+  static const double focusedCircleStroke = 3.0;
+  static const double labelDistanceFromLine = 5.0;
+  static const double labelPositionMultiplier = 1.02;
+  static const double labelFontSize = 12.0;
+
+  // Fill opacity constants
+  static const double evenFillOpacity = 0.1;
+  static const double oddFillOpacity = 0.05;
+
+  // UI constants
+  static const double toolbarIconSize = 32.0;
+  static const double toolbarSpacing = 4.0;
+  static const double toolbarBorderRadius = 4.0;
+  static const double toolbarFontSize = 14.0;
+  static const double toolbarTextHeight = 2.0;
+
+  // Coordinate defaults
+  static const double defaultCoordinate = 0.0;
+}
+
 /// Helper class for Fibonacci Fan drawing operations
 class FibonacciFanHelpers {
   /// Validates that all coordinates in the given offsets are not NaN
@@ -23,7 +66,7 @@ class FibonacciFanHelpers {
 
   /// Validates that deltas are meaningful (not too small)
   static bool areDeltasMeaningful(double deltaX, double deltaY,
-      {double threshold = 1.0}) {
+      {double threshold = FibfanConstants.defaultDeltaThreshold}) {
     return deltaX.abs() > threshold || deltaY.abs() > threshold;
   }
 
@@ -87,7 +130,7 @@ class FibonacciFanHelpers {
       // Handle vertical lines and avoid division by zero
       Offset extendedPoint1, extendedPoint2;
 
-      if (deltaXFan.abs() < 0.001) {
+      if (deltaXFan.abs() < FibfanConstants.verticalLineThreshold) {
         // Vertical lines - extend to top or bottom of screen
         extendedPoint1 = Offset(
           fanPoint1.dx,
@@ -121,7 +164,9 @@ class FibonacciFanHelpers {
           ..close();
 
         // Draw filled area with alternating opacity
-        final double opacity = (i % 2 == 0) ? 0.1 : 0.05;
+        final double opacity = (i % 2 == 0)
+            ? FibfanConstants.evenFillOpacity
+            : FibfanConstants.oddFillOpacity;
         canvas.drawPath(
           fillPath,
           paintStyle.fillPaintStyle(
@@ -168,7 +213,7 @@ class FibonacciFanHelpers {
 
       // Handle vertical lines and avoid division by zero
       Offset extendedPoint;
-      if (deltaXFan.abs() < 0.001) {
+      if (deltaXFan.abs() < FibfanConstants.verticalLineThreshold) {
         // Vertical line - extend to top or bottom of screen
         extendedPoint = Offset(
           fanPoint.dx,
@@ -219,8 +264,12 @@ class FibonacciFanHelpers {
 
       // Calculate label position along the line
       final Offset labelPosition = Offset(
-        startOffset.dx + (fanPoint.dx - startOffset.dx) * 1.02,
-        startOffset.dy + (fanPoint.dy - startOffset.dy) * 1.02,
+        startOffset.dx +
+            (fanPoint.dx - startOffset.dx) *
+                FibfanConstants.labelPositionMultiplier,
+        startOffset.dy +
+            (fanPoint.dy - startOffset.dy) *
+                FibfanConstants.labelPositionMultiplier,
       );
 
       // Use custom color if provided, otherwise use default line style color
@@ -235,7 +284,7 @@ class FibonacciFanHelpers {
           text: label,
           style: TextStyle(
             color: labelColor,
-            fontSize: 12,
+            fontSize: FibfanConstants.labelFontSize,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -254,7 +303,7 @@ class FibonacciFanHelpers {
 
       // Adjust text position to left-align it when rotated
       final Offset textOffset = Offset(
-        5, // Small offset from the line
+        FibfanConstants.labelDistanceFromLine, // Small offset from the line
         -textPainter.height,
       );
 

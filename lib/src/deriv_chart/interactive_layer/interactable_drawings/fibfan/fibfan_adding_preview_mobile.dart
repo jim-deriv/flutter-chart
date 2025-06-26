@@ -31,8 +31,10 @@ class FibfanAddingPreviewMobile
 
       if (layerSize != null) {
         // Position start point around the chart data area (middle-right region)
-        final double startX = layerSize.width * 0.06;
-        final double startY = layerSize.height * 0.5;
+        final double startX =
+            layerSize.width * FibfanConstants.mobileStartXRatio;
+        final double startY =
+            layerSize.height * FibfanConstants.mobileStartYRatio;
 
         interactableDrawing.startPoint = EdgePoint(
           epoch: interactiveLayer.epochFromX(startX),
@@ -54,8 +56,9 @@ class FibfanAddingPreviewMobile
       if (layerSize != null) {
         // Position end point to the right and above start point
         // This creates a proper upward-oriented Fibonacci fan
-        final double endX = layerSize.width * 0.65;
-        final double endY = layerSize.height * 0.3; // Above start point (0.5)
+        final double endX = layerSize.width * FibfanConstants.mobileEndXRatio;
+        final double endY = layerSize.height *
+            FibfanConstants.mobileEndYRatio; // Above start point (0.5)
 
         interactableDrawing.endPoint = EdgePoint(
           epoch: interactiveLayer.epochFromX(endX),
@@ -63,8 +66,9 @@ class FibfanAddingPreviewMobile
         );
       } else {
         // Fallback with proper orientation if size is not available
-        const double fallbackX = 50;
-        const double fallbackY = -50; // Above start point
+        const double fallbackX = FibfanConstants.mobileFallbackX;
+        const double fallbackY =
+            FibfanConstants.mobileFallbackY; // Above start point
 
         interactableDrawing.endPoint = EdgePoint(
           epoch: interactiveLayer.epochFromX(fallbackX),
@@ -160,7 +164,7 @@ class FibfanAddingPreviewMobile
         canvas,
         paintStyle,
         interactableDrawing.config.lineStyle,
-        radius: 4,
+        radius: FibfanConstants.pointRadius,
       );
       drawPointOffset(
         endOffset,
@@ -169,7 +173,7 @@ class FibfanAddingPreviewMobile
         canvas,
         paintStyle,
         interactableDrawing.config.lineStyle,
-        radius: 4,
+        radius: FibfanConstants.pointRadius,
       );
 
       // Draw alignment guides on each edge point when dragging
@@ -199,7 +203,8 @@ class FibfanAddingPreviewMobile
     Size size,
   ) {
     final Paint dashPaint = Paint()
-      ..color = interactableDrawing.config.lineStyle.color.withOpacity(0.7)
+      ..color = interactableDrawing.config.lineStyle.color
+          .withOpacity(FibfanConstants.dashOpacity)
       ..style = PaintingStyle.stroke
       ..strokeWidth = interactableDrawing.config.lineStyle.thickness;
 
@@ -215,7 +220,7 @@ class FibfanAddingPreviewMobile
 
       // Handle vertical lines and avoid division by zero
       Offset extendedPoint;
-      if (deltaXFan.abs() < 0.001) {
+      if (deltaXFan.abs() < FibfanConstants.verticalLineThreshold) {
         // Vertical line
         extendedPoint = Offset(fanPoint.dx, size.height);
       } else {
@@ -233,8 +238,8 @@ class FibfanAddingPreviewMobile
 
   /// Draws a dashed line between two points
   void _drawDashedLine(Canvas canvas, Offset start, Offset end, Paint paint) {
-    const double dashWidth = 5;
-    const double dashSpace = 3;
+    const double dashWidth = FibfanConstants.dashWidth;
+    const double dashSpace = FibfanConstants.dashSpace;
     final double distance = (end - start).distance;
 
     // Handle edge cases
