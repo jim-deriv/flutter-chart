@@ -196,7 +196,198 @@ class FibfanConstants {
 ///
 /// The fan consists of multiple trend lines drawn from a base point, each
 /// representing different Fibonacci retracement levels (0%, 38.2%, 50%, 61.8%, 100%).
+///
+/// **Performance Optimization:**
+/// This class implements paint object caching to improve rendering performance
+/// by reusing Paint objects instead of creating new ones for each draw operation.
 class FibonacciFanHelpers {
+  /// Cache for line paint objects to improve performance.
+  ///
+  /// Maps paint configuration keys to reusable Paint objects. This prevents
+  /// the overhead of creating new Paint objects for each drawing operation,
+  /// which can significantly improve performance during animations and
+  /// frequent redraws.
+  ///
+  /// **Cache Key Format:** `"line_${color.value}_${thickness}"`
+  static final Map<String, Paint> _linePaintCache = <String, Paint>{};
+
+  /// Cache for fill paint objects to improve performance.
+  ///
+  /// Maps paint configuration keys to reusable Paint objects for fill operations.
+  /// This is particularly beneficial for drawing the filled areas between
+  /// fan lines, which can involve multiple fill operations per frame.
+  ///
+  /// **Cache Key Format:** `"fill_${color.value}_${thickness}"`
+  static final Map<String, Paint> _fillPaintCache = <String, Paint>{};
+
+  /// Cache for dash paint objects to improve performance.
+  ///
+  /// Maps paint configuration keys to reusable Paint objects for dashed lines.
+  /// Used primarily in mobile preview mode where dashed lines are drawn
+  /// frequently during user interactions.
+  ///
+  /// **Cache Key Format:** `"dash_${color.value}_${thickness}_${opacity}"`
+  static final Map<String, Paint> _dashPaintCache = <String, Paint>{};
+
+  /// Cache for text painter objects to improve label rendering performance.
+  ///
+  /// Maps text configuration keys to reusable TextPainter objects. This is
+  /// especially beneficial for Fibonacci level labels which are drawn
+  /// repeatedly with the same styling.
+  ///
+  /// **Cache Key Format:** `"text_${text}_${color.value}_${fontSize}"`
+  static final Map<String, TextPainter> _textPainterCache =
+      <String, TextPainter>{};
+
+  /// Gets or creates a cached line paint object.
+  ///
+  /// Returns a reusable Paint object configured for line drawing. If a paint
+  /// object with the same configuration already exists in the cache, it is
+  /// returned. Otherwise, a new one is created, cached, and returned.
+  ///
+  /// **Parameters:**
+  /// - [color]: Line color
+  /// - [thickness]: Line thickness
+  ///
+  /// **Returns:** Cached or newly created Paint object for line drawing
+  ///
+  /// **Performance Benefit:** Eliminates Paint object allocation overhead
+  /// during frequent drawing operations, especially during animations.
+  static Paint getCachedLinePaint(Color color, double thickness) {
+    final String key = 'line_${color.value}_$thickness';
+    return _linePaintCache.putIfAbsent(
+        key,
+        () => Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = thickness);
+  }
+
+  /// Gets or creates a cached fill paint object.
+  ///
+  /// Returns a reusable Paint object configured for fill operations. This is
+  /// particularly useful for drawing the filled areas between fan lines.
+  ///
+  /// **Parameters:**
+  /// - [color]: Fill color
+  /// - [thickness]: Stroke thickness (for fill border if applicable)
+  ///
+  /// **Returns:** Cached or newly created Paint object for fill operations
+  ///
+  /// **Performance Benefit:** Reduces memory allocation during fill operations,
+  /// which can be frequent when drawing multiple fan fill areas.
+  static Paint getCachedFillPaint(Color color, double thickness) {
+    final String key = 'fill_${color.value}_$thickness';
+    return _fillPaintCache.putIfAbsent(
+        key,
+        () => Paint()
+          ..color = color
+          ..style = PaintingStyle.fill
+          ..strokeWidth = thickness);
+  }
+
+  /// Gets or creates a cached dash paint object.
+  ///
+  /// Returns a reusable Paint object configured for dashed line drawing.
+  /// Used primarily in mobile preview mode for drawing dashed fan lines.
+  ///
+  /// **Parameters:**
+  /// - [color]: Dash line color
+  /// - [thickness]: Dash line thickness
+  /// - [opacity]: Dash line opacity (0.0 to 1.0)
+  ///
+  /// **Returns:** Cached or newly created Paint object for dashed lines
+  ///
+  /// **Performance Benefit:** Optimizes mobile preview performance where
+  /// dashed lines are drawn frequently during user interactions.
+  static Paint getCachedDashPaint(
+      Color color, double thickness, double opacity) {
+    final String key = 'dash_${color.value}_${thickness}_$opacity';
+    return _dashPaintCache.putIfAbsent(
+        key,
+        () => Paint()
+          ..color = color.withOpacity(opacity)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = thickness);
+  }
+
+  /// Gets or creates a cached text painter object.
+  ///
+  /// Returns a reusable TextPainter object configured for text rendering.
+  /// This is especially beneficial for Fibonacci level labels which use
+  /// consistent styling and are drawn repeatedly.
+  ///
+  /// **Parameters:**
+  /// - [text]: Text content to render
+  /// - [color]: Text color
+  /// - [fontSize]: Text font size
+  ///
+  /// **Returns:** Cached or newly created TextPainter object
+  ///
+  /// **Performance Benefit:** Eliminates TextPainter creation and layout
+  /// overhead for repeated label rendering, significantly improving
+  /// performance during animations and frequent redraws.
+  static TextPainter getCachedTextPainter(
+      String text, Color color, double fontSize) {
+    final String key = 'text_${text}_${color.value}_$fontSize';
+    return _textPainterCache.putIfAbsent(key, () {
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: text,
+          style: TextStyle(
+            color: color,
+            fontSize: fontSize,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      return textPainter;
+    });
+  }
+
+  /// Clears all paint and text painter caches.
+  ///
+  /// This method should be called when memory optimization is needed or
+  /// when the drawing configuration has changed significantly. It's
+  /// recommended to call this during major theme changes or when the
+  /// drawing tool is no longer in use.
+  ///
+  /// **Use Cases:**
+  /// - Memory cleanup during app lifecycle events
+  /// - Theme changes that invalidate cached paint objects
+  /// - Drawing tool deactivation
+  ///
+  /// **Performance Note:** After clearing caches, the next drawing operations
+  /// will recreate paint objects, so avoid calling this during active drawing.
+  static void clearPaintCaches() {
+    _linePaintCache.clear();
+    _fillPaintCache.clear();
+    _dashPaintCache.clear();
+    _textPainterCache.clear();
+  }
+
+  /// Gets cache statistics for performance monitoring.
+  ///
+  /// Returns information about the current state of all paint caches.
+  /// This can be useful for performance monitoring and optimization.
+  ///
+  /// **Returns:** Map containing cache sizes and memory usage information
+  ///
+  /// **Example:**
+  /// ```dart
+  /// final stats = FibonacciFanHelpers.getCacheStats();
+  /// print('Line paint cache size: ${stats['linePaintCacheSize']}');
+  /// ```
+  static Map<String, int> getCacheStats() {
+    return {
+      'linePaintCacheSize': _linePaintCache.length,
+      'fillPaintCacheSize': _fillPaintCache.length,
+      'dashPaintCacheSize': _dashPaintCache.length,
+      'textPainterCacheSize': _textPainterCache.length,
+    };
+  }
+
   /// Validates that all coordinates in the given offsets are not NaN.
   ///
   /// This method checks a list of [Offset] objects to ensure that both
@@ -520,10 +711,8 @@ class FibonacciFanHelpers {
           ? fibonacciLevelColors[colorKey]!
           : lineStyle.color;
 
-      final Paint linePaint = paintStyle.linePaintStyle(
-        lineColor,
-        lineStyle.thickness,
-      );
+      final Paint linePaint =
+          getCachedLinePaint(lineColor, lineStyle.thickness);
 
       final Offset fanPoint = Offset(
         startOffset.dx + deltaX,
@@ -635,25 +824,17 @@ class FibonacciFanHelpers {
           ? fibonacciLevelColors[colorKey]!
           : lineStyle.color;
 
-      final TextPainter textPainter = TextPainter(
-        text: TextSpan(
-          text: label,
-          style: TextStyle(
-            color: labelColor,
-            fontSize: FibfanConstants.labelFontSize,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        textDirection: TextDirection.ltr,
-      )..layout();
+      final TextPainter textPainter = getCachedTextPainter(
+        label,
+        labelColor,
+        FibfanConstants.labelFontSize,
+      );
 
       // Save the current canvas state
       canvas
         ..save()
-
         // Translate to the label position
         ..translate(labelPosition.dx, labelPosition.dy)
-
         // Rotate the canvas by the line angle
         ..rotate(lineAngle);
 

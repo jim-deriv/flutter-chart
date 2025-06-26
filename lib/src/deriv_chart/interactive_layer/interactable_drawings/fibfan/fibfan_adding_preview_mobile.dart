@@ -238,11 +238,11 @@ class FibfanAddingPreviewMobile
     double deltaY,
     Size size,
   ) {
-    final Paint dashPaint = Paint()
-      ..color = interactableDrawing.config.lineStyle.color
-          .withOpacity(FibfanConstants.dashOpacity)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = interactableDrawing.config.lineStyle.thickness;
+    final Paint dashPaint = FibonacciFanHelpers.getCachedDashPaint(
+      interactableDrawing.config.lineStyle.color,
+      interactableDrawing.config.lineStyle.thickness,
+      FibfanConstants.dashOpacity,
+    );
 
     for (final double ratio in FibonacciFanHelpers.fibRatios) {
       final Offset fanPoint = Offset(
