@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/callbacks.dart';
 import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
@@ -199,7 +200,7 @@ class FibfanInteractableDrawing
     return _hitTestFanLines(offset, epochToX, quoteToY);
   }
 
-  /// Helper method to test if a point hits any of the fan lines
+  /// Helper method to test if a point hits any of the fan lines using angle-based calculations
   bool _hitTestFanLines(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
     if (startPoint == null || endPoint == null) {
       return false;
@@ -214,24 +215,23 @@ class FibfanInteractableDrawing
       quoteToY(endPoint!.quote),
     );
 
-    // Calculate the base vector
+    // Calculate the base vector and angle
     final double deltaX = endOffset.dx - startOffset.dx;
     final double deltaY = endOffset.dy - startOffset.dy;
+    final double baseAngle = math.atan2(deltaY, deltaX);
 
-    // Check each fan line
+    // Check each fan line using angle-based calculations
     for (final double ratio in FibonacciFanHelpers.fibRatios) {
-      final Offset fanEndPoint = Offset(
-        startOffset.dx + deltaX,
-        startOffset.dy + deltaY * ratio,
-      );
+      // Calculate angle as a percentage of the base angle
+      final double fanAngle = baseAngle * ratio;
 
-      // Extend the line to the edge of the screen
+      // Extend the line to the edge of the screen using trigonometry
       final double screenWidth = drawingContext.contentSize.width;
-      final double lineSlope =
-          (fanEndPoint.dy - startOffset.dy) / (fanEndPoint.dx - startOffset.dx);
+      final double distanceToEdge = screenWidth - startOffset.dx;
+
       final Offset extendedEndPoint = Offset(
         screenWidth,
-        startOffset.dy + lineSlope * (screenWidth - startOffset.dx),
+        startOffset.dy + distanceToEdge * math.tan(fanAngle),
       );
 
       // Calculate perpendicular distance from point to line

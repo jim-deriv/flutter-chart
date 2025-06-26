@@ -560,16 +560,16 @@ class FibonacciFanHelpers {
         fibonacciLevels[1.0]!['colorKey']!, // level100 for 100%
       ];
 
-  /// Draws the filled areas between fan lines.
+  /// Draws the filled areas between fan lines using angle-based calculations.
   ///
   /// Creates alternating filled regions between adjacent Fibonacci fan lines
   /// to provide visual distinction between different retracement levels.
   /// The fill areas help users identify price zones more easily.
   ///
   /// **Algorithm:**
-  /// 1. Iterates through adjacent pairs of Fibonacci ratios
-  /// 2. Calculates fan points for each ratio
-  /// 3. Extends lines to screen edges (handling vertical lines)
+  /// 1. Calculates the base angle from start to end point
+  /// 2. For each Fibonacci ratio, calculates the angle as a percentage of the base angle
+  /// 3. Extends lines to screen edges using trigonometric calculations
   /// 4. Creates triangular fill paths between adjacent lines
   /// 5. Applies alternating opacity levels for visual distinction
   ///
@@ -595,49 +595,30 @@ class FibonacciFanHelpers {
     DrawingPaintStyle paintStyle,
     LineStyle fillStyle,
   ) {
+    // Calculate the base angle from start to end point
+    final double baseAngle = math.atan2(deltaY, deltaX);
+
     for (int i = 0; i < fibRatios.length - 1; i++) {
       final double ratio1 = fibRatios[i];
       final double ratio2 = fibRatios[i + 1];
 
-      final Offset fanPoint1 = Offset(
-        startOffset.dx + deltaX,
-        startOffset.dy + deltaY * ratio1,
-      );
-      final Offset fanPoint2 = Offset(
-        startOffset.dx + deltaX,
-        startOffset.dy + deltaY * ratio2,
-      );
+      // Calculate angles as percentages of the base angle
+      final double angle1 = baseAngle * ratio1;
+      final double angle2 = baseAngle * ratio2;
 
-      // Extend lines to the edge of the screen
+      // Extend lines to the edge of the screen using angle-based calculations
       final double screenWidth = size.width;
-      final double deltaXFan = fanPoint1.dx - startOffset.dx;
+      final double distanceToEdge = screenWidth - startOffset.dx;
 
-      // Handle vertical lines and avoid division by zero
-      Offset extendedPoint1, extendedPoint2;
-
-      if (deltaXFan.abs() < FibfanConstants.verticalLineThreshold) {
-        // Vertical lines - extend to top or bottom of screen
-        extendedPoint1 = Offset(
-          fanPoint1.dx,
-          fanPoint1.dy > startOffset.dy ? size.height : 0,
-        );
-        extendedPoint2 = Offset(
-          fanPoint2.dx,
-          fanPoint2.dy > startOffset.dy ? size.height : 0,
-        );
-      } else {
-        final double slope1 = (fanPoint1.dy - startOffset.dy) / deltaXFan;
-        final double slope2 = (fanPoint2.dy - startOffset.dy) / deltaXFan;
-
-        extendedPoint1 = Offset(
-          screenWidth,
-          startOffset.dy + slope1 * (screenWidth - startOffset.dx),
-        );
-        extendedPoint2 = Offset(
-          screenWidth,
-          startOffset.dy + slope2 * (screenWidth - startOffset.dx),
-        );
-      }
+      // Calculate extended points using trigonometry
+      final Offset extendedPoint1 = Offset(
+        screenWidth,
+        startOffset.dy + distanceToEdge * math.tan(angle1),
+      );
+      final Offset extendedPoint2 = Offset(
+        screenWidth,
+        startOffset.dy + distanceToEdge * math.tan(angle2),
+      );
 
       // Validate coordinates before creating path
       if (areCoordinatesValid([startOffset, extendedPoint1, extendedPoint2])) {
@@ -663,17 +644,18 @@ class FibonacciFanHelpers {
     }
   }
 
-  /// Draws the fan lines representing Fibonacci retracement levels.
+  /// Draws the fan lines representing Fibonacci retracement levels using angle-based calculations.
   ///
   /// Creates the main trend lines of the Fibonacci fan, each representing
   /// a different retracement level. Lines extend from the start point to
-  /// the screen edge, with each line angled according to its Fibonacci ratio.
+  /// the screen edge, with each line angled according to its Fibonacci ratio
+  /// as a percentage of the base angle.
   ///
   /// **Algorithm:**
-  /// 1. Iterates through each Fibonacci ratio
-  /// 2. Calculates the fan point for each ratio
+  /// 1. Calculates the base angle from start to end point
+  /// 2. For each Fibonacci ratio, calculates the angle as a percentage of the base angle
   /// 3. Determines line color (custom or default)
-  /// 4. Extends line to screen edge (handling vertical lines)
+  /// 4. Extends line to screen edge using trigonometric calculations
   /// 5. Draws the line with appropriate styling
   ///
   /// **Parameters:**
@@ -686,9 +668,12 @@ class FibonacciFanHelpers {
   /// - [lineStyle]: Default line style and color
   /// - [fibonacciLevelColors]: Optional custom colors for each level
   ///
-  /// **Line Extension:**
-  /// - Normal lines: Extended to right edge of screen using slope calculation
-  /// - Vertical lines: Extended to top/bottom edge to avoid division by zero
+  /// **Angle-Based Approach:**
+  /// - 0%: Horizontal line (0 degrees)
+  /// - 38.2%: 38.2% of the base angle
+  /// - 50%: 50% of the base angle
+  /// - 61.8%: 61.8% of the base angle
+  /// - 100%: Full base angle (same as original trend line)
   ///
   /// **Color Mapping:**
   /// - Uses custom colors from [fibonacciLevelColors] if provided
@@ -703,6 +688,9 @@ class FibonacciFanHelpers {
     LineStyle lineStyle, {
     Map<String, Color>? fibonacciLevelColors,
   }) {
+    // Calculate the base angle from start to end point
+    final double baseAngle = math.atan2(deltaY, deltaX);
+
     for (int i = 0; i < fibRatios.length; i++) {
       final double ratio = fibRatios[i];
       final String colorKey = fibonacciColorKeys[i];
@@ -714,30 +702,18 @@ class FibonacciFanHelpers {
       final Paint linePaint =
           getCachedLinePaint(lineColor, lineStyle.thickness);
 
-      final Offset fanPoint = Offset(
-        startOffset.dx + deltaX,
-        startOffset.dy + deltaY * ratio,
-      );
+      // Calculate angle as a percentage of the base angle
+      final double fanAngle = baseAngle * ratio;
 
-      // Extend line to the edge of the screen
+      // Extend line to the edge of the screen using angle-based calculations
       final double screenWidth = size.width;
-      final double deltaXFan = fanPoint.dx - startOffset.dx;
+      final double distanceToEdge = screenWidth - startOffset.dx;
 
-      // Handle vertical lines and avoid division by zero
-      Offset extendedPoint;
-      if (deltaXFan.abs() < FibfanConstants.verticalLineThreshold) {
-        // Vertical line - extend to top or bottom of screen
-        extendedPoint = Offset(
-          fanPoint.dx,
-          fanPoint.dy > startOffset.dy ? size.height : 0,
-        );
-      } else {
-        final double slope = (fanPoint.dy - startOffset.dy) / deltaXFan;
-        extendedPoint = Offset(
-          screenWidth,
-          startOffset.dy + slope * (screenWidth - startOffset.dx),
-        );
-      }
+      // Calculate extended point using trigonometry
+      final Offset extendedPoint = Offset(
+        screenWidth,
+        startOffset.dy + distanceToEdge * math.tan(fanAngle),
+      );
 
       // Validate coordinates before drawing
       if (areTwoOffsetsValid(startOffset, extendedPoint)) {
@@ -746,20 +722,19 @@ class FibonacciFanHelpers {
     }
   }
 
-  /// Draws labels for the fan lines showing Fibonacci percentages.
+  /// Draws labels for the fan lines showing Fibonacci percentages using angle-based calculations.
   ///
   /// Places percentage labels (0%, 38.2%, 50%, 61.8%, 100%) next to their
   /// corresponding fan lines. Labels are rotated to align with their respective
   /// lines and positioned slightly beyond the fan endpoint for clarity.
   ///
   /// **Algorithm:**
-  /// 1. Iterates through each Fibonacci ratio and its corresponding label
-  /// 2. Calculates the fan point for the current ratio
-  /// 3. Determines the line angle using arctangent
-  /// 4. Positions label beyond the fan endpoint using multiplier
-  /// 5. Applies canvas transformations (translate + rotate)
-  /// 6. Draws the rotated text with appropriate styling
-  /// 7. Restores canvas state for next label
+  /// 1. Calculates the base angle from start to end point
+  /// 2. For each Fibonacci ratio, calculates the angle as a percentage of the base angle
+  /// 3. Positions label along the calculated angle
+  /// 4. Applies canvas transformations (translate + rotate)
+  /// 5. Draws the rotated text with appropriate styling
+  /// 6. Restores canvas state for next label
   ///
   /// **Parameters:**
   /// - [canvas]: The drawing canvas
@@ -772,7 +747,7 @@ class FibonacciFanHelpers {
   /// - [fibonacciLevelColors]: Optional custom colors for each level
   ///
   /// **Label Positioning:**
-  /// - Position: 102% along each fan line from start point
+  /// - Position: Along each fan line at a fixed distance from start point
   /// - Rotation: Aligned with the angle of the corresponding fan line
   /// - Offset: 5 pixels from the line to prevent overlap
   /// - Font: 12px medium weight for readability
@@ -790,30 +765,24 @@ class FibonacciFanHelpers {
     required List<String> fibonacciLabels,
     Map<String, Color>? fibonacciLevelColors,
   }) {
+    // Calculate the base angle from start to end point
+    final double baseAngle = math.atan2(deltaY, deltaX);
+
+    // Calculate a fixed distance for label positioning
+    final double labelDistance = math.sqrt(deltaX * deltaX + deltaY * deltaY) *
+        FibfanConstants.labelPositionMultiplier;
 
     for (int i = 0; i < FibonacciFanHelpers.fibRatios.length; i++) {
       final double ratio = FibonacciFanHelpers.fibRatios[i];
       final String label = i < fibonacciLabels.length ? fibonacciLabels[i] : '';
 
-      final Offset fanPoint = Offset(
-        startOffset.dx + deltaX,
-        startOffset.dy + deltaY * ratio,
-      );
+      // Calculate angle as a percentage of the base angle
+      final double fanAngle = baseAngle * ratio;
 
-      // Calculate the angle of the fan line
-      final double lineAngle = math.atan2(
-        fanPoint.dy - startOffset.dy,
-        fanPoint.dx - startOffset.dx,
-      );
-
-      // Calculate label position along the line
+      // Calculate label position along the fan line
       final Offset labelPosition = Offset(
-        startOffset.dx +
-            (fanPoint.dx - startOffset.dx) *
-                FibfanConstants.labelPositionMultiplier,
-        startOffset.dy +
-            (fanPoint.dy - startOffset.dy) *
-                FibfanConstants.labelPositionMultiplier,
+        startOffset.dx + labelDistance * math.cos(fanAngle),
+        startOffset.dy + labelDistance * math.sin(fanAngle),
       );
 
       // Use custom color if provided, otherwise use default line style color
@@ -834,8 +803,8 @@ class FibonacciFanHelpers {
         ..save()
         // Translate to the label position
         ..translate(labelPosition.dx, labelPosition.dy)
-        // Rotate the canvas by the line angle
-        ..rotate(lineAngle);
+        // Rotate the canvas by the fan angle
+        ..rotate(fanAngle);
 
       // Adjust text position to left-align it when rotated
       final Offset textOffset = Offset(
