@@ -71,10 +71,8 @@ class FibfanAddingPreviewDesktop
       );
 
       // Validate coordinates before proceeding
-      if (startOffset.dx.isNaN ||
-          startOffset.dy.isNaN ||
-          _hoverPosition!.dx.isNaN ||
-          _hoverPosition!.dy.isNaN) {
+      if (!FibonacciFanHelpers.areTwoOffsetsValid(
+          startOffset, _hoverPosition!)) {
         return;
       }
 
@@ -82,7 +80,7 @@ class FibfanAddingPreviewDesktop
       final double deltaY = _hoverPosition!.dy - startOffset.dy;
 
       // Only draw if we have meaningful deltas
-      if (deltaX.abs() > 1 || deltaY.abs() > 1) {
+      if (FibonacciFanHelpers.areDeltasMeaningful(deltaX, deltaY)) {
         // Draw filled areas between fan lines
         FibonacciFanHelpers.drawFanFills(
             canvas, startOffset, deltaX, deltaY, size, paintStyle, fillStyle);

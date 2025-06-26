@@ -6,6 +6,27 @@ import 'package:flutter/material.dart';
 
 /// Helper class for Fibonacci Fan drawing operations
 class FibonacciFanHelpers {
+  /// Validates that all coordinates in the given offsets are not NaN
+  static bool areCoordinatesValid(List<Offset> offsets) {
+    return offsets.every((offset) => !offset.dx.isNaN && !offset.dy.isNaN);
+  }
+
+  /// Validates that a single offset has valid coordinates
+  static bool isOffsetValid(Offset offset) {
+    return !offset.dx.isNaN && !offset.dy.isNaN;
+  }
+
+  /// Validates that two offsets have valid coordinates
+  static bool areTwoOffsetsValid(Offset offset1, Offset offset2) {
+    return isOffsetValid(offset1) && isOffsetValid(offset2);
+  }
+
+  /// Validates that deltas are meaningful (not too small)
+  static bool areDeltasMeaningful(double deltaX, double deltaY,
+      {double threshold = 1.0}) {
+    return deltaX.abs() > threshold || deltaY.abs() > threshold;
+  }
+
   /// Fibonacci levels with their ratios, labels, and color keys
   static final Map<double, Map<String, String>> fibonacciLevels = {
     0.0: {'label': '0%', 'colorKey': 'level0'},
@@ -91,12 +112,7 @@ class FibonacciFanHelpers {
       }
 
       // Validate coordinates before creating path
-      if (!startOffset.dx.isNaN &&
-          !startOffset.dy.isNaN &&
-          !extendedPoint1.dx.isNaN &&
-          !extendedPoint1.dy.isNaN &&
-          !extendedPoint2.dx.isNaN &&
-          !extendedPoint2.dy.isNaN) {
+      if (areCoordinatesValid([startOffset, extendedPoint1, extendedPoint2])) {
         // Create path for the filled area
         final Path fillPath = Path()
           ..moveTo(startOffset.dx, startOffset.dy)
@@ -167,10 +183,7 @@ class FibonacciFanHelpers {
       }
 
       // Validate coordinates before drawing
-      if (!startOffset.dx.isNaN &&
-          !startOffset.dy.isNaN &&
-          !extendedPoint.dx.isNaN &&
-          !extendedPoint.dy.isNaN) {
+      if (areTwoOffsetsValid(startOffset, extendedPoint)) {
         canvas.drawLine(startOffset, extendedPoint, linePaint);
       }
     }

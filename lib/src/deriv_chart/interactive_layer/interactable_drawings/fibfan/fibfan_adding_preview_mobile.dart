@@ -137,10 +137,7 @@ class FibfanAddingPreviewMobile
       );
 
       // Validate coordinates before proceeding
-      if (startOffset.dx.isNaN ||
-          startOffset.dy.isNaN ||
-          endOffset.dx.isNaN ||
-          endOffset.dy.isNaN) {
+      if (!FibonacciFanHelpers.areTwoOffsetsValid(startOffset, endOffset)) {
         return;
       }
 
@@ -149,7 +146,7 @@ class FibfanAddingPreviewMobile
       final double deltaY = endOffset.dy - startOffset.dy;
 
       // Only draw if we have meaningful deltas
-      if (deltaX.abs() > 1 || deltaY.abs() > 1) {
+      if (FibonacciFanHelpers.areDeltasMeaningful(deltaX, deltaY)) {
         // Draw preview fan lines with dashed style
         _drawPreviewFanLines(canvas, startOffset, deltaX, deltaY, size);
       }
@@ -241,11 +238,7 @@ class FibfanAddingPreviewMobile
     final double distance = (end - start).distance;
 
     // Handle edge cases
-    if (distance <= 0 ||
-        start.dx.isNaN ||
-        start.dy.isNaN ||
-        end.dx.isNaN ||
-        end.dy.isNaN) {
+    if (distance <= 0 || !FibonacciFanHelpers.areTwoOffsetsValid(start, end)) {
       return;
     }
 
@@ -266,10 +259,7 @@ class FibfanAddingPreviewMobile
             start + direction * (currentDistance + actualSegmentLength);
 
         // Validate segment points before drawing
-        if (!segmentStart.dx.isNaN &&
-            !segmentStart.dy.isNaN &&
-            !segmentEnd.dx.isNaN &&
-            !segmentEnd.dy.isNaN) {
+        if (FibonacciFanHelpers.areTwoOffsetsValid(segmentStart, segmentEnd)) {
           canvas.drawLine(segmentStart, segmentEnd, paint);
         }
       }
