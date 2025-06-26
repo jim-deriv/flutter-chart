@@ -5,7 +5,6 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_mobile_behaviour.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/gestures.dart';
@@ -15,12 +14,49 @@ import '../fibfan/helpers.dart';
 import '../drawing_adding_preview.dart';
 import 'fibfan_interactable_drawing.dart';
 
-/// A class to show a preview and handle adding a
-/// [FibfanInteractableDrawing] to the chart. It's for when we're on
-/// [InteractiveLayerMobileBehaviour].
+/// Mobile-optimized preview handler for Fibonacci Fan creation.
+///
+/// This class provides a touch-friendly interface for creating Fibonacci Fan
+/// drawings on mobile devices. Unlike desktop behavior that relies on mouse
+/// hover and click interactions, mobile behavior pre-positions both points
+/// and allows immediate drag-based editing.
+///
+/// **Mobile-Specific Features:**
+/// - Auto-positioning of start and end points for immediate usability
+/// - Touch-optimized drag interactions for point adjustment
+/// - Dashed line previews to distinguish from final drawings
+/// - Single-tap completion (no multi-step creation process)
+/// - Larger touch targets for better mobile interaction
+///
+/// **Positioning Strategy:**
+/// The mobile implementation automatically places the fan points in optimal
+/// positions based on screen dimensions:
+/// - Start point: 6% from left edge, vertically centered (50%)
+/// - End point: 65% from left edge, upper portion (30%)
+/// - This creates an upward-trending fan suitable for most analysis scenarios
+///
+/// **User Workflow:**
+/// 1. User selects Fibonacci Fan tool
+/// 2. Preview appears with pre-positioned points
+/// 3. User can drag individual points or entire fan to adjust
+/// 4. Single tap completes the drawing
 class FibfanAddingPreviewMobile
     extends DrawingAddingPreview<FibfanInteractableDrawing> {
-  /// Initializes [FibfanAddingPreviewMobile].
+  /// Initializes [FibfanAddingPreviewMobile] with auto-positioned points.
+  ///
+  /// Creates a mobile-optimized preview that automatically positions the
+  /// start and end points in sensible locations based on screen dimensions.
+  /// This eliminates the need for multi-step point placement on touch devices.
+  ///
+  /// **Auto-Positioning Logic:**
+  /// - Calculates optimal positions using screen dimension ratios
+  /// - Places start point in left-center area for trend origin
+  /// - Places end point in upper-right area for upward trend
+  /// - Provides fallback coordinates if screen dimensions unavailable
+  ///
+  /// **Parameters:**
+  /// - [interactiveLayerBehaviour]: Mobile interaction behavior handler
+  /// - [interactableDrawing]: The Fibonacci Fan drawing being created
   FibfanAddingPreviewMobile({
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,

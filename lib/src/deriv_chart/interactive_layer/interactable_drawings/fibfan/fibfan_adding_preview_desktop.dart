@@ -6,7 +6,6 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/fibfan/helpers.dart';
-import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_behaviours/interactive_layer_desktop_behaviour.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
@@ -16,17 +15,63 @@ import '../../helpers/types.dart';
 import '../drawing_adding_preview.dart';
 import 'fibfan_interactable_drawing.dart';
 
-/// A class to show a preview and handle adding
-/// [FibfanInteractableDrawing] to the chart. It's for when we're on
-/// [InteractiveLayerDesktopBehaviour]
+/// Desktop-optimized preview handler for Fibonacci Fan creation.
+///
+/// This class provides a mouse-friendly interface for creating Fibonacci Fan
+/// drawings on desktop devices. It implements a two-step creation process
+/// that leverages mouse hover and click interactions for precise point placement.
+///
+/// **Desktop-Specific Features:**
+/// - Two-step creation process (first click for start, second for end)
+/// - Real-time hover preview showing fan from start point to cursor
+/// - Precise mouse-based point placement
+/// - Alignment guides during point placement
+/// - Axis labels showing exact coordinate values
+///
+/// **Creation Workflow:**
+/// 1. User selects Fibonacci Fan tool
+/// 2. First click sets the start point
+/// 3. Mouse movement shows live preview fan from start to cursor
+/// 4. Second click sets the end point and completes the drawing
+///
+/// **Visual Feedback:**
+/// - Alignment guides appear at hover position and start point
+/// - Live preview fan lines follow mouse movement
+/// - Coordinate labels on both axes during creation
+/// - Smooth transitions between creation states
+///
+/// **Precision Features:**
+/// - Pixel-perfect point placement with mouse precision
+/// - Real-time coordinate validation and feedback
+/// - Visual guides for accurate technical analysis placement
 class FibfanAddingPreviewDesktop
     extends DrawingAddingPreview<FibfanInteractableDrawing> {
   /// Initializes [FibfanAddingPreviewDesktop].
+  ///
+  /// Creates a desktop-optimized preview handler that manages the two-step
+  /// creation process for Fibonacci Fan drawings. The handler tracks mouse
+  /// position and manages the creation state transitions.
+  ///
+  /// **Parameters:**
+  /// - [interactiveLayerBehaviour]: Desktop interaction behavior handler
+  /// - [interactableDrawing]: The Fibonacci Fan drawing being created
   FibfanAddingPreviewDesktop({
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
   });
 
+  /// Current mouse hover position for real-time preview.
+  ///
+  /// Tracks the mouse cursor position to enable live preview functionality.
+  /// When the start point is set but end point is null, a preview fan is
+  /// drawn from the start point to this hover position, giving users
+  /// immediate visual feedback of the final result.
+  ///
+  /// **Usage:**
+  /// - Updated continuously during mouse movement via [onHover]
+  /// - Used in [paint] method to render preview fan lines
+  /// - Enables real-time coordinate display on chart axes
+  /// - Reset when creation process completes
   Offset? _hoverPosition;
 
   @override

@@ -29,9 +29,46 @@ import 'fibfan_adding_preview_desktop.dart';
 import 'fibfan_adding_preview_mobile.dart';
 
 /// Interactable drawing for Fibonacci Fan drawing tool.
+///
+/// This class implements a complete Fibonacci Fan technical analysis tool that allows
+/// users to draw, interact with, and customize fan lines based on Fibonacci ratios.
+/// The fan consists of multiple trend lines emanating from a start point, each
+/// representing different Fibonacci retracement levels (0%, 38.2%, 50%, 61.8%, 100%).
+///
+/// **Key Features:**
+/// - Interactive creation with two-point definition (start and end points)
+/// - Real-time preview during creation and editing
+/// - Drag support for individual points or entire fan
+/// - Hit testing for precise user interaction
+/// - Customizable colors and styling
+/// - Mobile and desktop optimized behaviors
+/// - Automatic label display with percentage values
+/// - Fill areas between fan lines for visual clarity
+///
+/// **Usage in Technical Analysis:**
+/// Fibonacci fans help traders identify potential support and resistance levels
+/// by projecting Fibonacci ratios from a significant price movement. The fan
+/// lines act as dynamic trend lines that can guide trading decisions.
+///
+/// **Interaction States:**
+/// - **Creating**: User is placing the start and end points
+/// - **Selected**: Fan is selected and shows all visual elements
+/// - **Dragging**: User is moving points or the entire fan
+/// - **Hovered**: Mouse is over the fan (desktop only)
 class FibfanInteractableDrawing
     extends InteractableDrawing<FibfanDrawingToolConfig> {
   /// Initializes [FibfanInteractableDrawing].
+  ///
+  /// Creates a new Fibonacci Fan drawing with the specified configuration
+  /// and initial points. The drawing can be created with null points for
+  /// interactive creation or with predefined points for loading saved drawings.
+  ///
+  /// **Parameters:**
+  /// - [config]: Drawing configuration including colors, styles, and Fibonacci levels
+  /// - [startPoint]: Initial start point of the fan (can be null for interactive creation)
+  /// - [endPoint]: Initial end point of the fan (can be null for interactive creation)
+  /// - [drawingContext]: Context providing canvas dimensions and coordinate conversion
+  /// - [getDrawingState]: Function to retrieve current drawing state (selected, dragging, etc.)
   FibfanInteractableDrawing({
     required FibfanDrawingToolConfig config,
     required this.startPoint,
@@ -40,19 +77,40 @@ class FibfanInteractableDrawing
     required super.getDrawingState,
   }) : super(drawingConfig: config);
 
-  /// Start point of the fan.
+  /// Start point of the fan in epoch/quote coordinates.
+  ///
+  /// This point serves as the origin for all fan lines. In technical analysis,
+  /// this is typically placed at a significant price level (support, resistance,
+  /// or pivot point) from which Fibonacci projections are calculated.
   EdgePoint? startPoint;
 
-  /// End point of the fan.
+  /// End point of the fan in epoch/quote coordinates.
+  ///
+  /// This point defines the direction and scale of the fan. The vector from
+  /// start to end point determines the base angle and magnitude for calculating
+  /// all Fibonacci fan lines. Each fan line uses this vector multiplied by
+  /// its respective Fibonacci ratio.
   EdgePoint? endPoint;
 
-  /// Tracks which point is being dragged, if any
+  /// Tracks which point is being dragged during user interaction.
   ///
-  /// [null]: dragging the whole fan.
-  /// [true]: dragging the start point.
-  /// [false]: dragging the end point.
+  /// This state variable enables precise drag behavior by distinguishing between:
+  /// - `null`: User is dragging the entire fan (both points move together)
+  /// - `true`: User is dragging only the start point
+  /// - `false`: User is dragging only the end point
+  ///
+  /// The value is set during [onDragStart] based on hit testing and cleared
+  /// during [onDragEnd] to reset the interaction state.
   bool? isDraggingStartPoint;
 
+  /// Current hover position for desktop interactions.
+  ///
+  /// Stores the mouse position during hover events to enable real-time
+  /// preview functionality. This is used primarily during the creation
+  /// process to show a preview fan from the start point to the cursor.
+  ///
+  /// **Note:** This is only used on desktop platforms where hover events
+  /// are available. Mobile platforms use touch-based interactions instead.
   Offset? _hoverPosition;
 
   @override
