@@ -6,17 +6,35 @@ import 'package:flutter/material.dart';
 
 /// Helper class for Fibonacci Fan drawing operations
 class FibonacciFanHelpers {
-  /// Fibonacci ratios for the fan lines
-  static const List<double> fibRatios = [0.0, 0.382, 0.5, 0.618, 1.0];
+  /// Fibonacci levels with their ratios, labels, and color keys
+  static final Map<double, Map<String, String>> fibonacciLevels = {
+    0.0: {'label': '0%', 'colorKey': 'level0'},
+    0.382: {'label': '38.2%', 'colorKey': 'level38_2'},
+    0.5: {'label': '50%', 'colorKey': 'level50'},
+    0.618: {'label': '61.8%', 'colorKey': 'level61_8'},
+    1.0: {'label': '100%', 'colorKey': 'level100'},
+  };
 
-  /// Labels for each Fibonacci level
-  static const List<String> fibonacciLabels = [
-    '100%',
-    '61.8%',
-    '50%',
-    '38.2%',
-    '0%',
-  ];
+  /// Fibonacci ratios for the fan lines in the desired order (reversed for proper visual ordering)
+  static List<double> get fibRatios => [1.0, 0.618, 0.5, 0.382, 0.0];
+
+  /// Labels for each Fibonacci level in the desired order
+  static List<String> get fibonacciLabels => [
+        fibonacciLevels[0.0]!['label']!, // 0%
+        fibonacciLevels[0.382]!['label']!, // 38.2%
+        fibonacciLevels[0.5]!['label']!, // 50%
+        fibonacciLevels[0.618]!['label']!, // 61.8%
+        fibonacciLevels[1.0]!['label']!, // 100%
+      ];
+
+  /// Color keys for each Fibonacci level in the desired visual order
+  static List<String> get fibonacciColorKeys => [
+        fibonacciLevels[0.0]!['colorKey']!, // level0 for 0%
+        fibonacciLevels[0.382]!['colorKey']!, // level38_2 for 38.2%
+        fibonacciLevels[0.5]!['colorKey']!, // level50 for 50%
+        fibonacciLevels[0.618]!['colorKey']!, // level61_8 for 61.8%
+        fibonacciLevels[1.0]!['colorKey']!, // level100 for 100%
+      ];
 
   /// Draws the filled areas between fan lines
   static void drawFanFills(
@@ -43,36 +61,59 @@ class FibonacciFanHelpers {
 
       // Extend lines to the edge of the screen
       final double screenWidth = size.width;
-      final double slope1 =
-          (fanPoint1.dy - startOffset.dy) / (fanPoint1.dx - startOffset.dx);
-      final double slope2 =
-          (fanPoint2.dy - startOffset.dy) / (fanPoint2.dx - startOffset.dx);
+      final double deltaXFan = fanPoint1.dx - startOffset.dx;
 
-      final Offset extendedPoint1 = Offset(
-        screenWidth,
-        startOffset.dy + slope1 * (screenWidth - startOffset.dx),
-      );
-      final Offset extendedPoint2 = Offset(
-        screenWidth,
-        startOffset.dy + slope2 * (screenWidth - startOffset.dx),
-      );
+      // Handle vertical lines and avoid division by zero
+      Offset extendedPoint1, extendedPoint2;
 
-      // Create path for the filled area
-      final Path fillPath = Path()
-        ..moveTo(startOffset.dx, startOffset.dy)
-        ..lineTo(extendedPoint1.dx, extendedPoint1.dy)
-        ..lineTo(extendedPoint2.dx, extendedPoint2.dy)
-        ..close();
+      if (deltaXFan.abs() < 0.001) {
+        // Vertical lines - extend to top or bottom of screen
+        extendedPoint1 = Offset(
+          fanPoint1.dx,
+          fanPoint1.dy > startOffset.dy ? size.height : 0,
+        );
+        extendedPoint2 = Offset(
+          fanPoint2.dx,
+          fanPoint2.dy > startOffset.dy ? size.height : 0,
+        );
+      } else {
+        final double slope1 = (fanPoint1.dy - startOffset.dy) / deltaXFan;
+        final double slope2 = (fanPoint2.dy - startOffset.dy) / deltaXFan;
 
-      // Draw filled area with alternating opacity
-      final double opacity = (i % 2 == 0) ? 0.1 : 0.05;
-      canvas.drawPath(
-        fillPath,
-        paintStyle.fillPaintStyle(
-          fillStyle.color.withOpacity(opacity),
-          fillStyle.thickness,
-        ),
-      );
+        extendedPoint1 = Offset(
+          screenWidth,
+          startOffset.dy + slope1 * (screenWidth - startOffset.dx),
+        );
+        extendedPoint2 = Offset(
+          screenWidth,
+          startOffset.dy + slope2 * (screenWidth - startOffset.dx),
+        );
+      }
+
+      // Validate coordinates before creating path
+      if (!startOffset.dx.isNaN &&
+          !startOffset.dy.isNaN &&
+          !extendedPoint1.dx.isNaN &&
+          !extendedPoint1.dy.isNaN &&
+          !extendedPoint2.dx.isNaN &&
+          !extendedPoint2.dy.isNaN) {
+        // Create path for the filled area
+        final Path fillPath = Path()
+          ..moveTo(startOffset.dx, startOffset.dy)
+          ..lineTo(extendedPoint1.dx, extendedPoint1.dy)
+          ..lineTo(extendedPoint2.dx, extendedPoint2.dy)
+          ..close();
+
+        // Draw filled area with alternating opacity
+        final double opacity = (i % 2 == 0) ? 0.1 : 0.05;
+        canvas.drawPath(
+          fillPath,
+          paintStyle.fillPaintStyle(
+            fillStyle.color.withOpacity(opacity),
+            fillStyle.thickness,
+          ),
+        );
+      }
     }
   }
 
@@ -87,21 +128,12 @@ class FibonacciFanHelpers {
     LineStyle lineStyle, {
     Map<String, Color>? fibonacciLevelColors,
   }) {
-    for (int i = 0; i < FibonacciFanHelpers.fibRatios.length; i++) {
-      final double ratio = FibonacciFanHelpers.fibRatios[i];
-
-      // Use custom color if provided, otherwise use default line style color
-      final List<String> colorKeys = [
-        'level0',
-        'level38_2',
-        'level50',
-        'level61_8',
-        'level100'
-      ];
+    for (int i = 0; i < fibRatios.length; i++) {
+      final double ratio = fibRatios[i];
+      final String colorKey = fibonacciColorKeys[i];
       final Color lineColor = (fibonacciLevelColors != null &&
-              i < colorKeys.length &&
-              fibonacciLevelColors.containsKey(colorKeys[i]))
-          ? fibonacciLevelColors[colorKeys[i]]!
+              fibonacciLevelColors.containsKey(colorKey))
+          ? fibonacciLevelColors[colorKey]!
           : lineStyle.color;
 
       final Paint linePaint = paintStyle.linePaintStyle(
@@ -116,14 +148,31 @@ class FibonacciFanHelpers {
 
       // Extend line to the edge of the screen
       final double screenWidth = size.width;
-      final double slope =
-          (fanPoint.dy - startOffset.dy) / (fanPoint.dx - startOffset.dx);
-      final Offset extendedPoint = Offset(
-        screenWidth,
-        startOffset.dy + slope * (screenWidth - startOffset.dx),
-      );
+      final double deltaXFan = fanPoint.dx - startOffset.dx;
 
-      canvas.drawLine(startOffset, extendedPoint, linePaint);
+      // Handle vertical lines and avoid division by zero
+      Offset extendedPoint;
+      if (deltaXFan.abs() < 0.001) {
+        // Vertical line - extend to top or bottom of screen
+        extendedPoint = Offset(
+          fanPoint.dx,
+          fanPoint.dy > startOffset.dy ? size.height : 0,
+        );
+      } else {
+        final double slope = (fanPoint.dy - startOffset.dy) / deltaXFan;
+        extendedPoint = Offset(
+          screenWidth,
+          startOffset.dy + slope * (screenWidth - startOffset.dx),
+        );
+      }
+
+      // Validate coordinates before drawing
+      if (!startOffset.dx.isNaN &&
+          !startOffset.dy.isNaN &&
+          !extendedPoint.dx.isNaN &&
+          !extendedPoint.dy.isNaN) {
+        canvas.drawLine(startOffset, extendedPoint, linePaint);
+      }
     }
   }
 
@@ -138,11 +187,11 @@ class FibonacciFanHelpers {
     required List<String> fibonacciLabels,
     Map<String, Color>? fibonacciLevelColors,
   }) {
-    final List<String> labelsToUse = fibonacciLabels;
+    // final List<String> labelsToUse = fibonacciLabels;
 
     for (int i = 0; i < FibonacciFanHelpers.fibRatios.length; i++) {
       final double ratio = FibonacciFanHelpers.fibRatios[i];
-      final String label = i < labelsToUse.length ? labelsToUse[i] : '';
+      final String label = i < fibonacciLabels.length ? fibonacciLabels[i] : '';
 
       final Offset fanPoint = Offset(
         startOffset.dx + deltaX,
@@ -162,17 +211,10 @@ class FibonacciFanHelpers {
       );
 
       // Use custom color if provided, otherwise use default line style color
-      final List<String> colorKeys = [
-        'level0',
-        'level38_2',
-        'level50',
-        'level61_8',
-        'level100'
-      ];
+      final String colorKey = fibonacciColorKeys[i];
       final Color labelColor = (fibonacciLevelColors != null &&
-              i < colorKeys.length &&
-              fibonacciLevelColors.containsKey(colorKeys[i]))
-          ? fibonacciLevelColors[colorKeys[i]]!
+              fibonacciLevelColors.containsKey(colorKey))
+          ? fibonacciLevelColors[colorKey]!
           : lineStyle.color;
 
       final TextPainter textPainter = TextPainter(

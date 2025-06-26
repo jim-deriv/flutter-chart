@@ -52,19 +52,19 @@ class FibfanAddingPreviewMobile
       final Size? layerSize = interactiveLayer.drawingContext.fullSize;
 
       if (layerSize != null) {
-        // Position end point slightly offset from start to create a compact fan
-        // This keeps the fan within the chart data area
+        // Position end point to the right and above start point
+        // This creates a proper upward-oriented Fibonacci fan
         final double endX = layerSize.width * 0.65;
-        final double endY = layerSize.height * 0.3;
+        final double endY = layerSize.height * 0.3; // Above start point (0.5)
 
         interactableDrawing.endPoint = EdgePoint(
           epoch: interactiveLayer.epochFromX(endX),
           quote: interactiveLayer.quoteFromY(endY),
         );
       } else {
-        // Fallback with minimal offset if size is not available
+        // Fallback with proper orientation if size is not available
         const double fallbackX = 50;
-        const double fallbackY = 25;
+        const double fallbackY = -50; // Above start point
 
         interactableDrawing.endPoint = EdgePoint(
           epoch: interactiveLayer.epochFromX(fallbackX),
@@ -73,6 +73,9 @@ class FibfanAddingPreviewMobile
       }
     }
   }
+
+  /// Track if the drawing is currently being dragged
+  bool _isDragging = false;
 
   @override
   bool hitTest(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
@@ -85,6 +88,7 @@ class FibfanAddingPreviewMobile
   @override
   void onDragStart(DragStartDetails details, EpochFromX epochFromX,
       QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
+    _isDragging = true;
     interactableDrawing.onDragStart(
         details, epochFromX, quoteFromY, epochToX, quoteToY);
   }
@@ -99,6 +103,15 @@ class FibfanAddingPreviewMobile
       epochToX,
       quoteToY,
     );
+  }
+
+  /// Handle drag end to reset drag state
+  @override
+  void onDragEnd(DragEndDetails details, EpochFromX epochFromX,
+      QuoteFromY quoteFromY, EpochToX epochToX, QuoteToY quoteToY) {
+    _isDragging = false;
+    // Call parent implementation if it exists
+    super.onDragEnd(details, epochFromX, quoteFromY, epochToX, quoteToY);
   }
 
   @override
@@ -161,6 +174,22 @@ class FibfanAddingPreviewMobile
         interactableDrawing.config.lineStyle,
         radius: 4,
       );
+
+      // Draw alignment guides on each edge point when dragging
+      if (_isDragging) {
+        drawPointAlignmentGuides(
+          canvas,
+          size,
+          startOffset,
+          lineColor: interactableDrawing.config.lineStyle.color,
+        );
+        drawPointAlignmentGuides(
+          canvas,
+          size,
+          endOffset,
+          lineColor: interactableDrawing.config.lineStyle.color,
+        );
+      }
     }
   }
 
@@ -247,6 +276,67 @@ class FibfanAddingPreviewMobile
 
       currentDistance += actualSegmentLength.toDouble();
       isDash = !isDash;
+    }
+  }
+
+  @override
+  void paintOverYAxis(
+    Canvas canvas,
+    Size size,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    AnimationInfo animationInfo,
+    ChartConfig chartConfig,
+    ChartTheme chartTheme,
+    GetDrawingState getDrawingState,
+  ) {
+    // Draw labels for both edge points when dragging
+    if (_isDragging &&
+        interactableDrawing.startPoint != null &&
+        interactableDrawing.endPoint != null) {
+      // Draw labels for start point
+      drawValueLabel(
+        canvas: canvas,
+        quoteToY: quoteToY,
+        value: interactableDrawing.startPoint!.quote,
+        pipSize: chartConfig.pipSize,
+        size: size,
+        color: interactableDrawing.config.lineStyle.color,
+        backgroundColor: chartTheme.backgroundColor,
+        textStyle: interactableDrawing.config.labelStyle,
+      );
+      drawEpochLabel(
+        canvas: canvas,
+        epochToX: epochToX,
+        epoch: interactableDrawing.startPoint!.epoch,
+        size: size,
+        textStyle: interactableDrawing.config.labelStyle,
+        animationProgress: animationInfo.stateChangePercent,
+        color: interactableDrawing.config.lineStyle.color,
+        backgroundColor: chartTheme.backgroundColor,
+      );
+
+      // Draw labels for end point
+      drawValueLabel(
+        canvas: canvas,
+        quoteToY: quoteToY,
+        value: interactableDrawing.endPoint!.quote,
+        pipSize: chartConfig.pipSize,
+        size: size,
+        color: interactableDrawing.config.lineStyle.color,
+        backgroundColor: chartTheme.backgroundColor,
+        textStyle: interactableDrawing.config.labelStyle,
+      );
+      drawEpochLabel(
+        canvas: canvas,
+        epochToX: epochToX,
+        epoch: interactableDrawing.endPoint!.epoch,
+        size: size,
+        textStyle: interactableDrawing.config.labelStyle,
+        animationProgress: animationInfo.stateChangePercent,
+        color: interactableDrawing.config.lineStyle.color,
+        backgroundColor: chartTheme.backgroundColor,
+      );
     }
   }
 

@@ -10,6 +10,7 @@ import 'package:deriv_chart/src/deriv_chart/interactive_layer/drawing_context.da
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/types.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/fibfan/fibfan_interactable_drawing.dart';
 import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
+import 'package:deriv_chart/src/theme/design_tokens/light_theme_design_tokens.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -31,11 +32,14 @@ class FibfanDrawingToolConfig extends DrawingToolConfig {
     this.lineStyle = const LineStyle(
         thickness: 0.9, color: CoreDesignTokens.coreColorSolidBlue700),
     this.fibonacciLevelColors = const <String, Color>{
-      'level0': Color(0xFF2196F3), // Blue for 0%
-      'level38_2': Color(0xFF00BCD4), // Cyan for 38.2%
-      'level50': Color(0xFFFFC107), // Amber for 50%
-      'level61_8': Color(0xFFFF9800), // Orange for 61.8%
-      'level100': Color(0xFF2196F3), // Blue for 100%
+      'level0': CoreDesignTokens.coreColorSolidBlue700, // Blue for 0%
+      'level38_2': LightThemeDesignTokens
+          .semanticColorSeawaterSolidBorderStaticMid, // Cyan for 38.2%
+      'level50': LightThemeDesignTokens
+          .semanticColorMustardSolidBorderStaticHigh, // Amber for 50%
+      'level61_8': LightThemeDesignTokens
+          .semanticColorYellowSolidBorderStaticMid, // Orange for 61.8%
+      'level100': CoreDesignTokens.coreColorSolidBlue700, // Blue for 100%
     },
     this.labelStyle = const TextStyle(
       color: CoreDesignTokens.coreColorSolidBlue700,

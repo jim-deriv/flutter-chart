@@ -31,11 +31,14 @@ FibfanDrawingToolConfig _$FibfanDrawingToolConfigFromJson(
                     k, const ColorConverter().fromJson((e as num).toInt())),
               ) ??
               const <String, Color>{
-                'level0': Color(0xFF2196F3),
-                'level38_2': Color(0xFF00BCD4),
-                'level50': Color(0xFFFFC107),
-                'level61_8': Color(0xFFFF9800),
-                'level100': Color(0xFF2196F3)
+                'level0': CoreDesignTokens.coreColorSolidBlue700,
+                'level38_2': LightThemeDesignTokens
+                    .semanticColorSeawaterSolidBorderStaticMid,
+                'level50': LightThemeDesignTokens
+                    .semanticColorMustardSolidBorderStaticHigh,
+                'level61_8': LightThemeDesignTokens
+                    .semanticColorYellowSolidBorderStaticMid,
+                'level100': CoreDesignTokens.coreColorSolidBlue700
               },
       labelStyle: json['labelStyle'] == null
           ? const TextStyle(
