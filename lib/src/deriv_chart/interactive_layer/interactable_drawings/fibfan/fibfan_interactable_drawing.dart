@@ -310,11 +310,14 @@ class FibfanInteractableDrawing
             fibonacciLevelColors: config.fibonacciLevelColors);
       }
 
-      // Draw endpoints with glowy effect if selected
+      // Draw endpoints with appropriate visual feedback based on interaction state
       if (drawingState.contains(DrawingToolState.selected) ||
           drawingState.contains(DrawingToolState.dragging)) {
+        // Handle individual point dragging with differentiated visual feedback
         if (drawingState.contains(DrawingToolState.dragging) &&
             isDraggingStartPoint != null) {
+          // Draw focused circle (glowing effect) only on the point being dragged
+          // This provides clear visual feedback about which point is actively being manipulated
           drawFocusedCircle(
             paintStyle,
             lineStyle,
@@ -325,6 +328,10 @@ class FibfanInteractableDrawing
             FibfanConstants.focusedCircleStroke *
                 animationInfo.stateChangePercent,
           );
+
+          // Draw regular point (non-glowing) on the point that is NOT being dragged
+          // This maintains visibility of the stationary point while clearly distinguishing
+          // it from the actively dragged point
           drawPoint(
             isDraggingStartPoint == true ? endPoint! : startPoint!,
             epochToX,
@@ -335,6 +342,8 @@ class FibfanInteractableDrawing
             radius: FibfanConstants.pointRadius,
           );
         } else {
+          // When not dragging individual points (selected state or dragging entire fan),
+          // show focused circles on both points for general selection feedback
           drawPointsFocusedCircle(
             paintStyle,
             lineStyle,
