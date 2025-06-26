@@ -790,7 +790,6 @@ class FibonacciFanHelpers {
     required List<String> fibonacciLabels,
     Map<String, Color>? fibonacciLevelColors,
   }) {
-    // final List<String> labelsToUse = fibonacciLabels;
 
     for (int i = 0; i < FibonacciFanHelpers.fibRatios.length; i++) {
       final double ratio = FibonacciFanHelpers.fibRatios[i];
