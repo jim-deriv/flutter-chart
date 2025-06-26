@@ -313,17 +313,40 @@ class FibfanInteractableDrawing
       // Draw endpoints with glowy effect if selected
       if (drawingState.contains(DrawingToolState.selected) ||
           drawingState.contains(DrawingToolState.dragging)) {
-        drawPointsFocusedCircle(
-          paintStyle,
-          lineStyle,
-          canvas,
-          startOffset,
-          FibfanConstants.focusedCircleRadius *
-              animationInfo.stateChangePercent,
-          FibfanConstants.focusedCircleStroke *
-              animationInfo.stateChangePercent,
-          endOffset,
-        );
+        if (drawingState.contains(DrawingToolState.dragging) &&
+            isDraggingStartPoint != null) {
+          drawFocusedCircle(
+            paintStyle,
+            lineStyle,
+            canvas,
+            isDraggingStartPoint == true ? startOffset : endOffset,
+            FibfanConstants.focusedCircleRadius *
+                animationInfo.stateChangePercent,
+            FibfanConstants.focusedCircleStroke *
+                animationInfo.stateChangePercent,
+          );
+          drawPoint(
+            isDraggingStartPoint == true ? endPoint! : startPoint!,
+            epochToX,
+            quoteToY,
+            canvas,
+            paintStyle,
+            config.lineStyle,
+            radius: FibfanConstants.pointRadius,
+          );
+        } else {
+          drawPointsFocusedCircle(
+            paintStyle,
+            lineStyle,
+            canvas,
+            startOffset,
+            FibfanConstants.focusedCircleRadius *
+                animationInfo.stateChangePercent,
+            FibfanConstants.focusedCircleStroke *
+                animationInfo.stateChangePercent,
+            endOffset,
+          );
+        }
       } else if (drawingState.contains(DrawingToolState.hovered)) {
         drawPointsFocusedCircle(
             paintStyle,
