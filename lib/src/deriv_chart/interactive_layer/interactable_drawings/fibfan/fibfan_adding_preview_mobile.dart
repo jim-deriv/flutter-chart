@@ -191,25 +191,26 @@ class FibfanAddingPreviewMobile
         _drawPreviewFanLines(canvas, startOffset, deltaX, deltaY, size);
       }
 
-      // Draw edge points for the preview
+      // Draw edge points for the preview with enhanced visibility
       final DrawingPaintStyle paintStyle = DrawingPaintStyle();
-      drawPointOffset(
+
+      // Draw focused circles around the points to make them more visible during creation
+      drawFocusedCircle(
+        paintStyle,
+        interactableDrawing.config.lineStyle,
+        canvas,
         startOffset,
-        epochToX,
-        quoteToY,
-        canvas,
-        paintStyle,
-        interactableDrawing.config.lineStyle,
-        radius: FibfanConstants.pointRadius,
+        FibfanConstants.focusedCircleRadius,
+        FibfanConstants.pointRadius,
       );
-      drawPointOffset(
-        endOffset,
-        epochToX,
-        quoteToY,
-        canvas,
+
+      drawFocusedCircle(
         paintStyle,
         interactableDrawing.config.lineStyle,
-        radius: FibfanConstants.pointRadius,
+        canvas,
+        endOffset,
+        FibfanConstants.focusedCircleRadius,
+        FibfanConstants.pointRadius,
       );
 
       // Draw alignment guides on each edge point when dragging

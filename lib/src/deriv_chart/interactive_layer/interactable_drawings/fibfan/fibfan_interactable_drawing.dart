@@ -396,6 +396,34 @@ class FibfanInteractableDrawing
 
       FibonacciFanHelpers.drawFanLines(
           canvas, startOffset, deltaX, deltaY, size, paintStyle, lineStyle);
+
+      // Draw the control points during preview
+      // Draw start point (already placed)
+      drawPoint(
+        startPoint!,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        config.lineStyle,
+        radius: FibfanConstants.pointRadius,
+      );
+
+      // Draw preview end point at hover position
+      final Offset hoverPointOffset = Offset(
+        _hoverPosition!.dx,
+        _hoverPosition!.dy,
+      );
+      drawPointOffset(
+        hoverPointOffset,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        config.lineStyle,
+        radius: FibfanConstants.pointRadius,
+      );
+
       drawPointAlignmentGuides(canvas, size, startOffset,
           lineColor: config.lineStyle.color);
     }

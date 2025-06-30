@@ -100,6 +100,7 @@ class FibfanAddingPreviewDesktop
     final LineStyle lineStyle = interactableDrawing.config.lineStyle;
     final LineStyle fillStyle = interactableDrawing.config.fillStyle;
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
+
     if (interactableDrawing.startPoint == null && _hoverPosition != null) {
       final Offset pointOffset = Offset(
         _hoverPosition!.dx,
@@ -107,7 +108,19 @@ class FibfanAddingPreviewDesktop
       );
       drawPointAlignmentGuides(canvas, size, pointOffset,
           lineColor: interactableDrawing.config.lineStyle.color);
+
+      // Draw preview point at hover position
+      drawPointOffset(
+        pointOffset,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        interactableDrawing.config.lineStyle,
+        radius: FibfanConstants.pointRadius,
+      );
     }
+
     if (interactableDrawing.startPoint != null && _hoverPosition != null) {
       // Draw preview fan from start point to hover position
       final Offset startOffset = Offset(
@@ -141,11 +154,35 @@ class FibfanAddingPreviewDesktop
           fibonacciLabels: FibonacciFanHelpers.fibonacciLabels,
           fibonacciLevelColors:
               interactableDrawing.config.fibonacciLevelColors);
-      final Offset pointOffset = Offset(
+
+      // Draw the control points
+      // Draw start point (already placed)
+      drawPointOffset(
+        startOffset,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        interactableDrawing.config.lineStyle,
+        radius: FibfanConstants.pointRadius,
+      );
+
+      // Draw end point at hover position (preview)
+      final Offset endPointOffset = Offset(
         _hoverPosition!.dx,
         _hoverPosition!.dy,
       );
-      drawPointAlignmentGuides(canvas, size, pointOffset,
+      drawPointOffset(
+        endPointOffset,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        interactableDrawing.config.lineStyle,
+        radius: FibfanConstants.pointRadius,
+      );
+
+      drawPointAlignmentGuides(canvas, size, endPointOffset,
           lineColor: interactableDrawing.config.lineStyle.color);
     }
   }
