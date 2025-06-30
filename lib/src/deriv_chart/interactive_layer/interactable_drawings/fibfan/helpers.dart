@@ -4,6 +4,46 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/material.dart';
 
+/// Represents a single Fibonacci level with all its associated properties.
+///
+/// This class encapsulates the ratio, label, and color key for each
+/// Fibonacci retracement level, providing a more structured and
+/// maintainable approach to managing level data.
+@immutable
+class FibonacciLevel {
+  /// Creates a new Fibonacci level with the specified properties.
+  const FibonacciLevel({
+    required this.ratio,
+    required this.label,
+    required this.colorKey,
+  });
+
+  /// The mathematical ratio for this Fibonacci level (0.0 to 1.0).
+  final double ratio;
+
+  /// Human-readable percentage label (e.g., "38.2%", "61.8%").
+  final String label;
+
+  /// Color key for customizable styling (e.g., "level38_2").
+  final String colorKey;
+
+  @override
+  String toString() =>
+      'FibonacciLevel(ratio: $ratio, label: $label, colorKey: $colorKey)';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FibonacciLevel &&
+          runtimeType == other.runtimeType &&
+          ratio == other.ratio &&
+          label == other.label &&
+          colorKey == other.colorKey;
+
+  @override
+  int get hashCode => ratio.hashCode ^ label.hashCode ^ colorKey.hashCode;
+}
+
 /// Constants for Fibonacci Fan drawing operations.
 ///
 /// This class centralizes all magic numbers used throughout the Fibonacci Fan
@@ -329,6 +369,9 @@ class FibonacciFanHelpers {
   /// performance during animations and frequent redraws.
   static TextPainter getCachedTextPainter(
       String text, Color color, double fontSize) {
+    // Clear cache to ensure fresh text painters with updated labels
+    _textPainterCache.clear();
+
     final String key = 'text_${text}_${color.value}_$fontSize';
     return _textPainterCache.putIfAbsent(key, () {
       final textPainter = TextPainter(
@@ -489,76 +532,78 @@ class FibonacciFanHelpers {
     return deltaX.abs() > threshold || deltaY.abs() > threshold;
   }
 
-  /// Fibonacci levels with their ratios, labels, and color keys.
+  /// Fibonacci levels in the desired visual order for drawing operations.
   ///
-  /// This map defines the standard Fibonacci retracement levels used in
-  /// technical analysis. Each level contains:
-  /// - The mathematical ratio (key)
-  /// - A human-readable percentage label
-  /// - A color key for customizable styling
+  /// This list defines all Fibonacci retracement levels used in the fan,
+  /// ordered from flattest to steepest for proper visual layering.
+  /// Each level contains its ratio, display label, and color key.
   ///
-  /// **Fibonacci Levels:**
-  /// - **0.0**: 0% - The baseline level
-  /// - **0.382**: 38.2% - First major retracement level
-  /// - **0.5**: 50% - Midpoint retracement (not technically Fibonacci but commonly used)
-  /// - **0.618**: 61.8% - Golden ratio retracement level
-  /// - **1.0**: 100% - Full retracement level
-  static final Map<double, Map<String, String>> fibonacciLevels = {
-    0.0: {'label': '0%', 'colorKey': 'level0'},
-    0.382: {'label': '38.2%', 'colorKey': 'level38_2'},
-    0.5: {'label': '50%', 'colorKey': 'level50'},
-    0.618: {'label': '61.8%', 'colorKey': 'level61_8'},
-    1.0: {'label': '100%', 'colorKey': 'level100'},
-  };
+  /// **Visual Order (bottom to top):**
+  /// 1. 0% (0.0) - Baseline level (horizontal, flattest)
+  /// 2. 38.2% (0.382) - First major retracement level
+  /// 3. 50% (0.5) - Midpoint retracement (commonly used)
+  /// 4. 61.8% (0.618) - Golden ratio retracement level
+  /// 5. 100% (1.0) - Steepest line, full retracement
+  ///
+  /// **Benefits of this approach:**
+  /// - Single source of truth for all level data
+  /// - Consistent ordering across all operations
+  /// - Type-safe access to level properties
+  /// - Easy to add/remove/modify levels
+  /// - Eliminates data duplication
+  static const List<FibonacciLevel> fibonacciLevels = [
+    FibonacciLevel(ratio: 0, label: '0%', colorKey: 'level0'),
+    FibonacciLevel(ratio: 0.382, label: '38.2%', colorKey: 'level38_2'),
+    FibonacciLevel(ratio: 0.5, label: '50%', colorKey: 'level50'),
+    FibonacciLevel(ratio: 0.618, label: '61.8%', colorKey: 'level61_8'),
+    FibonacciLevel(ratio: 1, label: '100%', colorKey: 'level100'),
+  ];
 
-  /// Fibonacci ratios for the fan lines in the desired visual order.
+  /// Gets a Fibonacci level by its ratio value.
   ///
-  /// Returns the Fibonacci ratios in reverse order (1.0 to 0.0) to ensure
-  /// proper visual layering when drawing the fan lines. This ordering
-  /// prevents visual overlap issues and ensures consistent rendering.
+  /// Provides convenient access to level data when you have the ratio.
+  /// Returns null if no level with the specified ratio exists.
   ///
-  /// **Visual Order (top to bottom):**
-  /// 1. 100% (1.0) - Steepest line
-  /// 2. 61.8% (0.618) - Golden ratio line
-  /// 3. 50% (0.5) - Midpoint line
-  /// 4. 38.2% (0.382) - First retracement line
-  /// 5. 0% (0.0) - Baseline (horizontal)
-  static List<double> get fibRatios => [1.0, 0.618, 0.5, 0.382, 0.0];
+  /// **Parameters:**
+  /// - [ratio]: The mathematical ratio to search for
+  ///
+  /// **Returns:** The matching FibonacciLevel or null if not found
+  ///
+  /// **Example:**
+  /// ```dart
+  /// final goldenLevel = FibonacciFanHelpers.getLevelByRatio(0.618);
+  /// print(goldenLevel?.label); // "61.8%"
+  /// ```
+  static FibonacciLevel? getLevelByRatio(double ratio) {
+    try {
+      return fibonacciLevels.firstWhere((level) => level.ratio == ratio);
+    } on StateError {
+      return null;
+    }
+  }
 
-  /// Labels for each Fibonacci level in the desired visual order.
+  /// Gets a Fibonacci level by its color key.
   ///
-  /// Provides human-readable percentage labels corresponding to each
-  /// Fibonacci ratio. These labels are displayed next to their respective
-  /// fan lines to help users identify support and resistance levels.
+  /// Provides convenient access to level data when you have the color key.
+  /// Returns null if no level with the specified color key exists.
   ///
-  /// **Returns:** List of percentage strings in visual order
-  static List<String> get fibonacciLabels => [
-        fibonacciLevels[0.0]!['label']!, // 0%
-        fibonacciLevels[0.382]!['label']!, // 38.2%
-        fibonacciLevels[0.5]!['label']!, // 50%
-        fibonacciLevels[0.618]!['label']!, // 61.8%
-        fibonacciLevels[1.0]!['label']!, // 100%
-      ];
-
-  /// Color keys for each Fibonacci level in the desired visual order.
+  /// **Parameters:**
+  /// - [colorKey]: The color key to search for
   ///
-  /// Provides color mapping keys that can be used to apply custom colors
-  /// to individual Fibonacci levels. This allows for color-coded
-  /// visualization where different levels can have distinct appearances.
+  /// **Returns:** The matching FibonacciLevel or null if not found
   ///
-  /// **Color Keys:**
-  /// - `level0` - For 0% line
-  /// - `level38_2` - For 38.2% line
-  /// - `level50` - For 50% line
-  /// - `level61_8` - For 61.8% line
-  /// - `level100` - For 100% line
-  static List<String> get fibonacciColorKeys => [
-        fibonacciLevels[0.0]!['colorKey']!, // level0 for 0%
-        fibonacciLevels[0.382]!['colorKey']!, // level38_2 for 38.2%
-        fibonacciLevels[0.5]!['colorKey']!, // level50 for 50%
-        fibonacciLevels[0.618]!['colorKey']!, // level61_8 for 61.8%
-        fibonacciLevels[1.0]!['colorKey']!, // level100 for 100%
-      ];
+  /// **Example:**
+  /// ```dart
+  /// final level = FibonacciFanHelpers.getLevelByColorKey('level61_8');
+  /// print(level?.ratio); // 0.618
+  /// ```
+  static FibonacciLevel? getLevelByColorKey(String colorKey) {
+    try {
+      return fibonacciLevels.firstWhere((level) => level.colorKey == colorKey);
+    } on StateError {
+      return null;
+    }
+  }
 
   /// Draws the filled areas between fan lines using angle-based calculations.
   ///
@@ -598,13 +643,15 @@ class FibonacciFanHelpers {
     // Calculate the base angle from start to end point
     final double baseAngle = math.atan2(deltaY, deltaX);
 
-    for (int i = 0; i < fibRatios.length - 1; i++) {
-      final double ratio1 = fibRatios[i];
-      final double ratio2 = fibRatios[i + 1];
+    for (int i = 0; i < fibonacciLevels.length - 1; i++) {
+      final double ratio1 = fibonacciLevels[i].ratio;
+      final double ratio2 = fibonacciLevels[i + 1].ratio;
 
-      // Calculate angles as percentages of the base angle
-      final double angle1 = baseAngle * ratio1;
-      final double angle2 = baseAngle * ratio2;
+      // Calculate angles: 0% should point to end point, 100% should be horizontal (0 degrees)
+      // Interpolate between the end angle (baseAngle) and horizontal reference (0 degrees)
+      const double horizontalAngle = 0; // Horizontal reference
+      final double angle1 = baseAngle + (horizontalAngle - baseAngle) * ratio1;
+      final double angle2 = baseAngle + (horizontalAngle - baseAngle) * ratio2;
 
       // Extend lines to the edge of the screen using angle-based calculations
       final double screenWidth = size.width;
@@ -691,19 +738,21 @@ class FibonacciFanHelpers {
     // Calculate the base angle from start to end point
     final double baseAngle = math.atan2(deltaY, deltaX);
 
-    for (int i = 0; i < fibRatios.length; i++) {
-      final double ratio = fibRatios[i];
-      final String colorKey = fibonacciColorKeys[i];
+    for (int i = 0; i < fibonacciLevels.length; i++) {
+      final FibonacciLevel level = fibonacciLevels[i];
       final Color lineColor = (fibonacciLevelColors != null &&
-              fibonacciLevelColors.containsKey(colorKey))
-          ? fibonacciLevelColors[colorKey]!
+              fibonacciLevelColors.containsKey(level.colorKey))
+          ? fibonacciLevelColors[level.colorKey]!
           : lineStyle.color;
 
       final Paint linePaint =
           getCachedLinePaint(lineColor, lineStyle.thickness);
 
-      // Calculate angle as a percentage of the base angle
-      final double fanAngle = baseAngle * ratio;
+      // Calculate angle: 0% should point to end point, 100% should be horizontal (0 degrees)
+      // Interpolate between the end angle (baseAngle) and horizontal reference (0 degrees)
+      const double horizontalAngle = 0; // Horizontal reference
+      final double fanAngle =
+          baseAngle + (horizontalAngle - baseAngle) * level.ratio;
 
       // Extend line to the edge of the screen using angle-based calculations
       final double screenWidth = size.width;
@@ -743,7 +792,6 @@ class FibonacciFanHelpers {
   /// - [deltaY]: Vertical distance from start to end point
   /// - [size]: Canvas size for boundary calculations
   /// - [lineStyle]: Default line style for fallback color
-  /// - [fibonacciLabels]: List of percentage labels to display
   /// - [fibonacciLevelColors]: Optional custom colors for each level
   ///
   /// **Label Positioning:**
@@ -762,7 +810,6 @@ class FibonacciFanHelpers {
     double deltaY,
     Size size,
     LineStyle lineStyle, {
-    required List<String> fibonacciLabels,
     Map<String, Color>? fibonacciLevelColors,
   }) {
     // Calculate the base angle from start to end point
@@ -772,12 +819,14 @@ class FibonacciFanHelpers {
     final double labelDistance = math.sqrt(deltaX * deltaX + deltaY * deltaY) *
         FibfanConstants.labelPositionMultiplier;
 
-    for (int i = 0; i < FibonacciFanHelpers.fibRatios.length; i++) {
-      final double ratio = FibonacciFanHelpers.fibRatios[i];
-      final String label = i < fibonacciLabels.length ? fibonacciLabels[i] : '';
+    for (int i = 0; i < FibonacciFanHelpers.fibonacciLevels.length; i++) {
+      final FibonacciLevel level = FibonacciFanHelpers.fibonacciLevels[i];
 
-      // Calculate angle as a percentage of the base angle
-      final double fanAngle = baseAngle * ratio;
+      // Calculate angle: 0% should point to end point, 100% should be horizontal (0 degrees)
+      // Interpolate between the end angle (baseAngle) and horizontal reference (0 degrees)
+      const double horizontalAngle = 0; // Horizontal reference
+      final double fanAngle =
+          baseAngle + (horizontalAngle - baseAngle) * level.ratio;
 
       // Calculate label position along the fan line
       final Offset labelPosition = Offset(
@@ -786,14 +835,13 @@ class FibonacciFanHelpers {
       );
 
       // Use custom color if provided, otherwise use default line style color
-      final String colorKey = fibonacciColorKeys[i];
       final Color labelColor = (fibonacciLevelColors != null &&
-              fibonacciLevelColors.containsKey(colorKey))
-          ? fibonacciLevelColors[colorKey]!
+              fibonacciLevelColors.containsKey(level.colorKey))
+          ? fibonacciLevelColors[level.colorKey]!
           : lineStyle.color;
 
       final TextPainter textPainter = getCachedTextPainter(
-        label,
+        level.label,
         labelColor,
         FibfanConstants.labelFontSize,
       );

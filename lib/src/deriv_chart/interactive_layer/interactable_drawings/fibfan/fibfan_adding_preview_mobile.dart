@@ -191,26 +191,25 @@ class FibfanAddingPreviewMobile
         _drawPreviewFanLines(canvas, startOffset, deltaX, deltaY, size);
       }
 
-      // Draw edge points for the preview with enhanced visibility
+      // Draw edge points for the preview
       final DrawingPaintStyle paintStyle = DrawingPaintStyle();
-
-      // Draw focused circles around the points to make them more visible during creation
-      drawFocusedCircle(
-        paintStyle,
-        interactableDrawing.config.lineStyle,
-        canvas,
+      drawPointOffset(
         startOffset,
-        FibfanConstants.focusedCircleRadius,
-        FibfanConstants.pointRadius,
-      );
-
-      drawFocusedCircle(
+        epochToX,
+        quoteToY,
+        canvas,
         paintStyle,
         interactableDrawing.config.lineStyle,
-        canvas,
+        radius: FibfanConstants.pointRadius,
+      );
+      drawPointOffset(
         endOffset,
-        FibfanConstants.focusedCircleRadius,
-        FibfanConstants.pointRadius,
+        epochToX,
+        quoteToY,
+        canvas,
+        paintStyle,
+        interactableDrawing.config.lineStyle,
+        radius: FibfanConstants.pointRadius,
       );
 
       // Draw alignment guides on each edge point when dragging
@@ -245,10 +244,10 @@ class FibfanAddingPreviewMobile
       FibfanConstants.dashOpacity,
     );
 
-    for (final double ratio in FibonacciFanHelpers.fibRatios) {
+    for (final FibonacciLevel level in FibonacciFanHelpers.fibonacciLevels) {
       final Offset fanPoint = Offset(
         startOffset.dx + deltaX,
-        startOffset.dy + deltaY * ratio,
+        startOffset.dy + deltaY * level.ratio,
       );
 
       // Extend line to the edge of the screen

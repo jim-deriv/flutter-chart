@@ -151,7 +151,6 @@ class FibfanAddingPreviewDesktop
       // Draw labels for the fan lines
       FibonacciFanHelpers.drawFanLabels(
           canvas, startOffset, deltaX, deltaY, size, lineStyle,
-          fibonacciLabels: FibonacciFanHelpers.fibonacciLabels,
           fibonacciLevelColors:
               interactableDrawing.config.fibonacciLevelColors);
 

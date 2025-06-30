@@ -221,9 +221,12 @@ class FibfanInteractableDrawing
     final double baseAngle = math.atan2(deltaY, deltaX);
 
     // Check each fan line using angle-based calculations
-    for (final double ratio in FibonacciFanHelpers.fibRatios) {
-      // Calculate angle as a percentage of the base angle
-      final double fanAngle = baseAngle * ratio;
+    for (final FibonacciLevel level in FibonacciFanHelpers.fibonacciLevels) {
+      // Calculate angle: 0% should point to end point, 100% should be horizontal (0 degrees)
+      // Interpolate between the end angle (baseAngle) and horizontal reference (0 degrees)
+      const double horizontalAngle = 0; // Horizontal reference
+      final double fanAngle =
+          baseAngle + (horizontalAngle - baseAngle) * level.ratio;
 
       // Extend the line to the edge of the screen using trigonometry
       final double screenWidth = drawingContext.contentSize.width;
@@ -306,7 +309,6 @@ class FibfanInteractableDrawing
             canvas, startOffset, deltaX, deltaY, size, paintStyle, fillStyle);
         FibonacciFanHelpers.drawFanLabels(
             canvas, startOffset, deltaX, deltaY, size, lineStyle,
-            fibonacciLabels: FibonacciFanHelpers.fibonacciLabels,
             fibonacciLevelColors: config.fibonacciLevelColors);
       }
 
