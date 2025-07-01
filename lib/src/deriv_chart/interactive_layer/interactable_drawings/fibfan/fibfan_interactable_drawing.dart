@@ -9,6 +9,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_too
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/extensions/extensions.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/drawing_adding_preview.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/fibfan/drag_state.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactable_drawings/fibfan/helpers.dart';
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/widgets/color_picker.dart';
 import 'package:deriv_chart/src/models/axis_range.dart';
@@ -93,16 +94,17 @@ class FibfanInteractableDrawing
   /// its respective Fibonacci ratio.
   EdgePoint? endPoint;
 
-  /// Tracks which point is being dragged during user interaction.
+  /// Tracks the current drag state during user interaction.
   ///
   /// This state variable enables precise drag behavior by distinguishing between:
-  /// - `null`: User is dragging the entire fan (both points move together)
-  /// - `true`: User is dragging only the start point
-  /// - `false`: User is dragging only the end point
+  /// - `null`: No dragging is currently active
+  /// - `FibfanDragState.draggingStartPoint`: User is dragging only the start point
+  /// - `FibfanDragState.draggingEndPoint`: User is dragging only the end point
+  /// - `FibfanDragState.draggingEntireFan`: User is dragging the entire fan (both points move together)
   ///
   /// The value is set during [onDragStart] based on hit testing and cleared
   /// during [onDragEnd] to reset the interaction state.
-  bool? isDraggingStartPoint;
+  FibfanDragState? _dragState;
 
   /// Current hover position for desktop interactions.
   ///
@@ -148,19 +150,19 @@ class FibfanInteractableDrawing
 
     // If the drag is starting on the start point
     if (startDistance <= hitTestMargin) {
-      isDraggingStartPoint = true;
+      _dragState = FibfanDragState.draggingStartPoint;
       return;
     }
 
     // If the drag is starting on the end point
     if (endDistance <= hitTestMargin) {
-      isDraggingStartPoint = false;
+      _dragState = FibfanDragState.draggingEndPoint;
       return;
     }
 
     // Check if the drag is on any of the fan lines
     if (_hitTestFanLines(details.localPosition, epochToX, quoteToY)) {
-      isDraggingStartPoint = null; // Dragging the whole fan
+      _dragState = FibfanDragState.draggingEntireFan;
       return;
     }
   }
@@ -317,14 +319,17 @@ class FibfanInteractableDrawing
           drawingState.contains(DrawingToolState.dragging)) {
         // Handle individual point dragging with differentiated visual feedback
         if (drawingState.contains(DrawingToolState.dragging) &&
-            isDraggingStartPoint != null) {
+            (_dragState == FibfanDragState.draggingStartPoint ||
+                _dragState == FibfanDragState.draggingEndPoint)) {
           // Draw focused circle (glowing effect) only on the point being dragged
           // This provides clear visual feedback about which point is actively being manipulated
           drawFocusedCircle(
             paintStyle,
             lineStyle,
             canvas,
-            isDraggingStartPoint == true ? startOffset : endOffset,
+            _dragState == FibfanDragState.draggingStartPoint
+                ? startOffset
+                : endOffset,
             FibfanConstants.focusedCircleRadius *
                 animationInfo.stateChangePercent,
             FibfanConstants.focusedCircleStroke *
@@ -335,7 +340,9 @@ class FibfanInteractableDrawing
           // This maintains visibility of the stationary point while clearly distinguishing
           // it from the actively dragged point
           drawPoint(
-            isDraggingStartPoint == true ? endPoint! : startPoint!,
+            _dragState == FibfanDragState.draggingStartPoint
+                ? endPoint!
+                : startPoint!,
             epochToX,
             quoteToY,
             canvas,
@@ -370,21 +377,26 @@ class FibfanInteractableDrawing
       }
 
       // Draw alignment guides when dragging
-      if (drawingState.contains(DrawingToolState.dragging) &&
-          isDraggingStartPoint != null) {
-        if (isDraggingStartPoint!) {
-          drawPointAlignmentGuides(canvas, size, startOffset,
-              lineColor: config.lineStyle.color);
-        } else {
-          drawPointAlignmentGuides(canvas, size, endOffset,
-              lineColor: config.lineStyle.color);
+      if (drawingState.contains(DrawingToolState.dragging)) {
+        switch (_dragState) {
+          case FibfanDragState.draggingStartPoint:
+            drawPointAlignmentGuides(canvas, size, startOffset,
+                lineColor: config.lineStyle.color);
+            break;
+          case FibfanDragState.draggingEndPoint:
+            drawPointAlignmentGuides(canvas, size, endOffset,
+                lineColor: config.lineStyle.color);
+            break;
+          case FibfanDragState.draggingEntireFan:
+            drawPointAlignmentGuides(canvas, size, startOffset,
+                lineColor: config.lineStyle.color);
+            drawPointAlignmentGuides(canvas, size, endOffset,
+                lineColor: config.lineStyle.color);
+            break;
+          case null:
+            // No specific drag state, don't draw alignment guides
+            break;
         }
-      } else if (drawingState.contains(DrawingToolState.dragging) &&
-          isDraggingStartPoint == null) {
-        drawPointAlignmentGuides(canvas, size, startOffset,
-            lineColor: config.lineStyle.color);
-        drawPointAlignmentGuides(canvas, size, endOffset,
-            lineColor: config.lineStyle.color);
       }
     } else if (startPoint != null && _hoverPosition != null) {
       // Preview mode - draw fan from start point to hover position
@@ -547,68 +559,82 @@ class FibfanInteractableDrawing
     // Get the drag delta in screen coordinates
     final Offset delta = details.delta;
 
-    // If we're dragging a specific point (start or end point)
-    if (isDraggingStartPoint != null) {
-      // Get the current point being dragged
-      final EdgePoint pointBeingDragged =
-          isDraggingStartPoint! ? startPoint! : endPoint!;
+    // Handle different drag states
+    switch (_dragState) {
+      case FibfanDragState.draggingStartPoint:
+        // Get the current screen position of the start point
+        final Offset currentOffset = Offset(
+          epochToX(startPoint!.epoch),
+          quoteToY(startPoint!.quote),
+        );
 
-      // Get the current screen position of the point
-      final Offset currentOffset = Offset(
-        epochToX(pointBeingDragged.epoch),
-        quoteToY(pointBeingDragged.quote),
-      );
+        // Apply the delta to get the new screen position
+        final Offset newOffset = currentOffset + delta;
 
-      // Apply the delta to get the new screen position
-      final Offset newOffset = currentOffset + delta;
+        // Convert back to epoch and quote coordinates
+        final int newEpoch = epochFromX(newOffset.dx);
+        final double newQuote = quoteFromY(newOffset.dy);
 
-      // Convert back to epoch and quote coordinates
-      final int newEpoch = epochFromX(newOffset.dx);
-      final double newQuote = quoteFromY(newOffset.dy);
+        // Update the start point
+        startPoint = EdgePoint(
+          epoch: newEpoch,
+          quote: newQuote,
+        );
+        break;
 
-      // Create updated point
-      final EdgePoint updatedPoint = EdgePoint(
-        epoch: newEpoch,
-        quote: newQuote,
-      );
+      case FibfanDragState.draggingEndPoint:
+        // Get the current screen position of the end point
+        final Offset currentOffset = Offset(
+          epochToX(endPoint!.epoch),
+          quoteToY(endPoint!.quote),
+        );
 
-      // Update the appropriate point
-      if (isDraggingStartPoint!) {
-        startPoint = updatedPoint;
-      } else {
-        endPoint = updatedPoint;
-      }
-    } else {
-      // We're dragging the whole fan
-      // Convert start and end points to screen coordinates
-      final Offset startOffset = Offset(
-        epochToX(startPoint!.epoch),
-        quoteToY(startPoint!.quote),
-      );
-      final Offset endOffset = Offset(
-        epochToX(endPoint!.epoch),
-        quoteToY(endPoint!.quote),
-      );
+        // Apply the delta to get the new screen position
+        final Offset newOffset = currentOffset + delta;
 
-      // Apply the delta to get new screen coordinates
-      final Offset newStartOffset = startOffset + delta;
-      final Offset newEndOffset = endOffset + delta;
+        // Convert back to epoch and quote coordinates
+        final int newEpoch = epochFromX(newOffset.dx);
+        final double newQuote = quoteFromY(newOffset.dy);
 
-      // Convert back to epoch and quote coordinates
-      final int newStartEpoch = epochFromX(newStartOffset.dx);
-      final double newStartQuote = quoteFromY(newStartOffset.dy);
-      final int newEndEpoch = epochFromX(newEndOffset.dx);
-      final double newEndQuote = quoteFromY(newEndOffset.dy);
+        // Update the end point
+        endPoint = EdgePoint(
+          epoch: newEpoch,
+          quote: newQuote,
+        );
+        break;
 
-      // Update the start and end points
-      startPoint = EdgePoint(
-        epoch: newStartEpoch,
-        quote: newStartQuote,
-      );
-      endPoint = EdgePoint(
-        epoch: newEndEpoch,
-        quote: newEndQuote,
-      );
+      case FibfanDragState.draggingEntireFan:
+      case null:
+        // We're dragging the whole fan
+        // Convert start and end points to screen coordinates
+        final Offset startOffset = Offset(
+          epochToX(startPoint!.epoch),
+          quoteToY(startPoint!.quote),
+        );
+        final Offset endOffset = Offset(
+          epochToX(endPoint!.epoch),
+          quoteToY(endPoint!.quote),
+        );
+
+        // Apply the delta to get new screen coordinates
+        final Offset newStartOffset = startOffset + delta;
+        final Offset newEndOffset = endOffset + delta;
+
+        // Convert back to epoch and quote coordinates
+        final int newStartEpoch = epochFromX(newStartOffset.dx);
+        final double newStartQuote = quoteFromY(newStartOffset.dy);
+        final int newEndEpoch = epochFromX(newEndOffset.dx);
+        final double newEndQuote = quoteFromY(newEndOffset.dy);
+
+        // Update the start and end points
+        startPoint = EdgePoint(
+          epoch: newStartEpoch,
+          quote: newStartQuote,
+        );
+        endPoint = EdgePoint(
+          epoch: newEndEpoch,
+          quote: newEndQuote,
+        );
     }
   }
 
@@ -620,8 +646,8 @@ class FibfanInteractableDrawing
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    // Reset the dragging flag when drag is complete
-    isDraggingStartPoint = null;
+    // Reset the drag state when drag is complete
+    _dragState = null;
   }
 
   @override
