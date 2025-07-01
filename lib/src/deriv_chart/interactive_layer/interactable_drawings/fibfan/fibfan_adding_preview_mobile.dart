@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
@@ -230,7 +231,7 @@ class FibfanAddingPreviewMobile
     }
   }
 
-  /// Draws preview fan lines with dashed style
+  /// Draws preview fan lines with dashed style using angle-based calculations
   void _drawPreviewFanLines(
     Canvas canvas,
     Offset startOffset,
@@ -244,31 +245,31 @@ class FibfanAddingPreviewMobile
       FibfanConstants.dashOpacity,
     );
 
+    // Calculate the base angle from start to end point (same as main fan)
+    final double baseAngle = math.atan2(deltaY, deltaX);
+
     for (final FibonacciLevel level in FibonacciFanHelpers.fibonacciLevels) {
-      final Offset fanPoint = Offset(
-        startOffset.dx + deltaX,
-        startOffset.dy + deltaY * level.ratio,
+      // Calculate angle: 0% should point to end point, 100% should be horizontal (0 degrees)
+      // Interpolate between the end angle (baseAngle) and horizontal reference (0 degrees)
+      const double horizontalAngle = 0; // Horizontal reference
+      final double fanAngle =
+          baseAngle + (horizontalAngle - baseAngle) * level.ratio;
+
+      // Extend line to the edge of the screen using angle-based calculations
+      final double screenWidth = size.width;
+      final double distanceToEdge = screenWidth - startOffset.dx;
+
+      // Calculate extended point using trigonometry (same as main fan)
+      final Offset extendedPoint = Offset(
+        screenWidth,
+        startOffset.dy + distanceToEdge * math.tan(fanAngle),
       );
 
-      // Extend line to the edge of the screen
-      final double screenWidth = size.width;
-      final double deltaXFan = fanPoint.dx - startOffset.dx;
-
-      // Handle vertical lines and avoid division by zero
-      Offset extendedPoint;
-      if (deltaXFan.abs() < FibfanConstants.verticalLineThreshold) {
-        // Vertical line
-        extendedPoint = Offset(fanPoint.dx, size.height);
-      } else {
-        final double slope = (fanPoint.dy - startOffset.dy) / deltaXFan;
-        extendedPoint = Offset(
-          screenWidth,
-          startOffset.dy + slope * (screenWidth - startOffset.dx),
-        );
+      // Validate coordinates before drawing
+      if (FibonacciFanHelpers.areTwoOffsetsValid(startOffset, extendedPoint)) {
+        // Draw dashed line
+        _drawDashedLine(canvas, startOffset, extendedPoint, dashPaint);
       }
-
-      // Draw dashed line
-      _drawDashedLine(canvas, startOffset, extendedPoint, dashPaint);
     }
   }
 
