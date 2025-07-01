@@ -369,9 +369,6 @@ class FibonacciFanHelpers {
   /// performance during animations and frequent redraws.
   static TextPainter getCachedTextPainter(
       String text, Color color, double fontSize) {
-    // Clear cache to ensure fresh text painters with updated labels
-    _textPainterCache.clear();
-
     final String key = 'text_${text}_${color.value}_$fontSize';
     return _textPainterCache.putIfAbsent(key, () {
       final textPainter = TextPainter(
@@ -408,6 +405,84 @@ class FibonacciFanHelpers {
     _fillPaintCache.clear();
     _dashPaintCache.clear();
     _textPainterCache.clear();
+  }
+
+  /// Clears only the text painter cache.
+  ///
+  /// This method provides selective cache invalidation for text painters
+  /// without affecting paint object caches. Use this when text styling
+  /// changes but paint configurations remain the same.
+  ///
+  /// **Use Cases:**
+  /// - Font size changes in user preferences
+  /// - Text color theme updates
+  /// - Label content modifications
+  /// - Localization changes affecting label text
+  ///
+  /// **Performance Benefit:** Preserves paint object caches while ensuring
+  /// text rendering reflects the latest styling changes.
+  static void clearTextPainterCache() {
+    _textPainterCache.clear();
+  }
+
+  /// Clears text painter cache entries for a specific color.
+  ///
+  /// Provides targeted cache invalidation when only specific color
+  /// configurations have changed. This is more efficient than clearing
+  /// the entire text painter cache.
+  ///
+  /// **Parameters:**
+  /// - [color]: The color for which to clear cached text painters
+  ///
+  /// **Use Cases:**
+  /// - Single color theme updates
+  /// - User customization of specific Fibonacci level colors
+  /// - Selective color scheme changes
+  ///
+  /// **Performance Benefit:** Preserves text painters with other colors,
+  /// reducing the need to recreate unaffected cache entries.
+  static void clearTextPainterCacheForColor(Color color) {
+    _textPainterCache.removeWhere((key, _) => key.contains('_${color.value}_'));
+  }
+
+  /// Clears text painter cache entries for a specific font size.
+  ///
+  /// Provides targeted cache invalidation when font size preferences
+  /// change. This is more efficient than clearing the entire cache
+  /// when only font size has been modified.
+  ///
+  /// **Parameters:**
+  /// - [fontSize]: The font size for which to clear cached text painters
+  ///
+  /// **Use Cases:**
+  /// - User font size preference changes
+  /// - Accessibility font scaling updates
+  /// - Dynamic font size adjustments
+  ///
+  /// **Performance Benefit:** Preserves text painters with other font sizes,
+  /// maintaining cache efficiency for unaffected configurations.
+  static void clearTextPainterCacheForFontSize(double fontSize) {
+    _textPainterCache.removeWhere((key, _) => key.endsWith('_$fontSize'));
+  }
+
+  /// Clears only paint object caches, preserving text painter cache.
+  ///
+  /// This method provides selective cache invalidation for paint objects
+  /// without affecting text painter caches. Use this when paint styling
+  /// changes but text configurations remain the same.
+  ///
+  /// **Use Cases:**
+  /// - Line thickness changes
+  /// - Paint color updates (non-text)
+  /// - Stroke style modifications
+  /// - Fill opacity adjustments
+  ///
+  /// **Performance Benefit:** Preserves text painter caches while ensuring
+  /// paint rendering reflects the latest styling changes.
+  static void clearPaintObjectCaches() {
+    _linePaintCache.clear();
+    _fillPaintCache.clear();
+    _dashPaintCache.clear();
   }
 
   /// Gets cache statistics for performance monitoring.
