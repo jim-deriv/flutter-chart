@@ -11,6 +11,7 @@ import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../helpers/types.dart';
+import '../../interactive_layer_states/interactive_adding_tool_state.dart';
 import '../fibfan/helpers.dart';
 import '../drawing_adding_preview.dart';
 import 'fibfan_interactable_drawing.dart';
@@ -58,9 +59,11 @@ class FibfanAddingPreviewMobile
   /// **Parameters:**
   /// - [interactiveLayerBehaviour]: Mobile interaction behavior handler
   /// - [interactableDrawing]: The Fibonacci Fan drawing being created
+  /// - [onAddingStateChange]: Callback for adding state changes
   FibfanAddingPreviewMobile({
     required super.interactiveLayerBehaviour,
     required super.interactableDrawing,
+    required super.onAddingStateChange,
   }) {
     if (interactableDrawing.startPoint == null) {
       final interactiveLayer = interactiveLayerBehaviour.interactiveLayer;
@@ -379,9 +382,9 @@ class FibfanAddingPreviewMobile
     QuoteFromY quoteFromY,
     EpochToX epochToX,
     QuoteToY quoteToY,
-    VoidCallback onDone,
   ) {
     // For mobile, we complete the drawing on first tap since we already have both points
-    onDone();
+    // Notify that we've completed step 1 of 1 (finished)
+    onAddingStateChange(AddingStateInfo(1, 1));
   }
 }
