@@ -700,20 +700,41 @@ class FibfanInteractableDrawing
         children: <Widget>[
           _buildLineThicknessIcon(onUpdate),
           const SizedBox(width: 4),
-          _buildColorPickerIcon(onUpdate)
+          _buildFibonacciLevelColorPicker(
+              'Top & Bottom (0% & 100%)', 'level0', 'level100', onUpdate),
+          const SizedBox(width: 4),
+          _buildFibonacciLevelColorPicker('38.2%', 'level38_2', null, onUpdate),
+          const SizedBox(width: 4),
+          _buildFibonacciLevelColorPicker('50%', 'level50', null, onUpdate),
+          const SizedBox(width: 4),
+          _buildFibonacciLevelColorPicker('61.8%', 'level61_8', null, onUpdate),
         ],
       );
 
-  Widget _buildColorPickerIcon(UpdateDrawingTool onUpdate) => SizedBox(
+  Widget _buildFibonacciLevelColorPicker(String tooltip, String levelKey,
+          String? secondLevelKey, UpdateDrawingTool onUpdate) =>
+      SizedBox(
         width: 32,
         height: 32,
-        child: ColorPickerDropdownButton(
-          currentColor: config.lineStyle.color,
-          onColorChanged: (newColor) => onUpdate(config.copyWith(
-            lineStyle: config.lineStyle.copyWith(color: newColor),
-            fillStyle: config.fillStyle.copyWith(color: newColor),
-            labelStyle: config.labelStyle.copyWith(color: newColor),
-          )),
+        child: Tooltip(
+          message: tooltip,
+          child: ColorPickerDropdownButton(
+            currentColor: config.fibonacciLevelColors[levelKey]!,
+            onColorChanged: (newColor) {
+              final Map<String, Color> updatedColors =
+                  Map<String, Color>.from(config.fibonacciLevelColors);
+              updatedColors[levelKey] = newColor;
+
+              // If a second level key is provided, update it as well (for top & bottom lines)
+              if (secondLevelKey != null) {
+                updatedColors[secondLevelKey] = newColor;
+              }
+
+              onUpdate(config.copyWith(
+                fibonacciLevelColors: updatedColors,
+              ));
+            },
+          ),
         ),
       );
 
