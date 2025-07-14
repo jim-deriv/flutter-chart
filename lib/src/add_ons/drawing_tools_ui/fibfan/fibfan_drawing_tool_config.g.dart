@@ -17,12 +17,6 @@ FibfanDrawingToolConfig _$FibfanDrawingToolConfigFromJson(
               ?.map((e) => EdgePoint.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <EdgePoint>[],
-      fillStyle: json['fillStyle'] == null
-          ? const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700)
-          : LineStyle.fromJson(json['fillStyle'] as Map<String, dynamic>),
-      lineStyle: json['lineStyle'] == null
-          ? const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700)
-          : LineStyle.fromJson(json['lineStyle'] as Map<String, dynamic>),
       fibonacciLevelColors:
           (json['fibonacciLevelColors'] as Map<String, dynamic>?)?.map(
                 (k, e) => MapEntry(
@@ -38,6 +32,12 @@ FibfanDrawingToolConfig _$FibfanDrawingToolConfigFromJson(
                     .semanticColorYellowSolidBorderStaticMid,
                 'level100': CoreDesignTokens.coreColorSolidBlue700
               },
+      fillStyle: json['fillStyle'] == null
+          ? null
+          : LineStyle.fromJson(json['fillStyle'] as Map<String, dynamic>),
+      lineStyle: json['lineStyle'] == null
+          ? const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700)
+          : LineStyle.fromJson(json['lineStyle'] as Map<String, dynamic>),
       labelStyle: json['labelStyle'] == null
           ? const TextStyle(
               color: CoreDesignTokens.coreColorSolidBlue700, fontSize: 12)

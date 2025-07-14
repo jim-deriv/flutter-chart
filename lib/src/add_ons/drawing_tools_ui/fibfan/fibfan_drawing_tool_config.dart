@@ -23,14 +23,10 @@ part 'fibfan_drawing_tool_config.g.dart';
 @ColorConverter()
 class FibfanDrawingToolConfig extends DrawingToolConfig {
   /// Initializes
-  const FibfanDrawingToolConfig({
+  FibfanDrawingToolConfig({
     String? configId,
     DrawingData? drawingData,
     List<EdgePoint> edgePoints = const <EdgePoint>[],
-    this.fillStyle =
-        const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700),
-    this.lineStyle =
-        const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700),
     this.fibonacciLevelColors = const <String, Color>{
       'level0': CoreDesignTokens.coreColorSolidBlue700, // Blue for 0%
       'level38_2': LightThemeDesignTokens
@@ -41,12 +37,16 @@ class FibfanDrawingToolConfig extends DrawingToolConfig {
           .semanticColorYellowSolidBorderStaticMid, // Orange for 61.8%
       'level100': CoreDesignTokens.coreColorSolidBlue700, // Blue for 100%
     },
+    LineStyle? fillStyle,
+    this.lineStyle =
+        const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700),
     this.labelStyle = const TextStyle(
       color: CoreDesignTokens.coreColorSolidBlue700,
       fontSize: 12,
     ),
     super.number,
-  }) : super(
+  }) : fillStyle = fillStyle ?? LineStyle(color: fibonacciLevelColors['level0']!),
+       super(
           configId: configId,
           drawingData: drawingData,
           edgePoints: edgePoints,

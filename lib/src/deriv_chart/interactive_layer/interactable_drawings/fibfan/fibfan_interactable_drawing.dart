@@ -309,7 +309,8 @@ class FibfanInteractableDrawing
       if (drawingState.contains(DrawingToolState.selected)) {
         // Draw filled areas between fan lines
         FibonacciFanHelpers.drawFanFills(
-            canvas, startOffset, deltaX, deltaY, size, paintStyle, fillStyle);
+            canvas, startOffset, deltaX, deltaY, size, paintStyle, fillStyle,
+            fibonacciLevelColors: config.fibonacciLevelColors);
         FibonacciFanHelpers.drawFanLabels(
             canvas, startOffset, deltaX, deltaY, size, lineStyle,
             fibonacciLevelColors: config.fibonacciLevelColors);

@@ -701,6 +701,7 @@ class FibonacciFanHelpers {
   /// - [size]: Canvas size for boundary calculations
   /// - [paintStyle]: Paint style configuration
   /// - [fillStyle]: Fill style and color configuration
+  /// - [fibonacciLevelColors]: Optional custom colors for each level
   ///
   /// **Visual Effect:**
   /// - Even-indexed areas: 10% opacity
@@ -713,8 +714,9 @@ class FibonacciFanHelpers {
     double deltaY,
     Size size,
     DrawingPaintStyle paintStyle,
-    LineStyle fillStyle,
-  ) {
+    LineStyle fillStyle, {
+    Map<String, Color>? fibonacciLevelColors,
+  }) {
     // Calculate the base angle from start to end point
     final double baseAngle = math.atan2(deltaY, deltaX);
 
@@ -755,10 +757,17 @@ class FibonacciFanHelpers {
         final double opacity = (i % 2 == 0)
             ? FibfanConstants.evenFillOpacity
             : FibfanConstants.oddFillOpacity;
+        
+        // Use level0 color from fibonacciLevelColors if available, otherwise use fillStyle color
+        final Color fillColor = (fibonacciLevelColors != null &&
+                fibonacciLevelColors.containsKey('level0'))
+            ? fibonacciLevelColors['level0']!
+            : fillStyle.color;
+        
         canvas.drawPath(
           fillPath,
           paintStyle.fillPaintStyle(
-            fillStyle.color.withOpacity(opacity),
+            fillColor.withOpacity(opacity),
             fillStyle.thickness,
           ),
         );
