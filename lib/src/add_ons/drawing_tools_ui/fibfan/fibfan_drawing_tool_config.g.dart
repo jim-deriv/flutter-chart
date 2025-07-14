@@ -18,12 +18,10 @@ FibfanDrawingToolConfig _$FibfanDrawingToolConfigFromJson(
               .toList() ??
           const <EdgePoint>[],
       fillStyle: json['fillStyle'] == null
-          ? const LineStyle(
-              thickness: 0.9, color: CoreDesignTokens.coreColorSolidBlue700)
+          ? const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700)
           : LineStyle.fromJson(json['fillStyle'] as Map<String, dynamic>),
       lineStyle: json['lineStyle'] == null
-          ? const LineStyle(
-              thickness: 0.9, color: CoreDesignTokens.coreColorSolidBlue700)
+          ? const LineStyle(color: CoreDesignTokens.coreColorSolidBlue700)
           : LineStyle.fromJson(json['lineStyle'] as Map<String, dynamic>),
       fibonacciLevelColors:
           (json['fibonacciLevelColors'] as Map<String, dynamic>?)?.map(
