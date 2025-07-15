@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:deriv_chart/src/add_ons/drawing_tools_ui/drawing_tool_config.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_paint_style.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/edge_point.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/helpers/chart_date_utils.dart';
+import 'package:deriv_chart/src/deriv_chart/interactive_layer/interactive_layer_export.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
@@ -340,14 +342,14 @@ void drawEpochLabel({
 /// **Usage:**
 /// This function is designed to be reusable across different drawing tools that have
 /// two edge points and need proper z-index handling during drag operations.
-void drawLabelsWithZIndex({
+void drawLabelsWithZIndex<T extends DrawingToolConfig>({
   required Canvas canvas,
   required Size size,
   required AnimationInfo animationInfo,
   required ChartConfig chartConfig,
   required ChartTheme chartTheme,
   required GetDrawingState getDrawingState,
-  required dynamic drawing,
+  required InteractableDrawing<T> drawing,
   required void Function() drawStartPointLabel,
   required void Function() drawEndPointLabel,
   required bool isDraggingStartPoint,
