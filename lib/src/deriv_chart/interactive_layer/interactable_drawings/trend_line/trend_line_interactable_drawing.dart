@@ -346,7 +346,7 @@ class TrendLineInteractableDrawing
         }
       },
     );
-    
+
     // Paint X-axis labels when selected
     paintXAxisLabels(
       canvas,
