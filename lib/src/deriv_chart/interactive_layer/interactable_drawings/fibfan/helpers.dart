@@ -300,7 +300,7 @@ class FibonacciFanHelpers {
   /// especially beneficial for Fibonacci level labels which are drawn
   /// repeatedly with the same styling.
   ///
-  /// **Cache Key Format:** `"text_${text}_${color.value}_${fontSize}"`
+  /// **Cache Key Format:** `"text_${text}_${color.value}_${fontSize}_${fontWeight.index}_${fontFamily}"`
   static final Map<String, _CachedTextPainter> _textPainterCache =
       <String, _CachedTextPainter>{};
 
@@ -405,9 +405,16 @@ class FibonacciFanHelpers {
   /// overhead for repeated label rendering, significantly improving
   /// performance during animations and frequent redraws.
   static TextPainter getCachedTextPainter(
-      String text, Color color, double fontSize) {
+      String text, Color color, double fontSize,
+      {FontWeight? fontWeight, String? fontFamily}) {
     _performAutomaticCacheManagement();
-    final String key = 'text_${text}_${color.value}_$fontSize';
+
+    // Include font weight and family in cache key to prevent incorrect rendering
+    final FontWeight effectiveFontWeight = fontWeight ?? FontWeight.w500;
+    final String effectiveFontFamily = fontFamily ?? '';
+    final String key =
+        'text_${text}_${color.value}_${fontSize}_${effectiveFontWeight.index}_$effectiveFontFamily';
+
     final cachedTextPainter = _textPainterCache.putIfAbsent(key, () {
       final textPainter = TextPainter(
         text: TextSpan(
@@ -415,7 +422,8 @@ class FibonacciFanHelpers {
           style: TextStyle(
             color: color,
             fontSize: fontSize,
-            fontWeight: FontWeight.w500,
+            fontWeight: effectiveFontWeight,
+            fontFamily: fontFamily,
           ),
         ),
         textDirection: TextDirection.ltr,
@@ -596,7 +604,48 @@ class FibonacciFanHelpers {
   /// **Performance Benefit:** Preserves text painters with other font sizes,
   /// maintaining cache efficiency for unaffected configurations.
   static void clearTextPainterCacheForFontSize(double fontSize) {
-    _textPainterCache.removeWhere((key, _) => key.endsWith('_$fontSize'));
+    _textPainterCache.removeWhere((key, _) => key.contains('_${fontSize}_'));
+  }
+
+  /// Clears text painter cache entries for a specific font weight.
+  ///
+  /// Provides targeted cache invalidation when font weight preferences
+  /// change. This is more efficient than clearing the entire cache
+  /// when only font weight has been modified.
+  ///
+  /// **Parameters:**
+  /// - [fontWeight]: The font weight for which to clear cached text painters
+  ///
+  /// **Use Cases:**
+  /// - User font weight preference changes
+  /// - Theme updates affecting text weight
+  /// - Dynamic font weight adjustments
+  ///
+  /// **Performance Benefit:** Preserves text painters with other font weights,
+  /// maintaining cache efficiency for unaffected configurations.
+  static void clearTextPainterCacheForFontWeight(FontWeight fontWeight) {
+    _textPainterCache
+        .removeWhere((key, _) => key.contains('_${fontWeight.index}_'));
+  }
+
+  /// Clears text painter cache entries for a specific font family.
+  ///
+  /// Provides targeted cache invalidation when font family preferences
+  /// change. This is more efficient than clearing the entire cache
+  /// when only font family has been modified.
+  ///
+  /// **Parameters:**
+  /// - [fontFamily]: The font family for which to clear cached text painters
+  ///
+  /// **Use Cases:**
+  /// - User font family preference changes
+  /// - Theme updates affecting font family
+  /// - Dynamic font family adjustments
+  ///
+  /// **Performance Benefit:** Preserves text painters with other font families,
+  /// maintaining cache efficiency for unaffected configurations.
+  static void clearTextPainterCacheForFontFamily(String fontFamily) {
+    _textPainterCache.removeWhere((key, _) => key.endsWith('_$fontFamily'));
   }
 
   /// Clears only paint object caches, preserving text painter cache.
