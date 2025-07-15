@@ -458,39 +458,49 @@ class FibfanInteractableDrawing
     ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   ) {
-    if (getDrawingState(this).contains(DrawingToolState.selected)) {
-      // Draw value label for start point
-      if (startPoint != null) {
-        drawValueLabel(
-          canvas: canvas,
-          quoteToY: quoteToY,
-          value: startPoint!.quote,
-          pipSize: chartConfig.pipSize,
-          animationProgress: animationInfo.stateChangePercent,
-          size: size,
-          textStyle: config.labelStyle,
-          color: config.lineStyle.color,
-          backgroundColor: chartTheme.backgroundColor,
-        );
-      }
-
-      // Draw value label for end point (offset slightly to avoid overlap)
-      if (endPoint != null &&
-          startPoint != null &&
-          endPoint!.quote != startPoint!.quote) {
-        drawValueLabel(
-          canvas: canvas,
-          quoteToY: quoteToY,
-          value: endPoint!.quote,
-          pipSize: chartConfig.pipSize,
-          animationProgress: animationInfo.stateChangePercent,
-          size: size,
-          textStyle: config.labelStyle,
-          color: config.lineStyle.color,
-          backgroundColor: chartTheme.backgroundColor,
-        );
-      }
-    }
+    drawLabelsWithZIndex(
+      canvas: canvas,
+      size: size,
+      animationInfo: animationInfo,
+      chartConfig: chartConfig,
+      chartTheme: chartTheme,
+      getDrawingState: getDrawingState,
+      drawing: this,
+      isDraggingStartPoint: _dragState == FibfanDragState.draggingStartPoint,
+      isDraggingEndPoint: _dragState == FibfanDragState.draggingEndPoint,
+      drawStartPointLabel: () {
+        if (startPoint != null) {
+          drawValueLabel(
+            canvas: canvas,
+            quoteToY: quoteToY,
+            value: startPoint!.quote,
+            pipSize: chartConfig.pipSize,
+            animationProgress: animationInfo.stateChangePercent,
+            size: size,
+            textStyle: config.labelStyle,
+            color: config.lineStyle.color,
+            backgroundColor: chartTheme.backgroundColor,
+          );
+        }
+      },
+      drawEndPointLabel: () {
+        if (endPoint != null &&
+            startPoint != null &&
+            endPoint!.quote != startPoint!.quote) {
+          drawValueLabel(
+            canvas: canvas,
+            quoteToY: quoteToY,
+            value: endPoint!.quote,
+            pipSize: chartConfig.pipSize,
+            animationProgress: animationInfo.stateChangePercent,
+            size: size,
+            textStyle: config.labelStyle,
+            color: config.lineStyle.color,
+            backgroundColor: chartTheme.backgroundColor,
+          );
+        }
+      },
+    );
 
     paintXAxisLabels(
       canvas,
@@ -515,37 +525,47 @@ class FibfanInteractableDrawing
     ChartTheme chartTheme,
     GetDrawingState getDrawingState,
   ) {
-    if (getDrawingState(this).contains(DrawingToolState.selected)) {
-      // Draw epoch label for start point
-      if (startPoint != null) {
-        drawEpochLabel(
-          canvas: canvas,
-          epochToX: epochToX,
-          epoch: startPoint!.epoch,
-          size: size,
-          textStyle: config.labelStyle,
-          animationProgress: animationInfo.stateChangePercent,
-          color: config.lineStyle.color,
-          backgroundColor: chartTheme.backgroundColor,
-        );
-      }
-
-      // Draw epoch label for end point (only if different from start point to avoid overlap)
-      if (endPoint != null &&
-          startPoint != null &&
-          endPoint!.epoch != startPoint!.epoch) {
-        drawEpochLabel(
-          canvas: canvas,
-          epochToX: epochToX,
-          epoch: endPoint!.epoch,
-          size: size,
-          textStyle: config.labelStyle,
-          animationProgress: animationInfo.stateChangePercent,
-          color: config.lineStyle.color,
-          backgroundColor: chartTheme.backgroundColor,
-        );
-      }
-    }
+    drawLabelsWithZIndex(
+      canvas: canvas,
+      size: size,
+      animationInfo: animationInfo,
+      chartConfig: chartConfig,
+      chartTheme: chartTheme,
+      getDrawingState: getDrawingState,
+      drawing: this,
+      isDraggingStartPoint: _dragState == FibfanDragState.draggingStartPoint,
+      isDraggingEndPoint: _dragState == FibfanDragState.draggingEndPoint,
+      drawStartPointLabel: () {
+        if (startPoint != null) {
+          drawEpochLabel(
+            canvas: canvas,
+            epochToX: epochToX,
+            epoch: startPoint!.epoch,
+            size: size,
+            textStyle: config.labelStyle,
+            animationProgress: animationInfo.stateChangePercent,
+            color: config.lineStyle.color,
+            backgroundColor: chartTheme.backgroundColor,
+          );
+        }
+      },
+      drawEndPointLabel: () {
+        if (endPoint != null &&
+            startPoint != null &&
+            endPoint!.epoch != startPoint!.epoch) {
+          drawEpochLabel(
+            canvas: canvas,
+            epochToX: epochToX,
+            epoch: endPoint!.epoch,
+            size: size,
+            textStyle: config.labelStyle,
+            animationProgress: animationInfo.stateChangePercent,
+            color: config.lineStyle.color,
+            backgroundColor: chartTheme.backgroundColor,
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -703,41 +723,37 @@ class FibfanInteractableDrawing
         children: <Widget>[
           _buildLineThicknessIcon(onUpdate),
           const SizedBox(width: 4),
-          _buildFibonacciLevelColorPicker(
-              'Top & Bottom (0% & 100%)', 'level0', 'level100', onUpdate),
+          _buildFibonacciLevelColorPicker('level0', 'level100', onUpdate),
           const SizedBox(width: 4),
-          _buildFibonacciLevelColorPicker('38.2%', 'level38_2', null, onUpdate),
+          _buildFibonacciLevelColorPicker('level38_2', null, onUpdate),
           const SizedBox(width: 4),
-          _buildFibonacciLevelColorPicker('50%', 'level50', null, onUpdate),
+          _buildFibonacciLevelColorPicker('level50', null, onUpdate),
           const SizedBox(width: 4),
-          _buildFibonacciLevelColorPicker('61.8%', 'level61_8', null, onUpdate),
+          _buildFibonacciLevelColorPicker('level61_8', null, onUpdate),
         ],
       );
 
-  Widget _buildFibonacciLevelColorPicker(String tooltip, String levelKey,
+  Widget _buildFibonacciLevelColorPicker(String levelKey,
           String? secondLevelKey, UpdateDrawingTool onUpdate) =>
       SizedBox(
         width: 32,
         height: 32,
-        child: Tooltip(
-          message: tooltip,
-          child: ColorPickerDropdownButton(
-            currentColor: config.fibonacciLevelColors[levelKey]!,
-            onColorChanged: (newColor) {
-              final Map<String, Color> updatedColors =
-                  Map<String, Color>.from(config.fibonacciLevelColors);
-              updatedColors[levelKey] = newColor;
+        child: ColorPickerDropdownButton(
+          currentColor: config.fibonacciLevelColors[levelKey]!,
+          onColorChanged: (newColor) {
+            final Map<String, Color> updatedColors =
+                Map<String, Color>.from(config.fibonacciLevelColors);
+            updatedColors[levelKey] = newColor;
 
-              // If a second level key is provided, update it as well (for top & bottom lines)
-              if (secondLevelKey != null) {
-                updatedColors[secondLevelKey] = newColor;
-              }
+            // If a second level key is provided, update it as well (for top & bottom lines)
+            if (secondLevelKey != null) {
+              updatedColors[secondLevelKey] = newColor;
+            }
 
-              onUpdate(config.copyWith(
-                fibonacciLevelColors: updatedColors,
-              ));
-            },
-          ),
+            onUpdate(config.copyWith(
+              fibonacciLevelColors: updatedColors,
+            ));
+          },
         ),
       );
 
