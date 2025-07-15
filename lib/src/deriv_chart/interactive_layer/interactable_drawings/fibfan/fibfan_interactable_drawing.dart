@@ -451,6 +451,8 @@ class FibfanInteractableDrawing
     ui.Size size,
     EpochToX epochToX,
     QuoteToY quoteToY,
+    int Function(double)? epochFromX,
+    double Function(double)? quoteFromY,
     AnimationInfo animationInfo,
     ChartConfig chartConfig,
     ChartTheme chartTheme,
