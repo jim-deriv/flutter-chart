@@ -45,8 +45,9 @@ class FibfanDrawingToolConfig extends DrawingToolConfig {
       fontSize: 12,
     ),
     super.number,
-  }) : fillStyle = fillStyle ?? LineStyle(color: fibonacciLevelColors['level0']!),
-       super(
+  })  : fillStyle =
+            fillStyle ?? LineStyle(color: fibonacciLevelColors['level0']!),
+        super(
           configId: configId,
           drawingData: drawingData,
           edgePoints: edgePoints,

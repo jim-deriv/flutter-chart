@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/drawing_tools/data_model/drawing_paint_style.dart';
+import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/material.dart';
 
@@ -172,20 +173,6 @@ class FibfanConstants {
   /// Text size used for displaying percentage labels (0%, 38.2%, etc.)
   /// next to each fan line.
   static const double labelFontSize = 12;
-
-  // ========== Fill Opacity Constants ==========
-
-  /// Opacity for even-indexed fill areas between fan lines.
-  ///
-  /// Applied to alternating fill regions to create visual distinction
-  /// between different Fibonacci levels (10% opacity).
-  static const double evenFillOpacity = 0.1;
-
-  /// Opacity for odd-indexed fill areas between fan lines.
-  ///
-  /// Applied to alternating fill regions to create visual distinction
-  /// between different Fibonacci levels (5% opacity).
-  static const double oddFillOpacity = 0.05;
 
   // ========== UI Constants ==========
 
@@ -753,24 +740,18 @@ class FibonacciFanHelpers {
           ..lineTo(extendedPoint2.dx, extendedPoint2.dy)
           ..close();
 
-        // Draw filled area with alternating opacity
-        final double opacity = (i % 2 == 0)
-            ? FibfanConstants.evenFillOpacity
-            : FibfanConstants.oddFillOpacity;
-        
         // Use level0 color from fibonacciLevelColors if available, otherwise use fillStyle color
         final Color fillColor = (fibonacciLevelColors != null &&
                 fibonacciLevelColors.containsKey('level0'))
             ? fibonacciLevelColors['level0']!
             : fillStyle.color;
-        
-        canvas.drawPath(
-          fillPath,
-          paintStyle.fillPaintStyle(
-            fillColor.withOpacity(opacity),
-            fillStyle.thickness,
-          ),
-        );
+
+        // Create custom fill paint with opacity
+        final Paint fillPaint = getCachedFillPaint(
+            fillColor.withOpacity(CoreDesignTokens.coreOpacity100),
+            fillStyle.thickness);
+
+        canvas.drawPath(fillPath, fillPaint);
       }
     }
   }
