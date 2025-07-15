@@ -5,6 +5,31 @@ import 'package:deriv_chart/src/theme/design_tokens/core_design_tokens.dart';
 import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/material.dart';
 
+/// Wrapper class for cached Paint objects with timestamp tracking.
+class _CachedPaint {
+  _CachedPaint(this.paint) : lastUsed = DateTime.now().millisecondsSinceEpoch;
+
+  final Paint paint;
+  int lastUsed;
+
+  void updateLastUsed() {
+    lastUsed = DateTime.now().millisecondsSinceEpoch;
+  }
+}
+
+/// Wrapper class for cached TextPainter objects with timestamp tracking.
+class _CachedTextPainter {
+  _CachedTextPainter(this.textPainter)
+      : lastUsed = DateTime.now().millisecondsSinceEpoch;
+
+  final TextPainter textPainter;
+  int lastUsed;
+
+  void updateLastUsed() {
+    lastUsed = DateTime.now().millisecondsSinceEpoch;
+  }
+}
+
 /// Represents a single Fibonacci level with all its associated properties.
 ///
 /// This class encapsulates the ratio, label, and color key for each
@@ -227,7 +252,17 @@ class FibfanConstants {
 /// **Performance Optimization:**
 /// This class implements paint object caching to improve rendering performance
 /// by reusing Paint objects instead of creating new ones for each draw operation.
+/// The cache is automatically managed to prevent memory bloat through:
+/// - Size-based eviction when cache exceeds maximum entries
+/// - Time-based expiration for unused cache entries
+/// - Configuration change detection for selective invalidation
 class FibonacciFanHelpers {
+  /// Maximum number of entries allowed in each cache before eviction occurs.
+  static const int _maxCacheSize = 100;
+
+  /// Time in milliseconds after which unused cache entries expire.
+  static const int _cacheExpirationMs = 300000; // 5 minutes
+
   /// Cache for line paint objects to improve performance.
   ///
   /// Maps paint configuration keys to reusable Paint objects. This prevents
@@ -236,7 +271,8 @@ class FibonacciFanHelpers {
   /// frequent redraws.
   ///
   /// **Cache Key Format:** `"line_${color.value}_${thickness}"`
-  static final Map<String, Paint> _linePaintCache = <String, Paint>{};
+  static final Map<String, _CachedPaint> _linePaintCache =
+      <String, _CachedPaint>{};
 
   /// Cache for fill paint objects to improve performance.
   ///
@@ -245,7 +281,8 @@ class FibonacciFanHelpers {
   /// fan lines, which can involve multiple fill operations per frame.
   ///
   /// **Cache Key Format:** `"fill_${color.value}_${thickness}"`
-  static final Map<String, Paint> _fillPaintCache = <String, Paint>{};
+  static final Map<String, _CachedPaint> _fillPaintCache =
+      <String, _CachedPaint>{};
 
   /// Cache for dash paint objects to improve performance.
   ///
@@ -254,7 +291,8 @@ class FibonacciFanHelpers {
   /// frequently during user interactions.
   ///
   /// **Cache Key Format:** `"dash_${color.value}_${thickness}_${opacity}"`
-  static final Map<String, Paint> _dashPaintCache = <String, Paint>{};
+  static final Map<String, _CachedPaint> _dashPaintCache =
+      <String, _CachedPaint>{};
 
   /// Cache for text painter objects to improve label rendering performance.
   ///
@@ -263,8 +301,11 @@ class FibonacciFanHelpers {
   /// repeatedly with the same styling.
   ///
   /// **Cache Key Format:** `"text_${text}_${color.value}_${fontSize}"`
-  static final Map<String, TextPainter> _textPainterCache =
-      <String, TextPainter>{};
+  static final Map<String, _CachedTextPainter> _textPainterCache =
+      <String, _CachedTextPainter>{};
+
+  /// Tracks the last configuration hash to detect changes.
+  static int? _lastConfigHash;
 
   /// Gets or creates a cached line paint object.
   ///
@@ -281,13 +322,16 @@ class FibonacciFanHelpers {
   /// **Performance Benefit:** Eliminates Paint object allocation overhead
   /// during frequent drawing operations, especially during animations.
   static Paint getCachedLinePaint(Color color, double thickness) {
+    _performAutomaticCacheManagement();
     final String key = 'line_${color.value}_$thickness';
-    return _linePaintCache.putIfAbsent(
+    final cachedPaint = _linePaintCache.putIfAbsent(
         key,
-        () => Paint()
+        () => _CachedPaint(Paint()
           ..color = color
           ..style = PaintingStyle.stroke
-          ..strokeWidth = thickness);
+          ..strokeWidth = thickness))
+      ..updateLastUsed();
+    return cachedPaint.paint;
   }
 
   /// Gets or creates a cached fill paint object.
@@ -304,13 +348,16 @@ class FibonacciFanHelpers {
   /// **Performance Benefit:** Reduces memory allocation during fill operations,
   /// which can be frequent when drawing multiple fan fill areas.
   static Paint getCachedFillPaint(Color color, double thickness) {
+    _performAutomaticCacheManagement();
     final String key = 'fill_${color.value}_$thickness';
-    return _fillPaintCache.putIfAbsent(
+    final cachedPaint = _fillPaintCache.putIfAbsent(
         key,
-        () => Paint()
+        () => _CachedPaint(Paint()
           ..color = color
           ..style = PaintingStyle.fill
-          ..strokeWidth = thickness);
+          ..strokeWidth = thickness))
+      ..updateLastUsed();
+    return cachedPaint.paint;
   }
 
   /// Gets or creates a cached dash paint object.
@@ -329,13 +376,16 @@ class FibonacciFanHelpers {
   /// dashed lines are drawn frequently during user interactions.
   static Paint getCachedDashPaint(
       Color color, double thickness, double opacity) {
+    _performAutomaticCacheManagement();
     final String key = 'dash_${color.value}_${thickness}_$opacity';
-    return _dashPaintCache.putIfAbsent(
+    final cachedPaint = _dashPaintCache.putIfAbsent(
         key,
-        () => Paint()
+        () => _CachedPaint(Paint()
           ..color = color.withOpacity(opacity)
           ..style = PaintingStyle.stroke
-          ..strokeWidth = thickness);
+          ..strokeWidth = thickness))
+      ..updateLastUsed();
+    return cachedPaint.paint;
   }
 
   /// Gets or creates a cached text painter object.
@@ -356,8 +406,9 @@ class FibonacciFanHelpers {
   /// performance during animations and frequent redraws.
   static TextPainter getCachedTextPainter(
       String text, Color color, double fontSize) {
+    _performAutomaticCacheManagement();
     final String key = 'text_${text}_${color.value}_$fontSize';
-    return _textPainterCache.putIfAbsent(key, () {
+    final cachedTextPainter = _textPainterCache.putIfAbsent(key, () {
       final textPainter = TextPainter(
         text: TextSpan(
           text: text,
@@ -369,8 +420,104 @@ class FibonacciFanHelpers {
         ),
         textDirection: TextDirection.ltr,
       )..layout();
-      return textPainter;
-    });
+      return _CachedTextPainter(textPainter);
+    })
+      ..updateLastUsed();
+    return cachedTextPainter.textPainter;
+  }
+
+  /// Performs automatic cache management including size-based eviction and time-based expiration.
+  ///
+  /// This method is called automatically by cache getter methods to ensure
+  /// memory usage stays within acceptable bounds. It implements:
+  /// - Size-based eviction: Removes oldest entries when cache exceeds maximum size
+  /// - Time-based expiration: Removes entries that haven't been used recently
+  ///
+  /// **Performance Note:** This method is designed to be lightweight and only
+  /// performs cleanup when necessary to avoid impacting drawing performance.
+  static void _performAutomaticCacheManagement() {
+    final int currentTime = DateTime.now().millisecondsSinceEpoch;
+
+    // Perform size-based eviction for each cache
+    _evictOldestEntries(_linePaintCache);
+    _evictOldestEntries(_fillPaintCache);
+    _evictOldestEntries(_dashPaintCache);
+    _evictOldestEntriesTextPainter(_textPainterCache);
+
+    // Perform time-based expiration
+    _expireOldEntries(_linePaintCache, currentTime);
+    _expireOldEntries(_fillPaintCache, currentTime);
+    _expireOldEntries(_dashPaintCache, currentTime);
+    _expireOldEntriesTextPainter(_textPainterCache, currentTime);
+  }
+
+  /// Evicts oldest entries from paint cache when size limit is exceeded.
+  static void _evictOldestEntries(Map<String, _CachedPaint> cache) {
+    if (cache.length <= _maxCacheSize) {
+      return;
+    }
+
+    final entries = cache.entries.toList()
+      ..sort((a, b) => a.value.lastUsed.compareTo(b.value.lastUsed));
+
+    final entriesToRemove = cache.length - _maxCacheSize;
+    for (int i = 0; i < entriesToRemove; i++) {
+      cache.remove(entries[i].key);
+    }
+  }
+
+  /// Evicts oldest entries from text painter cache when size limit is exceeded.
+  static void _evictOldestEntriesTextPainter(
+      Map<String, _CachedTextPainter> cache) {
+    if (cache.length <= _maxCacheSize) {
+      return;
+    }
+
+    final entries = cache.entries.toList()
+      ..sort((a, b) => a.value.lastUsed.compareTo(b.value.lastUsed));
+
+    final entriesToRemove = cache.length - _maxCacheSize;
+    for (int i = 0; i < entriesToRemove; i++) {
+      cache.remove(entries[i].key);
+    }
+  }
+
+  /// Removes expired entries from paint cache based on time threshold.
+  static void _expireOldEntries(
+      Map<String, _CachedPaint> cache, int currentTime) {
+    cache.removeWhere(
+        (key, value) => currentTime - value.lastUsed > _cacheExpirationMs);
+  }
+
+  /// Removes expired entries from text painter cache based on time threshold.
+  static void _expireOldEntriesTextPainter(
+      Map<String, _CachedTextPainter> cache, int currentTime) {
+    cache.removeWhere(
+        (key, value) => currentTime - value.lastUsed > _cacheExpirationMs);
+  }
+
+  /// Detects configuration changes and clears relevant cache entries.
+  ///
+  /// This method should be called when drawing configuration changes to ensure
+  /// cached objects reflect the latest styling. It compares the current
+  /// configuration hash with the previous one and performs selective cache
+  /// invalidation when changes are detected.
+  ///
+  /// **Parameters:**
+  /// - [configHash]: Hash of the current configuration
+  ///
+  /// **Use Cases:**
+  /// - Theme changes that affect colors or styling
+  /// - User customization of drawing properties
+  /// - Dynamic style updates during runtime
+  static void handleConfigurationChange(int configHash) {
+    if (_lastConfigHash != null && _lastConfigHash != configHash) {
+      // Configuration has changed, perform selective cache clearing
+      // For now, clear all caches to ensure consistency
+      // In the future, this could be made more granular based on what changed
+      clearPaintCaches();
+    }
+    _lastConfigHash = configHash;
   }
 
   /// Clears all paint and text painter caches.

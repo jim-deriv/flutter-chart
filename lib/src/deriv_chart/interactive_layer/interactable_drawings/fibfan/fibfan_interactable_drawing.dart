@@ -286,6 +286,10 @@ class FibfanInteractableDrawing
     final DrawingPaintStyle paintStyle = DrawingPaintStyle();
     final drawingState = getDrawingState(this);
 
+    // Handle configuration changes for automatic cache management
+    final int configHash = _calculateConfigHash();
+    FibonacciFanHelpers.handleConfigurationChange(configHash);
+
     if (startPoint != null && endPoint != null) {
       final Offset startOffset = Offset(
         epochToX(startPoint!.epoch),
@@ -766,4 +770,32 @@ class FibfanInteractableDrawing
           ));
         },
       );
+
+  /// Calculates a hash of the current configuration for change detection.
+  ///
+  /// This method creates a hash based on the drawing configuration properties
+  /// that affect visual rendering. When the configuration changes, the hash
+  /// will change, triggering automatic cache management to ensure cached
+  /// paint objects reflect the latest styling.
+  ///
+  /// **Included Properties:**
+  /// - Line style (color, thickness)
+  /// - Fill style (color, thickness)
+  /// - Fibonacci level colors
+  /// - Label style (color, font size)
+  ///
+  /// **Returns:** Integer hash representing the current configuration state
+  int _calculateConfigHash() {
+    return Object.hash(
+      config.lineStyle.color.value,
+      config.lineStyle.thickness,
+      config.fillStyle.color.value,
+      config.fillStyle.thickness,
+      config.labelStyle.color?.value ?? 0,
+      config.labelStyle.fontSize,
+      config.fibonacciLevelColors.entries
+          .map((e) => Object.hash(e.key, e.value.value))
+          .fold<int>(0, (prev, hash) => prev ^ hash),
+    );
+  }
 }
