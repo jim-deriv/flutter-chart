@@ -226,17 +226,20 @@ class FibfanAddingPreviewMobile
 
       // Draw alignment guides on each edge point when dragging
       if (_isDragging) {
+        // Use the same color for alignment guides as edge points
+        final Color edgePointColor = interactableDrawing.config.fibonacciLevelColors['level0'] ?? interactableDrawing.config.lineStyle.color;
+        
         drawPointAlignmentGuides(
           canvas,
           size,
           startOffset,
-          lineColor: interactableDrawing.config.lineStyle.color,
+          lineColor: edgePointColor,
         );
         drawPointAlignmentGuides(
           canvas,
           size,
           endOffset,
-          lineColor: interactableDrawing.config.lineStyle.color,
+          lineColor: edgePointColor,
         );
       }
     }

@@ -396,20 +396,23 @@ class FibfanInteractableDrawing
 
       // Draw alignment guides when dragging
       if (drawingState.contains(DrawingToolState.dragging)) {
+        // Use the same color for alignment guides as edge points
+        final Color edgePointColor = config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
+        
         switch (_dragState) {
           case FibfanDragState.draggingStartPoint:
             drawPointAlignmentGuides(canvas, size, startOffset,
-                lineColor: config.lineStyle.color);
+                lineColor: edgePointColor);
             break;
           case FibfanDragState.draggingEndPoint:
             drawPointAlignmentGuides(canvas, size, endOffset,
-                lineColor: config.lineStyle.color);
+                lineColor: edgePointColor);
             break;
           case FibfanDragState.draggingEntireFan:
             drawPointAlignmentGuides(canvas, size, startOffset,
-                lineColor: config.lineStyle.color);
+                lineColor: edgePointColor);
             drawPointAlignmentGuides(canvas, size, endOffset,
-                lineColor: config.lineStyle.color);
+                lineColor: edgePointColor);
             break;
           case null:
             // No specific drag state, don't draw alignment guides
@@ -456,8 +459,10 @@ class FibfanInteractableDrawing
         radius: FibfanConstants.pointRadius,
       );
 
+      // Use the same color for alignment guides as edge points
+      final Color edgePointColor = config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
       drawPointAlignmentGuides(canvas, size, startOffset,
-          lineColor: config.lineStyle.color);
+          lineColor: edgePointColor);
     }
   }
 

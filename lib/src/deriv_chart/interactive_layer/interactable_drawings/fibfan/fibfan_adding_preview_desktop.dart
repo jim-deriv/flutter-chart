@@ -109,15 +109,12 @@ class FibfanAddingPreviewDesktop
         _hoverPosition!.dx,
         _hoverPosition!.dy,
       );
-      drawPointAlignmentGuides(canvas, size, pointOffset,
-          lineColor: interactableDrawing.config.lineStyle.color);
-
       // Use the same color for edge points (from level0 which matches level100)
-      final Color edgePointColor =
-          interactableDrawing.config.fibonacciLevelColors['level0'] ??
-              interactableDrawing.config.lineStyle.color;
-      final LineStyle edgePointLineStyle =
-          interactableDrawing.config.lineStyle.copyWith(color: edgePointColor);
+      final Color edgePointColor = interactableDrawing.config.fibonacciLevelColors['level0'] ?? interactableDrawing.config.lineStyle.color;
+      final LineStyle edgePointLineStyle = interactableDrawing.config.lineStyle.copyWith(color: edgePointColor);
+      
+      drawPointAlignmentGuides(canvas, size, pointOffset,
+          lineColor: edgePointColor);
 
       // Draw preview point at hover position
       drawPointOffset(
@@ -199,7 +196,7 @@ class FibfanAddingPreviewDesktop
       );
 
       drawPointAlignmentGuides(canvas, size, endPointOffset,
-          lineColor: interactableDrawing.config.lineStyle.color);
+          lineColor: edgePointColor);
     }
   }
 
