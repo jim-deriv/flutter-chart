@@ -227,8 +227,10 @@ class FibfanAddingPreviewMobile
       // Draw alignment guides on each edge point when dragging
       if (_isDragging) {
         // Use the same color for alignment guides as edge points
-        final Color edgePointColor = interactableDrawing.config.fibonacciLevelColors['level0'] ?? interactableDrawing.config.lineStyle.color;
-        
+        final Color edgePointColor =
+            interactableDrawing.config.fibonacciLevelColors['level0'] ??
+                interactableDrawing.config.lineStyle.color;
+
         drawPointAlignmentGuides(
           canvas,
           size,
@@ -342,6 +344,11 @@ class FibfanAddingPreviewMobile
     if (_isDragging &&
         interactableDrawing.startPoint != null &&
         interactableDrawing.endPoint != null) {
+      // Use the same color for labels as edge points
+      final Color edgePointColor =
+          interactableDrawing.config.fibonacciLevelColors['level0'] ??
+              interactableDrawing.config.lineStyle.color;
+
       // Draw labels for start point
       drawValueLabel(
         canvas: canvas,
@@ -349,7 +356,7 @@ class FibfanAddingPreviewMobile
         value: interactableDrawing.startPoint!.quote,
         pipSize: chartConfig.pipSize,
         size: size,
-        color: interactableDrawing.config.lineStyle.color,
+        color: edgePointColor,
         backgroundColor: chartTheme.backgroundColor,
         textStyle: interactableDrawing.config.labelStyle,
       );
@@ -360,7 +367,7 @@ class FibfanAddingPreviewMobile
         size: size,
         textStyle: interactableDrawing.config.labelStyle,
         animationProgress: animationInfo.stateChangePercent,
-        color: interactableDrawing.config.lineStyle.color,
+        color: edgePointColor,
         backgroundColor: chartTheme.backgroundColor,
       );
 
@@ -371,7 +378,7 @@ class FibfanAddingPreviewMobile
         value: interactableDrawing.endPoint!.quote,
         pipSize: chartConfig.pipSize,
         size: size,
-        color: interactableDrawing.config.lineStyle.color,
+        color: edgePointColor,
         backgroundColor: chartTheme.backgroundColor,
         textStyle: interactableDrawing.config.labelStyle,
       );
@@ -382,7 +389,7 @@ class FibfanAddingPreviewMobile
         size: size,
         textStyle: interactableDrawing.config.labelStyle,
         animationProgress: animationInfo.stateChangePercent,
-        color: interactableDrawing.config.lineStyle.color,
+        color: edgePointColor,
         backgroundColor: chartTheme.backgroundColor,
       );
     }

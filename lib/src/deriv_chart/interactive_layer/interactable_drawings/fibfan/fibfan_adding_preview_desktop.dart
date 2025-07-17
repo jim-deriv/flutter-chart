@@ -110,9 +110,12 @@ class FibfanAddingPreviewDesktop
         _hoverPosition!.dy,
       );
       // Use the same color for edge points (from level0 which matches level100)
-      final Color edgePointColor = interactableDrawing.config.fibonacciLevelColors['level0'] ?? interactableDrawing.config.lineStyle.color;
-      final LineStyle edgePointLineStyle = interactableDrawing.config.lineStyle.copyWith(color: edgePointColor);
-      
+      final Color edgePointColor =
+          interactableDrawing.config.fibonacciLevelColors['level0'] ??
+              interactableDrawing.config.lineStyle.color;
+      final LineStyle edgePointLineStyle =
+          interactableDrawing.config.lineStyle.copyWith(color: edgePointColor);
+
       drawPointAlignmentGuides(canvas, size, pointOffset,
           lineColor: edgePointColor);
 
@@ -214,6 +217,11 @@ class FibfanAddingPreviewDesktop
     GetDrawingState getDrawingState,
   ) {
     if (_hoverPosition != null) {
+      // Use the same color for labels as edge points
+      final Color edgePointColor =
+          interactableDrawing.config.fibonacciLevelColors['level0'] ??
+              interactableDrawing.config.lineStyle.color;
+
       drawValueLabel(
         canvas: canvas,
         quoteToY: quoteToY,
@@ -221,7 +229,7 @@ class FibfanAddingPreviewDesktop
             .quoteFromY(_hoverPosition!.dy),
         pipSize: chartConfig.pipSize,
         size: size,
-        color: interactableDrawing.config.lineStyle.color,
+        color: edgePointColor,
         backgroundColor: chartTheme.backgroundColor,
         textStyle: interactableDrawing.config.labelStyle,
       );
@@ -233,7 +241,7 @@ class FibfanAddingPreviewDesktop
         size: size,
         textStyle: interactableDrawing.config.labelStyle,
         animationProgress: animationInfo.stateChangePercent,
-        color: interactableDrawing.config.lineStyle.color,
+        color: edgePointColor,
         backgroundColor: chartTheme.backgroundColor,
       );
     }

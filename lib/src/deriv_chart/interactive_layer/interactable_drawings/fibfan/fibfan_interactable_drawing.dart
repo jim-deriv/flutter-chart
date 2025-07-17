@@ -397,8 +397,9 @@ class FibfanInteractableDrawing
       // Draw alignment guides when dragging
       if (drawingState.contains(DrawingToolState.dragging)) {
         // Use the same color for alignment guides as edge points
-        final Color edgePointColor = config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
-        
+        final Color edgePointColor =
+            config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
+
         switch (_dragState) {
           case FibfanDragState.draggingStartPoint:
             drawPointAlignmentGuides(canvas, size, startOffset,
@@ -460,7 +461,8 @@ class FibfanInteractableDrawing
       );
 
       // Use the same color for alignment guides as edge points
-      final Color edgePointColor = config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
+      final Color edgePointColor =
+          config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
       drawPointAlignmentGuides(canvas, size, startOffset,
           lineColor: edgePointColor);
     }
@@ -491,6 +493,9 @@ class FibfanInteractableDrawing
       isDraggingEndPoint: _dragState == FibfanDragState.draggingEndPoint,
       drawStartPointLabel: () {
         if (startPoint != null) {
+          // Use the same color for labels as edge points
+          final Color edgePointColor =
+              config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
           drawValueLabel(
             canvas: canvas,
             quoteToY: quoteToY,
@@ -499,7 +504,7 @@ class FibfanInteractableDrawing
             animationProgress: animationInfo.stateChangePercent,
             size: size,
             textStyle: config.labelStyle,
-            color: config.lineStyle.color,
+            color: edgePointColor,
             backgroundColor: chartTheme.backgroundColor,
           );
         }
@@ -508,6 +513,9 @@ class FibfanInteractableDrawing
         if (endPoint != null &&
             startPoint != null &&
             endPoint!.quote != startPoint!.quote) {
+          // Use the same color for labels as edge points
+          final Color edgePointColor =
+              config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
           drawValueLabel(
             canvas: canvas,
             quoteToY: quoteToY,
@@ -516,7 +524,7 @@ class FibfanInteractableDrawing
             animationProgress: animationInfo.stateChangePercent,
             size: size,
             textStyle: config.labelStyle,
-            color: config.lineStyle.color,
+            color: edgePointColor,
             backgroundColor: chartTheme.backgroundColor,
           );
         }
@@ -558,6 +566,9 @@ class FibfanInteractableDrawing
       isDraggingEndPoint: _dragState == FibfanDragState.draggingEndPoint,
       drawStartPointLabel: () {
         if (startPoint != null) {
+          // Use the same color for labels as edge points
+          final Color edgePointColor =
+              config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
           drawEpochLabel(
             canvas: canvas,
             epochToX: epochToX,
@@ -565,7 +576,7 @@ class FibfanInteractableDrawing
             size: size,
             textStyle: config.labelStyle,
             animationProgress: animationInfo.stateChangePercent,
-            color: config.lineStyle.color,
+            color: edgePointColor,
             backgroundColor: chartTheme.backgroundColor,
           );
         }
@@ -574,6 +585,9 @@ class FibfanInteractableDrawing
         if (endPoint != null &&
             startPoint != null &&
             endPoint!.epoch != startPoint!.epoch) {
+          // Use the same color for labels as edge points
+          final Color edgePointColor =
+              config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
           drawEpochLabel(
             canvas: canvas,
             epochToX: epochToX,
@@ -581,7 +595,7 @@ class FibfanInteractableDrawing
             size: size,
             textStyle: config.labelStyle,
             animationProgress: animationInfo.stateChangePercent,
-            color: config.lineStyle.color,
+            color: edgePointColor,
             backgroundColor: chartTheme.backgroundColor,
           );
         }
