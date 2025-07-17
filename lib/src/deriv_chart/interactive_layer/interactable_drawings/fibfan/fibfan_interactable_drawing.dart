@@ -166,6 +166,12 @@ class FibfanInteractableDrawing
       _dragState = FibfanDragState.draggingEntireFan;
       return;
     }
+
+    // Check if the drag is anywhere within the fan area
+    if (_hitTestFanArea(details.localPosition, epochToX, quoteToY)) {
+      _dragState = FibfanDragState.draggingEntireFan;
+      return;
+    }
   }
 
   @override
@@ -200,7 +206,12 @@ class FibfanInteractableDrawing
     }
 
     // Check if the pointer is near any of the fan lines
-    return _hitTestFanLines(offset, epochToX, quoteToY);
+    if (_hitTestFanLines(offset, epochToX, quoteToY)) {
+      return true;
+    }
+
+    // Check if the pointer is within the fan area (between the fan lines)
+    return _hitTestFanArea(offset, epochToX, quoteToY);
   }
 
   /// Helper method to test if a point hits any of the fan lines using angle-based calculations
@@ -268,6 +279,93 @@ class FibfanInteractableDrawing
     }
 
     return false;
+  }
+
+  /// Helper method to test if a point is within the fan area (between the fan lines)
+  /// Uses the same logic as drawFanFills to ensure perfect coverage
+  bool _hitTestFanArea(Offset offset, EpochToX epochToX, QuoteToY quoteToY) {
+    if (startPoint == null || endPoint == null) {
+      return false;
+    }
+
+    final Offset startOffset = Offset(
+      epochToX(startPoint!.epoch),
+      quoteToY(startPoint!.quote),
+    );
+    final Offset endOffset = Offset(
+      epochToX(endPoint!.epoch),
+      quoteToY(endPoint!.quote),
+    );
+
+    // Calculate the base vector and angle (same as drawFanFills)
+    final double deltaX = endOffset.dx - startOffset.dx;
+    final double deltaY = endOffset.dy - startOffset.dy;
+    final double baseAngle = math.atan2(deltaY, deltaX);
+
+    // Check if the point is within any of the triangular fill areas
+    // This uses the exact same logic as drawFanFills
+    for (int i = 0; i < FibonacciFanHelpers.fibonacciLevels.length - 1; i++) {
+      final double ratio1 = FibonacciFanHelpers.fibonacciLevels[i].ratio;
+      final double ratio2 = FibonacciFanHelpers.fibonacciLevels[i + 1].ratio;
+
+      // Calculate angles: 0% should point to end point, 100% should be horizontal (0 degrees)
+      // Interpolate between the end angle (baseAngle) and horizontal reference (0 degrees)
+      const double horizontalAngle = 0; // Horizontal reference
+      final double angle1 = baseAngle + (horizontalAngle - baseAngle) * ratio1;
+      final double angle2 = baseAngle + (horizontalAngle - baseAngle) * ratio2;
+
+      // Extend lines to the edge of the screen using angle-based calculations
+      final double screenWidth = drawingContext.contentSize.width;
+      final double distanceToEdge = screenWidth - startOffset.dx;
+
+      // Calculate extended points using trigonometry (same as drawFanFills)
+      final Offset extendedPoint1 = Offset(
+        screenWidth,
+        startOffset.dy + distanceToEdge * math.tan(angle1),
+      );
+      final Offset extendedPoint2 = Offset(
+        screenWidth,
+        startOffset.dy + distanceToEdge * math.tan(angle2),
+      );
+
+      // Validate coordinates before testing (same as drawFanFills)
+      if (FibonacciFanHelpers.areCoordinatesValid(
+          [startOffset, extendedPoint1, extendedPoint2])) {
+        // Test if the point is inside this triangular area
+        if (_isPointInTriangle(
+            offset, startOffset, extendedPoint1, extendedPoint2)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  /// Helper method to test if a point is inside a triangle using barycentric coordinates
+  bool _isPointInTriangle(Offset point, Offset a, Offset b, Offset c) {
+    // Calculate vectors
+    final double v0x = c.dx - a.dx;
+    final double v0y = c.dy - a.dy;
+    final double v1x = b.dx - a.dx;
+    final double v1y = b.dy - a.dy;
+    final double v2x = point.dx - a.dx;
+    final double v2y = point.dy - a.dy;
+
+    // Calculate dot products
+    final double dot00 = v0x * v0x + v0y * v0y;
+    final double dot01 = v0x * v1x + v0y * v1y;
+    final double dot02 = v0x * v2x + v0y * v2y;
+    final double dot11 = v1x * v1x + v1y * v1y;
+    final double dot12 = v1x * v2x + v1y * v2y;
+
+    // Calculate barycentric coordinates
+    final double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+    final double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+    final double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+    // Check if point is in triangle
+    return (u >= 0) && (v >= 0) && (u + v <= 1);
   }
 
   @override
