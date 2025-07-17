@@ -323,6 +323,12 @@ class FibfanInteractableDrawing
       // Draw endpoints with appropriate visual feedback based on interaction state
       if (drawingState.contains(DrawingToolState.selected) ||
           drawingState.contains(DrawingToolState.dragging)) {
+        // Use the same color for both edge points (from level0 which matches level100)
+        final Color edgePointColor =
+            config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
+        final LineStyle edgePointLineStyle =
+            config.lineStyle.copyWith(color: edgePointColor);
+
         // Handle individual point dragging with differentiated visual feedback
         if (drawingState.contains(DrawingToolState.dragging) &&
             (_dragState == FibfanDragState.draggingStartPoint ||
@@ -331,7 +337,7 @@ class FibfanInteractableDrawing
           // This provides clear visual feedback about which point is actively being manipulated
           drawFocusedCircle(
             paintStyle,
-            lineStyle,
+            edgePointLineStyle,
             canvas,
             _dragState == FibfanDragState.draggingStartPoint
                 ? startOffset
@@ -353,7 +359,7 @@ class FibfanInteractableDrawing
             quoteToY,
             canvas,
             paintStyle,
-            config.lineStyle,
+            edgePointLineStyle,
             radius: FibfanConstants.pointRadius,
           );
         } else {
@@ -361,7 +367,7 @@ class FibfanInteractableDrawing
           // show focused circles on both points for general selection feedback
           drawPointsFocusedCircle(
             paintStyle,
-            lineStyle,
+            edgePointLineStyle,
             canvas,
             startOffset,
             FibfanConstants.focusedCircleRadius *
@@ -372,9 +378,15 @@ class FibfanInteractableDrawing
           );
         }
       } else if (drawingState.contains(DrawingToolState.hovered)) {
+        // Use the same color for both edge points (from level0 which matches level100)
+        final Color edgePointColor =
+            config.fibonacciLevelColors['level0'] ?? config.lineStyle.color;
+        final LineStyle edgePointLineStyle =
+            config.lineStyle.copyWith(color: edgePointColor);
+
         drawPointsFocusedCircle(
             paintStyle,
-            lineStyle,
+            edgePointLineStyle,
             canvas,
             startOffset,
             FibfanConstants.focusedCircleRadius,

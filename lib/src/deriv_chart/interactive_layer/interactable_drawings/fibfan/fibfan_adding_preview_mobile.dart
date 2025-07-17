@@ -8,6 +8,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/anim
 import 'package:deriv_chart/src/deriv_chart/interactive_layer/helpers/paint_helpers.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
+import 'package:deriv_chart/src/theme/painting_styles/line_style.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../helpers/types.dart';
@@ -195,6 +196,13 @@ class FibfanAddingPreviewMobile
         _drawPreviewFanLines(canvas, startOffset, deltaX, deltaY, size);
       }
 
+      // Use the same color for edge points (from level0 which matches level100)
+      final Color edgePointColor =
+          interactableDrawing.config.fibonacciLevelColors['level0'] ??
+              interactableDrawing.config.lineStyle.color;
+      final LineStyle edgePointLineStyle =
+          interactableDrawing.config.lineStyle.copyWith(color: edgePointColor);
+
       // Draw edge points for the preview
       final DrawingPaintStyle paintStyle = DrawingPaintStyle();
       drawPointOffset(
@@ -203,7 +211,7 @@ class FibfanAddingPreviewMobile
         quoteToY,
         canvas,
         paintStyle,
-        interactableDrawing.config.lineStyle,
+        edgePointLineStyle,
         radius: FibfanConstants.pointRadius,
       );
       drawPointOffset(
@@ -212,7 +220,7 @@ class FibfanAddingPreviewMobile
         quoteToY,
         canvas,
         paintStyle,
-        interactableDrawing.config.lineStyle,
+        edgePointLineStyle,
         radius: FibfanConstants.pointRadius,
       );
 

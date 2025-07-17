@@ -112,6 +112,13 @@ class FibfanAddingPreviewDesktop
       drawPointAlignmentGuides(canvas, size, pointOffset,
           lineColor: interactableDrawing.config.lineStyle.color);
 
+      // Use the same color for edge points (from level0 which matches level100)
+      final Color edgePointColor =
+          interactableDrawing.config.fibonacciLevelColors['level0'] ??
+              interactableDrawing.config.lineStyle.color;
+      final LineStyle edgePointLineStyle =
+          interactableDrawing.config.lineStyle.copyWith(color: edgePointColor);
+
       // Draw preview point at hover position
       drawPointOffset(
         pointOffset,
@@ -119,7 +126,7 @@ class FibfanAddingPreviewDesktop
         quoteToY,
         canvas,
         paintStyle,
-        interactableDrawing.config.lineStyle,
+        edgePointLineStyle,
         radius: FibfanConstants.pointRadius,
       );
     }
@@ -157,6 +164,13 @@ class FibfanAddingPreviewDesktop
           fibonacciLevelColors:
               interactableDrawing.config.fibonacciLevelColors);
 
+      // Use the same color for edge points (from level0 which matches level100)
+      final Color edgePointColor =
+          interactableDrawing.config.fibonacciLevelColors['level0'] ??
+              interactableDrawing.config.lineStyle.color;
+      final LineStyle edgePointLineStyle =
+          interactableDrawing.config.lineStyle.copyWith(color: edgePointColor);
+
       // Draw the control points
       // Draw start point (already placed)
       drawPointOffset(
@@ -165,7 +179,7 @@ class FibfanAddingPreviewDesktop
         quoteToY,
         canvas,
         paintStyle,
-        interactableDrawing.config.lineStyle,
+        edgePointLineStyle,
         radius: FibfanConstants.pointRadius,
       );
 
@@ -180,7 +194,7 @@ class FibfanAddingPreviewDesktop
         quoteToY,
         canvas,
         paintStyle,
-        interactableDrawing.config.lineStyle,
+        edgePointLineStyle,
         radius: FibfanConstants.pointRadius,
       );
 
