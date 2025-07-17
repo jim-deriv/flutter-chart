@@ -197,7 +197,7 @@ void drawValueLabel({
   final TextPainter textPainter = _getTextPainter(
     formattedValue,
     textStyle: textStyle.copyWith(
-      color: textStyle.color?.withOpacity(animationProgress),
+      color: color.withOpacity(animationProgress),
     ),
   )..layout();
 
@@ -278,7 +278,7 @@ void drawEpochLabel({
   final TextPainter textPainter = _getTextPainter(
     formattedTime,
     textStyle: textStyle.copyWith(
-      color: textStyle.color?.withOpacity(animationProgress),
+      color: color.withOpacity(animationProgress),
     ),
   )..layout();
 
