@@ -863,6 +863,70 @@ class FibonacciFanHelpers {
     }
   }
 
+  /// Calculates the triangular polygons for each fan area between adjacent Fibonacci levels.
+  ///
+  /// This method extracts the shared geometric calculations used by both hit testing
+  /// and drawing operations, eliminating code duplication and ensuring consistency.
+  /// Each polygon represents the area between two adjacent Fibonacci fan lines.
+  ///
+  /// **Algorithm:**
+  /// 1. Calculates the base angle from start to end point
+  /// 2. For each pair of adjacent Fibonacci ratios, calculates their angles
+  /// 3. Extends lines to screen edges using trigonometric calculations
+  /// 4. Validates coordinates and creates triangular polygons
+  ///
+  /// **Parameters:**
+  /// - [startOffset]: Starting point of the fan in screen coordinates
+  /// - [deltaX]: Horizontal distance from start to end point
+  /// - [deltaY]: Vertical distance from start to end point
+  /// - [size]: Canvas size for boundary calculations
+  ///
+  /// **Returns:** List of triangular areas, where each triangle is defined by three points:
+  /// [startOffset, extendedPoint1, extendedPoint2]
+  static List<List<Offset>> calculateFanAreaPolygons({
+    required Offset startOffset,
+    required double deltaX,
+    required double deltaY,
+    required Size size,
+  }) {
+    final List<List<Offset>> polygons = [];
+
+    // Calculate the base angle from start to end point
+    final double baseAngle = math.atan2(deltaY, deltaX);
+
+    // Calculate screen edge distance
+    final double screenWidth = size.width;
+    final double distanceToEdge = screenWidth - startOffset.dx;
+
+    // Generate polygons for each fan area
+    for (int i = 0; i < fibonacciLevels.length - 1; i++) {
+      final double ratio1 = fibonacciLevels[i].ratio;
+      final double ratio2 = fibonacciLevels[i + 1].ratio;
+
+      // Calculate angles
+      const double horizontalAngle = 0;
+      final double angle1 = baseAngle + (horizontalAngle - baseAngle) * ratio1;
+      final double angle2 = baseAngle + (horizontalAngle - baseAngle) * ratio2;
+
+      // Calculate extended points
+      final Offset extendedPoint1 = Offset(
+        screenWidth,
+        startOffset.dy + distanceToEdge * math.tan(angle1),
+      );
+      final Offset extendedPoint2 = Offset(
+        screenWidth,
+        startOffset.dy + distanceToEdge * math.tan(angle2),
+      );
+
+      // Validate coordinates
+      if (areCoordinatesValid([startOffset, extendedPoint1, extendedPoint2])) {
+        polygons.add([startOffset, extendedPoint1, extendedPoint2]);
+      }
+    }
+
+    return polygons;
+  }
+
   /// Draws the filled areas between fan lines using angle-based calculations.
   ///
   /// Creates alternating filled regions between adjacent Fibonacci fan lines
@@ -870,11 +934,9 @@ class FibonacciFanHelpers {
   /// The fill areas help users identify price zones more easily.
   ///
   /// **Algorithm:**
-  /// 1. Calculates the base angle from start to end point
-  /// 2. For each Fibonacci ratio, calculates the angle as a percentage of the base angle
-  /// 3. Extends lines to screen edges using trigonometric calculations
-  /// 4. Creates triangular fill paths between adjacent lines
-  /// 5. Applies alternating opacity levels for visual distinction
+  /// 1. Uses shared polygon calculation method for consistency
+  /// 2. Creates triangular fill paths between adjacent lines
+  /// 3. Applies fill styling with appropriate opacity
   ///
   /// **Parameters:**
   /// - [canvas]: The drawing canvas
@@ -887,8 +949,7 @@ class FibonacciFanHelpers {
   /// - [fibonacciLevelColors]: Optional custom colors for each level
   ///
   /// **Visual Effect:**
-  /// - Even-indexed areas: 10% opacity
-  /// - Odd-indexed areas: 5% opacity
+  /// - Uses consistent polygon calculations with hit testing
   /// - Creates alternating light/lighter pattern
   static void drawFanFills(
     Canvas canvas,
@@ -900,55 +961,35 @@ class FibonacciFanHelpers {
     LineStyle fillStyle, {
     Map<String, Color>? fibonacciLevelColors,
   }) {
-    // Calculate the base angle from start to end point
-    final double baseAngle = math.atan2(deltaY, deltaX);
+    // Use shared calculation method for consistency with hit testing
+    final List<List<Offset>> fanPolygons = calculateFanAreaPolygons(
+      startOffset: startOffset,
+      deltaX: deltaX,
+      deltaY: deltaY,
+      size: size,
+    );
 
-    for (int i = 0; i < fibonacciLevels.length - 1; i++) {
-      final double ratio1 = fibonacciLevels[i].ratio;
-      final double ratio2 = fibonacciLevels[i + 1].ratio;
+    // Draw each calculated polygon
+    for (final List<Offset> polygon in fanPolygons) {
+      // Create path for the filled area
+      final Path fillPath = Path()
+        ..moveTo(polygon[0].dx, polygon[0].dy)
+        ..lineTo(polygon[1].dx, polygon[1].dy)
+        ..lineTo(polygon[2].dx, polygon[2].dy)
+        ..close();
 
-      // Calculate angles: 0% should point to end point, 100% should be horizontal (0 degrees)
-      // Interpolate between the end angle (baseAngle) and horizontal reference (0 degrees)
-      const double horizontalAngle = 0; // Horizontal reference
-      final double angle1 = baseAngle + (horizontalAngle - baseAngle) * ratio1;
-      final double angle2 = baseAngle + (horizontalAngle - baseAngle) * ratio2;
+      // Use level0 color from fibonacciLevelColors if available, otherwise use fillStyle color
+      final Color fillColor = (fibonacciLevelColors != null &&
+              fibonacciLevelColors.containsKey('level0'))
+          ? fibonacciLevelColors['level0']!
+          : fillStyle.color;
 
-      // Extend lines to the edge of the screen using angle-based calculations
-      final double screenWidth = size.width;
-      final double distanceToEdge = screenWidth - startOffset.dx;
+      // Create custom fill paint with opacity
+      final Paint fillPaint = getCachedFillPaint(
+          fillColor.withOpacity(CoreDesignTokens.coreOpacity100),
+          fillStyle.thickness);
 
-      // Calculate extended points using trigonometry
-      final Offset extendedPoint1 = Offset(
-        screenWidth,
-        startOffset.dy + distanceToEdge * math.tan(angle1),
-      );
-      final Offset extendedPoint2 = Offset(
-        screenWidth,
-        startOffset.dy + distanceToEdge * math.tan(angle2),
-      );
-
-      // Validate coordinates before creating path
-      if (areCoordinatesValid([startOffset, extendedPoint1, extendedPoint2])) {
-        // Create path for the filled area
-        final Path fillPath = Path()
-          ..moveTo(startOffset.dx, startOffset.dy)
-          ..lineTo(extendedPoint1.dx, extendedPoint1.dy)
-          ..lineTo(extendedPoint2.dx, extendedPoint2.dy)
-          ..close();
-
-        // Use level0 color from fibonacciLevelColors if available, otherwise use fillStyle color
-        final Color fillColor = (fibonacciLevelColors != null &&
-                fibonacciLevelColors.containsKey('level0'))
-            ? fibonacciLevelColors['level0']!
-            : fillStyle.color;
-
-        // Create custom fill paint with opacity
-        final Paint fillPaint = getCachedFillPaint(
-            fillColor.withOpacity(CoreDesignTokens.coreOpacity100),
-            fillStyle.thickness);
-
-        canvas.drawPath(fillPath, fillPaint);
-      }
+      canvas.drawPath(fillPath, fillPaint);
     }
   }
 

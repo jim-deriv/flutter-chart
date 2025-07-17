@@ -297,45 +297,22 @@ class FibfanInteractableDrawing
       quoteToY(endPoint!.quote),
     );
 
-    // Calculate the base vector and angle (same as drawFanFills)
     final double deltaX = endOffset.dx - startOffset.dx;
     final double deltaY = endOffset.dy - startOffset.dy;
-    final double baseAngle = math.atan2(deltaY, deltaX);
 
-    // Check if the point is within any of the triangular fill areas
-    // This uses the exact same logic as drawFanFills
-    for (int i = 0; i < FibonacciFanHelpers.fibonacciLevels.length - 1; i++) {
-      final double ratio1 = FibonacciFanHelpers.fibonacciLevels[i].ratio;
-      final double ratio2 = FibonacciFanHelpers.fibonacciLevels[i + 1].ratio;
+    // Use shared calculation method for perfect consistency with drawFanFills
+    final List<List<Offset>> fanPolygons =
+        FibonacciFanHelpers.calculateFanAreaPolygons(
+      startOffset: startOffset,
+      deltaX: deltaX,
+      deltaY: deltaY,
+      size: drawingContext.contentSize,
+    );
 
-      // Calculate angles: 0% should point to end point, 100% should be horizontal (0 degrees)
-      // Interpolate between the end angle (baseAngle) and horizontal reference (0 degrees)
-      const double horizontalAngle = 0; // Horizontal reference
-      final double angle1 = baseAngle + (horizontalAngle - baseAngle) * ratio1;
-      final double angle2 = baseAngle + (horizontalAngle - baseAngle) * ratio2;
-
-      // Extend lines to the edge of the screen using angle-based calculations
-      final double screenWidth = drawingContext.contentSize.width;
-      final double distanceToEdge = screenWidth - startOffset.dx;
-
-      // Calculate extended points using trigonometry (same as drawFanFills)
-      final Offset extendedPoint1 = Offset(
-        screenWidth,
-        startOffset.dy + distanceToEdge * math.tan(angle1),
-      );
-      final Offset extendedPoint2 = Offset(
-        screenWidth,
-        startOffset.dy + distanceToEdge * math.tan(angle2),
-      );
-
-      // Validate coordinates before testing (same as drawFanFills)
-      if (FibonacciFanHelpers.areCoordinatesValid(
-          [startOffset, extendedPoint1, extendedPoint2])) {
-        // Test if the point is inside this triangular area
-        if (_isPointInTriangle(
-            offset, startOffset, extendedPoint1, extendedPoint2)) {
-          return true;
-        }
+    // Test if point is in any of the calculated polygons
+    for (final List<Offset> polygon in fanPolygons) {
+      if (_isPointInTriangle(offset, polygon[0], polygon[1], polygon[2])) {
+        return true;
       }
     }
 
