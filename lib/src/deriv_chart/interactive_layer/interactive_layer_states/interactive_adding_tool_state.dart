@@ -123,11 +123,18 @@ class InteractiveAddingToolState extends InteractiveState
   Set<DrawingToolState> getToolState(DrawingV2 drawing) {
     final String? addingDrawingId = _drawingPreview?.interactableDrawing.id;
 
-    final Set<DrawingToolState> states = drawing.id == addingDrawingId
-        ? {DrawingToolState.adding}
-        : {DrawingToolState.normal};
+    if (drawing.id == addingDrawingId) {
+      final Set<DrawingToolState> states = {DrawingToolState.adding};
 
-    return states;
+      // Add dragging state if the adding tool is being dragged
+      if (_isAddingToolBeingDragged) {
+        states.add(DrawingToolState.dragging);
+      }
+
+      return states;
+    }
+
+    return {DrawingToolState.normal};
   }
 
   @override
@@ -160,7 +167,6 @@ class InteractiveAddingToolState extends InteractiveState
         StateChangeAnimationDirection.forward,
       );
 
-      _isAddingToolBeingDragged = true;
       _drawingPreview!.onDragStart(
         details,
         epochFromX,
@@ -170,24 +176,24 @@ class InteractiveAddingToolState extends InteractiveState
       );
       return true; // Started dragging the tool being added. Jim - Verify this
     } else {
-      _isAddingToolBeingDragged = false;
       return false; // Not dragging the tool being added. Jim - Verify this
     }
   }
 
   @override
   bool onPanUpdate(DragUpdateDetails details) {
-    if (_isAddingToolBeingDragged) {
-      _drawingPreview?.onDragUpdate(
-        details,
-        epochFromX,
-        quoteFromY,
-        epochToX,
-        quoteToY,
-      );
-      return true; // Dragging the adding tool. Jim - Verify this
+    if (!_isAddingToolBeingDragged) {
+      _isAddingToolBeingDragged = true;
     }
-    return false; // Not dragging the adding tool. Jim - Verify this
+
+    _drawingPreview?.onDragUpdate(
+      details,
+      epochFromX,
+      quoteFromY,
+      epochToX,
+      quoteToY,
+    );
+    return true; // Dragging the adding tool.
   }
 
   @override
